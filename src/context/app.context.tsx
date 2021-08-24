@@ -1,4 +1,4 @@
-import { useContext, useMemo, useReducer, createContext } from "react";
+import React, { useContext, useMemo, useReducer } from "react";
 import {
     TAppAction,
     TAppDispatch,
@@ -10,7 +10,7 @@ const initialState: TAppState = {
     theme: "LIGHT",
 };
 
-const AppContext = createContext<{
+const AppContext = React.createContext<{
     state: TAppState;
     dispatch: TAppDispatch;
 } | null>(null);

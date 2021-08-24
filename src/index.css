@@ -8,3 +8,56 @@
 html {
     font-size: 62.5%;
 }
+
+body {
+    margin: 0;
+    padding: 0;
+}
+
+figure {
+    margin: 0;
+    padding: 0;
+}
+
+ul {
+    margin: 0;
+    padding: 0;
+}
+
+li {
+    list-style: none;
+}
+
+a {
+    text-decoration: none;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+p {
+    margin: 0;
+}
+
+button {
+    background: transparent;
+    border: none;
+}
+
+:root {
+    --gray-1: #828282;
+    --gray-2: #4f4f4f;
+    --gray-3: #333333;
+    --gray-4: #bdbdbd;
+
+    --blue-1: #2f80ed;
+
+    --light-1: #f2f2f2;
+    --light-2: #fafafa;
+}
+
+body {
+    background-color: var(--light-1);
+}

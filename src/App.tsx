@@ -1,3 +1,4 @@
+import MyProfile from "pages/MyProfile";
 import React from "react";
 import { Route, Switch } from "react-router";
 
@@ -8,7 +9,8 @@ const App = () => {
     return (
         <React.Fragment>
             <Switch>
-                <Route path="/" component={NewsFeed} />
+                <Route path="/" exact component={NewsFeed} />
+                <Route path="/my-profile" exact component={MyProfile} />
             </Switch>
         </React.Fragment>
     );
