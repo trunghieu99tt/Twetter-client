@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 // context
 import { useAppContext } from "../../context/app.context";
 
@@ -16,7 +18,9 @@ const Logo = () => {
 
     return (
         <LogoWrapper>
-            <LogoImg src={imageSrc} alt="Logo"></LogoImg>
+            <Link to="/">
+                <LogoImg src={imageSrc} alt="Logo"></LogoImg>
+            </Link>
         </LogoWrapper>
     );
 };

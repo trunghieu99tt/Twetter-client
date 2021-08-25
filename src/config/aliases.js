@@ -1,6 +1,6 @@
 const alias = (prefix) => ({
     "@utils": `${prefix}/utils/`,
-    "@types": `${prefix}/types/`,
+    "@type": `${prefix}/types/`,
     "@hooks": `${prefix}/hooks/`,
     "@pages": `${prefix}/pages/`,
     "@talons": `${prefix}/talons/`,

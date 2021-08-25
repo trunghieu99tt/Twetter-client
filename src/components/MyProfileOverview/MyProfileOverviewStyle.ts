@@ -16,7 +16,7 @@ export const Main = styled.section`
     background: #fff;
     transform: translateY(-50%);
     padding: 2rem 2.5rem 3.5rem 2.5rem;
-    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.05);
+    box-shadow: var(--box-shadow-1);
     border-radius: 12px;
     display: flex;
     gap: 2.5rem;

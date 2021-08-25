@@ -1,3 +1,6 @@
+// talons
+import { useTweet } from "@talons/useTweet";
+
 // layout
 import MainLayout from "@layout/Main";
 
@@ -9,10 +12,13 @@ import MyProfileOverview from "@components/MyProfileOverview";
 // styles
 import { Sidebar, Wrapper, Main, Content } from "./MyProfileStyle";
 import { Container } from "@shared/style/sharedStyle.style";
+import { iTweet } from "@type/tweet.types";
 
-interface Props {}
+const MyProfile = () => {
+    const { getMyTweetsQuery } = useTweet();
 
-const MyProfile = (props: Props) => {
+    const myTweets: iTweet[] = (getMyTweetsQuery?.data || []) as iTweet[];
+
     return (
         <Wrapper>
             <MyProfileOverview />
@@ -22,9 +28,13 @@ const MyProfile = (props: Props) => {
                         <LeftSidebar type="PROFILE" />
                     </Sidebar>
                     <Main>
-                        {[...Array(10)].map((_, i) => (
-                            <Tweet key={i} />
-                        ))}
+                        {myTweets?.length > 0 &&
+                            myTweets.map((tweet: iTweet) => (
+                                <Tweet
+                                    tweet={tweet}
+                                    key={`MyProfile-tweet-${tweet._id}`}
+                                />
+                            ))}
                     </Main>
                 </Content>
             </Container>

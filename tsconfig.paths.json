@@ -2,13 +2,13 @@
     "compilerOptions": {
         "baseUrl": "./src",
         "paths": {
-            "@types*": ["types/*"],
-            "@pages*": ["pages/*"],
+            "@type/*": ["types/*"],
+            "@pages/*": ["pages/*"],
             "@hooks/*": ["hooks/*"],
             "@utils/*": ["utils/*"],
-            "@talons*": ["talons/*"],
-            "@shared*": ["shared/*"],
-            "@config*": ["config/*"],
+            "@talons/*": ["talons/*"],
+            "@shared/*": ["shared/*"],
+            "@config/*": ["config/*"],
             "@layout/*": ["layout/*"],
             "@context*": ["context/*"],
             "@images/*": ["assets/images/*"],

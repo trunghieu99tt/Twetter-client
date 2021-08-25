@@ -3,16 +3,22 @@ import ReactDOM from "react-dom";
 import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter } from "react-router-dom";
 import AppProvider from "context/app.context";
+import { QueryClient, QueryClientProvider } from "react-query";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import "./index.css";
 import App from "./App";
+
+// Create a client
+const queryClient = new QueryClient();
 
 ReactDOM.render(
     <React.StrictMode>
         <Suspense fallback={<div>Loading...</div>}>
             <AppProvider>
                 <BrowserRouter>
-                    <App />
+                    <QueryClientProvider client={queryClient}>
+                        <App />
+                    </QueryClientProvider>
                 </BrowserRouter>
             </AppProvider>
         </Suspense>

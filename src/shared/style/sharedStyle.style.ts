@@ -20,8 +20,29 @@ export const Container = styled.div`
         width: 1140px;
     }
     
-    @media (min-width: 1400px){
-        width: 1320px;
-    }
+    // @media (min-width: 1400px){
+    //     width: 1320px;
+    // }
   
 `
+
+export const UserAvatarSmall = styled.img`
+    --size: 4rem;
+    width: var(--size);
+    height: var(--size);
+    object-fit: cover;
+    border-radius: .5rem;
+`;
+
+export const Flex = styled('div') <
+    {
+        gap?: string;
+        justify?: string;
+        align?: string;
+    }
+    >`
+    display: flex;
+    ${({ gap }) => gap && `gap: ${gap}`};
+    ${({ align }) => align && `align-items: ${align};`}
+    ${({ justify }) => justify && `justify-content: ${justify}`};
+`;

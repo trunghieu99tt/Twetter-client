@@ -1,3 +1,6 @@
+// talons
+import { useUser } from "@talons/useUser";
+
 // utils
 import { nFormatter } from "@utils/helper";
 
@@ -22,12 +25,13 @@ import {
 import { Container } from "@shared/style/sharedStyle.style";
 
 // mock data
-import { user } from "../../mocks/user.data";
 
 const MyProfileOverview = () => {
+    const { user } = useUser();
+
     return (
         <Wrapper>
-            <CoverPhoto img={user.coverPhoto}></CoverPhoto>
+            <CoverPhoto img={user?.coverPhoto || ""}></CoverPhoto>
             <Container>
                 <Main>
                     <AvatarWrapper>
@@ -38,7 +42,7 @@ const MyProfileOverview = () => {
                     </AvatarWrapper>
                     <Info>
                         <MainInfo>
-                            <Name>{user.name}</Name>
+                            <Name>{user?.name}</Name>
                             <FollowersCounter>
                                 <span>
                                     {nFormatter(user?.following?.length || 0)}
@@ -53,7 +57,7 @@ const MyProfileOverview = () => {
                             </FollowersCounter>
                         </MainInfo>
                         <SecondaryInfo>
-                            <Bio>{user.bio}</Bio>
+                            <Bio>{user?.bio}</Bio>
                         </SecondaryInfo>
                     </Info>
                     <FollowButton>

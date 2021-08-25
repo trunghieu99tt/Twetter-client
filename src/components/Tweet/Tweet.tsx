@@ -10,8 +10,8 @@ import { FiRefreshCw } from "react-icons/fi";
 import { FaRegHeart } from "react-icons/fa";
 import { BiComment, BiBookmark } from "react-icons/bi";
 
-// data
-import { tweet } from "../../mocks/tweet.data";
+// types
+import { iTweet } from "@type/tweet.types";
 
 // styles
 import {
@@ -32,9 +32,14 @@ import {
     CommentsWrapper,
     InteractionButtonGroup,
 } from "./TweetStyle";
+
 import { comments } from "mocks/comment.data";
 
-const Tweet = () => {
+type Props = {
+    tweet: iTweet;
+};
+
+const Tweet = ({ tweet }: Props) => {
     const addCommentRef = useRef(null) as React.RefObject<HTMLInputElement>;
 
     const onClickComment = () => {
@@ -58,26 +63,31 @@ const Tweet = () => {
             </Header>
             <Content>
                 <TweetDescription>{tweet.content}</TweetDescription>
-                <TweetMediaWrapper>
-                    <Carousel showArrows={false}>
-                        {tweet.media.map((media, index) => (
-                            <TweetMedia key={index} src={media} />
-                        ))}
-                    </Carousel>
-                </TweetMediaWrapper>
+                {tweet?.media?.length > 0 && (
+                    <TweetMediaWrapper>
+                        <Carousel
+                            showArrows={false}
+                            showIndicators={tweet?.media?.length > 1}
+                        >
+                            {tweet.media.map((media, index) => (
+                                <TweetMedia key={index} src={media} />
+                            ))}
+                        </Carousel>
+                    </TweetMediaWrapper>
+                )}
                 <Interaction>
                     <InteractionSummary>
                         <InteractionSummaryItem>
-                            {tweet?.likes?.length} likes
+                            {tweet?.likes?.length || 0} likes
                         </InteractionSummaryItem>
                         <InteractionSummaryItem>
-                            {tweet?.comments?.length} comments
+                            {tweet?.comments?.length || 0} comments
                         </InteractionSummaryItem>
                         <InteractionSummaryItem>
-                            {tweet?.retweet?.length} retweeted
+                            {tweet?.retweeted?.length || 0} retweeted
                         </InteractionSummaryItem>
                         <InteractionSummaryItem>
-                            {tweet?.saved?.length} saved
+                            {tweet?.saved?.length || 0} saved
                         </InteractionSummaryItem>
                     </InteractionSummary>
 

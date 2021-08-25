@@ -39,7 +39,7 @@ export const Dropdown = styled.div`
     width: 100%;
     border: 1px solid #E0E0E0;
     box-sizing: border-box;
-    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.05);
+    box-shadow: var(--box-shadow-1);
     border-radius: 12px;
     padding: 1.5rem;
     transform: translateY(1rem);
