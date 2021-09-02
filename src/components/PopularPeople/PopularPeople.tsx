@@ -1,17 +1,18 @@
+// talons
+import { useUser } from "@talons/useUser";
+
 // utils
 import { nFormatter } from "@utils/helper";
 
 // components
 import SidebarBlock from "@components/SidebarBlock";
+import UserAvatarSmall from "@components/UserAvatarSmall";
 
 // icons
 import { IoPersonAdd } from "react-icons/io5";
 
-// data
-import { user } from "../../mocks/user.data";
-
 // styles
-import { Flex, UserAvatarSmall } from "@shared/style/sharedStyle.style";
+import { Flex } from "@shared/style/sharedStyle.style";
 import {
     FollowButton,
     UserBio,
@@ -22,11 +23,13 @@ import {
 } from "./PopularPeopleStyle";
 
 const PopularPeople = () => {
+    const { user } = useUser();
+
     const items = [...Array(2)].map(() => {
         return (
             <UserCard>
                 <Flex gap="1.8rem">
-                    <UserAvatarSmall src={user?.avatar} alt={user?.name} />
+                    <UserAvatarSmall user={user} />
                     <div>
                         <UserName>{user?.name}</UserName>
                         <UserFollowers>

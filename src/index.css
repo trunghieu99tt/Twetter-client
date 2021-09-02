@@ -64,3 +64,15 @@ button {
 body {
     background-color: var(--light-1);
 }
+
+button {
+    cursor: pointer;
+}
+
+::-webkit-scrollbar {
+    width: 1rem;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #333;
+}

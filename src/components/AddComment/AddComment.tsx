@@ -1,76 +1,74 @@
-import React, { ChangeEvent, useState } from "react";
+import React from "react";
+
+// talons
+import { useAddComment } from "./useAddComment";
+
+// components
+import UserAvatarSmall from "@components/UserAvatarSmall";
 
 // icons
 import { BsCardImage } from "react-icons/bs";
 import { ImCancelCircle } from "react-icons/im";
 
-// data
-import { user } from "../../mocks/user.data";
-
 // styles
 import {
-    CommentImage,
-    CommentImageCancelButton,
-    CommentImageWrapper,
-    FileInput,
-    FileInputLabel,
     Input,
-    InputWrapper,
-    UserAvatar,
     Wrapper,
+    FileInput,
+    CommentImage,
+    InputLoading,
+    InputWrapper,
+    FileInputLabel,
+    CommentImageWrapper,
+    CommentImageCancelButton,
 } from "./AddCommentStyle";
+import { Spinner2 } from "@components/Loaders";
 
 type Props = {
     addCommentRef: React.RefObject<HTMLInputElement>;
+    tweetId: string;
 };
 
-const AddComment = ({ addCommentRef }: Props) => {
-    const [comment, setComment] = useState<string>("");
-    const [file, setFile] = useState<File | null>(null);
-    const [imagePreview, setImagePreview] = useState<string>("");
+const AddComment = ({ addCommentRef, tweetId }: Props) => {
+    const {
+        user,
+        error,
+        comment,
+        loading,
+        imagePreview,
 
-    const onChangeComment = (event: ChangeEvent<HTMLInputElement>) => {
-        setComment(event.target.value);
-    };
-
-    const onChangeFile = (event: ChangeEvent<HTMLInputElement>) => {
-        const file = event.target.files?.[0];
-        if (file) {
-            setFile(file);
-            setImagePreview(URL.createObjectURL(file));
-        }
-    };
-
-    const onCancelImage = () => {
-        setFile(null);
-        setImagePreview("");
-    };
-
-    const onSubmit = (event: any) => {
-        event.preventDefault();
-        console.log(comment);
-    };
+        onSubmit,
+        onChangeFile,
+        onCancelImage,
+        onChangeComment,
+    } = useAddComment({
+        tweetId,
+    });
 
     return (
         <React.Fragment>
             <Wrapper onSubmit={onSubmit}>
-                <UserAvatar
-                    src={user?.avatar}
-                    alt={user?.name || "user avatar"}
-                />
+                <UserAvatarSmall user={user} />
                 <InputWrapper>
                     <Input
-                        placeholder="Add a comment..."
-                        onChange={onChangeComment}
+                        value={comment}
                         ref={addCommentRef}
+                        onChange={onChangeComment}
+                        placeholder="Add a comment..."
+                        disabled={loading}
                     />
-                    <FileInputLabel htmlFor="comment-file">
+                    {loading && (
+                        <InputLoading>
+                            <Spinner2 customStyles="--size: 20px" />
+                        </InputLoading>
+                    )}
+                    <FileInputLabel htmlFor={`comment-file-${tweetId}`}>
                         <BsCardImage />
                     </FileInputLabel>
                     <FileInput
                         type="file"
                         name="comment-file"
-                        id="comment-file"
+                        id={`comment-file-${tweetId}`}
                         onChange={onChangeFile}
                     />
                 </InputWrapper>

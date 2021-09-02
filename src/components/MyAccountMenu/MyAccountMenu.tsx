@@ -17,13 +17,13 @@ import { RiLogoutBoxRLine, RiAccountCircleFill } from "react-icons/ri";
 
 // styles
 import {
-    Avatar,
     AvatarCaption,
     AvatarWrapper,
     DropdownButton,
     LogoutButton,
     Wrapper,
 } from "./MyAccountStyle";
+import UserAvatarSmall from "@components/UserAvatarSmall";
 
 const MyAccountMenu = () => {
     const [visibleDropdown, setVisibleDropdown] = useState<boolean>(false);
@@ -41,7 +41,7 @@ const MyAccountMenu = () => {
 
     const dropdownItems = useMemo(
         () => [
-            <Link to="/my-profile">
+            <Link to={`/profile/${user?.id}`}>
                 <RiAccountCircleFill></RiAccountCircleFill>
                 <p>Profile</p>
             </Link>,
@@ -54,13 +54,13 @@ const MyAccountMenu = () => {
                 <p>Logout</p>
             </LogoutButton>,
         ],
-        []
+        [user]
     );
 
     return (
         <Wrapper ref={myAccountControllerRef}>
             <AvatarWrapper>
-                <Avatar src={user?.avatar || ""} alt={user?.name} />
+                <UserAvatarSmall user={user} />
                 <AvatarCaption>{user?.name}</AvatarCaption>
                 <DropdownButton onClick={toggleDropdown}>
                     <BsFillCaretDownFill />

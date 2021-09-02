@@ -1,8 +1,9 @@
 // styles
+import UserAvatarSmall from "@components/UserAvatarSmall";
+import { iComment } from "@type/comments.types";
 import { AiOutlineHeart } from "react-icons/ai";
 
 import {
-    AuthorAvatar,
     AuthorName,
     Content,
     CreatedAt,
@@ -15,19 +16,21 @@ import {
 } from "./CommentStyle";
 
 interface Props {
-    data: any;
+    data: iComment;
     level?: number;
 }
 
 const Comment = ({ data, level = 0 }: Props) => {
     return (
         <Wrapper shouldIndent={level <= 1}>
-            <AuthorAvatar src={data?.author?.avatar} alt={data?.author?.name} />
+            <UserAvatarSmall user={data?.author} />
             <Main>
                 <MainInfo>
                     <div>
                         <AuthorName>{data?.author?.name}</AuthorName>
-                        <CreatedAt>{data?.date}</CreatedAt>
+                        <CreatedAt>
+                            {new Date(data?.createdAt).toLocaleString()}
+                        </CreatedAt>
                     </div>
                     <Content>{data?.content}</Content>
                 </MainInfo>

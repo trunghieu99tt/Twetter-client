@@ -9,22 +9,21 @@ export const Wrapper = styled('div') <{
     margin-bottom: ${props => props.shouldIndent ? '1.8rem' : '1rem'};
 `;
 
-export const AuthorAvatar = styled.img`
-    --size: 4rem;
-    width: var(--size);
-    height: var(--size);
-    object-fit: cover;
-    border-radius: .8rem;
-`;
-
 export const Main = styled.div`
-    
+    flex: 1;
 `;
 
 export const MainInfo = styled.div`
     background: var(--light-2);
     padding: 1rem 1.5rem;
     border-radius: .8rem;
+    
+    & > div:first-of-type {
+        display: flex;
+        gap: 1rem;
+        align-items: center;
+    }
+    
 `;
 
 export const AuthorName = styled.p`

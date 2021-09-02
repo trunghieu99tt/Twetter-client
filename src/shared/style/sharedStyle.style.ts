@@ -26,14 +26,6 @@ export const Container = styled.div`
   
 `
 
-export const UserAvatarSmall = styled.img`
-    --size: 4rem;
-    width: var(--size);
-    height: var(--size);
-    object-fit: cover;
-    border-radius: .5rem;
-`;
-
 export const Flex = styled('div') <
     {
         gap?: string;

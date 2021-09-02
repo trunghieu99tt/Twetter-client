@@ -5,10 +5,14 @@ export const useUpload = () => {
     const uploadImage = async (file: File) => {
         if (!file)
             return;
-        const formData = new FormData();
-        formData.append('image', file);
-        const response = await client.post(UPLOAD_ENDPOINTS.UPLOAD_SINGLE_IMAGE, formData);
-        return response.data;
+        try {
+            const formData = new FormData();
+            formData.append('image', file);
+            const response = await client.post(UPLOAD_ENDPOINTS.UPLOAD_SINGLE_IMAGE, formData);
+            return response?.data || '';
+        } catch (error) {
+            console.log('upload image error: ', error)
+        }
     }
 
     const uploadImages = async (files: FileList | never[]) => {

@@ -10,13 +10,6 @@ export const AvatarWrapper = styled.figure`
     gap: 1rem;
 `;
 
-export const Avatar = styled.img`
-    width: 3.2rem;
-    height: 3.2rem;
-    object-fit: cover;
-    border-radius: .5rem;
-`;
-
 export const AvatarCaption = styled.figcaption`
     font-size: 1.2rem;
     font-weight: 600;

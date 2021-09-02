@@ -1,46 +1,77 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
+import { Link } from "react-router-dom";
+
+// talons
+import { useQueryClient } from "react-query";
+import { useTweet } from "@talons/useTweet";
+
+// hooks
+import { useOnClickOutside } from "@hooks/useOnClickOutside";
 
 // components
-import Comment from "@components/Comment";
+import { Spinner1 } from "@components/Loaders";
+import Dropdown from "@components/Dropdown";
 import AddComment from "@components/AddComment";
 import { Carousel } from "react-responsive-carousel";
+import UserAvatarSmall from "@components/UserAvatarSmall";
 
 // icons
 import { FiRefreshCw } from "react-icons/fi";
 import { FaRegHeart } from "react-icons/fa";
-import { BiComment, BiBookmark } from "react-icons/bi";
+import { AiOutlineDelete } from "react-icons/ai";
+import { BiComment, BiBookmark, BiDotsVertical } from "react-icons/bi";
 
 // types
 import { iTweet } from "@type/tweet.types";
 
 // styles
 import {
-    Content,
     Header,
     Wrapper,
-    AuthorWrapper,
-    AuthorAvatar,
+    Content,
+    TweetMedia,
     AuthorName,
     DateCreated,
+    Interaction,
+    AuthorAction,
+    AuthorWrapper,
+    AuthorActions,
+    DropdownButton,
     TweetDescription,
     TweetMediaWrapper,
-    TweetMedia,
-    Interaction,
+    InteractionButton,
     InteractionSummary,
     InteractionSummaryItem,
-    InteractionButton,
-    CommentsWrapper,
     InteractionButtonGroup,
 } from "./TweetStyle";
 
-import { comments } from "mocks/comment.data";
+// types and constants
+import { iUser } from "@type/user.types";
+import { USER_QUERY } from "constants/user.constants";
+import TweetComments from "@components/TweetComments";
 
 type Props = {
     tweet: iTweet;
 };
 
 const Tweet = ({ tweet }: Props) => {
+    const [visibleDropdown, setVisibleDropdown] = useState<boolean>(false);
+    const currentUser: iUser | undefined = useQueryClient().getQueryData(
+        USER_QUERY.GET_ME
+    );
+    const { deleteTweetMutation } = useTweet();
+
+    const dropdownRef = useRef() as React.RefObject<HTMLDivElement>;
     const addCommentRef = useRef(null) as React.RefObject<HTMLInputElement>;
+
+    const toggleDropdown = () => setVisibleDropdown((isVisible) => !isVisible);
+
+    const onDeleteTweet = () => {
+        console.log(tweet._id);
+        deleteTweetMutation.mutate(tweet._id);
+    };
+
+    useOnClickOutside(dropdownRef, () => setVisibleDropdown(false));
 
     const onClickComment = () => {
         if (addCommentRef?.current) {
@@ -48,18 +79,41 @@ const Tweet = ({ tweet }: Props) => {
         }
     };
 
+    const isAuthor = currentUser && tweet.author._id === currentUser?._id;
+
     return (
         <Wrapper>
+            {deleteTweetMutation.isLoading && <Spinner1 />}
             <Header>
                 <AuthorWrapper>
-                    <AuthorAvatar src={tweet.author.avatar} />
+                    <Link to={`/profile/${tweet.author._id}`}>
+                        <UserAvatarSmall user={tweet?.author} />
+                    </Link>
                     <div>
-                        <AuthorName>{tweet.author.name}</AuthorName>
+                        <Link to={`/profile/${tweet.author._id}`}>
+                            <AuthorName>{tweet.author.name}</AuthorName>
+                        </Link>
                         <DateCreated>
                             {new Date(tweet.createdAt).toLocaleString("en-US")}
                         </DateCreated>
                     </div>
                 </AuthorWrapper>
+                {isAuthor && (
+                    <AuthorActions ref={dropdownRef}>
+                        <DropdownButton onClick={toggleDropdown}>
+                            <BiDotsVertical />
+                        </DropdownButton>
+                        <Dropdown
+                            isVisible={visibleDropdown}
+                            items={[
+                                <AuthorAction onClick={onDeleteTweet}>
+                                    <AiOutlineDelete />
+                                    Delete
+                                </AuthorAction>,
+                            ]}
+                        ></Dropdown>
+                    </AuthorActions>
+                )}
             </Header>
             <Content>
                 <TweetDescription>{tweet.content}</TweetDescription>
@@ -68,6 +122,7 @@ const Tweet = ({ tweet }: Props) => {
                         <Carousel
                             showArrows={false}
                             showIndicators={tweet?.media?.length > 1}
+                            showStatus={tweet?.media?.length > 1}
                         >
                             {tweet.media.map((media, index) => (
                                 <TweetMedia key={index} src={media} />
@@ -111,12 +166,8 @@ const Tweet = ({ tweet }: Props) => {
                     </InteractionButtonGroup>
                 </Interaction>
             </Content>
-            <AddComment addCommentRef={addCommentRef} />
-            <CommentsWrapper>
-                {comments?.map((comment) => (
-                    <Comment data={comment} key={comment._id} level={0} />
-                ))}
-            </CommentsWrapper>
+            <AddComment addCommentRef={addCommentRef} tweetId={tweet._id} />
+            <TweetComments tweetId={tweet._id} />
         </Wrapper>
     );
 };

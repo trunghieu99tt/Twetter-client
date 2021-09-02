@@ -1,40 +1,43 @@
+import { useParams } from "react-router";
+
 // talons
+import { useUser } from "@talons/useUser";
 import { useTweet } from "@talons/useTweet";
 
 // layout
 import MainLayout from "@layout/Main";
 
 // components
-import Tweet from "@components/Tweet";
 import LeftSidebar from "@components/LeftSidebar";
+import InfinityTweetList from "@components/InfinityTweetsList";
 import MyProfileOverview from "@components/MyProfileOverview";
 
 // styles
 import { Sidebar, Wrapper, Main, Content } from "./MyProfileStyle";
 import { Container } from "@shared/style/sharedStyle.style";
-import { iTweet } from "@type/tweet.types";
 
 const MyProfile = () => {
-    const { getMyTweetsQuery } = useTweet();
+    const params: { userId: string } = useParams();
+    const { userId } = params;
 
-    const myTweets: iTweet[] = (getMyTweetsQuery?.data || []) as iTweet[];
+    const { getProfileTweetsQuery } = useTweet(userId);
+    const { user: me, getUserQuery } = useUser(userId);
+
+    const userData = userId === me?.id ? me : getUserQuery.data;
+    const isMe = userId === me?.id;
+
+    if (!userData) return null;
 
     return (
         <Wrapper>
-            <MyProfileOverview />
+            <MyProfileOverview user={userData} isMe={isMe} />
             <Container>
                 <Content>
                     <Sidebar>
                         <LeftSidebar type="PROFILE" />
                     </Sidebar>
                     <Main>
-                        {myTweets?.length > 0 &&
-                            myTweets.map((tweet: iTweet) => (
-                                <Tweet
-                                    tweet={tweet}
-                                    key={`MyProfile-tweet-${tweet._id}`}
-                                />
-                            ))}
+                        <InfinityTweetList query={getProfileTweetsQuery} />
                     </Main>
                 </Content>
             </Container>

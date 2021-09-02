@@ -5,6 +5,7 @@ import { BrowserRouter } from "react-router-dom";
 import AppProvider from "context/app.context";
 import { QueryClient, QueryClientProvider } from "react-query";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
+import "draft-js/dist/Draft.css";
 import "./index.css";
 import App from "./App";
 

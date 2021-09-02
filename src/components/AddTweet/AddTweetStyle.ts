@@ -28,6 +28,7 @@ export const Main = styled.div`
 
 export const TweetContentInputWrapper = styled.div`
     min-height: 10rem;
+    margin-bottom: 2rem;
 `;
 
 export const TweetContentInput = styled.input`
@@ -58,6 +59,7 @@ export const TweetImageWrapper = styled('div') <{
     position: relative;
     margin-top: 1rem;
     margin-bottom: 2rem;
+    position: relative;
     
     display: ${props => props.mode};
     
@@ -102,6 +104,19 @@ export const TweetImageWrapper = styled('div') <{
             position: relative;
         }
     `}
+`;
+
+export const DeleteImagesButton = styled.button`
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    cursor: pointer;
+    
+    svg{
+        --size: 1.5rem;
+        width: var(--size);
+        height: var(--size);
+    }
 `;
 
 export const Footer = styled.div`

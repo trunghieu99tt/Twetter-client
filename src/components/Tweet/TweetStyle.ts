@@ -10,20 +10,14 @@ export const Wrapper = styled.div`
     max-width: 75rem;
 `;
 
-export const Header = styled.header``;
+export const Header = styled.header`
+    position: relative;
+`;
 
 export const AuthorWrapper = styled.div`
    display: flex;
    gap: 2rem;
    margin-bottom: 2rem;
-`;
-
-export const AuthorAvatar = styled.img`
-    --size: 4rem;
-    width: var(--size);
-    height: var(--size);
-    border-radius: .5rem;
-    object-fit: cover;
 `;
 
 export const AuthorName = styled.h4`
@@ -36,24 +30,42 @@ export const DateCreated = styled.p`
     font-weight: 500;
 `;
 
+export const DropdownButton = styled.button`
+    cursor: pointer;
+`;
+
+export const AuthorActions = styled.div`
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    z-index: 1;
+`;
+
+export const AuthorAction = styled.button`
+    border: none;
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+`;
+
 export const Content = styled.div``;
 
 export const TweetDescription = styled.p`
-    font-size: 1.5rem;
-    color: var(--gray-2);
-    margin-bottom: 2rem;
+font-size: 1.5rem;
+color: var(--gray-2);
+margin - bottom: 2rem;
 `;
 
 export const TweetMediaWrapper = styled.div``;
 
 export const TweetMedia = styled.img`
-    height: 40rem;
-    object-fit: cover;
-    border-radius: .8rem;
+height: 40rem;
+object-fit: contain;
+border-radius: .8rem;
 `;
 
 export const Interaction = styled.div`
-    margin-bottom: 1rem;
+margin - bottom: 1rem;
 `;
 
 export const InteractionSummary = styled.div`
@@ -61,18 +73,18 @@ export const InteractionSummary = styled.div`
     gap: 1.6rem;
     align-items: center;
     justify-content: flex-end;
-    margin-bottom: .8rem;  
+    margin-bottom: .8rem;
 `;
 
 export const InteractionSummaryItem = styled.div`
     color: var(--gray-4);
     font-size: 1.2rem;
-    font-weight: 500;
+    font - weight: 500;
 `;
 
 export const InteractionButtonGroup = styled.div`
-    border-top: 1px solid var(--light-1);
-    border-bottom: 1px solid var(--light-1);
+    border - top: 1px solid var(--light-1);
+    border - bottom: 1px solid var(--light-1);
     padding: .4rem 0;
     display: flex;
     justify-content: space-between;
@@ -81,15 +93,15 @@ export const InteractionButtonGroup = styled.div`
 export const InteractionButton = styled.button`
     cursor: pointer;
     padding: 1.1rem 4rem;
-    border-radius: .8rem;
+    border - radius: .8rem;
     display: flex;
     gap: 1.2rem;
     align-items: center;
-    
+        
     &:hover{
         background: var(--light-1);
     }
-    
+
 `;
 
 export const CommentsWrapper = styled.div`

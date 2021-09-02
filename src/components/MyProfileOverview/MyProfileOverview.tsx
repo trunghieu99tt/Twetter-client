@@ -1,11 +1,11 @@
-// talons
-import { useUser } from "@talons/useUser";
-
 // utils
 import { nFormatter } from "@utils/helper";
 
 // icons
 import { IoPersonAdd } from "react-icons/io5";
+
+// types
+import { iUser } from "@type/user.types";
 
 // styles
 import {
@@ -24,11 +24,12 @@ import {
 } from "./MyProfileOverviewStyle";
 import { Container } from "@shared/style/sharedStyle.style";
 
-// mock data
+type Props = {
+    user: iUser;
+    isMe: boolean;
+};
 
-const MyProfileOverview = () => {
-    const { user } = useUser();
-
+const MyProfileOverview = ({ user, isMe }: Props) => {
     return (
         <Wrapper>
             <CoverPhoto img={user?.coverPhoto || ""}></CoverPhoto>
@@ -60,10 +61,12 @@ const MyProfileOverview = () => {
                             <Bio>{user?.bio}</Bio>
                         </SecondaryInfo>
                     </Info>
-                    <FollowButton>
-                        <IoPersonAdd />
-                        Follow
-                    </FollowButton>
+                    {!isMe && (
+                        <FollowButton>
+                            <IoPersonAdd />
+                            Follow
+                        </FollowButton>
+                    )}
                 </Main>
             </Container>
         </Wrapper>

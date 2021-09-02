@@ -1,4 +1,5 @@
 export interface iUser {
+    id: string;
     _id: string;
     name: string;
     bio: string;

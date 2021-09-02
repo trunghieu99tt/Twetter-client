@@ -5,13 +5,6 @@ export const Wrapper = styled.form`
     gap: 1.6rem;
 `;
 
-export const UserAvatar = styled.img`
-    --size: 4rem;
-    width: var(--size);
-    height: var(--size);
-    object-fit: cover;
-    border-radius: .5rem;
-`;
 
 export const InputWrapper = styled.div`
     background: #fafafa;
@@ -23,6 +16,7 @@ export const InputWrapper = styled.div`
     justify-content: space-between;
     align-items: center;
     padding: 0 1.5rem;
+    gap: 1rem;
 `;
 
 export const Input = styled.input`
@@ -33,6 +27,7 @@ export const Input = styled.input`
     color: var(--gray-4);
     width: 95%;
     background: #fafafa;
+    padding: .75rem 0;
 `;
 
 export const FileInput = styled.input`
@@ -71,4 +66,7 @@ export const CommentImageCancelButton = styled.button`
         width: var(--size);
         height: var(--size);
     }
+`;
+
+export const InputLoading = styled.div`
 `;

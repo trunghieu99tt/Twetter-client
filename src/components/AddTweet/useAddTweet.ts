@@ -4,9 +4,13 @@ import { useUpload } from "@talons/useUpload";
 import { iCreateTweetDTO } from "@type/tweet.types";
 import { useQueryClient } from "react-query";
 import { USER_QUERY } from "constants/user.constants";
-import { TWEET_QUERY } from "constants/tweet.constants";
+import { iUser } from "@type/user.types";
 
 export const useAddTweet = () => {
+
+    const user: iUser | undefined = useQueryClient().getQueryData(
+        USER_QUERY.GET_ME
+    );
 
     const [content, setContent] = useState<string>('');
     const [audience, setAudience] = useState<number>(0);
@@ -14,11 +18,9 @@ export const useAddTweet = () => {
     const [files, setFiles] = useState<FileList | never[]>([]);
     const [imagesPreview, setImagesPreview] = useState<string[]>([]);
 
-    const queryClient = useQueryClient();
-
     const {
         createTweetMutation
-    } = useTweet();
+    } = useTweet(user?._id);
 
     const {
         uploadImages
@@ -40,10 +42,10 @@ export const useAddTweet = () => {
         }
     };
 
-    // const onCancelImage = () => {
-    //     setFile(null);
-    //     setImagePreview("");
-    // };
+    const onCancelImage = () => {
+        setFiles([]);
+        setImagesPreview([]);
+    };
 
     const resetFiles = () => {
         setFiles([]);
@@ -70,9 +72,8 @@ export const useAddTweet = () => {
             }
 
             createTweetMutation.mutate(newTweet, {
-                onSuccess: (data) => {
-                    resetAll();
-                    queryClient.invalidateQueries(TWEET_QUERY.GET_MY_TWEETS);
+                onSettled: () => {
+                    setLoading(false);
                 },
                 onError: (error) => {
                     resetAll();
@@ -88,12 +89,11 @@ export const useAddTweet = () => {
         audience,
         imagesPreview,
 
-
         onSubmit,
         setContent,
         setAudience,
         onChangeFile,
-        // onCancelImage,
+        onCancelImage,
         onChangeContent,
     }
 

@@ -3,12 +3,12 @@ import { motion, AnimatePresence } from "framer-motion";
 // style
 import { Wrapper, DropdownList, DropdownListItem } from "./DropdownStyle";
 
-interface Props {
+interface Props extends React.HTMLAttributes<HTMLDivElement> {
+    items?: any;
     isVisible?: boolean;
-    items: any;
 }
 
-const Dropdown = ({ isVisible, items }: Props) => {
+const Dropdown = ({ isVisible, items, children }: Props) => {
     return (
         <AnimatePresence>
             {isVisible && (
@@ -38,6 +38,7 @@ const Dropdown = ({ isVisible, items }: Props) => {
                                     </DropdownListItem>
                                 );
                             })}
+                            {children}
                         </DropdownList>
                     </Wrapper>
                 </motion.div>
