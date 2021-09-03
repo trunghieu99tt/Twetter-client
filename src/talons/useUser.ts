@@ -13,10 +13,11 @@ import { iUser } from "../types/user.types";
 // constants
 import { USER_ENDPOINTS, USER_QUERY } from "constants/user.constants";
 import { INFINITY_QUERY_LIST_CONFIG, LONG_STATE_TIME } from "constants/config.constant";
+import { UserModel } from "model/user.model";
 
 const getMe = async () => {
     const response = await client.get(USER_ENDPOINTS.GET_ME);
-    return response?.data?.data;
+    return new UserModel(response?.data?.data);
 }
 
 const getUser = async ({ queryKey }: QueryFunctionContext) => {
@@ -24,7 +25,7 @@ const getUser = async ({ queryKey }: QueryFunctionContext) => {
     if (!userId)
         return;
     const response = await client.get(`${USER_ENDPOINTS.BASE}/${userId}`);
-    return response?.data?.data;
+    return new UserModel(response?.data?.data);
 }
 
 const getPopularUsers = async ({ pageParam = 0 }: QueryFunctionContext) => {
@@ -101,7 +102,7 @@ export const useUser = (
         }
     });
 
-    const user: iUser | undefined = queryClient.getQueryData(USER_QUERY.GET_ME);
+    const user: iUser = new UserModel(getMeQuery.data);
 
     return {
         user,

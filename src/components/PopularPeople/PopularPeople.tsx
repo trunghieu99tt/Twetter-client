@@ -5,7 +5,7 @@ import { useUser } from "@talons/useUser";
 import { nFormatter } from "@utils/helper";
 
 // components
-import SidebarBlock from "@components/SidebarBlock";
+import SidebarBlock from "@components/Sidebar/SidebarBlock";
 import UserAvatarSmall from "@components/UserAvatarSmall";
 
 // types
@@ -38,10 +38,8 @@ const PopularPeople = () => {
                 // - if current user is not following user
                 return (
                     user._id !== currentUser?._id &&
-                    !user?.followers.some((u: iUser | string) => {
-                        if (typeof u === "string")
-                            return u === currentUser?._id;
-                        return u._id === currentUser?._id;
+                    !user?.followers.some((user: iUser) => {
+                        return user._id === currentUser?._id;
                     })
                 );
             })) ||

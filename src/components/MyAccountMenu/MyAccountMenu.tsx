@@ -41,7 +41,7 @@ const MyAccountMenu = () => {
 
     const dropdownItems = useMemo(
         () => [
-            <Link to={`/profile/${user?.id}`}>
+            <Link to={`/profile/${user?._id}`}>
                 <RiAccountCircleFill></RiAccountCircleFill>
                 <p>Profile</p>
             </Link>,

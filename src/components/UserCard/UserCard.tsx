@@ -21,21 +21,17 @@ import {
 import { useUser } from "@talons/useUser";
 
 interface Props {
-    user: Partial<iUser> | string;
+    user: iUser;
 }
 
 const UserCard = ({ user }: Props) => {
     const { followUserMutation, user: currentUser } = useUser();
 
-    if (typeof user === "string") return null;
-
     const followersCount = user.followers ? user.followers.length : 0;
 
     const followed =
         user.followers &&
-        user.followers.some((follower: iUser | string) => {
-            if (typeof follower === "string")
-                return follower === currentUser?._id;
+        user.followers.some((follower: iUser) => {
             return follower?._id === currentUser?._id;
         });
 

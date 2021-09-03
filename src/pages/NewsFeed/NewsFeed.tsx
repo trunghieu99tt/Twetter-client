@@ -1,21 +1,23 @@
+import { useQueryClient } from "react-query";
+
 // talons
 import { useTweets } from "@talons/useTweets";
 
 // components
 import AddTweet from "@components/AddTweet";
-import PopularTags from "@components/PopularTags";
 import PopularPeople from "@components/PopularPeople";
 import InfinityTweetsList from "@components/InfinityTweetsList";
 
 // layout
 import MainLayout from "@layout/Main";
 
+// types and constants
+import { iUser } from "@type/user.types";
+import { USER_QUERY } from "constants/user.constants";
+
 // styles
 import { Container } from "@shared/style/sharedStyle.style";
 import { Main, Wrapper, Inner, Sidebar } from "./newsFeed.style";
-import { useQueryClient } from "react-query";
-import { USER_QUERY } from "constants/user.constants";
-import { iUser } from "@type/user.types";
 
 const NewsFeed = () => {
     const user: iUser | undefined = useQueryClient().getQueryData(

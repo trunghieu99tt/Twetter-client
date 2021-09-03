@@ -34,7 +34,7 @@ export const useTweet = ({ tweet }: Props) => {
     const { tweetComments, totalTweetComments, fetchMoreTweetComment } =
         useComment({
             tweetId: tweet._id,
-            userId: currentUser?.id,
+            userId: currentUser?._id,
         });
 
     const dropdownRef = useRef() as React.RefObject<HTMLDivElement>;

@@ -4,7 +4,7 @@ import { v4 as uuid } from "uuid";
 // talons
 
 // components
-import SocialLoginIcons from "@components/SocialAuthIcons";
+import SocialLoginIcons from "@components/Auth/SocialAuthIcons";
 
 import {
     Wrapper,

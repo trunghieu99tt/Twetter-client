@@ -1,7 +1,7 @@
 import InfinityMediaList from "@components/InfinityMediaList";
 import InfinityPeopleList from "@components/InfinityPeopleList";
 import InfinityTweetList from "@components/InfinityTweetsList";
-import LeftSidebar from "@components/LeftSidebar";
+import LeftSidebar from "@components/Sidebar/LeftSidebar";
 import MainLayout from "@layout/Main";
 import { Container } from "@shared/style/sharedStyle.style";
 import { useTweets } from "@talons/useTweets";

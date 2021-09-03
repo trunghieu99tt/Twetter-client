@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
-import styled from "styled-components";
+
+// components
+import ImageWithPlaceholder from "@components/ImageWithPlaceholder";
 
 // images
 import DefaultManAvatar from "@images/man.svg";
@@ -10,44 +12,42 @@ import DefaultUnknownAvatar from "@images/user.png";
 import { iUser } from "@type/user.types";
 import { GENDER } from "constants/user.constants";
 
-const Wrapper = styled.img`
-    --size: 3rem;
-    width: var(--size);
-    height: var(--size);
-    object-fit: cover;
-    border-radius: 0.5rem;
-`;
-
 interface Props {
-    user?: Partial<iUser>;
+    user: iUser;
 }
 
 const UserAvatarSmall = ({ user }: Props) => {
-    const [src, setSrc] = useState<any>(user?.avatar || "");
+    const [defaultSrc, setDefaultSrc] = useState<any>(user?.avatar || "");
 
     useEffect(() => {
-        const image = document.createElement("img");
-        image.src = src;
-        image.onerror = () => {
-            if (user) {
-                let defaultSrc = DefaultUnknownAvatar;
-                if (user?.gender !== undefined) {
-                    switch (user.gender) {
-                        case GENDER.MALE:
-                            defaultSrc = DefaultManAvatar;
-                            break;
-                        case GENDER.FEMALE:
-                            defaultSrc = DefaultWomanAvatar;
-                            break;
-                        default:
-                    }
+        if (user) {
+            let defaultSrc = DefaultUnknownAvatar;
+            if (user?.gender !== undefined) {
+                switch (user.gender) {
+                    case GENDER.MALE:
+                        defaultSrc = DefaultManAvatar;
+                        break;
+                    case GENDER.FEMALE:
+                        defaultSrc = DefaultWomanAvatar;
+                        break;
+                    default:
                 }
-                setSrc(defaultSrc);
             }
-        };
+            setDefaultSrc(defaultSrc);
+        }
     }, [user]);
 
-    return <Wrapper src={src} alt={`${user?.name} avatar`}></Wrapper>;
+    return (
+        <ImageWithPlaceholder
+            src={user.avatar || ""}
+            defaultSrc={defaultSrc}
+            alt={`${user.name} avatar`}
+            customStyles="--size: 3rem;
+                width: var(--size);
+                height: var(--size);
+                border-radius: 0.5rem;"
+        ></ImageWithPlaceholder>
+    );
 };
 
 export default UserAvatarSmall;

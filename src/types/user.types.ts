@@ -1,16 +1,13 @@
 export interface iUser {
-    id: string;
+    bio: string;
     _id: string;
     name: string;
-    bio: string;
-    avatar: string;
-    coverPhoto: string;
-    password?: string | null;
-    passwordConfirm?: string | null;
     email: string;
     gender: number;
+    avatar: string;
     birthday: Date;
+    coverPhoto: string;
     isThirdParty?: boolean;
-    following: iUser[] | string[];
-    followers: iUser[] | string[];
+    following: iUser[];
+    followers: iUser[];
 }

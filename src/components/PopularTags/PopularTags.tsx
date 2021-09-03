@@ -2,7 +2,7 @@
 import { nFormatter } from "@utils/helper";
 
 // components
-import SidebarBlock from "@components/SidebarBlock";
+import SidebarBlock from "@components/Sidebar/SidebarBlock";
 
 // styles
 import { TagCounter, TagName, TagWrapper } from "./PopularTagsStyle";

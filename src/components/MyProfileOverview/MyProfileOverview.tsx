@@ -44,17 +44,14 @@ const MyProfileOverview = ({ user, isMe }: Props) => {
     const { user: currentUser, followUserMutation } = useUser();
     const [listType, setListType] = useState<LIST_TYPE>("");
 
-    const followed = currentUser?.following.some((u: iUser | string) => {
-        if (typeof u === "string") {
-            return u === user._id;
-        }
+    const followed = currentUser?.following.some((u: iUser) => {
         return u._id === user._id;
     });
 
-    const followers: iUser[] | string[] = user.followers;
-    const following: iUser[] | string[] = user.following;
+    const followers: iUser[] = user.followers;
+    const following: iUser[] = user.following;
 
-    let modalData: iUser[] | string[] = [];
+    let modalData: iUser[];
     let modalHeader = null;
 
     switch (listType) {
@@ -71,9 +68,7 @@ const MyProfileOverview = ({ user, isMe }: Props) => {
             modalHeader = null;
     }
 
-    const modalBody = modalData.map((u: iUser | string) => (
-        <UserCard user={u} />
-    ));
+    const modalBody = modalData.map((user: iUser) => <UserCard user={user} />);
 
     return (
         <Wrapper>
@@ -92,10 +87,10 @@ const MyProfileOverview = ({ user, isMe }: Props) => {
                             alt={user?.name || "user avatar"}
                         />
                         <div>
-                            <label htmlFor={`upload-avatar-${user.id}`} />
+                            <label htmlFor={`upload-avatar-${user._id}`} />
                             <input
                                 type="file"
-                                id={`upload-avatar-${user.id}`}
+                                id={`upload-avatar-${user._id}`}
                                 accept="image/*"
                             />
                         </div>

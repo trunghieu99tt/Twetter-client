@@ -1,7 +1,7 @@
 import React from "react";
 
 // api
-import client from "../../api/client";
+import client from "../../../api/client";
 
 // talons
 import { useSocialLogin } from "./useSocialLogin";

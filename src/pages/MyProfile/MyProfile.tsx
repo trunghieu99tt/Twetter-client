@@ -8,7 +8,7 @@ import { useTweets } from "@talons/useTweets";
 import MainLayout from "@layout/Main";
 
 // components
-import LeftSidebar from "@components/LeftSidebar";
+import LeftSidebar from "@components/Sidebar/LeftSidebar";
 import InfinityTweetList from "@components/InfinityTweetsList";
 import MyProfileOverview from "@components/MyProfileOverview";
 
@@ -23,8 +23,8 @@ const MyProfile = () => {
     const { getProfileTweetsQuery } = useTweets(userId);
     const { user: me, getUserQuery } = useUser(userId);
 
-    const userData = userId === me?.id ? me : getUserQuery.data;
-    const isMe = userId === me?.id;
+    const userData = userId === me?._id ? me : getUserQuery.data;
+    const isMe = userId === me?._id;
 
     if (!userData) return null;
 
