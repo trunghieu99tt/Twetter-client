@@ -8,6 +8,9 @@ import { nFormatter } from "@utils/helper";
 import SidebarBlock from "@components/SidebarBlock";
 import UserAvatarSmall from "@components/UserAvatarSmall";
 
+// types
+import { iUser } from "@type/user.types";
+
 // icons
 import { IoPersonAdd } from "react-icons/io5";
 
@@ -21,7 +24,6 @@ import {
     UserFollowers,
     UserName,
 } from "./PopularPeopleStyle";
-import { iUser } from "@type/user.types";
 
 const PopularPeople = () => {
     const { getLimitedPopularUsersQuery, user: currentUser } = useUser();

@@ -8,25 +8,27 @@ interface Props extends React.HTMLAttributes<HTMLDivElement> {
     isVisible?: boolean;
 }
 
+const motionConfig = {
+    initial: {
+        opacity: 0,
+        scale: 0,
+    },
+    animate: {
+        opacity: 1,
+        scale: 1,
+        transformOrigin: "top right",
+    },
+    exit: {
+        opacity: 0,
+        scale: 0,
+    },
+};
+
 const Dropdown = ({ isVisible, items, children }: Props) => {
     return (
         <AnimatePresence>
             {isVisible && (
-                <motion.div
-                    initial={{
-                        opacity: 0,
-                        scale: 0,
-                    }}
-                    animate={{
-                        opacity: 1,
-                        scale: 1,
-                        transformOrigin: "top right",
-                    }}
-                    exit={{
-                        opacity: 0,
-                        scale: 0,
-                    }}
-                >
+                <motion.div {...motionConfig}>
                     <Wrapper>
                         <DropdownList>
                             {items?.map((item: any, idx: number) => {

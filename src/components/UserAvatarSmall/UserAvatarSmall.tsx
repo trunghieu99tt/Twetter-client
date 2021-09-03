@@ -11,7 +11,7 @@ import { iUser } from "@type/user.types";
 import { GENDER } from "constants/user.constants";
 
 const Wrapper = styled.img`
-    --size: 2.5rem;
+    --size: 3rem;
     width: var(--size);
     height: var(--size);
     object-fit: cover;

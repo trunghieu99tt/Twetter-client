@@ -1,8 +1,14 @@
+import { useState } from "react";
+
 // utils
 import { nFormatter } from "@utils/helper";
 
 // talons
 import { useUser } from "@talons/useUser";
+
+// components
+import Modal from "@components/Modal";
+import UserCard from "@components/UserCard";
 
 // icons
 import { IoPersonAdd } from "react-icons/io5";
@@ -26,9 +32,6 @@ import {
     FollowersCounter,
 } from "./MyProfileOverviewStyle";
 import { Container } from "@shared/style/sharedStyle.style";
-import { useState } from "react";
-import UserCard from "@components/UserCard";
-import Modal from "@components/Modal";
 
 type Props = {
     user: iUser;

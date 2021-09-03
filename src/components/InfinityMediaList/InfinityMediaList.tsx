@@ -1,26 +1,23 @@
 import React from "react";
-
-// components
-import TweetSkeleton from "@components/Tweet/TweetSkeleton";
 import Masonry from "react-masonry-css";
 import InfiniteScroll from "react-infinite-scroll-component";
+
+// components
+import MediaCard from "./MediaCard";
+import TweetSkeleton from "@components/Tweet/TweetSkeleton";
 
 // types
 import { iTweet } from "@type/tweet.types";
 
+// constants
+import { MASONRY_CONFIG_BREAKPOINTS } from "constants/config.constant";
+
 // styles
 import classes from "./infinityMediaList.module.css";
-import MediaCard from "./MediaCard";
 
 interface Props {
     query: any;
 }
-
-const breakpointColumnsObj = {
-    default: 3,
-    700: 2,
-    500: 1,
-};
 
 const InfinityMediaList = ({ query }: Props) => {
     const { data, isLoading, fetchNextPage } = query;
@@ -53,7 +50,7 @@ const InfinityMediaList = ({ query }: Props) => {
                 <Masonry
                     className={classes.grid}
                     columnClassName={classes.column}
-                    breakpointCols={breakpointColumnsObj}
+                    breakpointCols={MASONRY_CONFIG_BREAKPOINTS}
                 >
                     {mediaList?.map((tweet: iTweet) => (
                         <MediaCard

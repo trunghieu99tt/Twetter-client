@@ -1,5 +1,8 @@
 import { QueryFunctionContext, useInfiniteQuery, useMutation, useQueryClient } from "react-query";
 
+// utils
+import { getInfinityList } from "@utils/query";
+
 // api
 import client from "api/client";
 
@@ -7,45 +10,35 @@ import client from "api/client";
 import { iComment, iCreateCommentDTO } from "@type/comments.types";
 
 // constants
+import {
+    DEFAULT_LIST_RESPONSE,
+    INFINITY_QUERY_LIST_CONFIG,
+}
+    from "constants/config.constant";
 import { COMMENT_ENDPOINTS, COMMENT_QUERY } from "constants/comment.constants";
 
-const LIMIT = 2;
 
 const getMyComments = async ({ queryKey, pageParam = 0 }: QueryFunctionContext) => {
     const userId = queryKey[1];
     if (userId) {
-        const response = await client.get(`${COMMENT_ENDPOINTS.GET_USER_COMMENTS}`, {
-            params: {
-                limit: LIMIT,
-                page: pageParam + 1,
-                sort: "createdAt+modifiedAt"
-            },
-        });
-        return {
-            data: response?.data?.data || [],
-            total: response?.data?.total || 0
-        }
+        return getInfinityList(`${COMMENT_ENDPOINTS.GET_USER_COMMENTS}`, pageParam, {
+            sort: "createdAt",
+        })
     }
+    return DEFAULT_LIST_RESPONSE;
 
-    return {
-        data: [],
-        total: 0
-    }
 }
 
 const getTweetComments = async ({ queryKey, pageParam = 0 }: QueryFunctionContext) => {
     const tweetId = queryKey[1];
-    const response = await client.get(`${COMMENT_ENDPOINTS.BASE}/${tweetId}`, {
-        params: {
-            page: pageParam + 1,
-            limit: LIMIT,
-            sort: "createdAt"
-        },
-    });
-    return {
-        data: response?.data?.data || [],
-        total: response?.data?.total || 0
+
+    if (tweetId) {
+        return getInfinityList(`${COMMENT_ENDPOINTS.BASE}/${tweetId}`, pageParam, {
+            sort: "createdAt",
+        });
     }
+
+    return DEFAULT_LIST_RESPONSE
 }
 
 const createComment = async ({ newComment, tweetId }: {
@@ -63,19 +56,6 @@ const deleteComment = async (id: string) => {
     return response?.data;
 }
 
-
-const infinityListConfig = {
-    staleTime: 60 * 60 * 1000, // 1 hour
-    getPreviousPageParam: (lastPage: any, pages: any) => {
-        return pages.length - 1;
-    },
-    getNextPageParam: (lastPage: any, pages: any) => {
-        const totalPage = lastPage.total / LIMIT;
-        return pages.length < totalPage ? pages.length : null;
-    }
-}
-
-
 export const useComment = ({
     tweetId = "",
     userId = ""
@@ -86,28 +66,27 @@ export const useComment = ({
     const getMyCommentsQuery = useInfiniteQuery(
         [COMMENT_QUERY.GET_MY_COMMENTS, userId],
         getMyComments,
-        infinityListConfig);
+        INFINITY_QUERY_LIST_CONFIG);
 
     const getTweetCommentsQuery = useInfiniteQuery(
         [COMMENT_QUERY.GET_TWEET_COMMENTS, tweetId],
         getTweetComments,
-        infinityListConfig);
+        INFINITY_QUERY_LIST_CONFIG);
+
+    const invalidateCommentQuery = () => {
+        queryClient.invalidateQueries(COMMENT_QUERY.GET_MY_COMMENTS);
+        queryClient.invalidateQueries([COMMENT_QUERY.GET_TWEET_COMMENTS, tweetId]);
+    }
 
     const createCommentMutation = useMutation(createComment, {
-        onSuccess: () => {
-            queryClient.invalidateQueries(COMMENT_QUERY.GET_MY_COMMENTS);
-            queryClient.invalidateQueries([COMMENT_QUERY.GET_TWEET_COMMENTS, tweetId]);
-        }
+        onSuccess: invalidateCommentQuery
     });
     const deleteCommentMutation = useMutation(deleteComment, {
-        onSuccess: () => {
-            queryClient.invalidateQueries(COMMENT_QUERY.GET_MY_COMMENTS);
-            queryClient.invalidateQueries([COMMENT_QUERY.GET_TWEET_COMMENTS, tweetId]);
-        }
+        onSuccess: invalidateCommentQuery
     });
 
     const myComments = getMyCommentsQuery.data;
-    const { data, isLoading, fetchNextPage: fetchMoreTweetComment } = getTweetCommentsQuery;
+    const { data, fetchNextPage: fetchMoreTweetComment } = getTweetCommentsQuery;
 
     const pages = data?.pages;
     const totalTweetComments = pages?.[0].total || 0;

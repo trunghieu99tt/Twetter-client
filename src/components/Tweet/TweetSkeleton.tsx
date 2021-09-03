@@ -3,14 +3,12 @@ import Skeleton from "react-loading-skeleton";
 
 // styles
 import {
-    Header,
     Wrapper,
     Content,
     Interaction,
     CommentsWrapper,
     TweetDescription,
     TweetMediaWrapper,
-    InteractionButtonGroup,
 } from "./TweetStyle";
 import { Flex } from "@shared/style/sharedStyle.style";
 

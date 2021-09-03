@@ -4,6 +4,7 @@ import React from "react";
 import { useAddComment } from "./useAddComment";
 
 // components
+import { Spinner2 } from "@components/Loaders";
 import UserAvatarSmall from "@components/UserAvatarSmall";
 
 // icons
@@ -22,17 +23,15 @@ import {
     CommentImageWrapper,
     CommentImageCancelButton,
 } from "./AddCommentStyle";
-import { Spinner2 } from "@components/Loaders";
 
 type Props = {
-    addCommentRef: React.RefObject<HTMLInputElement>;
     tweetId: string;
+    addCommentRef: React.RefObject<HTMLInputElement>;
 };
 
 const AddComment = ({ addCommentRef, tweetId }: Props) => {
     const {
         user,
-        error,
         comment,
         loading,
         imagePreview,

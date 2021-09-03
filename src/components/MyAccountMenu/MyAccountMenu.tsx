@@ -2,11 +2,12 @@ import React, { useRef, useState, useMemo } from "react";
 import { Link } from "react-router-dom";
 
 // talons
-import { useOnClickOutside } from "@hooks/useOnClickOutside";
 import { useUser } from "@talons/useUser";
+import { useOnClickOutside } from "@hooks/useOnClickOutside";
 
 // components
 import Dropdown from "@components/Dropdown";
+import UserAvatarSmall from "@components/UserAvatarSmall";
 
 // icons
 import { BsFillCaretDownFill } from "react-icons/bs";
@@ -23,7 +24,6 @@ import {
     LogoutButton,
     Wrapper,
 } from "./MyAccountStyle";
-import UserAvatarSmall from "@components/UserAvatarSmall";
 
 const MyAccountMenu = () => {
     const [visibleDropdown, setVisibleDropdown] = useState<boolean>(false);

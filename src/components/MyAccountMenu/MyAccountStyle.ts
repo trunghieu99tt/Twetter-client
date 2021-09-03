@@ -20,6 +20,7 @@ export const DropdownButton = styled.button`
     background: none;
     border: none;
     cursor: pointer;
+    display: flex;
     
     &:focus {
         outline: none;

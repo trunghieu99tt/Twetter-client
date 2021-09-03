@@ -77,27 +77,27 @@ export const TweetImageWrapper = styled('div') <{
         grid-template-rows: repeat(2, 20rem);
         grid-template-columns: repeat(6, 1fr);
         
-        ${TweetImage}:nth-child(1){
+        ${TweetImage}:nth-of-type(1){
             grid-row: 1;
             grid-column: 1/span 3;
         }
         
-        ${TweetImage}:nth-child(2){
+        ${TweetImage}:nth-of-type(2){
             grid-row: 1;
             grid-column: 4/-1;
         }
         
-        ${TweetImage}:nth-child(3){
+        ${TweetImage}:nth-of-type(3){
             grid-row: 2;
             grid-column: 1/span 2;
         }
         
-        ${TweetImage}:nth-child(4){
+        ${TweetImage}:nth-of-type(4){
             grid-row: 2;
             grid-column: 3/span 2;
         }
         
-        ${TweetImage}:nth-child(5), 
+        ${TweetImage}:nth-of-type(5),
         ${ImageLeftPlaceHolder}{
             grid-row: 2;
             grid-column: 5/-1;

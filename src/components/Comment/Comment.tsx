@@ -1,8 +1,11 @@
-// styles
-import UserAvatarSmall from "@components/UserAvatarSmall";
+// types
 import { iComment } from "@type/comments.types";
+
+// icons
 import { AiOutlineHeart } from "react-icons/ai";
 
+// styles
+import UserAvatarSmall from "@components/UserAvatarSmall";
 import {
     Main,
     Content,
@@ -22,6 +25,8 @@ interface Props {
 }
 
 const Comment = ({ data, level = 0 }: Props) => {
+    const likeCount = data?.likes?.length || 0;
+
     return (
         <Wrapper shouldIndent={level <= 1}>
             <UserAvatarSmall user={data?.author} />
@@ -48,8 +53,7 @@ const Comment = ({ data, level = 0 }: Props) => {
                     </LikeButton>
                     <span>.</span>
                     <LikeCounter>
-                        {data?.likes?.length}{" "}
-                        {data?.likes?.length === 1 ? " Like" : " Likes"}
+                        {likeCount} {likeCount === 1 ? " Like" : " Likes"}
                     </LikeCounter>
                 </Interaction>
             </Main>

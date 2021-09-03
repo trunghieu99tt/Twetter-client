@@ -1,10 +1,12 @@
 import React from "react";
 
 // talons
+import { useUser } from "@talons/useUser";
 import { useAddTweet } from "./useAddTweet";
 
 // components
 import { Spinner1 } from "@components/Loaders";
+import UserAvatarSmall from "@components/UserAvatarSmall";
 // import RichTextInput from "@components/RichTextInput";
 import AudienceSelector from "@components/AudienceSelector";
 
@@ -29,10 +31,6 @@ import {
     TweetContentInputWrapper,
 } from "./AddTweetStyle";
 import { Flex } from "@shared/style/sharedStyle.style";
-import { useQueryClient } from "react-query";
-import { USER_QUERY } from "constants/user.constants";
-import UserAvatarSmall from "@components/UserAvatarSmall";
-import { useUser } from "@talons/useUser";
 
 type modeType = "block" | "flex" | "grid" | "none";
 
@@ -97,11 +95,12 @@ const AddTweet = () => {
                                             alt={`add-tweet-file-image-${index}`}
                                         />
                                     ))}
-                            {imageLeft && imageLeft > 0 && (
+                            {(imageLeft && imageLeft > 0 && (
                                 <ImageLeftPlaceHolder>
                                     {imageLeft}+
                                 </ImageLeftPlaceHolder>
-                            )}
+                            )) ||
+                                null}
                         </TweetImageWrapper>
                         <Footer>
                             <Flex gap="1.5rem">

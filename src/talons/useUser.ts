@@ -1,9 +1,18 @@
-import { iUser } from "../types/user.types";
-import client from "api/client"
 import { QueryFunctionContext, useInfiniteQuery, useMutation, useQuery, useQueryClient } from "react-query";
-import { USER_ENDPOINTS, USER_QUERY } from "constants/user.constants";
 
-const LIMIT = 10;
+
+// utils
+import { getInfinityList } from "@utils/query";
+
+// api
+import client from "api/client"
+
+// types
+import { iUser } from "../types/user.types";
+
+// constants
+import { USER_ENDPOINTS, USER_QUERY } from "constants/user.constants";
+import { INFINITY_QUERY_LIST_CONFIG, LONG_STATE_TIME } from "constants/config.constant";
 
 const getMe = async () => {
     const response = await client.get(USER_ENDPOINTS.GET_ME);
@@ -18,18 +27,8 @@ const getUser = async ({ queryKey }: QueryFunctionContext) => {
     return response?.data?.data;
 }
 
-const getPopularUsers = async ({ pageParam = 0, limit = LIMIT }) => {
-    const response = await client.get(USER_ENDPOINTS.POPULAR_USERS, {
-        params: {
-            page: pageParam + 1,
-            limit
-        },
-    });
-
-    return {
-        data: response?.data?.data || [],
-        total: response?.data?.total || 0
-    };
+const getPopularUsers = async ({ pageParam = 0 }: QueryFunctionContext) => {
+    return getInfinityList(USER_ENDPOINTS.POPULAR_USERS, pageParam);
 }
 
 // get 5 most popular users
@@ -40,7 +39,6 @@ const getLimitedPopularUsers = async () => {
             limit: 5
         },
     });
-
     return response?.data?.data || [];
 }
 
@@ -58,41 +56,34 @@ const followUser = async (userId: string) => {
     return response?.data;
 }
 
-const DEFAULT_STATE_TIME = 86400 * 1000; // 1 day
-
-const infinityListConfig = {
-    staleTime: 60 * 60 * 1000, // 1 hour
-    getPreviousPageParam: (lastPage: any, pages: any) => {
-        return pages.length - 1;
-    },
-    getNextPageParam: (lastPage: any, pages: any) => {
-        const totalPage = lastPage.total / LIMIT;
-        return pages.length < totalPage ? pages.length : null;
-    }
-}
-
 export const useUser = (
     userId = ""
 ) => {
 
     const queryClient = useQueryClient();
 
+    const invalidateQueriesAfterSuccess = () => {
+        queryClient.invalidateQueries(USER_QUERY.GET_ME);
+        queryClient.invalidateQueries(USER_QUERY.GET_POPULAR_USERS);
+        queryClient.invalidateQueries(USER_QUERY.GET_LIMITED_POPULAR_USERS);
+    }
+
     // Have to separate into 2 query because we need to get the user by token for the
     // first time we load the page. At that time we don't have the userId yet.
     const getMeQuery = useQuery<iUser | undefined>(USER_QUERY.GET_ME, getMe, {
-        staleTime: DEFAULT_STATE_TIME,
+        staleTime: LONG_STATE_TIME,
         retry: 5
     });
 
     const getUserQuery = useQuery<iUser | undefined>([USER_QUERY.GET_USER, userId], getUser, {
-        staleTime: DEFAULT_STATE_TIME,
+        staleTime: LONG_STATE_TIME,
         retry: 5
     });
 
-    const getPopularUsersQuery = useInfiniteQuery(USER_QUERY.GET_POPULAR_USERS, getPopularUsers, infinityListConfig);
+    const getPopularUsersQuery = useInfiniteQuery(USER_QUERY.GET_POPULAR_USERS, getPopularUsers, INFINITY_QUERY_LIST_CONFIG);
 
     const getLimitedPopularUsersQuery = useQuery<iUser[] | undefined>(USER_QUERY.GET_LIMITED_POPULAR_USERS, getLimitedPopularUsers, {
-        staleTime: DEFAULT_STATE_TIME,
+        staleTime: LONG_STATE_TIME,
         retry: 5
     });
 
@@ -104,9 +95,7 @@ export const useUser = (
 
     const followUserMutation = useMutation(followUser, {
         onSuccess: (user, userId) => {
-            queryClient.invalidateQueries(USER_QUERY.GET_ME);
-            queryClient.invalidateQueries(USER_QUERY.GET_POPULAR_USERS);
-            queryClient.invalidateQueries(USER_QUERY.GET_LIMITED_POPULAR_USERS);
+            invalidateQueriesAfterSuccess();
             if (userId)
                 queryClient.invalidateQueries([USER_QUERY.GET_USER, userId]);
         }

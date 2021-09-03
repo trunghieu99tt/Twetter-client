@@ -1,12 +1,8 @@
-import React, { useRef, useState } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 
 // talons
-import { useQueryClient } from "react-query";
-import { useTweets } from "@talons/useTweets";
-
-// hooks
-import { useOnClickOutside } from "@hooks/useOnClickOutside";
+import { useTweet } from "./useTweet";
 
 // components
 import Comment from "@components/Comment";
@@ -49,9 +45,6 @@ import {
 } from "./TweetStyle";
 
 // types and constants
-import { iUser } from "@type/user.types";
-import { USER_QUERY } from "constants/user.constants";
-import { useComment } from "@talons/useComment";
 import { iComment } from "@type/comments.types";
 
 type Props = {
@@ -59,66 +52,33 @@ type Props = {
 };
 
 const Tweet = ({ tweet }: Props) => {
-    const [visibleDropdown, setVisibleDropdown] = useState<boolean>(false);
-    const currentUser: iUser | undefined = useQueryClient().getQueryData(
-        USER_QUERY.GET_ME
-    );
     const {
-        deleteTweetMutation,
-        reactTweetMutation,
-        retweetMutation,
-        saveTweetMutation,
-    } = useTweets();
-    const { tweetComments, totalTweetComments, fetchMoreTweetComment } =
-        useComment({
-            tweetId: tweet._id,
-            userId: currentUser?.id,
-        });
+        liked,
+        saved,
+        isAuthor,
+        retweeted,
+        dropdownRef,
+        isRetweeted,
+        retweetedBy,
+        deleteLoading,
+        tweetComments,
+        addCommentRef,
+        tweetLikeCount,
+        tweetSavedCount,
+        visibleDropdown,
+        tweetRetweetCount,
+        totalTweetComments,
 
-    const dropdownRef = useRef() as React.RefObject<HTMLDivElement>;
-    const addCommentRef = useRef(null) as React.RefObject<HTMLInputElement>;
-
-    const toggleDropdown = () => setVisibleDropdown((isVisible) => !isVisible);
-
-    const onDeleteTweet = () => {
-        deleteTweetMutation.mutate(tweet._id);
-    };
-
-    const onReactTweet = () => {
-        reactTweetMutation.mutate({ tweetId: tweet._id });
-    };
-
-    const onRetweet = () => {
-        retweetMutation.mutate(tweet._id);
-    };
-
-    const onSaveTweet = () => {
-        saveTweetMutation.mutate(tweet._id);
-    };
-
-    useOnClickOutside(dropdownRef, () => setVisibleDropdown(false));
-
-    const onClickComment = () => {
-        if (addCommentRef?.current) {
-            addCommentRef.current.focus();
-        }
-    };
-
-    const isAuthor =
-        (currentUser && tweet?.author?._id === currentUser?._id) ||
-        (currentUser && tweet?.retweetedBy?._id === currentUser?._id);
-    const isRetweeted = tweet.isRetweet;
-    const liked =
-        (currentUser?._id && tweet.likes.includes(currentUser?._id)) || false;
-    const saved =
-        (currentUser?._id && tweet?.saved?.includes(currentUser._id)) || false;
-    const retweetedBy = tweet?.retweetedBy;
-    const retweeted =
-        (currentUser?._id && tweet?.retweeted?.includes(currentUser._id)) ||
-        false;
-    const tweetLikeCount = tweet?.likes?.length || 0;
-    const tweetSavedCount = tweet?.saved?.length || 0;
-    const tweetRetweetCount = tweet?.retweeted?.length || 0;
+        onRetweet,
+        onSaveTweet,
+        onReactTweet,
+        onDeleteTweet,
+        toggleDropdown,
+        focusOnCommentForm,
+        fetchMoreTweetComment,
+    } = useTweet({
+        tweet,
+    });
 
     return (
         <React.Fragment>
@@ -128,7 +88,7 @@ const Tweet = ({ tweet }: Props) => {
                 </RetweetedBy>
             )}
             <Wrapper>
-                {deleteTweetMutation.isLoading && <Spinner1 />}
+                {deleteLoading && <Spinner1 />}
 
                 <Header>
                     <AuthorWrapper>
@@ -200,7 +160,7 @@ const Tweet = ({ tweet }: Props) => {
                         </InteractionSummary>
 
                         <InteractionButtonGroup>
-                            <InteractionButton onClick={onClickComment}>
+                            <InteractionButton onClick={focusOnCommentForm}>
                                 <BiComment />
                                 Comment
                             </InteractionButton>
