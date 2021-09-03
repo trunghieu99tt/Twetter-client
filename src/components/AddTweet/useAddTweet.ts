@@ -1,5 +1,5 @@
 import { ChangeEvent, useState } from "react";
-import { useTweet } from "@talons/useTweet"
+import { useTweets } from "@talons/useTweets"
 import { useUpload } from "@talons/useUpload";
 import { iCreateTweetDTO } from "@type/tweet.types";
 import { useQueryClient } from "react-query";
@@ -7,7 +7,6 @@ import { USER_QUERY } from "constants/user.constants";
 import { iUser } from "@type/user.types";
 
 export const useAddTweet = () => {
-
     const user: iUser | undefined = useQueryClient().getQueryData(
         USER_QUERY.GET_ME
     );
@@ -20,7 +19,7 @@ export const useAddTweet = () => {
 
     const {
         createTweetMutation
-    } = useTweet(user?._id);
+    } = useTweets(user?._id);
 
     const {
         uploadImages
@@ -58,7 +57,6 @@ export const useAddTweet = () => {
         setAudience(0);
         setLoading(false);
     }
-
 
     const onSubmit = async () => {
         if (content || files.length > 0) {

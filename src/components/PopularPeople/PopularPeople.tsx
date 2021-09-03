@@ -21,11 +21,33 @@ import {
     UserFollowers,
     UserName,
 } from "./PopularPeopleStyle";
+import { iUser } from "@type/user.types";
 
 const PopularPeople = () => {
-    const { user } = useUser();
+    const { getLimitedPopularUsersQuery, user: currentUser } = useUser();
 
-    const items = [...Array(2)].map(() => {
+    const data: iUser[] = getLimitedPopularUsersQuery?.data || [];
+
+    const filteredUsers =
+        (data?.length > 0 &&
+            data?.filter((user: iUser) => {
+                // Filter user:
+                // - if user is not current user
+                // - if current user is not following user
+                return (
+                    user._id !== currentUser?._id &&
+                    !user?.followers.some((u: iUser | string) => {
+                        if (typeof u === "string")
+                            return u === currentUser?._id;
+                        return u._id === currentUser?._id;
+                    })
+                );
+            })) ||
+        [];
+
+    if (filteredUsers?.length === 0) return null;
+
+    const items = filteredUsers.map((user: iUser) => {
         return (
             <UserCard>
                 <Flex gap="1.8rem">
@@ -42,7 +64,7 @@ const PopularPeople = () => {
                     </FollowButton>
                 </Flex>
                 <UserBio>{user?.bio}</UserBio>
-                <UserCoverPhoto src={user?.coverPhoto} />
+                {user?.coverPhoto && <UserCoverPhoto src={user?.coverPhoto} />}
             </UserCard>
         );
     });

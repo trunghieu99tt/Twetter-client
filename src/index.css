@@ -64,6 +64,8 @@ button {
     --red: #eb5757;
 
     --box-shadow-1: 0px 2px 4px rgba(0, 0, 0, 0.05);
+
+    --border-1: 1px solid var(--gray-5);
 }
 
 body {
@@ -72,6 +74,10 @@ body {
 
 button {
     cursor: pointer;
+}
+
+button:focus {
+    outline: none;
 }
 
 ::-webkit-scrollbar {

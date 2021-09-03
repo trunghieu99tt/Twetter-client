@@ -1,26 +1,25 @@
+// talons
+import { useTweets } from "@talons/useTweets";
+
 // layout
 import MainLayout from "@layout/Main";
 
 // components
-import Tweet from "@components/Tweet";
-import LeftSidebar from "@components/LeftSidebar";
+import InfinityTweetList from "@components/InfinityTweetsList";
 
 // styles
 import { Container, Flex } from "@shared/style/sharedStyle.style";
 import { Main, Wrapper } from "./BookmarkStyle";
 
 const BookMark = () => {
+    const { getMySavedTweetsQuery } = useTweets();
+
     return (
         <Wrapper>
             <Container>
                 <Flex>
-                    <div>
-                        <LeftSidebar type="PROFILE" />
-                    </div>
                     <Main>
-                        {/* {[...Array(10)].map((_, i) => (
-                            <Tweet key={i} />
-                        ))} */}
+                        <InfinityTweetList query={getMySavedTweetsQuery} />
                     </Main>
                 </Flex>
             </Container>

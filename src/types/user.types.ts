@@ -11,6 +11,6 @@ export interface iUser {
     gender: number;
     birthday: Date;
     isThirdParty?: boolean;
-    following: iUser[];
-    followers: iUser[];
+    following: iUser[] | string[];
+    followers: iUser[] | string[];
 }

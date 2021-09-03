@@ -58,7 +58,7 @@ export const Name = styled.h2`
     letter-spacing: 0.5px;
 `;
 
-export const FollowersCounter = styled.p`
+export const FollowersCounter = styled.button`
     font-size: 1.2rem;
     line-height: 1.8rem;
     color: var(--gray-3);

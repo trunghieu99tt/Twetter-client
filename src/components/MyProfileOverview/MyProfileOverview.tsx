@@ -26,21 +26,60 @@ import {
     FollowersCounter,
 } from "./MyProfileOverviewStyle";
 import { Container } from "@shared/style/sharedStyle.style";
+import { useState } from "react";
+import UserCard from "@components/UserCard";
+import Modal from "@components/Modal";
 
 type Props = {
     user: iUser;
     isMe: boolean;
 };
 
+type LIST_TYPE = "followers" | "following" | "";
+
 const MyProfileOverview = ({ user, isMe }: Props) => {
     const { user: currentUser, followUserMutation } = useUser();
+    const [listType, setListType] = useState<LIST_TYPE>("");
 
-    const followed = currentUser?.following.some(
-        (u: iUser) => u.id === user.id
-    );
+    const followed = currentUser?.following.some((u: iUser | string) => {
+        if (typeof u === "string") {
+            return u === user._id;
+        }
+        return u._id === user._id;
+    });
+
+    const followers: iUser[] | string[] = user.followers;
+    const following: iUser[] | string[] = user.following;
+
+    let modalData: iUser[] | string[] = [];
+    let modalHeader = null;
+
+    switch (listType) {
+        case "followers":
+            modalData = followers;
+            modalHeader = <p>People are following {user.name}</p>;
+            break;
+        case "following":
+            modalData = following;
+            modalHeader = <p>{user.name} is following</p>;
+            break;
+        default:
+            modalData = [];
+            modalHeader = null;
+    }
+
+    const modalBody = modalData.map((u: iUser | string) => (
+        <UserCard user={u} />
+    ));
 
     return (
         <Wrapper>
+            <Modal
+                body={modalBody}
+                header={modalHeader}
+                isOpen={listType !== ""}
+                onCancel={() => setListType("")}
+            />
             <CoverPhoto img={user?.coverPhoto || ""}></CoverPhoto>
             <Container>
                 <Main>
@@ -61,13 +100,17 @@ const MyProfileOverview = ({ user, isMe }: Props) => {
                     <Info>
                         <MainInfo>
                             <Name>{user?.name}</Name>
-                            <FollowersCounter>
+                            <FollowersCounter
+                                onClick={() => setListType("following")}
+                            >
                                 <span>
                                     {nFormatter(user?.following?.length || 0)}
                                 </span>
                                 Following
                             </FollowersCounter>
-                            <FollowersCounter>
+                            <FollowersCounter
+                                onClick={() => setListType("followers")}
+                            >
                                 <span>
                                     {nFormatter(user?.followers?.length || 0)}
                                 </span>

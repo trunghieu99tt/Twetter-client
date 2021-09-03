@@ -5,11 +5,14 @@ export const USER_ENDPOINTS = {
     GET_ME: `${prefix}/me`,
     FOLLOW: `${prefix}/follow`,
     UPDATE_ME: `${prefix}/update`,
+    POPULAR_USERS: `${prefix}/popular`,
 }
 
 export const USER_QUERY = {
     GET_ME: 'GET_ME',
     GET_USER: 'GET_USER',
+    GET_POPULAR_USERS: 'GET_POPULAR_USERS',
+    GET_LIMITED_POPULAR_USERS: 'LIMITED_POPULAR_USERS',
 }
 
 export const GENDER = {

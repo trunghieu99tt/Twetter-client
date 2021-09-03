@@ -19,7 +19,7 @@ const Wrapper = styled.img`
 `;
 
 interface Props {
-    user?: iUser;
+    user?: Partial<iUser>;
 }
 
 const UserAvatarSmall = ({ user }: Props) => {

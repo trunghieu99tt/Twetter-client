@@ -26,22 +26,22 @@ export const myProfileRouter = [
 export const newFeedsRouter = [
     {
         name: "Top",
-        path: "/top",
+        path: "/explore/top",
         id: uuid(),
     },
     {
         name: "Latest",
-        path: "/latest",
+        path: "/explore/latest",
         id: uuid(),
     },
     {
         name: "People",
-        path: "/people",
+        path: "/explore/people",
         id: uuid(),
     },
     {
         name: "Media",
-        path: "/media",
+        path: "/explore/media",
         id: uuid(),
     },
 ];

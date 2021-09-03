@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 // talons
 import { useQueryClient } from "react-query";
-import { useTweet } from "@talons/useTweet";
+import { useTweets } from "@talons/useTweets";
 
 // hooks
 import { useOnClickOutside } from "@hooks/useOnClickOutside";
@@ -63,8 +63,12 @@ const Tweet = ({ tweet }: Props) => {
     const currentUser: iUser | undefined = useQueryClient().getQueryData(
         USER_QUERY.GET_ME
     );
-    const { deleteTweetMutation, reactTweetMutation, retweetMutation } =
-        useTweet();
+    const {
+        deleteTweetMutation,
+        reactTweetMutation,
+        retweetMutation,
+        saveTweetMutation,
+    } = useTweets();
     const { tweetComments, totalTweetComments, fetchMoreTweetComment } =
         useComment({
             tweetId: tweet._id,
@@ -88,6 +92,10 @@ const Tweet = ({ tweet }: Props) => {
         retweetMutation.mutate(tweet._id);
     };
 
+    const onSaveTweet = () => {
+        saveTweetMutation.mutate(tweet._id);
+    };
+
     useOnClickOutside(dropdownRef, () => setVisibleDropdown(false));
 
     const onClickComment = () => {
@@ -102,7 +110,12 @@ const Tweet = ({ tweet }: Props) => {
     const isRetweeted = tweet.isRetweet;
     const liked =
         (currentUser?._id && tweet.likes.includes(currentUser?._id)) || false;
-    const retweetedBy = tweet.retweetedBy;
+    const saved =
+        (currentUser?._id && tweet?.saved?.includes(currentUser._id)) || false;
+    const retweetedBy = tweet?.retweetedBy;
+    const retweeted =
+        (currentUser?._id && tweet?.retweeted?.includes(currentUser._id)) ||
+        false;
     const tweetLikeCount = tweet?.likes?.length || 0;
     const tweetSavedCount = tweet?.saved?.length || 0;
     const tweetRetweetCount = tweet?.retweeted?.length || 0;
@@ -158,6 +171,7 @@ const Tweet = ({ tweet }: Props) => {
                                 showArrows={false}
                                 showIndicators={tweet?.media?.length > 1}
                                 showStatus={tweet?.media?.length > 1}
+                                showThumbs={false}
                             >
                                 {tweet.media.map((media, index) => (
                                     <TweetMedia key={index} src={media} />
@@ -190,7 +204,10 @@ const Tweet = ({ tweet }: Props) => {
                                 <BiComment />
                                 Comment
                             </InteractionButton>
-                            <InteractionButton onClick={onRetweet}>
+                            <InteractionButton
+                                onClick={onRetweet}
+                                retweeted={retweeted}
+                            >
                                 <FiRefreshCw />
                                 Retweet
                             </InteractionButton>
@@ -201,9 +218,12 @@ const Tweet = ({ tweet }: Props) => {
                                 <FaRegHeart />
                                 {liked ? "Liked" : "Like"}
                             </InteractionButton>
-                            <InteractionButton>
+                            <InteractionButton
+                                onClick={onSaveTweet}
+                                saved={saved}
+                            >
                                 <BiBookmark />
-                                Save
+                                {saved ? "Saved" : "Save"}
                             </InteractionButton>
                         </InteractionButtonGroup>
                     </Interaction>

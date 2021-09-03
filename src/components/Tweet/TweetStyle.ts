@@ -64,7 +64,7 @@ export const Content = styled.div``;
 export const TweetDescription = styled.p`
 font-size: 1.5rem;
 color: var(--gray-2);
-margin - bottom: 2rem;
+margin-bottom: 2rem;
 `;
 
 export const TweetMediaWrapper = styled.div``;
@@ -76,7 +76,7 @@ border-radius: .8rem;
 `;
 
 export const Interaction = styled.div`
-margin - bottom: 1rem;
+    margin: 1rem 0;
 `;
 
 export const InteractionSummary = styled.div`
@@ -90,12 +90,12 @@ export const InteractionSummary = styled.div`
 export const InteractionSummaryItem = styled.div`
     color: var(--gray-4);
     font-size: 1.2rem;
-    font - weight: 500;
+    font-weight: 500;
 `;
 
 export const InteractionButtonGroup = styled.div`
-    border - top: 1px solid var(--light-1);
-    border - bottom: 1px solid var(--light-1);
+    border-top: 1px solid var(--light-1);
+    border-bottom: 1px solid var(--light-1);
     padding: .4rem 0;
     display: flex;
     justify-content: space-between;
@@ -104,6 +104,8 @@ export const InteractionButtonGroup = styled.div`
 export const InteractionButton = styled('button') <{
     customStyle?: string;
     liked?: boolean;
+    saved?: boolean;
+    retweeted?: boolean;
 }>`
     cursor: pointer;
     padding: 1.1rem 4rem;
@@ -115,6 +117,14 @@ export const InteractionButton = styled('button') <{
     
     ${(props) => props.liked && `
         color: var(--red);
+    `}
+    
+    ${(props) => props.saved && `
+        color: var(--blue-2);
+    `}
+
+    ${(props) => props.retweeted && `
+        color: var(--green-2);
     `}
     
     &:hover{

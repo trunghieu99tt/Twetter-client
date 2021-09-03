@@ -2,7 +2,7 @@ import { useParams } from "react-router";
 
 // talons
 import { useUser } from "@talons/useUser";
-import { useTweet } from "@talons/useTweet";
+import { useTweets } from "@talons/useTweets";
 
 // layout
 import MainLayout from "@layout/Main";
@@ -20,7 +20,7 @@ const MyProfile = () => {
     const params: { userId: string } = useParams();
     const { userId } = params;
 
-    const { getProfileTweetsQuery } = useTweet(userId);
+    const { getProfileTweetsQuery } = useTweets(userId);
     const { user: me, getUserQuery } = useUser(userId);
 
     const userData = userId === me?.id ? me : getUserQuery.data;

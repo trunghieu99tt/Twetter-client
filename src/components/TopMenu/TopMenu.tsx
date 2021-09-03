@@ -10,7 +10,7 @@ const menu = [
     },
     {
         name: "Explore",
-        path: "/explore",
+        path: "/explore/latest",
         id: uuidv4(),
     },
     {
@@ -30,7 +30,7 @@ const TopMenu = () => {
                     return (
                         <Item
                             key={item.id}
-                            active={item.path === location.pathname}
+                            active={location.pathname.includes(item.path)}
                         >
                             <Link to={item.path}>{item.name}</Link>
                         </Item>

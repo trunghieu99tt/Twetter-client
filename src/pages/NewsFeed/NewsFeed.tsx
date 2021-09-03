@@ -1,5 +1,5 @@
 // talons
-import { useTweet } from "@talons/useTweet";
+import { useTweets } from "@talons/useTweets";
 
 // components
 import AddTweet from "@components/AddTweet";
@@ -22,7 +22,7 @@ const NewsFeed = () => {
         USER_QUERY.GET_ME
     );
 
-    const { getNewsFeedTweetsQuery } = useTweet(user?._id || "");
+    const { getNewsFeedTweetsQuery } = useTweets(user?._id || "");
 
     return (
         <Wrapper>
@@ -33,7 +33,7 @@ const NewsFeed = () => {
                         <InfinityTweetsList query={getNewsFeedTweetsQuery} />
                     </Main>
                     <Sidebar>
-                        <PopularTags />
+                        {/* <PopularTags /> */}
                         <PopularPeople />
                     </Sidebar>
                 </Inner>

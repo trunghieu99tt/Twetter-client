@@ -6,7 +6,7 @@ export interface iTweet {
     author: iUser;
     save: iUser[];
     tags: string[];
-    saved: iUser[];
+    saved: string[];
     likes: string[];
     media: string[];
     createdAt: Date;
