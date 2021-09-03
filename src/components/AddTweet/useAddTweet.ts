@@ -74,6 +74,7 @@ export const useAddTweet = () => {
             createTweetMutation.mutate(newTweet, {
                 onSettled: () => {
                     setLoading(false);
+                    resetAll();
                 },
                 onError: (error) => {
                     resetAll();

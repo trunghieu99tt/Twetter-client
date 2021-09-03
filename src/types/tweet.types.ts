@@ -7,7 +7,7 @@ export interface iTweet {
     save: iUser[];
     tags: string[];
     saved: iUser[];
-    likes: iUser[];
+    likes: string[];
     media: string[];
     createdAt: Date;
     content: string;
@@ -15,7 +15,8 @@ export interface iTweet {
     modifiedAt: Date;
     audience: number;
     isRetweet: boolean;
-    retweeted: iUser[];
+    retweeted: string[];
+    retweetedBy: iUser;
     comments: iComment[];
 }
 

@@ -1,6 +1,9 @@
 // utils
 import { nFormatter } from "@utils/helper";
 
+// talons
+import { useUser } from "@talons/useUser";
+
 // icons
 import { IoPersonAdd } from "react-icons/io5";
 
@@ -30,6 +33,12 @@ type Props = {
 };
 
 const MyProfileOverview = ({ user, isMe }: Props) => {
+    const { user: currentUser, followUserMutation } = useUser();
+
+    const followed = currentUser?.following.some(
+        (u: iUser) => u.id === user.id
+    );
+
     return (
         <Wrapper>
             <CoverPhoto img={user?.coverPhoto || ""}></CoverPhoto>
@@ -40,6 +49,14 @@ const MyProfileOverview = ({ user, isMe }: Props) => {
                             src={user?.avatar || ""}
                             alt={user?.name || "user avatar"}
                         />
+                        <div>
+                            <label htmlFor={`upload-avatar-${user.id}`} />
+                            <input
+                                type="file"
+                                id={`upload-avatar-${user.id}`}
+                                accept="image/*"
+                            />
+                        </div>
                     </AvatarWrapper>
                     <Info>
                         <MainInfo>
@@ -62,9 +79,15 @@ const MyProfileOverview = ({ user, isMe }: Props) => {
                         </SecondaryInfo>
                     </Info>
                     {!isMe && (
-                        <FollowButton>
+                        <FollowButton
+                            onClick={() => followUserMutation.mutate(user._id)}
+                        >
                             <IoPersonAdd />
-                            Follow
+                            {followUserMutation.isLoading
+                                ? "Changing..."
+                                : followed
+                                ? "Followed"
+                                : "Follow"}
                         </FollowButton>
                     )}
                 </Main>

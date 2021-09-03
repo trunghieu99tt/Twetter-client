@@ -55,6 +55,18 @@ const deleteTweet = async (id: string) => {
     return response?.data;
 }
 
+const reactTweet = async ({ tweetId }: {
+    tweetId: string
+}) => {
+    const response = await client.post(`${TWEET_ENDPOINTS.REACT_TWEET}/${tweetId}`);
+    return response?.data;
+}
+
+const retweet = async (tweetId: string) => {
+    const response = await client.post(`${TWEET_ENDPOINTS.RETWEET}/${tweetId}`);
+    return response?.data;
+}
+
 const infinityListConfig = {
     staleTime: 60 * 60 * 1000, // 1 hour
     getPreviousPageParam: (lastPage: any, pages: any) => {
@@ -71,6 +83,11 @@ export const useTweet = (userId = "") => {
 
     const queryClient = useQueryClient();
 
+    const invalidateTweetQueries = () => {
+        queryClient.invalidateQueries(TWEET_QUERY.GET_MY_TWEETS);
+        queryClient.invalidateQueries(TWEET_QUERY.GET_NEWS_FEED_TWEETS);
+    }
+
     const getProfileTweetsQuery = useInfiniteQuery([TWEET_QUERY.GET_MY_TWEETS, userId], getUserTweets, {
         ...infinityListConfig
     });
@@ -81,22 +98,36 @@ export const useTweet = (userId = "") => {
 
     const createTweetMutation = useMutation(createTweet, {
         onSuccess: () => {
-            queryClient.invalidateQueries(TWEET_QUERY.GET_MY_TWEETS);
-            queryClient.invalidateQueries(TWEET_QUERY.GET_NEWS_FEED_TWEETS);
+            invalidateTweetQueries();
         }
     });
+
     const deleteTweetMutation = useMutation(deleteTweet, {
         onSuccess: () => {
-            queryClient.invalidateQueries(TWEET_QUERY.GET_MY_TWEETS);
-            queryClient.invalidateQueries(TWEET_QUERY.GET_NEWS_FEED_TWEETS);
+            invalidateTweetQueries();
         }
     });
+
+    const reactTweetMutation = useMutation(reactTweet, {
+        onSuccess: () => {
+            invalidateTweetQueries();
+        }
+    });
+
+    const retweetMutation = useMutation(retweet, {
+        onSuccess: () => {
+            invalidateTweetQueries();
+        }
+    });
+
 
     return {
         getProfileTweetsQuery,
         getNewsFeedTweetsQuery,
 
+        retweetMutation,
+        reactTweetMutation,
         createTweetMutation,
-        deleteTweetMutation
+        deleteTweetMutation,
     }
 };

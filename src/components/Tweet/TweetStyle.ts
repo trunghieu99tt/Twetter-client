@@ -1,4 +1,15 @@
+import { Link } from "react-router-dom";
 import styled from "styled-components";
+
+export const RetweetedBy = styled(Link)`
+    margin-bottom: 1rem;
+    margin-left: 2rem;
+    display: flex;
+    font-size: 14px;
+    color: var(--gray-1);
+    gap: 1rem;
+    align-items: center;
+`
 
 export const Wrapper = styled.div`
     background: #fff;
@@ -90,18 +101,25 @@ export const InteractionButtonGroup = styled.div`
     justify-content: space-between;
 `;
 
-export const InteractionButton = styled.button`
+export const InteractionButton = styled('button') <{
+    customStyle?: string;
+    liked?: boolean;
+}>`
     cursor: pointer;
     padding: 1.1rem 4rem;
-    border - radius: .8rem;
+    border-radius: .8rem;
     display: flex;
     gap: 1.2rem;
     align-items: center;
-        
+    font-weight: 500;
+    
+    ${(props) => props.liked && `
+        color: var(--red);
+    `}
+    
     &:hover{
         background: var(--light-1);
     }
-
 `;
 
 export const CommentsWrapper = styled.div`

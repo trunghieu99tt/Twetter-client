@@ -63,3 +63,7 @@ export const LikeCounter = styled.div`
 `;
 
 export const RepliesWrapper = styled.div``;
+
+export const CommentMedia = styled.img`
+    height: 15rem;
+`;

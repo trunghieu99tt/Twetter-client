@@ -54,9 +54,14 @@ button {
     --gray-5: #e0e0e0;
 
     --blue-1: #2f80ed;
+    --blue-2: #2d9cdb;
 
     --light-1: #f2f2f2;
     --light-2: #fafafa;
+
+    --green-2: #27ae60;
+
+    --red: #eb5757;
 
     --box-shadow-1: 0px 2px 4px rgba(0, 0, 0, 0.05);
 }

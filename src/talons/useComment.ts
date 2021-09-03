@@ -4,7 +4,7 @@ import { QueryFunctionContext, useInfiniteQuery, useMutation, useQueryClient } f
 import client from "api/client";
 
 // types
-import { iCreateCommentDTO } from "@type/comments.types";
+import { iComment, iCreateCommentDTO } from "@type/comments.types";
 
 // constants
 import { COMMENT_ENDPOINTS, COMMENT_QUERY } from "constants/comment.constants";
@@ -107,11 +107,26 @@ export const useComment = ({
     });
 
     const myComments = getMyCommentsQuery.data;
-    const tweetComments = getTweetCommentsQuery.data;
+    const { data, isLoading, fetchNextPage: fetchMoreTweetComment } = getTweetCommentsQuery;
+
+    const pages = data?.pages;
+    const totalTweetComments = pages?.[0].total || 0;
+
+    const tweetComments: iComment[] =
+        pages?.reduce(
+            (res: iComment[], curr: { data: iComment[]; total: number }) => [
+                ...res,
+                ...curr.data,
+            ],
+            []
+        ) || [];
 
     return {
         myComments,
         tweetComments,
+        totalTweetComments,
+
+        fetchMoreTweetComment,
 
         getMyCommentsQuery,
         getTweetCommentsQuery,

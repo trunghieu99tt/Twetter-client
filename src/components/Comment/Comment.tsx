@@ -4,15 +4,16 @@ import { iComment } from "@type/comments.types";
 import { AiOutlineHeart } from "react-icons/ai";
 
 import {
-    AuthorName,
-    Content,
-    CreatedAt,
-    Interaction,
-    LikeButton,
-    LikeCounter,
     Main,
-    MainInfo,
+    Content,
     Wrapper,
+    MainInfo,
+    CreatedAt,
+    LikeButton,
+    AuthorName,
+    LikeCounter,
+    Interaction,
+    CommentMedia,
 } from "./CommentStyle";
 
 interface Props {
@@ -33,6 +34,12 @@ const Comment = ({ data, level = 0 }: Props) => {
                         </CreatedAt>
                     </div>
                     <Content>{data?.content}</Content>
+                    {data?.media?.url && (
+                        <CommentMedia
+                            src={data.media.url}
+                            alt={`comment-${data._id}-media`}
+                        />
+                    )}
                 </MainInfo>
                 <Interaction>
                     <LikeButton>

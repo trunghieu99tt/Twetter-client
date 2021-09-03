@@ -2,6 +2,8 @@ const prefix = '/tweet'
 
 export const TWEET_ENDPOINTS = {
     BASE: prefix,
+    RETWEET: `${prefix}/retweet`,
+    REACT_TWEET: `${prefix}/react`,
     GET_USER_TWEETS: `${prefix}/user`,
 }
 
