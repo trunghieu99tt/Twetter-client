@@ -1,28 +1,28 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useHistory } from "react-router";
+
+// talons
+import { useUser } from "@talons/useUser";
 
 // components
 import Auth from "@components/Auth";
 
-// images
-import AuthImage from "@images/auth.jpg";
-
 // styles
-import {
-    Right,
-    Wrapper,
-    Left,
-    AuthCoverPhoto,
-    Main,
-    Heading,
-} from "./AuthPageStyle";
+import { Right, Wrapper, Main, Heading } from "./AuthPageStyle";
 
-const index = () => {
+const AuthPage = () => {
+    const { user } = useUser();
+    const history = useHistory();
+
+    useEffect(() => {
+        if (user?._id.length > 0) {
+            history.push("/");
+        }
+    }, [user]);
+
     return (
         <Wrapper>
             <Main>
-                <Left>
-                    <AuthCoverPhoto src={AuthImage} alt="auth cover" />
-                </Left>
                 <Right>
                     <Heading>It's time to make new friends</Heading>
                     <Auth />
@@ -32,4 +32,4 @@ const index = () => {
     );
 };
 
-export default index;
+export default AuthPage;

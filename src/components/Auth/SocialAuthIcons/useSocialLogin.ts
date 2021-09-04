@@ -1,6 +1,8 @@
 import { useHistory } from "react-router";
 import client from "../../../api/client";
 import { toast } from 'react-toastify';
+import { useQueryClient } from "react-query";
+import { USER_QUERY } from "constants/user.constants";
 
 
 /**
@@ -16,6 +18,7 @@ import { toast } from 'react-toastify';
  */
 const useSocialLogin = () => {
     const history = useHistory();
+    const queryClient = useQueryClient();
 
     const showAlert = () => {
         alert(
@@ -28,9 +31,10 @@ const useSocialLogin = () => {
             tokenId: data.tokenId,
         });
         const accessToken = response?.data?.accessToken;
-        const user = response?.data?.data;
+        const user = response?.data?.user;
         if (user && accessToken) {
             window.localStorage.setItem("accessToken", JSON.stringify(accessToken));
+            queryClient.invalidateQueries(USER_QUERY.GET_ME);
             history.push('/');
             toast.success("Login Success");
         }

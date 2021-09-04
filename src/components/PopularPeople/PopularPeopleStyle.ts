@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 
 export const Wrapper = styled.div``;
@@ -11,7 +12,7 @@ export const UserCard = styled.article`
     }
 `;
 
-export const UserName = styled.p`
+export const UserName = styled(Link)`
     font-size: 1.4rem;
     font-weight: 500;
 `;

@@ -1,7 +1,4 @@
-import React from "react";
-
-// api
-import client from "../../../api/client";
+import styled from "styled-components";
 
 // talons
 import { useSocialLogin } from "./useSocialLogin";
@@ -9,18 +6,74 @@ import { useSocialLogin } from "./useSocialLogin";
 // components
 import GoogleLogin from "react-google-login";
 
+// styles
+
+const Wrapper = styled.div`
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+`;
+
+const SocialIcon = styled("button")<{
+    typeName: string;
+}>`
+    &:hover {
+        svg {
+            ${({ typeName }) => {
+                switch (typeName) {
+                    case "google":
+                        return `
+                        fill: #dd4b39;
+                        circle {
+                            stroke: #dd4b39;
+                        }
+                    `;
+                    case "facebook":
+                        return `
+                        fill: #3b5998;
+                        circle {
+                            stroke: #3b5998;
+                        }
+                    `;
+                    case "github":
+                        return `
+                        fill: #000;
+                        circle {
+                            stroke: #fff;
+                        }
+                    `;
+                    case "twitter":
+                        return `
+                        fill: #2795e9;
+                        circle {
+                            stroke: #2795e9;
+                        }
+                    `;
+                    default:
+                        return "";
+                }
+            }}
+        }
+
+        path {
+            fill: #fff;
+        }
+    }
+`;
+
 const SocialLoginIcons = () => {
     const { responseGoogle, showAlert } = useSocialLogin();
 
     return (
-        <div className="flex justify-center mt-4">
+        <Wrapper>
             <GoogleLogin
                 clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID as string}
                 render={(renderProps: any) => (
-                    <div
+                    <SocialIcon
                         className="social-icons"
                         onClick={renderProps.onClick}
                         // disabled={renderProps.disabled}
+                        typeName="google"
                     >
                         <svg
                             width="43"
@@ -40,14 +93,14 @@ const SocialLoginIcons = () => {
                                 fill="#828282"
                             />
                         </svg>
-                    </div>
+                    </SocialIcon>
                 )}
                 buttonText="Login"
                 onSuccess={responseGoogle}
                 onFailure={responseGoogle}
                 cookiePolicy={"single_host_origin"}
             />
-            <div className="social-icons" onClick={showAlert}>
+            <SocialIcon typeName="facebook" onClick={showAlert}>
                 <svg
                     width="43"
                     height="43"
@@ -78,8 +131,12 @@ const SocialLoginIcons = () => {
                         </clipPath>
                     </defs>
                 </svg>
-            </div>
-            <div className="social-icons" onClick={showAlert}>
+            </SocialIcon>
+            <SocialIcon
+                typeName="twitter"
+                className="social-icons"
+                onClick={showAlert}
+            >
                 <svg
                     width="43"
                     height="43"
@@ -110,8 +167,12 @@ const SocialLoginIcons = () => {
                         </clipPath>
                     </defs>
                 </svg>
-            </div>
-            <div className="social-icons" onClick={showAlert}>
+            </SocialIcon>
+            <SocialIcon
+                typeName="github"
+                className="social-icons"
+                onClick={showAlert}
+            >
                 <svg
                     width="43"
                     height="43"
@@ -142,8 +203,8 @@ const SocialLoginIcons = () => {
                         </clipPath>
                     </defs>
                 </svg>
-            </div>
-        </div>
+            </SocialIcon>
+        </Wrapper>
     );
 };
 

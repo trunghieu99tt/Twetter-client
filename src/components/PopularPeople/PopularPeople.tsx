@@ -48,16 +48,25 @@ const PopularPeople = () => {
     if (filteredUsers?.length === 0) return null;
 
     const items = filteredUsers.map((user: iUser) => {
+        const followersCount = user?.followers.length || 0;
+
         return (
             <UserCard>
-                <Flex gap="1.8rem">
-                    <UserAvatarSmall user={user} />
-                    <div>
-                        <UserName>{user?.name}</UserName>
-                        <UserFollowers>
-                            {nFormatter(user?.followers?.length || 0)} followers
-                        </UserFollowers>
-                    </div>
+                <Flex gap="1.8rem" align="flex-start" justify="space-between">
+                    <Flex gap="1.8rem">
+                        <UserAvatarSmall user={user} />
+                        <div>
+                            <UserName to={`/profile/${user._id}`}>
+                                {user?.name}
+                            </UserName>
+                            <UserFollowers>
+                                {nFormatter(followersCount)}
+                                {followersCount > 1
+                                    ? " followers"
+                                    : " follower"}
+                            </UserFollowers>
+                        </div>
+                    </Flex>
                     <FollowButton>
                         <IoPersonAdd />
                         Follow

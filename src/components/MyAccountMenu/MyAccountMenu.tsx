@@ -24,18 +24,18 @@ import {
     LogoutButton,
     Wrapper,
 } from "./MyAccountStyle";
+import { useAuth } from "@components/Auth/useAuth";
 
 const MyAccountMenu = () => {
     const [visibleDropdown, setVisibleDropdown] = useState<boolean>(false);
 
     const { user } = useUser();
+    const { handleLogout } = useAuth({});
 
     const myAccountControllerRef =
         useRef() as React.MutableRefObject<HTMLDivElement>;
 
     const toggleDropdown = () => setVisibleDropdown((isVisible) => !isVisible);
-
-    const handleLogout = () => {};
 
     useOnClickOutside(myAccountControllerRef, () => setVisibleDropdown(false));
 

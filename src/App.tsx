@@ -1,31 +1,43 @@
 import React, { useEffect } from "react";
-import { Route, Switch } from "react-router";
+import { Route, Switch, useHistory } from "react-router";
 
 // talons
 import { useUser } from "@talons/useUser";
 
 // pages
 import Auth from "@pages/Auth";
-import Explore from "@pages/Explore";
-import NewsFeed from "@pages/NewsFeed";
-import BookMarks from "@pages/BookMarks";
-import MyProfile from "@pages/MyProfile";
+import NotFound from "@pages/NotFound";
+
+// routes
+import PublicRoute from "@components/routes/PublicRoute";
+import PrivateRouteController from "routes/PrivateRouteController";
 
 const App = () => {
-    const { getMeQuery } = useUser();
+    const { user, getMeQuery } = useUser();
+    const history = useHistory();
 
     useEffect(() => {
-        getMeQuery.refetch();
-    }, []);
+        const windowHref = window.location.href;
+        if (!user?._id) {
+            if (!windowHref.includes("auth")) {
+                history.push("/auth");
+            }
+        } else {
+            if (windowHref.includes("auth")) {
+                history.push("/");
+            }
+        }
+    }, [user]);
+
+    if (getMeQuery.isLoading) return <div>Loading...</div>;
+
+    if (user?._id) return <PrivateRouteController />;
 
     return (
         <React.Fragment>
             <Switch>
-                <Route path="/" exact component={NewsFeed} />
-                <Route path="/profile/:userId" component={MyProfile} />
-                <Route path="/bookmarks" exact component={BookMarks} />
-                <Route path="/auth" exact component={Auth} />
-                <Route path="/explore/:page" component={Explore} />
+                <PublicRoute path="/auth" exact component={Auth} />
+                <Route component={NotFound} />
             </Switch>
         </React.Fragment>
     );

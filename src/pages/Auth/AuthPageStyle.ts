@@ -11,14 +11,11 @@ export const Wrapper = styled.div`
 export const Main = styled.div`
     display: flex;
     max-width: 70%;
-    max-height: 50rem;
     border-radius: .8rem;
     overflow: hidden;
+    box-shadow: 0px 0px 10px rgb(0 0 0 / 10%);
 `;
 
-export const Left = styled.div`
-    width: 50%;
-`;
 
 export const AuthCoverPhoto = styled.img`
     width: 100%;
@@ -29,9 +26,11 @@ export const AuthCoverPhoto = styled.img`
 export const Right = styled.div`
     background: #fff;
     flex: 1;
+    padding: 10rem;
 `;
 
 export const Heading = styled.h1`
     font-size: 2.5rem;
     font-weight: bold;
+    text-align: center;
 `

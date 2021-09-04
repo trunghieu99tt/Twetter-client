@@ -102,7 +102,7 @@ export const useUser = (
         }
     });
 
-    const user: iUser = new UserModel(getMeQuery.data);
+    const user: iUser = new UserModel(getMeQuery.data).getData();
 
     return {
         user,

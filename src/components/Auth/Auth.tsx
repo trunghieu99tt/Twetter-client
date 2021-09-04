@@ -1,32 +1,33 @@
 import React, { useState } from "react";
-import { v4 as uuid } from "uuid";
 
 // talons
+import { useAuth } from "./useAuth";
 
 // components
+import GenderSelector from "./GenderSelector";
 import SocialLoginIcons from "@components/Auth/SocialAuthIcons";
 
 import {
     Wrapper,
-    Heading,
     SubHeading,
     RedirectButton,
     Form,
     InputGroup,
     InputLabel,
     Input,
-    Selected,
+    Hr,
+    SocialSuggest,
+    SubmitButton,
 } from "./AuthStyle";
-import { useAuth } from "./useAuth";
 
 const Auth = () => {
     const [screen, setScreen] = useState<"LOGIN" | "REGISTER">("LOGIN");
 
     const {
+        gender,
+        setGender,
         handleLogout,
         handleSubmit,
-        onCloseEmailForm,
-        onOpenEmailForm,
         register,
         visibleEmailForm,
     } = useAuth({ isRegister: screen === "REGISTER" });
@@ -46,56 +47,51 @@ const Auth = () => {
             <SubHeading>
                 Don't have an account?{" "}
                 <RedirectButton onClick={() => changeScreen("REGISTER")}>
-                    Register here
+                    Register here now
                 </RedirectButton>
             </SubHeading>
         );
 
-    const genderSelections = [
-        {
-            value: 0,
-            label: "Male",
-            id: uuid(),
-        },
-        {
-            value: 1,
-            label: "Female",
-            id: uuid(),
-        },
-        {
-            value: 2,
-            label: "Others",
-            id: uuid(),
-        },
-    ];
-
     return (
         <Wrapper>
-            <Heading>{screen === "LOGIN" ? "Login" : "Register"}</Heading>
             {subHeading}
-            <SocialLoginIcons />
             <Form>
                 <InputGroup>
                     <InputLabel>Username</InputLabel>
-                    <Input required />
+                    <Input required {...register("username")} name="username" />
                 </InputGroup>
                 <InputGroup>
                     <InputLabel>Password</InputLabel>
-                    <Input type="password" required />
+                    <Input type="password" required {...register("password")} />
                 </InputGroup>
                 {screen === "REGISTER" && (
                     <React.Fragment>
                         <InputGroup>
                             <InputLabel>Confirm Password</InputLabel>
-                            <Input type="password" required />
+                            <Input
+                                type="password"
+                                required
+                                {...register("username")}
+                            />
                         </InputGroup>
                         <InputGroup>
                             <InputLabel>Gender</InputLabel>
-                            <Selected></Selected>
+                            <GenderSelector
+                                gender={gender}
+                                setGender={setGender}
+                            />
                         </InputGroup>
                     </React.Fragment>
                 )}
+                <SubmitButton onClick={handleSubmit}>
+                    {screen === "REGISTER" ? "Register" : "Login"}
+                </SubmitButton>
             </Form>
+            <Hr>
+                <span>Or</span>
+            </Hr>
+            <SocialSuggest>Don't want to wait? Login with </SocialSuggest>
+            <SocialLoginIcons />
         </Wrapper>
     );
 };
