@@ -2,26 +2,22 @@ import { v4 as uuid } from 'uuid';
 
 export const myProfileRouter = [
     {
-        name: "Tweets",
-        path: "/user/tweets",
-        id: uuid(),
-    },
-    {
-        name: "Tweets & Replies",
-        path: "/users/tweets-and-replies",
+        name: 'Tweets',
+        path: '/profile',
         id: uuid(),
     },
     {
         name: "Media",
-        path: "/user/media",
+        path: "/profile/media",
         id: uuid(),
     },
     {
         name: "Likes",
-        path: "/user/likes",
+        path: "/profile/likes",
         id: uuid(),
     },
 ];
+
 
 export const newFeedsRouter = [
     {

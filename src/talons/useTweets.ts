@@ -34,7 +34,6 @@ const getLatestTweets = async ({ pageParam = 0 }: QueryFunctionContext) => {
     return getInfinityList(TWEET_ENDPOINTS.LATEST_TWEETS, pageParam);
 }
 
-
 const getTweetsMedia = async ({ pageParam = 0 }: QueryFunctionContext) => {
     return getInfinityList(TWEET_ENDPOINTS.BASE, pageParam, { limit: 10 });
 }
@@ -43,13 +42,22 @@ const getMySavedTweets = async ({ pageParam = 0 }: QueryFunctionContext) => {
     return getInfinityList(TWEET_ENDPOINTS.MY_SAVED_TWEETS, pageParam);
 }
 
+const getLikedTweets = async ({ pageParam = 0, queryKey }: QueryFunctionContext) => {
+    const userId = queryKey[1];
+    if (userId) {
+        return getInfinityList(`${TWEET_ENDPOINTS.MY_LIKED_TWEETS}/${userId}`, pageParam);
+    }
+
+    return DEFAULT_LIST_RESPONSE;
+}
+
 const createTweet = async (newTweet: iCreateTweetDTO) => {
     const response = await client.post(TWEET_ENDPOINTS.BASE, newTweet);
     return response?.data;
 }
 
 const deleteTweet = async (id: string) => {
-    const response = await client.delete(`${TWEET_ENDPOINTS.BASE}/${id}`);
+    const response = await client.delete(`${TWEET_ENDPOINTS.BASE}/ ${id}`);
     return response?.data;
 }
 
@@ -79,6 +87,8 @@ export const useTweets = (userId = "") => {
     }
 
     const getProfileTweetsQuery = useInfiniteQuery([TWEET_QUERY.GET_MY_TWEETS, userId], getUserTweets, INFINITY_QUERY_LIST_CONFIG);
+
+    const getProfileLikedTweetsQuery = useInfiniteQuery([TWEET_QUERY.GET_USER_LIKED_TWEETS, userId], getLikedTweets, INFINITY_QUERY_LIST_CONFIG);
 
     const getNewsFeedTweetsQuery = useInfiniteQuery(TWEET_QUERY.GET_NEWS_FEED_TWEETS, getNewsFeedTweets, INFINITY_QUERY_LIST_CONFIG);
 
@@ -129,6 +139,7 @@ export const useTweets = (userId = "") => {
         getPopularTweetsQuery,
         getProfileTweetsQuery,
         getNewsFeedTweetsQuery,
+        getProfileLikedTweetsQuery,
 
         retweetMutation,
         saveTweetMutation,

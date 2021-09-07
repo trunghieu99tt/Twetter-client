@@ -73,7 +73,10 @@ export const useUser = (
     // first time we load the page. At that time we don't have the userId yet.
     const getMeQuery = useQuery<iUser | undefined>(USER_QUERY.GET_ME, getMe, {
         staleTime: LONG_STATE_TIME,
-        retry: 5
+        retry: 5,
+        onError: () => {
+            localStorage.removeItem('accessToken')
+        }
     });
 
     const getUserQuery = useQuery<iUser | undefined>([USER_QUERY.GET_USER, userId], getUser, {

@@ -9,6 +9,7 @@ export const TWEET_ENDPOINTS = {
     LATEST_TWEETS: `${prefix}/latest`,
     POPULAR_TWEETS: `${prefix}/popular`,
     MY_SAVED_TWEETS: `${prefix}/user/saved`,
+    MY_LIKED_TWEETS: `${prefix}/liked`,
 }
 
 export const TWEET_QUERY = {
@@ -20,4 +21,6 @@ export const TWEET_QUERY = {
     CREATE_NEW_TWEET: 'CREATE_NEW_TWEET',
     GET_MY_SAVED_TWEETS: 'GET_MY_SAVED_TWEETS',
     GET_NEWS_FEED_TWEETS: 'GET_NEWS_FEED_TWEETS',
+    GET_USER_LIKED_TWEETS: 'GET_USER_LIKED_TWEETS',
+
 }

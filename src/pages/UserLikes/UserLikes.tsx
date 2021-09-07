@@ -1,5 +1,4 @@
 import { useParams } from "react-router";
-import { v4 as uuid } from "uuid";
 
 // talons
 import { useUser } from "@talons/useUser";
@@ -10,18 +9,18 @@ import MainLayout from "@layout/Main";
 
 // components
 import LeftSidebar from "@components/Sidebar/LeftSidebar";
-import InfinityTweetList from "@components/InfinityTweetsList";
 import MyProfileOverview from "@components/MyProfileOverview";
+import InfinityTweetsList from "@components/InfinityTweetsList";
 
 // styles
-import { Sidebar, Wrapper, Main, Content } from "./MyProfileStyle";
+import { Wrapper, Content, Main, Sidebar } from "./UserLikesStyles";
 import { Container } from "@shared/style/sharedStyle.style";
 
-const MyProfile = () => {
+const UserLikes = () => {
     const params: { userId: string } = useParams();
     const { userId } = params;
 
-    const { getProfileTweetsQuery } = useTweets(userId);
+    const { getProfileLikedTweetsQuery } = useTweets(userId);
     const { user: me, getUserQuery } = useUser(userId);
 
     const userData = userId === me?._id ? me : getUserQuery.data;
@@ -38,7 +37,9 @@ const MyProfile = () => {
                         <LeftSidebar type="PROFILE" />
                     </Sidebar>
                     <Main>
-                        <InfinityTweetList query={getProfileTweetsQuery} />
+                        <InfinityTweetsList
+                            query={getProfileLikedTweetsQuery}
+                        />
                     </Main>
                 </Content>
             </Container>
@@ -46,4 +47,4 @@ const MyProfile = () => {
     );
 };
 
-export default MainLayout(MyProfile);
+export default MainLayout(UserLikes);
