@@ -5,14 +5,16 @@ export const TWEET_ENDPOINTS = {
     RETWEET: `${prefix}/retweet`,
     SAVE_TWEET: `${prefix}/save`,
     REACT_TWEET: `${prefix}/react`,
-    GET_USER_TWEETS: `${prefix}/user`,
+    GET_MEDIAS: `${prefix}/medias`,
     LATEST_TWEETS: `${prefix}/latest`,
+    GET_USER_TWEETS: `${prefix}/user`,
+    MY_LIKED_TWEETS: `${prefix}/liked`,
     POPULAR_TWEETS: `${prefix}/popular`,
     MY_SAVED_TWEETS: `${prefix}/user/saved`,
-    MY_LIKED_TWEETS: `${prefix}/liked`,
 }
 
 export const TWEET_QUERY = {
+    GET_MEDIAS: 'GET_MEDIAS',
     DELETE_TWEET: 'DELETE_TWEET',
     LATEST_TWEETS: 'LATEST_TWEETS',
     GET_MY_TWEETS: 'GET_MY_TWEETS',

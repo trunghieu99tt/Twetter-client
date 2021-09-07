@@ -1,5 +1,5 @@
-import React, { useEffect } from "react";
-import { Route, Switch, useHistory } from "react-router";
+import React, { MutableRefObject, useEffect, useRef } from "react";
+import { Route, Switch, useHistory, useLocation } from "react-router";
 
 // talons
 import { useUser } from "@talons/useUser";
@@ -15,6 +15,12 @@ import PrivateRouteController from "routes/PrivateRouteController";
 const App = () => {
     const { user, getMeQuery } = useUser();
     const history = useHistory();
+    const location = useLocation();
+    const currentPathRef = useRef(null) as MutableRefObject<string | null>;
+
+    useEffect(() => {
+        currentPathRef.current = location.pathname;
+    }, []);
 
     useEffect(() => {
         const windowHref = window.location.href;
@@ -24,7 +30,9 @@ const App = () => {
             }
         } else {
             if (windowHref.includes("auth")) {
-                history.push("/");
+                if (currentPathRef.current)
+                    history.push(currentPathRef.current);
+                else history.push("/");
             }
         }
     }, [user]);

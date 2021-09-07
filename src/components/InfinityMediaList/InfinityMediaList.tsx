@@ -20,7 +20,7 @@ interface Props {
 }
 
 const InfinityMediaList = ({ query }: Props) => {
-    const { data, isLoading, fetchNextPage } = query;
+    const { data, fetchNextPage } = query;
 
     const pages = data?.pages;
     const totalRecords = pages?.[0].total || 0;
@@ -40,7 +40,6 @@ const InfinityMediaList = ({ query }: Props) => {
 
     return (
         <React.Fragment>
-            {isLoading && mediaList.length === 0 && <TweetSkeleton />}
             <InfiniteScroll
                 dataLength={mediaList.length}
                 next={fetchNextPage}

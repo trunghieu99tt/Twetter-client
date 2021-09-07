@@ -4,9 +4,9 @@ export const MASONRY_CONFIG_BREAKPOINTS = {
     500: 1,
 }
 
-export const DEFAULT_LIST_LIMIT = 2;
+export const DEFAULT_LIST_LIMIT = 4;
 export const USER_LIST_LIMIT = 10;
-export const TWEET_LIST_LIMIT = 2;
+export const TWEET_LIST_LIMIT = 3;
 export const COMMIT_LIST_LIMIT = 2;
 
 export const DEFAULT_LIST_RESPONSE = {

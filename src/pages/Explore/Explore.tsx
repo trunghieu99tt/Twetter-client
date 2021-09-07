@@ -15,7 +15,7 @@ const Explore = () => {
     const params: { page: string } = useParams();
     const { page } = params;
 
-    const { getTweetsMediaQuery, getPopularTweetsQuery, getLatestTweetsQuery } =
+    const { getPopularTweetsQuery, getLatestTweetsQuery, getMediasQuery } =
         useTweets();
     const { getPopularUsersQuery } = useUser();
 
@@ -29,7 +29,7 @@ const Explore = () => {
             query = getLatestTweetsQuery;
             break;
         case "media":
-            query = getTweetsMediaQuery;
+            query = getMediasQuery;
             break;
         case "people":
             query = getPopularUsersQuery;

@@ -23,14 +23,9 @@ import {
 const Auth = () => {
     const [screen, setScreen] = useState<"LOGIN" | "REGISTER">("LOGIN");
 
-    const {
-        gender,
-        setGender,
-        handleLogout,
-        handleSubmit,
-        register,
-        visibleEmailForm,
-    } = useAuth({ isRegister: screen === "REGISTER" });
+    const { gender, setGender, handleSubmit, register } = useAuth({
+        isRegister: screen === "REGISTER",
+    });
 
     const changeScreen = (newScreen: "LOGIN" | "REGISTER") =>
         setScreen(newScreen);
