@@ -1,6 +1,6 @@
-import InfinityMediaList from "@components/InfinityMediaList";
-import InfinityPeopleList from "@components/InfinityPeopleList";
-import InfinityTweetList from "@components/InfinityTweetsList";
+import InfinityMediaList from "@components/InfinityLists/InfinityMediaList";
+import InfinityPeopleList from "@components/InfinityLists/InfinityPeopleList";
+import InfinityTweetList from "@components/InfinityLists/InfinityTweetsList";
 import LeftSidebar from "@components/Sidebar/LeftSidebar";
 import MainLayout from "@layout/Main";
 import { Container } from "@shared/style/sharedStyle.style";

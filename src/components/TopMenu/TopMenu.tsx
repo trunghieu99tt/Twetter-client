@@ -44,7 +44,11 @@ const TopMenu = () => {
                     return (
                         <Item
                             key={item.id}
-                            active={location.pathname.includes(item.path)}
+                            active={
+                                location.pathname === item.path ||
+                                item?.submenus?.includes(location.pathname) ||
+                                false
+                            }
                         >
                             <Link to={item.path}>{item.name}</Link>
                         </Item>

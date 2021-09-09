@@ -7,6 +7,7 @@ import InfiniteScroll from "react-infinite-scroll-component";
 
 // types
 import { iUser } from "@type/user.types";
+import { parseUser } from "@talons/useUser";
 
 interface Props {
     query: any;
@@ -22,7 +23,7 @@ const InfinityPeopleList = ({ query }: Props) => {
         pages?.reduce(
             (res: iUser[], curr: { data: iUser[]; total: number }) => [
                 ...res,
-                ...curr.data,
+                ...curr.data.map((user: iUser) => parseUser(user)),
             ],
             []
         ) || [];

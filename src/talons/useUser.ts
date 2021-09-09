@@ -14,10 +14,23 @@ import { iUser } from "../types/user.types";
 import { USER_ENDPOINTS, USER_QUERY } from "constants/user.constants";
 import { INFINITY_QUERY_LIST_CONFIG, LONG_STATE_TIME } from "constants/config.constant";
 import { UserModel } from "model/user.model";
+import { TWEET_QUERY } from "constants/tweet.constants";
+
+export const parseUser = (user: iUser) => {
+    if (!user)
+        return undefined;
+    if (user?.followers?.length > 0) {
+        user.followers = user.followers.map(follower => new UserModel(follower));
+    }
+    if (user?.following?.length > 0) {
+        user.following = user.following.map(following => new UserModel(following));
+    }
+    return new UserModel(user).getData();
+}
 
 const getMe = async () => {
     const response = await client.get(USER_ENDPOINTS.GET_ME);
-    return new UserModel(response?.data?.data);
+    return parseUser(response?.data?.data);
 }
 
 const getUser = async ({ queryKey }: QueryFunctionContext) => {
@@ -25,7 +38,7 @@ const getUser = async ({ queryKey }: QueryFunctionContext) => {
     if (!userId)
         return;
     const response = await client.get(`${USER_ENDPOINTS.BASE}/${userId}`);
-    return new UserModel(response?.data?.data);
+    return parseUser(response?.data?.data);
 }
 
 const getPopularUsers = async ({ pageParam = 0 }: QueryFunctionContext) => {
@@ -93,7 +106,9 @@ export const useUser = (
 
     const updateUserMutation = useMutation(updateUser, {
         onSuccess: () => {
+            queryClient.invalidateQueries(USER_QUERY.GET_USER);
             queryClient.invalidateQueries(USER_QUERY.GET_ME);
+            queryClient.invalidateQueries(TWEET_QUERY.GET_MY_TWEETS);
         }
     });
 

@@ -5,8 +5,8 @@ import { useTweets } from "@talons/useTweets";
 
 // components
 import AddTweet from "@components/AddTweet";
-import PopularPeople from "@components/PopularPeople";
-import InfinityTweetsList from "@components/InfinityTweetsList";
+import PopularPeople from "@components/NewsFeed/PopularPeople";
+import InfinityTweetsList from "@components/InfinityLists/InfinityTweetsList";
 
 // layout
 import MainLayout from "@layout/Main";

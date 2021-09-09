@@ -18,8 +18,6 @@ const LeftSidebar = ({ type }: Props) => {
     const location = useLocation();
     const pathname = location.pathname;
 
-    console.log(`location`, location);
-
     return (
         <Wrapper>
             <List>

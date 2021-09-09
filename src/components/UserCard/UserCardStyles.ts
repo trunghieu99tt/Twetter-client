@@ -27,6 +27,11 @@ export const FollowButton = styled.button`
     padding: 0.8rem 2.4rem;
     height: 3rem;
     border-radius: .4rem;
+    
+    &:disabled{
+        cursor: initial;
+        background: var(--gray-4);
+    }
 `;
 
 export const UserBio = styled.p`

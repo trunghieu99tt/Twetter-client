@@ -8,7 +8,13 @@ export const menu = [
     },
     {
         name: "Explore",
-        path: "/explore/latest",
+        path: "/explore/top",
+        submenus: [
+            '/explore/latest',
+            '/explore/top',
+            '/explore/people',
+            '/explore/media'
+        ],
         id: uuidv4(),
     },
     {

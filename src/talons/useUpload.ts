@@ -9,7 +9,7 @@ export const useUpload = () => {
             const formData = new FormData();
             formData.append('image', file);
             const response = await client.post(UPLOAD_ENDPOINTS.UPLOAD_SINGLE_IMAGE, formData);
-            return response?.data || '';
+            return response?.data?.url || '';
         } catch (error) {
             console.log('upload image error: ', error)
         }

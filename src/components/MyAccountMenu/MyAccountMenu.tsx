@@ -57,10 +57,12 @@ const MyAccountMenu = () => {
         [user]
     );
 
+    console.log("user: ", user);
+
     return (
         <Wrapper ref={myAccountControllerRef}>
             <AvatarWrapper>
-                <UserAvatarSmall user={user} />
+                <UserAvatarSmall user={user} key={user?.avatar} />
                 <AvatarCaption>{user?.name}</AvatarCaption>
                 <DropdownButton onClick={toggleDropdown}>
                     <BsFillCaretDownFill />

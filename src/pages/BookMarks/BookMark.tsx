@@ -5,7 +5,7 @@ import { useTweets } from "@talons/useTweets";
 import MainLayout from "@layout/Main";
 
 // components
-import InfinityTweetList from "@components/InfinityTweetsList";
+import InfinityTweetList from "@components/InfinityLists/InfinityTweetsList";
 
 // styles
 import { Container, Flex } from "@shared/style/sharedStyle.style";

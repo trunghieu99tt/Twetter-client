@@ -9,8 +9,8 @@ import MainLayout from "@layout/Main";
 
 // components
 import LeftSidebar from "@components/Sidebar/LeftSidebar";
-import MyProfileOverview from "@components/MyProfileOverview";
-import InfinityMediaList from "@components/InfinityMediaList";
+import MyProfileOverview from "@components/MyProfile/MyProfileOverview";
+import InfinityMediaList from "@components/InfinityLists/InfinityMediaList";
 
 // styles
 import { Wrapper, Content, Main, Sidebar } from "./userMediaStyle";
@@ -26,13 +26,12 @@ const UserMedia = () => {
     const { user: me, getUserQuery } = useUser(userId);
 
     const userData = userId === me?._id ? me : getUserQuery.data;
-    const isMe = userId === me?._id;
 
     if (!userData) return null;
 
     return (
         <Wrapper>
-            <MyProfileOverview user={userData} isMe={isMe} />
+            <MyProfileOverview user={userData} />
             <Container>
                 <Content>
                     <Sidebar>

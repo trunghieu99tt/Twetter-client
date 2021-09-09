@@ -9,9 +9,10 @@ import { useTweets } from "@talons/useTweets";
 import MainLayout from "@layout/Main";
 
 // components
+import AddTweet from "@components/AddTweet";
 import LeftSidebar from "@components/Sidebar/LeftSidebar";
-import InfinityTweetList from "@components/InfinityTweetsList";
-import MyProfileOverview from "@components/MyProfileOverview";
+import InfinityTweetList from "@components/InfinityLists/InfinityTweetsList";
+import MyProfileOverview from "@components/MyProfile/MyProfileOverview";
 
 // styles
 import { Sidebar, Wrapper, Main, Content } from "./MyProfileStyle";
@@ -31,13 +32,14 @@ const MyProfile = () => {
 
     return (
         <Wrapper>
-            <MyProfileOverview user={userData} isMe={isMe} />
+            <MyProfileOverview user={userData} />
             <Container>
                 <Content>
                     <Sidebar>
                         <LeftSidebar type="PROFILE" />
                     </Sidebar>
                     <Main>
+                        {isMe && <AddTweet />}
                         <InfinityTweetList query={getProfileTweetsQuery} />
                     </Main>
                 </Content>

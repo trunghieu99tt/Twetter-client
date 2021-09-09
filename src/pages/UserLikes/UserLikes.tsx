@@ -9,8 +9,8 @@ import MainLayout from "@layout/Main";
 
 // components
 import LeftSidebar from "@components/Sidebar/LeftSidebar";
-import MyProfileOverview from "@components/MyProfileOverview";
-import InfinityTweetsList from "@components/InfinityTweetsList";
+import MyProfileOverview from "@components/MyProfile/MyProfileOverview";
+import InfinityTweetsList from "@components/InfinityLists/InfinityTweetsList";
 
 // styles
 import { Wrapper, Content, Main, Sidebar } from "./UserLikesStyles";
@@ -24,13 +24,12 @@ const UserLikes = () => {
     const { user: me, getUserQuery } = useUser(userId);
 
     const userData = userId === me?._id ? me : getUserQuery.data;
-    const isMe = userId === me?._id;
 
     if (!userData) return null;
 
     return (
         <Wrapper>
-            <MyProfileOverview user={userData} isMe={isMe} />
+            <MyProfileOverview user={userData} />
             <Container>
                 <Content>
                     <Sidebar>
