@@ -10,7 +10,7 @@
             "@shared/*": ["shared/*"],
             "@config/*": ["config/*"],
             "@layout/*": ["layout/*"],
-            "@context*": ["context/*"],
+            "@context/*": ["context/*"],
             "@images/*": ["assets/images/*"],
             "@components/*": ["components/*"]
         }

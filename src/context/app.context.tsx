@@ -1,13 +1,15 @@
 import React, { useContext, useMemo, useReducer } from "react";
 import {
+    TAppState,
     TAppAction,
     TAppDispatch,
-    TAppState,
     TAppContextProps,
 } from "../types/app.types";
 
 const initialState: TAppState = {
     theme: "LIGHT",
+    screenSize: "DESKTOP",
+    visibleLeftSidebar: false,
 };
 
 const AppContext = React.createContext<{
@@ -21,6 +23,16 @@ const appReducer = (state: TAppState = initialState, action: TAppAction) => {
             return {
                 ...state,
                 theme: action.payload,
+            };
+        case "SET_VISIBLE_LEFT_SIDEBAR":
+            return {
+                ...state,
+                visibleLeftSidebar: action.payload,
+            };
+        case "SET_SCREEN_SIZE":
+            return {
+                ...state,
+                screenSize: action.payload,
             };
         default:
             return state;
