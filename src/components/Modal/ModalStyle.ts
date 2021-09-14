@@ -11,7 +11,7 @@ export const Wrapper = styled('div') <{
     height: 100vh;
     align-items: center;
     justify-content: center;
-    z-index: 1;
+    z-index: 999;
 `;
 
 export const Mask = styled.div`

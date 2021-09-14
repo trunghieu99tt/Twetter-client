@@ -21,6 +21,7 @@ type Props = {
 }
 
 export const useTweet = ({ tweet }: Props) => {
+    const [visibleEditForm, setVisibleEditForm] = useState<boolean>(false);
     const [visibleDropdown, setVisibleDropdown] = useState<boolean>(false);
     const currentUser: iUser | undefined = useQueryClient().getQueryData(
         USER_QUERY.GET_ME
@@ -112,6 +113,7 @@ export const useTweet = ({ tweet }: Props) => {
         tweetLikeCount,
         tweetSavedCount,
         visibleDropdown,
+        visibleEditForm,
         tweetRetweetCount,
         totalTweetComments,
 
@@ -120,6 +122,7 @@ export const useTweet = ({ tweet }: Props) => {
         onReactTweet,
         onDeleteTweet,
         toggleDropdown,
+        setVisibleEditForm,
         focusOnCommentForm,
         fetchMoreTweetComment,
     }

@@ -1,8 +1,8 @@
 import React from "react";
 
 // components
-import Tweet from "@components/Tweet";
-import TweetSkeleton from "@components/Tweet/TweetSkeleton";
+import Tweet from "@components/Tweet/TweetDetail";
+import TweetSkeleton from "@components/Tweet/TweetDetail/TweetSkeleton";
 import InfiniteScroll from "react-infinite-scroll-component";
 
 // types

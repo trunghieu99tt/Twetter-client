@@ -20,8 +20,6 @@ const UserMedia = () => {
     const params: { userId: string } = useParams();
     const { userId } = params;
 
-    console.log(`userId`, userId);
-
     const { getProfileTweetsQuery } = useTweets(userId);
     const { user: me, getUserQuery } = useUser(userId);
 

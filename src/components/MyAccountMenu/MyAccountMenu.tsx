@@ -57,8 +57,6 @@ const MyAccountMenu = () => {
         [user]
     );
 
-    console.log("user: ", user);
-
     return (
         <Wrapper ref={myAccountControllerRef}>
             <AvatarWrapper>

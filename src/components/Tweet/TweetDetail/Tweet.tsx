@@ -15,7 +15,11 @@ import UserAvatarSmall from "@components/UserAvatarSmall";
 // icons
 import { FiRefreshCw } from "react-icons/fi";
 import { FaRegHeart } from "react-icons/fa";
-import { AiOutlineDelete, AiOutlineRetweet } from "react-icons/ai";
+import {
+    AiOutlineEdit,
+    AiOutlineDelete,
+    AiOutlineRetweet,
+} from "react-icons/ai";
 import { BiComment, BiBookmark, BiDotsVertical } from "react-icons/bi";
 
 // types
@@ -35,17 +39,18 @@ import {
     AuthorWrapper,
     AuthorActions,
     DropdownButton,
+    CommentsWrapper,
     TweetDescription,
     TweetMediaWrapper,
     InteractionButton,
     InteractionSummary,
     InteractionSummaryItem,
     InteractionButtonGroup,
-    CommentsWrapper,
 } from "./TweetStyle";
 
 // types and constants
 import { iComment } from "@type/comments.types";
+import EditTweet from "../EditTweet";
 
 type Props = {
     tweet: iTweet;
@@ -66,6 +71,7 @@ const Tweet = ({ tweet }: Props) => {
         tweetLikeCount,
         tweetSavedCount,
         visibleDropdown,
+        visibleEditForm,
         tweetRetweetCount,
         totalTweetComments,
 
@@ -74,6 +80,7 @@ const Tweet = ({ tweet }: Props) => {
         onReactTweet,
         onDeleteTweet,
         toggleDropdown,
+        setVisibleEditForm,
         focusOnCommentForm,
         fetchMoreTweetComment,
     } = useTweet({
@@ -82,6 +89,12 @@ const Tweet = ({ tweet }: Props) => {
 
     return (
         <React.Fragment>
+            {visibleEditForm && (
+                <EditTweet
+                    tweet={tweet}
+                    onCancel={() => setVisibleEditForm(false)}
+                />
+            )}
             {isRetweeted && retweetedBy && (
                 <RetweetedBy to={`/profile/${retweetedBy._id}`}>
                     <AiOutlineRetweet /> {`${retweetedBy.name} retweeted`}
@@ -114,6 +127,12 @@ const Tweet = ({ tweet }: Props) => {
                             <Dropdown
                                 isVisible={visibleDropdown}
                                 items={[
+                                    <AuthorAction
+                                        onClick={() => setVisibleEditForm(true)}
+                                    >
+                                        <AiOutlineEdit />
+                                        Edit
+                                    </AuthorAction>,
                                     <AuthorAction onClick={onDeleteTweet}>
                                         <AiOutlineDelete />
                                         Delete

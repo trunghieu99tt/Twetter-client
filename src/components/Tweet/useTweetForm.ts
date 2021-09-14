@@ -1,24 +1,31 @@
-import { ChangeEvent, useState } from "react";
-import { useTweets } from "@talons/useTweets"
+import { useTweets } from "@talons/useTweets";
 import { useUpload } from "@talons/useUpload";
-import { iCreateTweetDTO } from "@type/tweet.types";
-import { useQueryClient } from "react-query";
-import { USER_QUERY } from "constants/user.constants";
+import { iCreateTweetDTO, iTweet } from "@type/tweet.types";
 import { iUser } from "@type/user.types";
+import { USER_QUERY } from "constants/user.constants";
+import { UserModel } from "model/user.model";
+import { ChangeEvent, useState } from "react";
+import { useQueryClient } from "react-query";
 
-export const useAddTweet = () => {
-    const user: iUser | undefined = useQueryClient().getQueryData(
+type Props = {
+    tweet?: iTweet;
+}
+
+export const useTweetForm = ({ tweet }: Props) => {
+
+    const user: iUser = new UserModel(useQueryClient().getQueryData(
         USER_QUERY.GET_ME
-    );
+    )).getData();
 
-    const [content, setContent] = useState<string>('');
-    const [audience, setAudience] = useState<number>(0);
+    const [content, setContent] = useState<string>(tweet?.content || "");
+    const [audience, setAudience] = useState<number>(tweet?.audience || 0);
     const [loading, setLoading] = useState<boolean>(false);
     const [files, setFiles] = useState<FileList | never[]>([]);
-    const [imagesPreview, setImagesPreview] = useState<string[]>([]);
+    const [imagesPreview, setImagesPreview] = useState<string[]>(tweet?.media || []);
 
     const {
-        createTweetMutation
+        createTweetMutation,
+        updateTweetMutation,
     } = useTweets(user?._id);
 
     const {
@@ -62,23 +69,36 @@ export const useAddTweet = () => {
         if (content || files.length > 0) {
             setLoading(true);
             const imageResponses = await uploadImages(files);
-            const images = imageResponses && imageResponses.length > 0 && imageResponses?.map(imageResponse => imageResponse.url) || [];
             const newTweet: iCreateTweetDTO = {
                 content,
                 audience,
-                media: images,
+                media: imageResponses,
             }
 
-            createTweetMutation.mutate(newTweet, {
-                onSettled: () => {
-                    setLoading(false);
-                    resetAll();
-                },
-                onError: (error) => {
-                    resetAll();
-                    console.log(error);
-                }
-            });
+            if (tweet) {
+                updateTweetMutation.mutate({ tweetId: tweet._id, updatedTweet: newTweet }, {
+                    onSettled: () => {
+                        resetAll();
+                        setLoading(false);
+                    },
+                    onError: (error) => {
+                        resetAll();
+                        console.log(error);
+                    }
+                });
+            } else {
+
+                createTweetMutation.mutate(newTweet, {
+                    onSettled: () => {
+                        resetAll();
+                        setLoading(false);
+                    },
+                    onError: (error) => {
+                        resetAll();
+                        console.log(error);
+                    }
+                });
+            }
         }
     }
 

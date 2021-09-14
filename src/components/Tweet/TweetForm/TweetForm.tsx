@@ -2,7 +2,7 @@ import React from "react";
 
 // talons
 import { useUser } from "@talons/useUser";
-import { useAddTweet } from "./useAddTweet";
+import { useTweetForm } from "../useTweetForm";
 
 // components
 import { Spinner1 } from "@components/Loaders";
@@ -13,6 +13,9 @@ import AudienceSelector from "@components/AudienceSelector";
 // icons
 import { BsCardImage } from "react-icons/bs";
 import { ImCancelCircle } from "react-icons/im";
+
+// types
+import { iTweet } from "@type/tweet.types";
 
 // styles
 import {
@@ -29,12 +32,17 @@ import {
     DeleteImagesButton,
     ImageLeftPlaceHolder,
     TweetContentInputWrapper,
-} from "./AddTweetStyle";
+} from "./TweetFormStyle";
 import { Flex } from "@shared/style/sharedStyle.style";
 
 type modeType = "block" | "flex" | "grid" | "none";
 
-const AddTweet = () => {
+interface Props {
+    tweet?: iTweet;
+    onCancel?: () => void;
+}
+
+const TweetForm = ({ tweet, onCancel }: Props) => {
     const {
         loading,
         content,
@@ -46,7 +54,9 @@ const AddTweet = () => {
         onChangeFile,
         onCancelImage,
         onChangeContent,
-    } = useAddTweet();
+    } = useTweetForm({
+        tweet,
+    });
 
     const { user } = useUser();
 
@@ -61,13 +71,17 @@ const AddTweet = () => {
         imageViewMode = "block";
     }
 
-    const imageLeft = Math.max(0, imagesLen - 5);
+    const remainingImageCount = Math.max(0, imagesLen - 5);
+
+    const inputFileId = tweet
+        ? `update-tweet-media-${tweet._id}`
+        : `new-tweet-media`;
 
     return (
         <React.Fragment>
             {loading && <Spinner1 />}
             <Wrapper>
-                <HeadLine>Tweet something</HeadLine>
+                {!tweet && <HeadLine>Tweet something...</HeadLine>}
                 <Main>
                     <UserAvatarSmall user={user} />
                     <div>
@@ -95,21 +109,22 @@ const AddTweet = () => {
                                             alt={`add-tweet-file-image-${index}`}
                                         />
                                     ))}
-                            {(imageLeft && imageLeft > 0 && (
-                                <ImageLeftPlaceHolder>
-                                    {imageLeft}+
-                                </ImageLeftPlaceHolder>
-                            )) ||
+                            {(remainingImageCount &&
+                                remainingImageCount > 0 && (
+                                    <ImageLeftPlaceHolder>
+                                        {remainingImageCount}+
+                                    </ImageLeftPlaceHolder>
+                                )) ||
                                 null}
                         </TweetImageWrapper>
                         <Footer>
                             <Flex gap="1.5rem">
-                                <FileLabel htmlFor="tweet-file">
+                                <FileLabel htmlFor={inputFileId}>
                                     <BsCardImage />
                                 </FileLabel>
                                 <FileInput
                                     type="file"
-                                    id="tweet-file"
+                                    id={inputFileId}
                                     onChange={onChangeFile}
                                     multiple
                                 />
@@ -119,10 +134,16 @@ const AddTweet = () => {
                                 />
                             </Flex>
                             <TweetSubmitButton
-                                onClick={onSubmit}
+                                onClick={() => {
+                                    onSubmit();
+                                    if (onCancel) {
+                                        console.log("Go here");
+                                        onCancel();
+                                    }
+                                }}
                                 disabled={loading}
                             >
-                                Tweet
+                                {!tweet ? "Tweet" : "Update"}
                             </TweetSubmitButton>
                         </Footer>
                     </div>
@@ -132,4 +153,4 @@ const AddTweet = () => {
     );
 };
 
-export default AddTweet;
+export default TweetForm;

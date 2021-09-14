@@ -2,8 +2,8 @@ import React from "react";
 
 // components
 import UserCard from "@components/UserCard";
-import TweetSkeleton from "@components/Tweet/TweetSkeleton";
 import InfiniteScroll from "react-infinite-scroll-component";
+import TweetSkeleton from "@components/Tweet/TweetDetail/TweetSkeleton";
 
 // types
 import { iUser } from "@type/user.types";

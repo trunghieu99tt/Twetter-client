@@ -4,7 +4,7 @@ import { useQueryClient } from "react-query";
 import { useTweets } from "@talons/useTweets";
 
 // components
-import AddTweet from "@components/AddTweet";
+import AddTweet from "@components/Tweet/AddTweet";
 import PopularPeople from "@components/NewsFeed/PopularPeople";
 import InfinityTweetsList from "@components/InfinityLists/InfinityTweetsList";
 

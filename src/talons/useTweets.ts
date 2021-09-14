@@ -57,6 +57,14 @@ const createTweet = async (newTweet: iCreateTweetDTO) => {
     return response?.data;
 }
 
+const updateTweet = async ({ tweetId, updatedTweet }: {
+    tweetId: string, updatedTweet: Partial<iCreateTweetDTO>
+}) => {
+    if (!tweetId) return;
+    const response = await client.patch(`${TWEET_ENDPOINTS.BASE}/${tweetId}`, updatedTweet);
+    return response?.data;
+}
+
 const deleteTweet = async (id: string) => {
     const response = await client.delete(`${TWEET_ENDPOINTS.BASE}/${id}`);
     return response?.data;
@@ -110,6 +118,12 @@ export const useTweets = (userId = "") => {
         }
     });
 
+    const updateTweetMutation = useMutation(updateTweet, {
+        onSuccess: () => {
+            invalidateTweetQueries();
+        }
+    })
+
     const deleteTweetMutation = useMutation(deleteTweet, {
         onSuccess: () => {
             invalidateTweetQueries();
@@ -149,5 +163,6 @@ export const useTweets = (userId = "") => {
         reactTweetMutation,
         createTweetMutation,
         deleteTweetMutation,
+        updateTweetMutation,
     }
 };

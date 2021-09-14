@@ -9,7 +9,7 @@ import { useTweets } from "@talons/useTweets";
 import MainLayout from "@layout/Main";
 
 // components
-import AddTweet from "@components/AddTweet";
+import AddTweet from "@components/Tweet/AddTweet";
 import LeftSidebar from "@components/Sidebar/LeftSidebar";
 import InfinityTweetList from "@components/InfinityLists/InfinityTweetsList";
 import MyProfileOverview from "@components/MyProfile/MyProfileOverview";

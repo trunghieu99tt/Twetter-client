@@ -4,7 +4,7 @@ import InfiniteScroll from "react-infinite-scroll-component";
 
 // components
 import MediaCard from "./MediaCard";
-import TweetSkeleton from "@components/Tweet/TweetSkeleton";
+import TweetSkeleton from "@components/Tweet/TweetDetail/TweetSkeleton";
 
 // types
 import { iTweet } from "@type/tweet.types";
