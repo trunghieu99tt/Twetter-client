@@ -45,8 +45,27 @@ export const Header = styled('div') <{
 
 export const Body = styled.div``;
 
-export const Footer = styled.div``;
+export const Footer = styled.div`
+    padding: 1rem;
+    display: flex;
+    justify-content: end;
+    border-top: 1px solid var(--gray-4);
+    margin-top: 2rem;
+    gap: 1rem;
+`;
 
-export const OkButton = styled.button``;
+export const OkButton = styled.button`
+    background: var(--blue-2);
+    padding: 0.5rem 3rem;
+    border-radius: 5px;
+    color: #fff;
+    font-weight: 500;
+`;
 
-export const CancelButton = styled.button``;
+export const CancelButton = styled.button`
+    background: var(--red);
+    color: #fff;
+    font-weight: 500;
+    border-radius: 5px;
+    padding: 0.5rem 2rem;
+`;

@@ -7,12 +7,13 @@ import { useMyProfileOverview } from "./userMyProfileOverview";
 import { nFormatter } from "@utils/helper";
 
 // components
+import EditInfo from "../EditInfo";
 import Modal from "@components/Modal";
 import UserCard from "@components/UserCard";
+import ImageWithUpdater from "@components/ImageWithUpdater";
 
 // icons
 import { IoPersonAdd } from "react-icons/io5";
-import { BiCamera } from "react-icons/bi";
 
 // types
 import { iUser } from "@type/user.types";
@@ -23,18 +24,12 @@ import {
     Name,
     Main,
     Info,
-    Avatar,
     Wrapper,
     MainInfo,
     CoverPhoto,
-    UpdateAvatar,
-    FollowButton,
+    RightButton,
     SecondaryInfo,
-    AvatarWrapper,
     FollowersCounter,
-    ChangeAvatarActions,
-    OkChangeAvatarButton,
-    CancelChangeAvatarButton,
 } from "./MyProfileOverviewStyle";
 import { Container } from "@shared/style/sharedStyle.style";
 
@@ -48,8 +43,8 @@ const MyProfileOverview = ({ user }: Props) => {
         newAvatar,
         followed,
         listType,
-        modalType,
         isDisabledUpdate,
+        isVisibleEditForm,
         updatingFollowStatus,
         followerOrFollowingList,
 
@@ -59,6 +54,7 @@ const MyProfileOverview = ({ user }: Props) => {
         onChangeAvatar,
         updateUserAvatar,
         updateFollowStatus,
+        setIsVisibleEditForm,
         onCancelChangeAvatar,
     } = useMyProfileOverview({
         user,
@@ -81,6 +77,24 @@ const MyProfileOverview = ({ user }: Props) => {
         <UserCard user={user} />
     ));
 
+    let rightButtonContent: any = (
+        <React.Fragment>
+            <IoPersonAdd />
+            {updatingFollowStatus
+                ? "Changing..."
+                : followed
+                ? "Followed"
+                : "Follow"}
+        </React.Fragment>
+    );
+
+    let rightButtonAction = () => updateFollowStatus(user._id);
+
+    if (isMe) {
+        rightButtonContent = "Update Info";
+        rightButtonAction = () => setIsVisibleEditForm(true);
+    }
+
     return (
         <Wrapper>
             <Modal
@@ -89,48 +103,26 @@ const MyProfileOverview = ({ user }: Props) => {
                 isOpen={listType !== ""}
                 onCancel={closeModal}
             />
+            {isVisibleEditForm && (
+                <EditInfo
+                    data={user}
+                    onCancel={() => setIsVisibleEditForm(false)}
+                />
+            )}
             <CoverPhoto img={user?.coverPhoto || ""}></CoverPhoto>
             <Container>
                 <Main>
-                    <AvatarWrapper>
-                        <Avatar
-                            src={newAvatar?.preview || user?.avatar || ""}
-                            alt={user?.name || "user avatar"}
-                        />
-                        <UpdateAvatar>
-                            {!newAvatar?.file ? (
-                                <React.Fragment>
-                                    <label
-                                        htmlFor={`upload-avatar-${user._id}`}
-                                    >
-                                        <BiCamera />
-                                        <span>Update your avatar</span>
-                                    </label>
-                                    <input
-                                        type="file"
-                                        id={`upload-avatar-${user._id}`}
-                                        accept="image/*"
-                                        onChange={onChangeAvatar}
-                                    />
-                                </React.Fragment>
-                            ) : (
-                                <ChangeAvatarActions>
-                                    <OkChangeAvatarButton
-                                        onClick={updateUserAvatar}
-                                        disabled={isDisabledUpdate}
-                                    >
-                                        Update
-                                    </OkChangeAvatarButton>
-                                    <CancelChangeAvatarButton
-                                        onClick={onCancelChangeAvatar}
-                                        disabled={isDisabledUpdate}
-                                    >
-                                        Cancel
-                                    </CancelChangeAvatarButton>
-                                </ChangeAvatarActions>
-                            )}
-                        </UpdateAvatar>
-                    </AvatarWrapper>
+                    <ImageWithUpdater
+                        data={newAvatar}
+                        name="coverPhoto"
+                        isDisabledUpdate={isDisabledUpdate}
+                        id={`update-user-avatar-${user._id}`}
+                        wrapperCustomStyles="margin-top: -7.5rem;"
+                        image={newAvatar?.preview || user?.avatar}
+                        onOk={updateUserAvatar}
+                        onChange={onChangeAvatar}
+                        onCancel={onCancelChangeAvatar}
+                    />
                     <Info>
                         <MainInfo>
                             <Name>{user?.name}</Name>
@@ -151,18 +143,9 @@ const MyProfileOverview = ({ user }: Props) => {
                             <Bio>{user?.bio}</Bio>
                         </SecondaryInfo>
                     </Info>
-                    {!isMe && (
-                        <FollowButton
-                            onClick={() => updateFollowStatus(user?._id)}
-                        >
-                            <IoPersonAdd />
-                            {updatingFollowStatus
-                                ? "Changing..."
-                                : followed
-                                ? "Followed"
-                                : "Follow"}
-                        </FollowButton>
-                    )}
+                    <RightButton onClick={rightButtonAction}>
+                        {rightButtonContent}
+                    </RightButton>
                 </Main>
             </Container>
         </Wrapper>

@@ -28,3 +28,8 @@ export interface Size {
     width: number | undefined;
     height: number | undefined;
 }
+
+export type TImageInput = {
+    file: File | null;
+    preview: string | null;
+}

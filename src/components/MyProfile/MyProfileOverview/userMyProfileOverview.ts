@@ -18,6 +18,7 @@ export const useMyProfileOverview = ({
 
     const [listType, setListType] = useState<LIST_TYPE>("");
     const [modalType, setModalType] = useState<MODAL_TYPE>("");
+    const [isVisibleEditForm, setIsVisibleEditForm] = useState<boolean>(false);
     const [newAvatar, setNewAvatar] = useState<{
         file: File | null;
         preview: string;
@@ -110,6 +111,7 @@ export const useMyProfileOverview = ({
         updating,
         newAvatar,
         isDisabledUpdate,
+        isVisibleEditForm,
         followerOrFollowingList,
         updatingFollowStatus: followUserMutation.isLoading,
 
@@ -119,6 +121,7 @@ export const useMyProfileOverview = ({
         onChangeAvatar,
         updateUserAvatar,
         updateFollowStatus,
-        onCancelChangeAvatar
+        onCancelChangeAvatar,
+        setIsVisibleEditForm,
     }
 }

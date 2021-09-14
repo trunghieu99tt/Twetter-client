@@ -23,83 +23,6 @@ export const Main = styled.section`
     position: relative;
 `;
 
-export const UpdateAvatar = styled.div`
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    display: none;
-    width: 100%;
-    
-    label {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        width: 100%;
-        color: #fff;
-        background: rgba(0,0,0,.3);
-        padding: 1rem;
-        cursor: pointer;
-        
-        svg {
-            --size: 1.5rem;
-            width: var(--size);
-            height: var(--size);
-        }
-        
-    }
-    
-    input {
-        display: none;
-    }
-`;
-
-export const ChangeAvatarActions = styled.div`
-    background: rgba(0,0,0,.4);
-    padding: 1rem 0;
-    display: flex;
-    justify-content: center;
-    
-    button:disabled{
-        cursor: initial;
-    }
-    
-`;
-
-export const CancelChangeAvatarButton = styled.button`
-    text-align: center;
-    color: #fff;
-`;
-
-export const OkChangeAvatarButton = styled.button`
-    background: var(--blue-2);
-    border-radius: 5px;
-    color: #fff;
-`;
-
-export const AvatarWrapper = styled.figure`
-    --size: 15rem;
-    width: var(--size);
-    height: var(--size);
-    border-radius: .5rem;
-    overflow: hidden;
-    margin-top: -7.5rem;
-    margin-bottom: 1.5rem;
-    position: relative;
-    
-    &:hover ${UpdateAvatar}{
-        display: block;
-    }
-    
-`;
-
-export const Avatar = styled.img`
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-`;
-
-
 export const Info = styled.div`
     max-width: 50%;
 `;
@@ -140,7 +63,7 @@ export const Bio = styled.p`
     line-height: 2.5rem;
 `;
 
-export const FollowButton = styled.button`
+export const RightButton = styled.button`
     position: absolute;
     top: 2.5rem;
     right: 2.5rem;
