@@ -15,7 +15,7 @@ client.interceptors.request.use(
 
         if (token && token.length > 3) {
             if (token[0] === '"') {
-                token = token?.substring(1, token.length-1);
+                token = token?.substring(1, token.length - 1);
             }
             config.headers["Authorization"] = `Bearer ${token}`;
         }

@@ -43,7 +43,7 @@ const UserAvatarSmall = ({ user }: Props) => {
             defaultSrc={defaultSrc}
             alt={`${user.name} avatar`}
             key={user.avatar}
-            customStyles="--size: 3rem;
+            customStyles="--size: 3.5rem;
                 width: var(--size);
                 height: var(--size);
                 border-radius: 0.5rem;"

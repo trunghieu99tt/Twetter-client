@@ -5,4 +5,7 @@ export const Wrapper = styled.header`
     padding: 1.5rem 7rem 0 7rem;
     display: flex;
     justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 2;
 `;

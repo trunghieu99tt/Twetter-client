@@ -1,3 +1,4 @@
+import ChatUserList from "@components/Chat/ChatUserList";
 import React from "react";
 import Header from "./Header";
 
@@ -8,6 +9,7 @@ const MainLayout =
             <React.Fragment>
                 <Header />
                 <WrappedComponent {...props} />
+                <ChatUserList />
             </React.Fragment>
         );
     };
