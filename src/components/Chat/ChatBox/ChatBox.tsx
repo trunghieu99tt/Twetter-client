@@ -1,12 +1,31 @@
+// talons
 import { useUser } from "@talons/useUser";
-import React from "react";
 
-import { Wrapper, Header, Main, UserName, UserAvatar } from "./ChatBoxStyle";
+// components
+import Message from "./Message";
+import TextMessageForm from "./MessageForm/TextMessageForm";
 
-interface Props {}
+import {
+    Main,
+    Header,
+    Wrapper,
+    UserName,
+    UserAvatar,
+    MessageForm,
+    MessageListWrapper,
+} from "./ChatBoxStyle";
+import { useChatBox } from "./useChatbox";
+import { iUser } from "@type/user.types";
 
-const ChatBox = (props: Props) => {
-    const { user } = useUser();
+type Props = {
+    user: iUser;
+};
+
+const ChatBox = ({ user }: Props) => {
+    const { user: currentUser } = useUser();
+    const { message, onSubmit, setChosenEmoji, setMessage, onChange } =
+        useChatBox();
+
     return (
         <Wrapper>
             <Header>
@@ -14,7 +33,20 @@ const ChatBox = (props: Props) => {
                 <UserName>{user.name}</UserName>
             </Header>
             <Main>
-                <input type="text" name="message"></input>
+                <MessageListWrapper>
+                    {[...Array(10)].map(() => {
+                        return <Message key={`message-${Math.random()}`} />;
+                    })}
+                </MessageListWrapper>
+                <MessageForm>
+                    <TextMessageForm
+                        onChange={onChange}
+                        setMessage={setMessage}
+                        onSubmit={onSubmit}
+                        setChosenEmoji={setChosenEmoji}
+                        value={message}
+                    />
+                </MessageForm>
             </Main>
         </Wrapper>
     );

@@ -14,7 +14,7 @@ const PopularTags = (props: Props) => {
 
     const content = [...Array(6)].map((_, i) => {
         return (
-            <TagWrapper>
+            <TagWrapper key={`popular-tag-${Math.random()}`}>
                 <TagName>#programing</TagName>
                 <TagCounter>
                     {nFormatter(Math.random() * 1e5)} Tweets

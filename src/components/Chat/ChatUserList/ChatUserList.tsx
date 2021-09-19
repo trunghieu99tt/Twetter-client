@@ -1,5 +1,8 @@
 import UserAvatarSmall from "@components/UserAvatarSmall";
 import { useUser } from "@talons/useUser";
+import { iUser } from "@type/user.types";
+import { useRecoilValue } from "recoil";
+import { connectedUsersState } from "states/user.state";
 import ChatBox from "../ChatBox";
 import {
     Wrapper,
@@ -12,22 +15,29 @@ import {
 interface Props {}
 
 const ChatUserList = (props: Props) => {
-    const { user } = useUser();
+    const { user: currentUser } = useUser();
+    const connectedUsers = useRecoilValue(connectedUsersState);
+
+    console.log(`connectedUsers`, connectedUsers);
+
+    const userLists = connectedUsers?.filter(
+        (u: iUser) => u._id !== currentUser._id
+    );
 
     return (
         <Wrapper>
             <Heading>Contacts</Heading>
-            {[...Array(10)].map(() => {
+            {userLists?.map((user: iUser) => {
                 return (
-                    <ChatUserListItem>
+                    <ChatUserListItem key={`chat-user-list-item-${user._id}`}>
                         <UserAvatarSmall user={user} />
                         <ChatUserListItemName>{user.name}</ChatUserListItemName>
                     </ChatUserListItem>
                 );
             })}
             <ChatBoxList>
-                {[...Array(3)].map(() => {
-                    return <ChatBox />;
+                {userLists?.map((user: iUser) => {
+                    return <ChatBox user={user} key={Math.random()} />;
                 })}
             </ChatBoxList>
         </Wrapper>

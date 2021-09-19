@@ -9,8 +9,10 @@ import NotFound from "@pages/NotFound";
 import PublicRoute from "@components/routes/PublicRoute";
 import PrivateRouteController from "routes/PrivateRouteController";
 import { useApp } from "@talons/useApp";
+import { useSocket } from "socket/useSocket";
 
 const App = () => {
+    const {} = useSocket();
     const { isLoading, user } = useApp();
     if (isLoading) return <div>Loading...</div>;
     if (user?._id) return <PrivateRouteController />;

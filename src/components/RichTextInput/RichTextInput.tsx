@@ -1,15 +1,17 @@
 import { EditorState } from "draft-js";
-import { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import createLinkifyPlugin from "@draft-js-plugins/linkify";
+import createEmojiPlugin from "@draft-js-plugins/emoji";
+
 import styled from "styled-components";
 
 // components
 import Editor from "@draft-js-plugins/editor";
-import { LinkPreview } from "@dhaiwat10/react-link-preview";
+// import { LinkPreview } from "@dhaiwat10/react-link-preview";
 
 // styles
 import "@draft-js-plugins/linkify/lib/plugin.css";
-import styles from "./custom.module.css";
+import "@draft-js-plugins/emoji/lib/plugin.css";
 
 const TextWrapper = styled.div`
     width: 100%;
@@ -32,41 +34,61 @@ const TextWrapper = styled.div`
     }
 `;
 
-const RichTextInput = () => {
-    const [editorState, setEditorState] = useState(EditorState.createEmpty());
+type Props = {
+    data: EditorState;
+    onChange?: any;
+    placeholder?: string;
+};
+
+const emojiPlugin = createEmojiPlugin();
+const { EmojiSuggestions, EmojiSelect } = emojiPlugin;
+
+const RichTextInput = ({ data, onChange, placeholder }: Props) => {
     const [link, setLink] = useState<string>("");
 
-    const linkifyPlugin = useMemo(
-        () =>
-            createLinkifyPlugin({
-                component(props) {
-                    console.log("props: ", props);
-                    if (!link) {
-                        setLink(props.href);
-                    }
-                    return <a {...props}>{props.children}</a>;
-                },
-            }),
-        [link]
-    );
+    const isReadOnly = onChange === undefined;
+
+    // const linkifyPlugin = useMemo(
+    //     () =>
+    //         createLinkifyPlugin({
+    //             component(props) {
+    //                 console.log("props: ", props);
+    //                 if (!link) {
+    //                     setLink(props.href);
+    //                 }
+    //                 return <a {...props}>{props.children}</a>;
+    //             },
+    //         }),
+    //     [link]
+    // );
+
+    // const onChangeTextEditor = (editorState: EditorState) => {
+    //     console.log(`editorState`, editorState.getCurrentContent());
+    //     if (onChange) {
+    //         onChange(editorState);
+    //     }
+    // };
 
     return (
         <TextWrapper>
             <Editor
-                editorState={editorState}
-                onChange={setEditorState}
-                placeholder="What's on your mind..."
-                plugins={[linkifyPlugin]}
+                readOnly={isReadOnly}
+                editorState={data}
+                onChange={onChange}
+                placeholder={placeholder}
+                // plugins={[emojiPlugin]}
             ></Editor>
+            {/* {!isReadOnly && (
+                <React.Fragment>
+                    <EmojiSuggestions />
+                    <EmojiSelect />
+                </React.Fragment>
+            )} */}
 
-            {link && (
+            {/* {link && (
                 <LinkPreview url={link} className={styles.customLinkPreview} />
             )}
-            <button
-                onClick={() => console.log(editorState.getCurrentContent())}
-            >
-                Log State
-            </button>
+            <button onClick={saveRaw}>Save raw</button> */}
         </TextWrapper>
     );
 };

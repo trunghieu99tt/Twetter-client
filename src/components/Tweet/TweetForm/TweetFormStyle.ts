@@ -29,12 +29,15 @@ export const Main = styled.div`
 export const TweetContentInputWrapper = styled.div`
     min-height: 10rem;
     margin-bottom: 2rem;
+    max-height: 20rem;
+    overflow: auto;
 `;
 
 export const TweetContentInput = styled.input`
     outline: none;
     border: none;
     width: 100%;
+    
 `;
 
 export const TweetImage = styled.img`

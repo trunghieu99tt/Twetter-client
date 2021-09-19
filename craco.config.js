@@ -15,6 +15,14 @@ const resolvedAliases = Object.fromEntries(
 module.exports = {
     webpack: {
         alias: resolvedAliases,
+        module: {
+            loaders: [
+                {
+                    test: /plugin\.css$/,
+                    loaders: ["style-loader", "css"],
+                },
+            ],
+        },
     },
     babel: {
         plugins: [["babel-plugin-styled-components"]],

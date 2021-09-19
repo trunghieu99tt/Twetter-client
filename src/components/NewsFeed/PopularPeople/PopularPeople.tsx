@@ -51,7 +51,7 @@ const PopularPeople = () => {
         const followersCount = user?.followers.length || 0;
 
         return (
-            <UserCard>
+            <UserCard key={`user-card-${user._id}`}>
                 <Flex gap="1.8rem" align="flex-start" justify="space-between">
                     <Flex gap="1.8rem">
                         <UserAvatarSmall user={user} />

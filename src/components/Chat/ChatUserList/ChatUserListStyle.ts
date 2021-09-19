@@ -10,6 +10,7 @@ export const Wrapper = styled.div`
     background: #fff;
     padding: 1.5rem;
     overflow: auto;
+    z-index: 2;
 `;
 
 export const Heading = styled.div`

@@ -51,6 +51,8 @@ import {
 // types and constants
 import { iComment } from "@type/comments.types";
 import EditTweet from "../EditTweet";
+import RichTextInput from "@components/RichTextInput";
+import { convertFromRaw, EditorState } from "draft-js";
 
 type Props = {
     tweet: iTweet;
@@ -143,7 +145,18 @@ const Tweet = ({ tweet }: Props) => {
                     )}
                 </Header>
                 <Content>
-                    <TweetDescription>{tweet.content}</TweetDescription>
+                    {tweet?.content && (
+                        <TweetDescription>
+                            <RichTextInput
+                                data={EditorState.createWithContent(
+                                    convertFromRaw(
+                                        JSON.parse(tweet.content || "{}")
+                                    )
+                                )}
+                            />
+                        </TweetDescription>
+                    )}
+
                     {tweet?.media?.length > 0 && (
                         <TweetMediaWrapper>
                             <Carousel
@@ -158,6 +171,7 @@ const Tweet = ({ tweet }: Props) => {
                             </Carousel>
                         </TweetMediaWrapper>
                     )}
+
                     <Interaction>
                         <InteractionSummary>
                             <InteractionSummaryItem>

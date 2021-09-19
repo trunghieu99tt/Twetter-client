@@ -7,6 +7,7 @@ const defaultUser = {
     avatar: '',
     gender: 0,
     email: '',
+    username: '',
     following: [],
     followers: [],
     coverPhoto: '',
@@ -22,10 +23,11 @@ export class UserModel {
     email: string;
     gender: number;
     birthday: Date;
+    username: string;
     coverPhoto: string;
-    isThirdParty: boolean;
     following: iUser[];
     followers: iUser[];
+    isThirdParty: boolean;
 
     constructor(user: iUser | undefined | null) {
         this.bio = user?.bio || defaultUser.bio;
@@ -34,6 +36,7 @@ export class UserModel {
         this.email = user?.email || defaultUser.email;
         this.avatar = user?.avatar || defaultUser.avatar;
         this.gender = user?.gender || defaultUser.gender;
+        this.username = user?.username || defaultUser.username;
         this.birthday = user?.birthday || defaultUser.birthday;
         this.coverPhoto = user?.coverPhoto || defaultUser.coverPhoto;
         this.isThirdParty = user?.isThirdParty || defaultUser.isThirdParty;
@@ -71,11 +74,12 @@ export class UserModel {
             email: this.email,
             avatar: this.avatar,
             gender: this.gender,
+            username: this.username,
             birthday: this.birthday,
+            followers: this.followers,
+            following: this.following,
             coverPhoto: this.coverPhoto,
             isThirdParty: this.isThirdParty,
-            following: this.following,
-            followers: this.followers
         }
     }
 }

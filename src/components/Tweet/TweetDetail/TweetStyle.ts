@@ -49,7 +49,7 @@ export const AuthorActions = styled.div`
     position: absolute;
     top: 1rem;
     right: 1rem;
-    z-index: 1;
+    z-index: 2;
 `;
 
 export const AuthorAction = styled.button`
@@ -61,7 +61,7 @@ export const AuthorAction = styled.button`
 
 export const Content = styled.div``;
 
-export const TweetDescription = styled.p`
+export const TweetDescription = styled.div`
 font-size: 1.5rem;
 color: var(--gray-2);
 margin-bottom: 2rem;

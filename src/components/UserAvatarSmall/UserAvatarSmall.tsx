@@ -14,9 +14,10 @@ import { GENDER } from "constants/user.constants";
 
 interface Props {
     user: iUser;
+    customStyles?: string;
 }
 
-const UserAvatarSmall = ({ user }: Props) => {
+const UserAvatarSmall = ({ user, customStyles }: Props) => {
     const [defaultSrc, setDefaultSrc] = useState<any>(user?.avatar || "");
 
     useEffect(() => {
@@ -43,10 +44,12 @@ const UserAvatarSmall = ({ user }: Props) => {
             defaultSrc={defaultSrc}
             alt={`${user.name} avatar`}
             key={user.avatar}
-            customStyles="--size: 3.5rem;
+            customStyles={`--size: 3.5rem;
                 width: var(--size);
                 height: var(--size);
-                border-radius: 0.5rem;"
+                border-radius: 0.5rem;
+                ${customStyles}
+            `}
         ></ImageWithPlaceholder>
     );
 };

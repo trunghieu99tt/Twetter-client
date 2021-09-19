@@ -3,8 +3,9 @@ import { useUpload } from "@talons/useUpload";
 import { iCreateTweetDTO, iTweet } from "@type/tweet.types";
 import { iUser } from "@type/user.types";
 import { USER_QUERY } from "constants/user.constants";
+import { ContentState, convertFromRaw, convertToRaw, EditorState } from "draft-js";
 import { UserModel } from "model/user.model";
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import { useQueryClient } from "react-query";
 
 type Props = {
@@ -17,7 +18,12 @@ export const useTweetForm = ({ tweet }: Props) => {
         USER_QUERY.GET_ME
     )).getData();
 
-    const [content, setContent] = useState<string>(tweet?.content || "");
+    const [content, setContent] = useState(
+        tweet?.content
+            ? EditorState.createWithContent(convertFromRaw(JSON.parse(tweet.content)))
+            : EditorState.createEmpty()
+    );
+
     const [audience, setAudience] = useState<number>(tweet?.audience || 0);
     const [loading, setLoading] = useState<boolean>(false);
     const [files, setFiles] = useState<FileList | never[]>([]);
@@ -32,14 +38,6 @@ export const useTweetForm = ({ tweet }: Props) => {
         uploadImages
     } = useUpload();
 
-    const onChangeContent = (event: ChangeEvent<HTMLInputElement>) => {
-        const newContent = event?.target?.value || '';
-
-        if (newContent !== content) {
-            setContent(newContent);
-        }
-
-    }
     const onChangeFile = (event: ChangeEvent<HTMLInputElement>) => {
         const files = event.target.files || [];
         if (files?.length > 0) {
@@ -58,10 +56,15 @@ export const useTweetForm = ({ tweet }: Props) => {
         setImagesPreview([]);
     }
 
+    const resetContent = () => {
+        const editorState = EditorState.push(content, ContentState.createFromText(''), 'remove-range');
+        setContent(editorState);
+    }
+
     const resetAll = () => {
         resetFiles();
-        setContent('');
         setAudience(0);
+        resetContent();
         setLoading(false);
     }
 
@@ -69,8 +72,9 @@ export const useTweetForm = ({ tweet }: Props) => {
         if (content || files.length > 0) {
             setLoading(true);
             const imageResponses = await uploadImages(files);
+            const contentRaw = JSON.stringify(convertToRaw(content.getCurrentContent()));
             const newTweet: iCreateTweetDTO = {
-                content,
+                content: contentRaw,
                 audience,
                 media: imageResponses,
             }
@@ -113,9 +117,5 @@ export const useTweetForm = ({ tweet }: Props) => {
         setAudience,
         onChangeFile,
         onCancelImage,
-        onChangeContent,
     }
-
-
-
 }

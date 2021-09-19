@@ -1,0 +1,33 @@
+.mediaGroup {
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    border-top-right-radius: 8px;
+    border-top-left-radius: 8px;
+    background: #000;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    color: #fff;
+    padding: 0.5rem 2rem;
+}
+
+.mediaGroup > button,
+.mediaGroup svg {
+    width: 1.5rem;
+    height: 1.5rem;
+}
+
+.picker {
+    position: absolute;
+    bottom: 0;
+    transform: translateY(-10%);
+    box-shadow: 0;
+}
+
+@media (max-width: 500px) {
+    .root {
+        width: 90%;
+    }
+}

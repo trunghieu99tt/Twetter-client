@@ -9,6 +9,7 @@ import "draft-js/dist/Draft.css";
 import "react-datepicker/dist/react-datepicker.css";
 import "./index.css";
 import App from "./App";
+import { RecoilRoot } from "recoil";
 
 // Create a client
 const queryClient = new QueryClient();
@@ -19,7 +20,9 @@ ReactDOM.render(
             <AppProvider>
                 <BrowserRouter>
                     <QueryClientProvider client={queryClient}>
-                        <App />
+                        <RecoilRoot>
+                            <App />
+                        </RecoilRoot>
                     </QueryClientProvider>
                 </BrowserRouter>
             </AppProvider>

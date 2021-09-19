@@ -6,6 +6,7 @@ export interface iUser {
     gender: number;
     avatar: string;
     birthday: Date;
+    username: string;
     coverPhoto: string;
     isThirdParty?: boolean;
     following: iUser[];

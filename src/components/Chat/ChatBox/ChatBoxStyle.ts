@@ -32,4 +32,12 @@ export const UserName = styled.p`
 export const Main = styled.div`
     flex: 1;
     overflow: auto;
+    padding: 1rem 0;
 `;
+
+export const MessageListWrapper = styled.div`
+    height: 29rem;
+    overflow: auto;
+`;
+
+export const MessageForm = styled.div``;

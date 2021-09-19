@@ -34,6 +34,7 @@ import {
     TweetContentInputWrapper,
 } from "./TweetFormStyle";
 import { Flex } from "@shared/style/sharedStyle.style";
+import RichTextInput from "@components/RichTextInput";
 
 type modeType = "block" | "flex" | "grid" | "none";
 
@@ -50,10 +51,10 @@ const TweetForm = ({ tweet, onCancel }: Props) => {
         imagesPreview,
 
         onSubmit,
+        setContent,
         setAudience,
         onChangeFile,
         onCancelImage,
-        onChangeContent,
     } = useTweetForm({
         tweet,
     });
@@ -86,14 +87,18 @@ const TweetForm = ({ tweet, onCancel }: Props) => {
                     <UserAvatarSmall user={user} />
                     <div>
                         <TweetContentInputWrapper>
-                            <TweetContentInput
+                            {/* <TweetContentInput
                                 value={content}
                                 name="tweet-content"
                                 onChange={onChangeContent}
                                 placeholder="What's on your mind?"
-                            />
+                            /> */}
                             {/* // TODO: Update later */}
-                            {/* <RichTextInput /> */}
+                            <RichTextInput
+                                data={content}
+                                onChange={setContent}
+                                placeholder="What's on your mind?"
+                            />
                         </TweetContentInputWrapper>
                         <TweetImageWrapper mode={imageViewMode}>
                             <DeleteImagesButton onClick={onCancelImage}>
@@ -137,7 +142,6 @@ const TweetForm = ({ tweet, onCancel }: Props) => {
                                 onClick={() => {
                                     onSubmit();
                                     if (onCancel) {
-                                        console.log("Go here");
                                         onCancel();
                                     }
                                 }}
