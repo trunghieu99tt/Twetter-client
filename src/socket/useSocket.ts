@@ -1,33 +1,31 @@
-import { iUser } from "@type/user.types";
-import { isEqual } from "lodash";
+import { useUser } from "@talons/useUser";
 import { useEffect, useRef } from "react";
-import { useRecoilState } from "recoil";
-import { connectedUsersState, userState } from "states/user.state";
+import { useRecoilValue, useSetRecoilState } from "recoil";
+import { connectedUsersState, prevUserState } from "states/user.state";
 import { Socket } from "./socket";
 
 const useSocket = () => {
     const socketInstance = useRef(null);
-    const [connectedUsers, setConnectedUsers] = useRecoilState(connectedUsersState);
-    const [user, setUser] = useRecoilState(userState)
+    const previousUser = useRecoilValue(prevUserState);
+    const setConnectedUsers = useSetRecoilState(connectedUsersState);
+    const { user } = useUser();
 
 
     useEffect(() => {
-        const socket = new Socket().socket;
-        socketInstance.current = socket;
-        init();
+        if (!socketInstance.current) {
+            const socket = new Socket().socket;
+            socketInstance.current = socket;
+            init();
+        }
     }, [])
 
-
-
     useEffect(() => {
-        if (connectedUsers && connectedUsers.length > 0 && user) {
-            const userDB = connectedUsers?.find((connectedUser: iUser) => connectedUser._id === user._id);
-            if (userDB && !isEqual(userDB, user)) {
-                setUser(userDB);
-            }
+        if (user?._id && socketInstance?.current) {
+            (socketInstance.current as any).emit("userOn", user);
+        } else if (!user?._id && previousUser?._id && socketInstance?.current) {
+            (socketInstance.current as any).emit("userOff", previousUser);
         }
-    }, [connectedUsers, user]);
-
+    }, [user])
 
 
     const init = () => {
@@ -37,7 +35,6 @@ const useSocket = () => {
         })
 
         socket.on('users', (res: any) => {
-            console.log(`res`, res)
             setConnectedUsers(res);
         });
 

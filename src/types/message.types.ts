@@ -9,6 +9,13 @@ export interface iMessage {
     author: iUser
 }
 
+export interface iNewMessage {
+    content: string;
+    file?: string;
+    author: iUser;
+    roomId: string;
+}
+
 export interface iFile {
     file: File | null;
     url: string;

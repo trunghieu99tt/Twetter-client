@@ -7,5 +7,5 @@ export const Wrapper = styled.header`
     justify-content: space-between;
     position: sticky;
     top: 0;
-    z-index: 2;
+    z-index: 3;
 `;

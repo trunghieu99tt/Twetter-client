@@ -1,27 +1,25 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { ContentState, convertToRaw, EditorState } from "draft-js";
 import { useParams } from "react-router";
-import { useRecoilValue } from "recoil";
+import { useRecoilValue, useSetRecoilState } from "recoil";
 
-import { useUser } from "@talons/useUser";
-import { useSocket } from "socket/useSocket";
+// talons
 import { useUpload } from "@talons/useUpload";
 
 // states
-import { roomState } from "states/room.state";
+import { roomsState } from "states/room.state";
 
 // types
 import { iRoom } from "@type/room.types";
-import { iUser } from "@type/user.types";
 import { iMessage } from "@type/message.types";
-import { ContentState, convertToRaw, EditorState } from "draft-js";
+import { newMessageState } from "states/message.state";
 
 
 export const useChatBox = () => {
-    const channels = useRecoilValue(roomState);
+    const channels = useRecoilValue(roomsState);
+    const setNewMessages = useSetRecoilState(newMessageState);
     const params: any = useParams();
     const { uploadImage } = useUpload();
-    const { user: currentUser } = useUser();
-    const { addMessage, joinRoom } = useSocket();
     const { id } = params;
 
     const [messages, setMessages] = useState<{ [key: string]: iMessage[] } | null>(null);
@@ -47,32 +45,13 @@ export const useChatBox = () => {
         }
     })
 
-    useEffect(() => {
-        return () => {
-            joinChannel();
-        }
-    }, []);
-
-    useEffect(() => {
-        if (currentChannel) {
-            getMessages();
-            joinChannel();
-        }
-    }, [id]);
-
-    useEffect(() => {
-        if (currentChannel) {
-            getMessages();
-        }
-    }, [channels])
-
-    useEffect(() => {
-        if (chosenEmoji) {
-            const newMessage = `${message} ${chosenEmoji!.emoji}`;
-            // setMessage(newMessage);
-            setChosenEmoji(null);
-        }
-    }, [chosenEmoji]);
+    // useEffect(() => {
+    //     if (chosenEmoji) {
+    //         const newMessage = `${message} ${chosenEmoji!.emoji}`;
+    //         setMessage(newMessage);
+    //         setChosenEmoji(null);
+    //     }
+    // }, [chosenEmoji]);
 
     const resetMessage = () => {
         const editorState = EditorState.push(message, ContentState.createFromText(''), 'remove-range');
@@ -84,13 +63,11 @@ export const useChatBox = () => {
         const messageRaw = JSON.stringify(convertToRaw(message.getCurrentContent()));
         if (!messageImage.file) {
             if (messageRaw.length > 0) {
-                addMessage(messageRaw, id);
                 resetMessage()
             }
         }
         else {
             const imageUrl = await uploadImage(messageImage.file);
-            addMessage(messageRaw, id, imageUrl);
             onCloseImageMessageForm();
             resetMessage()
         }
@@ -126,13 +103,6 @@ export const useChatBox = () => {
     }
 
     const joinChannel = () => {
-        const isUserRoomMember = currentChannel?.members.find((member: iUser) => member.username === currentUser?.username);
-
-        if (!isUserRoomMember) {
-            joinRoom(id);
-        } else {
-            joinRoom(id, false);
-        }
     }
 
     const onCloseImageMessageForm = () => {

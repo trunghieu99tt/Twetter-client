@@ -11,8 +11,6 @@ export class Socket {
                     token: jwt
                 }
             });
-
         console.log(`this.socket`, this.socket)
     }
-
 }

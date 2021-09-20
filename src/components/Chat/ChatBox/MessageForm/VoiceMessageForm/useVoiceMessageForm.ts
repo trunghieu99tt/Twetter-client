@@ -1,7 +1,6 @@
 import { useFirebase } from "@talons/useFirebase";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router";
-import { useSocket } from "socket/useSocket";
 
 const useVoiceMessageForm = () => {
     const [recording, setRecording] = useState<boolean>(false);
@@ -10,7 +9,6 @@ const useVoiceMessageForm = () => {
     const { uploadToStorage, fileUrl, setFileUrl } = useFirebase();
     const params: any = useParams();
     const { id } = params;
-    const { addMessage } = useSocket();
 
     useEffect(() => {
         if (fileUrl) {
@@ -40,7 +38,6 @@ const useVoiceMessageForm = () => {
     };
 
     const sendMessage = async () => {
-        addMessage("", id, fileUrl);
         setFileUrl(null);
         setRecordData(null);
         setRecording(false);

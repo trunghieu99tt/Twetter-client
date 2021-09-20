@@ -1,8 +1,8 @@
 import { atom } from "recoil";
 import { iUser } from "@type/user.types";
 
-export const userState = atom<iUser | null>({
-    key: "user",
+export const prevUserState = atom<iUser | null>({
+    key: "prevUser",
     default: null,
 });
 

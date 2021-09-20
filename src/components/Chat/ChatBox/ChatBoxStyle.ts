@@ -13,8 +13,15 @@ export const Header = styled.header`
     border-bottom: var(--border-1);
     padding: 1rem;
     display: flex;
+    align-items: center;
+    justify-content: space-between;
+`;
+
+export const UserInfo = styled.div`
+    display: flex;
     gap: 1.5rem;
     align-items: center;
+    max-width: 90%;
 `;
 
 export const UserAvatar = styled.img`

@@ -1,43 +1,48 @@
 // talons
-import { useUser } from "@talons/useUser";
+import { useChatBox } from "./useChatbox";
 
 // components
-import Message from "./Message";
 import TextMessageForm from "./MessageForm/TextMessageForm";
+
+// icons
+import { ImCancelCircle } from "react-icons/im";
+
+// types
+import { iUser } from "@type/user.types";
 
 import {
     Main,
     Header,
     Wrapper,
+    UserInfo,
     UserName,
     UserAvatar,
     MessageForm,
     MessageListWrapper,
 } from "./ChatBoxStyle";
-import { useChatBox } from "./useChatbox";
-import { iUser } from "@type/user.types";
 
 type Props = {
     user: iUser;
+    onClose: () => void;
 };
 
-const ChatBox = ({ user }: Props) => {
-    const { user: currentUser } = useUser();
+const ChatBox = ({ user, onClose }: Props) => {
     const { message, onSubmit, setChosenEmoji, setMessage, onChange } =
         useChatBox();
 
     return (
         <Wrapper>
             <Header>
-                <UserAvatar src={user.avatar} />
-                <UserName>{user.name}</UserName>
+                <UserInfo>
+                    <UserAvatar src={user.avatar} />
+                    <UserName>{user.name}</UserName>
+                </UserInfo>
+                <button onClick={onClose}>
+                    <ImCancelCircle />
+                </button>
             </Header>
             <Main>
-                <MessageListWrapper>
-                    {[...Array(10)].map(() => {
-                        return <Message key={`message-${Math.random()}`} />;
-                    })}
-                </MessageListWrapper>
+                <MessageListWrapper></MessageListWrapper>
                 <MessageForm>
                     <TextMessageForm
                         onChange={onChange}

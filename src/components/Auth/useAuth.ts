@@ -6,6 +6,8 @@ import { useState } from "react";
 import { AUTH_ENDPOINTS } from "constants/auth.constants";
 import { useQueryClient } from "react-query";
 import { USER_QUERY } from "constants/user.constants";
+import { useSetRecoilState } from "recoil";
+import { prevUserState } from "states/user.state";
 
 
 type Props = {

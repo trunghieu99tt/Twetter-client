@@ -15,6 +15,8 @@ import { USER_ENDPOINTS, USER_QUERY } from "constants/user.constants";
 import { INFINITY_QUERY_LIST_CONFIG, LONG_STATE_TIME } from "constants/config.constant";
 import { UserModel } from "model/user.model";
 import { TWEET_QUERY } from "constants/tweet.constants";
+import { useSetRecoilState } from "recoil";
+import { prevUserState } from "states/user.state";
 
 export const parseUser = (user: iUser) => {
     if (!user)
@@ -74,6 +76,8 @@ export const useUser = (
     userId = ""
 ) => {
 
+    const setPreviousUser = useSetRecoilState(prevUserState);
+
     const queryClient = useQueryClient();
 
     const invalidateQueriesAfterSuccess = () => {
@@ -89,6 +93,11 @@ export const useUser = (
         retry: 1,
         onError: () => {
             localStorage.removeItem('accessToken')
+        },
+        onSuccess: (data: iUser | undefined) => {
+            if (data) {
+                setPreviousUser(data);
+            }
         }
     });
 
