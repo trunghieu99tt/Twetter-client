@@ -1,7 +1,9 @@
 import { Route, Switch } from "react-router-dom";
 
 // pages
+import Chat from "@pages/Chat";
 import Explore from "@pages/Explore";
+import NotFound from "@pages/NotFound";
 import NewsFeed from "@pages/NewsFeed";
 import MyProfile from "@pages/MyProfile";
 import BookMarks from "@pages/BookMarks";
@@ -9,7 +11,6 @@ import UserMedia from "@pages/UserMedia";
 import UserLikes from "@pages/UserLikes";
 
 // components
-import NotFound from "@pages/NotFound";
 import PrivateRoute from "@components/routes/PrivateRoute";
 
 const PrivateRouteController = () => {
@@ -17,6 +18,7 @@ const PrivateRouteController = () => {
         <Switch>
             <PrivateRoute path="/" exact component={NewsFeed} />
             <PrivateRoute path="/bookmarks" exact component={BookMarks} />
+            <PrivateRoute path="/chat/:roomId" exact component={Chat} />
             <PrivateRoute
                 path="/profile/media/:userId"
                 exact

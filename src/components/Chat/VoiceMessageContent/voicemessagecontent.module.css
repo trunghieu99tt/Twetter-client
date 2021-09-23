@@ -1,0 +1,45 @@
+.root {
+    margin-top: 0.5rem;
+}
+
+.wrapper {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem;
+    background: blue;
+    border-radius: 999px;
+    overflow: hidden;
+}
+
+.progress {
+    position: absolute;
+    content: "";
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background: rgba(256, 256, 256, 0.2);
+}
+
+.duration {
+    font-size: 13px;
+    font-weight: 600;
+    border-radius: 999px;
+    padding: 0.25rem 0.5rem;
+    background: #fff;
+    color: #000;
+}
+
+.controlBtn {
+    --btnSize: 2rem;
+    width: var(--btnSize);
+    height: var(--btnSize);
+    filter: invert(1);
+}
+
+.controlBtn svg {
+    width: 100%;
+    height: 100%;
+}

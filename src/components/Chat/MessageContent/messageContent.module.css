@@ -1,0 +1,86 @@
+.root {
+    display: flex;
+    gap: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.root.self {
+    flex-direction: row-reverse;
+}
+
+.image {
+    --size: 3rem;
+    width: var(--size);
+    height: var(--size);
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.info {
+    text-align: left;
+}
+
+.root.self .info {
+    text-align: right;
+}
+
+.name {
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+.time {
+    font-size: 1rem;
+    margin-left: 1rem;
+    display: inline-block;
+    color: var(--mGray1);
+}
+
+.messageWrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.content {
+    position: relative;
+    max-width: 80%;
+    border-radius: 1rem;
+    padding: 1rem;
+    color: #000;
+    font-size: 1.4rem;
+    word-break: break-all;
+    background: #fff;
+    margin-right: auto;
+    border-top-left-radius: unset;
+    display: inline-block; /* min-width: 10%; */
+}
+
+.content figure {
+    border-radius: 1rem;
+    overflow: hidden;
+    border-top-left-radius: unset;
+}
+
+.content figure img {
+    height: 15rem;
+}
+
+.root.self .content figure {
+    border-top-left-radius: 1rem;
+    border-top-right-radius: unset;
+}
+
+.root.self .content {
+    border-top-left-radius: 1rem;
+    border-top-right-radius: unset;
+    margin-left: auto;
+    margin-right: initial;
+    background: var(--blue-1);
+    color: #fff;
+}
+
+.content a {
+    color: blue;
+    text-decoration: underline;
+}

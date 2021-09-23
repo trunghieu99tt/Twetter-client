@@ -1,0 +1,23 @@
+.logo {
+    padding: 1rem;
+}
+
+.item {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding: 1rem;
+    border-radius: 0.8rem;
+    transition: all 0.2s;
+}
+
+.item:hover {
+    background-color: var(--gray-5);
+    cursor: pointer;
+}
+
+.name {
+    font-size: 1.3rem;
+    font-weight: 500;
+}

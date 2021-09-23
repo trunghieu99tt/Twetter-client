@@ -7,7 +7,7 @@ import { useRecoilValue, useSetRecoilState } from "recoil";
 import { useUpload } from "@talons/useUpload";
 
 // states
-import { roomsState } from "states/room.state";
+import { connectedRoomsState } from "states/room.state";
 
 // types
 import { iRoom } from "@type/room.types";
@@ -16,8 +16,7 @@ import { newMessageState } from "states/message.state";
 
 
 export const useChatBox = () => {
-    const channels = useRecoilValue(roomsState);
-    const setNewMessages = useSetRecoilState(newMessageState);
+    const channels = useRecoilValue(connectedRoomsState);
     const params: any = useParams();
     const { uploadImage } = useUpload();
     const { id } = params;

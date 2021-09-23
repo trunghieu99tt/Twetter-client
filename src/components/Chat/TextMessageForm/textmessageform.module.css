@@ -1,0 +1,134 @@
+.root {
+    position: absolute;
+    bottom: 0;
+    width: 95%;
+    padding: 5px 15px;
+    background: var(--mGray6);
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    align-items: center;
+    border-radius: 8px;
+}
+
+.mediaGroup {
+    position: absolute;
+    background: #fff;
+    height: 2.5rem;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    border-top-right-radius: 8px;
+    border-top-left-radius: 8px;
+    background: var(--mGray6);
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    color: #fff;
+    padding: 0 1rem;
+}
+
+.mediaItem {
+    --size: 3rem;
+    width: var(--size);
+    height: var(--size);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.mediaGroup svg {
+    width: 100%;
+    height: 100%;
+    color: #000;
+}
+
+.picker {
+    position: absolute;
+    bottom: 0;
+    transform: translateY(-10%);
+    box-shadow: 0;
+}
+
+.recordContainer {
+    background: var(--mGray1);
+    position: absolute;
+    bottom: 0;
+    transform: translateY(-40%);
+    border-radius: 5px;
+    overflow: hidden;
+    left: 0;
+}
+
+.recordSoundwave {
+    height: 2rem;
+}
+
+.recordBtnGroup {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.5rem;
+}
+
+.recordBtn {
+    --record-size: 1.5rem;
+    width: var(--record-size);
+    height: var(--record-size);
+}
+
+.recordBtn:not(:first-of-type) {
+    margin-left: 1rem;
+}
+
+.mediaGroupToggleBtn {
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    outline: none;
+    --size: 3rem;
+    width: var(--size);
+    height: var(--size);
+    background: var(--blue-1);
+    color: #fff;
+}
+
+.mediaGroupToggleBtn svg {
+    width: 100%;
+    height: 100%;
+}
+
+.mediaGroupToggleBtn:focus {
+    outline: none;
+}
+
+.textInput {
+    width: 100%;
+    background: transparent;
+    outline: none;
+    font-size: 14px;
+    border: none;
+    border-radius: 0.8rem;
+    background-color: var(--gray-5);
+    padding: 1rem;
+}
+
+.submitBtn {
+    --size: 4rem;
+    width: var(--size);
+    height: var(--size);
+    background-color: var(--blue-1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    color: #fff;
+}
+
+@media (max-width: 500px) {
+    .root {
+        width: 90%;
+    }
+}

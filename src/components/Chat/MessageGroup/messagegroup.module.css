@@ -1,0 +1,32 @@
+.header {
+    text-align: center;
+    color: #fff;
+    position: relative;
+    display: block;
+    margin-top: 1rem;
+}
+
+.header p {
+    background: #252329;
+    z-index: 1;
+    display: inline-block;
+    position: absolute;
+    top: 0;
+    transform: translate(-50%, -50%);
+    padding: 0 2rem;
+    font-size: 14px;
+}
+
+.header::before {
+    content: "";
+    position: absolute;
+    width: 100%;
+    top: 50%;
+    transform: translateX(-50%);
+    height: 1px;
+    background: #fff;
+}
+
+.messageList {
+    padding-top: 2rem;
+}

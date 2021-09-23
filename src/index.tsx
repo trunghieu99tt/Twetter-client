@@ -7,6 +7,7 @@ import { QueryClient, QueryClientProvider } from "react-query";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import "draft-js/dist/Draft.css";
 import "react-datepicker/dist/react-datepicker.css";
+import "react-virtualized/styles.css";
 import "./index.css";
 import App from "./App";
 import { RecoilRoot } from "recoil";

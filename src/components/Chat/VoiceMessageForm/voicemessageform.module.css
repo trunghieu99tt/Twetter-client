@@ -1,0 +1,30 @@
+.root {
+    background: var(--mGray1);
+    position: absolute;
+    bottom: 0;
+    transform: translateY(-40%);
+    border-radius: 5px;
+    overflow: hidden;
+    left: 0;
+}
+
+.recordSoundwave {
+    height: 2rem;
+}
+
+.btnGroup {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.5rem;
+}
+
+.btn {
+    --record-size: 1.5rem;
+    width: var(--record-size);
+    height: var(--record-size);
+}
+
+.btn:not(:first-of-type) {
+    margin-left: 1rem;
+}

@@ -1,7 +1,12 @@
 import { iRoom } from '@type/room.types';
 import { atom } from 'recoil';
 
-export const roomsState = atom<iRoom[] | null>({
-    key: 'roomsState',
+export const connectedRoomsState = atom<iRoom[] | null>({
+    key: 'connectedRoomsState',
     default: null
+})
+
+export const joinDMRoomState = atom<{ userIds: string[] } | null>({
+    key: 'joinDMRoomState',
+    default: null,
 })
