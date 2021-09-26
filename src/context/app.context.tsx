@@ -7,6 +7,8 @@ import {
 } from "../types/app.types";
 
 const initialState: TAppState = {
+    peer: null,
+    socket: null,
     theme: "LIGHT",
     screenSize: "DESKTOP",
     visibleLeftSidebar: false,
@@ -33,6 +35,16 @@ const appReducer = (state: TAppState = initialState, action: TAppAction) => {
             return {
                 ...state,
                 screenSize: action.payload,
+            };
+        case "SET_PEER":
+            return {
+                ...state,
+                peer: action.payload,
+            };
+        case "SET_SOCKET":
+            return {
+                ...state,
+                socket: action.payload,
             };
         default:
             return state;

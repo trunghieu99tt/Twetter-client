@@ -3,6 +3,7 @@ import { useWindowSize } from "@hooks/useWindowSize";
 import { MutableRefObject, useEffect, useRef } from "react";
 import { useHistory, useLocation } from "react-router";
 import { useUser } from "./useUser";
+import Peer from "peerjs";
 
 export const useApp = () => {
     const { user, getMeQuery } = useUser();
@@ -17,6 +18,13 @@ export const useApp = () => {
 
     useEffect(() => {
         currentPathRef.current = location.pathname;
+        const newPeer = new Peer(undefined, {
+            path: '/',
+        });
+        dispatch({
+            type: 'SET_PEER',
+            payload: newPeer,
+        })
     }, []);
 
     useEffect(() => {

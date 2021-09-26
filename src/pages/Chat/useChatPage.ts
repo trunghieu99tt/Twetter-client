@@ -10,9 +10,18 @@ import { useMessage } from "@talons/useMessage";
 import { connectedRoomsState } from "states/room.state";
 import { iRoom } from "@type/room.types";
 import { iUser } from "@type/user.types";
-import { useIntersectionObserver } from "@hooks/useIntersectionObserver";
+import { useAppContext } from "@context/app.context";
+import { callState } from "states/call.state";
 
 const useChatPage = () => {
+    const {
+        state: {
+            peer,
+            socket,
+        },
+        dispatch
+    } = useAppContext();
+    const [call, setCall] = useRecoilState(callState);
     const params: any = useParams();
     const { roomId } = params;
     const { uploadImage } = useUpload();
@@ -38,12 +47,11 @@ const useChatPage = () => {
         url: ""
     })
 
-
-
     const getRoomInfo = async (roomId: string) => {
         try {
             const response = await client.get(`/room/${roomId}`);
             const room = response.data.data;
+            setRoom(room);
             setConnectedRooms([...(connectedRooms || []), room]);
         } catch (error) {
             console.log('error getRoomInfo: ', error);
@@ -114,6 +122,58 @@ const useChatPage = () => {
         })
     }
 
+    // initialize call message
+    const initNewCall = (video: boolean = false) => {
+        const { _id, avatar, name } = currentUser;
+        const guestUser: iUser | undefined = room?.members.find((member: iUser) => member._id !== _id);
+
+        if (guestUser) {
+            const newCall = {
+                senderId: _id,
+                guestId: guestUser?._id,
+                avatar,
+                name,
+                video,
+                peerId: ''
+            }
+            return newCall;
+        }
+
+        return null;
+    }
+
+    // update call context
+    const caller = (video: boolean = false) => {
+        const newCall = initNewCall(video);
+        if (newCall) {
+            setCall(newCall);
+        }
+    }
+
+    // fire call event to socket
+    const callUserSocket = (video: boolean = false) => {
+        const newCall = initNewCall(video);
+
+        if (newCall) {
+            if (peer) {
+                newCall.peerId = peer.id;
+            }
+            socket?.emit('startCall', newCall);
+        }
+    }
+
+    // open audio call
+    const openAudioCall = () => {
+        caller();
+        callUserSocket();
+    }
+
+    // open video call
+    const openVideoCall = () => {
+        caller(true);
+        callUserSocket(true);
+    }
+
     useEffect(() => {
         const currentRoom = connectedRooms && connectedRooms.find((room: iRoom) => room._id === roomId);
 
@@ -135,18 +195,10 @@ const useChatPage = () => {
         }
     }, [chosenEmoji]);
 
-    useEffect(() => {
-        const currentRoom = connectedRooms && connectedRooms.find((room: iRoom) => room._id === roomId);
-        console.log(`connectedRooms`, connectedRooms)
-        if (currentRoom) {
-            setRoom(currentRoom)
-        }
-    }, [connectedRooms])
-
-
     const guestUser = room?.members?.find((member: iUser) => member._id !== currentUser?._id);
 
     return {
+        call,
         room,
         message,
         loading,
@@ -158,8 +210,10 @@ const useChatPage = () => {
         messageImage,
         totalMessage,
 
-        onSubmit,
         onChange,
+        onSubmit,
+        openAudioCall,
+        openVideoCall,
         fetchNextPage,
         setChosenEmoji,
         onCloseImageMessageForm,

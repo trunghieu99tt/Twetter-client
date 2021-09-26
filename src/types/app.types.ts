@@ -1,3 +1,6 @@
+import Peer from "peerjs";
+import { Socket } from "socket.io-client";
+
 export type TTheme = "LIGHT" | "DARK"
 export type TScreenSize = "DESKTOP" | "TABLET" | "MOBILE";
 
@@ -11,10 +14,18 @@ export type TAppAction = {
 } | {
     type: 'SET_SCREEN_SIZE',
     payload: TScreenSize
+} | {
+    type: 'SET_PEER',
+    payload: Peer | null
+} | {
+    type: 'SET_SOCKET',
+    payload: Socket | null
 }
 
 export type TAppState = {
     theme: TTheme;
+    peer: Peer | null;
+    socket: Socket | null;
     screenSize: TScreenSize;
     visibleLeftSidebar: boolean;
 }
