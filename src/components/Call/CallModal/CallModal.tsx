@@ -1,9 +1,15 @@
 import { useAppContext } from "@context/app.context";
 import { useUser } from "@talons/useUser";
 import { MediaConnection } from "peerjs";
-import React, { useEffect, useState } from "react";
+import React, {
+    MutableRefObject,
+    RefObject,
+    useEffect,
+    useRef,
+    useState,
+} from "react";
 import { HiOutlinePhoneMissedCall } from "react-icons/hi";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useRecoilState } from "recoil";
 import { callState } from "states/call.state";
 
 // Styles
@@ -20,135 +26,87 @@ const CallModal = (props: Props) => {
 
     const [answer, setAnswer] = useState<boolean>(false);
     const [callDuration, setCallDuration] = useState<number>(0);
-    const [tracks, setTracks] = useState<MediaStreamTrack[] | null>(null);
     const [newCall, setNewCall] = useState<MediaConnection | null>(null);
 
-    const myVideoRef = React.useRef<HTMLVideoElement>(null);
-    const remoteVideoRef = React.useRef<HTMLVideoElement>(null);
+    const tracks = useRef([]) as MutableRefObject<MediaStreamTrack[]>;
+    const myVideoRef = useRef() as MutableRefObject<HTMLVideoElement>;
+    const remoteVideoRef = useRef() as MutableRefObject<HTMLVideoElement>;
 
-    // open stream
-    const openStream = (video: any) => {
-        return navigator.mediaDevices.getUserMedia({
-            video,
+    // Open stream
+    const openStream = async (video: boolean) => {
+        const stream = await navigator.mediaDevices.getUserMedia({
             audio: true,
+            video: video,
         });
+        tracks.current = stream.getTracks();
+        return stream;
     };
 
     // play stream
-    const playStream = (stream: any, video: any) => {
-        if (video) {
-            video.srcObject = stream;
+    const playStream = (stream: MediaStream, video: HTMLVideoElement) => {
+        video.srcObject = stream;
+        video.addEventListener("loadedmetadata", () => {
             video.play();
-        }
+        });
+    };
+
+    // Close stream
+    const closeStream = () => {
+        tracks?.current?.forEach((track) => track.stop());
+        if (newCall) newCall.close();
+    };
+
+    // reset states
+    const reset = () => {
+        closeStream();
+        setCall(null);
+        setAnswer(false);
+        setCallDuration(0);
+        setNewCall(null);
     };
 
     // end call
     const endCall = () => {
-        tracks?.forEach((track: MediaStreamTrack) => {
-            track.stop();
-        });
-        if (newCall) {
-            console.log(`newCall.close`, newCall.close);
-            newCall.close();
+        reset();
+        socket?.emit("endCall", call);
+    };
+
+    // handle open peer connection
+    const onPeerConnection = async (newCall: MediaConnection | null) => {
+        const stream = await openStream(call.video);
+        if (myVideoRef?.current) {
+            playStream(stream, myVideoRef.current);
         }
-        const callTime = answer ? callDuration : 0;
-        console.log(`call`, call);
-        socket?.emit("endCall", {
-            ...call,
-            callTime,
+        if (newCall) {
+            newCall.answer(stream);
+        } else {
+            newCall = peer?.call(call.peerId, stream) as MediaConnection;
+        }
+        newCall.on("stream", (stream) => {
+            if (remoteVideoRef?.current) {
+                playStream(stream, remoteVideoRef.current);
+            }
         });
-        setCall(null);
+        setNewCall(newCall);
+        setAnswer(true);
     };
 
     // answer call
-    const answerCall = () => {
-        openStream(call.video).then((stream) => {
-            playStream(stream, myVideoRef.current);
-            const tracks = stream.getTracks();
-            setTracks(tracks);
-
-            const newCall = peer && peer.call(call.peerId, stream);
-            newCall &&
-                newCall.on("stream", (remoteStream: any) => {
-                    playStream(remoteStream, remoteVideoRef.current);
-                });
-
-            setAnswer(true);
-            setNewCall(newCall);
-        });
+    const answerCall = async () => {
+        onPeerConnection(null);
     };
 
-    // convert call duration to hours, minutes and seconds
-    const convertDuration = (duration: number) => {
-        const hours = Math.floor(duration / 3600);
-        const minutes = Math.floor((duration - hours * 3600) / 60);
-        const seconds = duration - hours * 3600 - minutes * 60;
-        return `${hours}:${minutes}:${seconds}`;
-    };
-
-    // set call duration
     useEffect(() => {
-        const setTime = setInterval(() => {
-            setCallDuration((prevCallDuration) => prevCallDuration + 1);
-        }, 1000);
-        return () => clearInterval(setTime);
-    });
-
-    // play - pause audio
-    const playAudio = (audio: any) => {
-        audio.play();
-    };
-
-    const pauseAudio = (audio: any) => {
-        audio.pause();
-        audio.currentTime = 0;
-    };
-
-    // on call event
-    useEffect(() => {
-        peer?.on("call", (newCall: MediaConnection) => {
-            openStream(call.video).then((stream) => {
-                if (myVideoRef.current) {
-                    playStream(stream, myVideoRef.current);
-                }
-                const tracks = stream.getTracks();
-                setTracks(tracks);
-                newCall.answer(stream);
-                newCall.on("stream", (remoteStream: any) => {
-                    if (remoteVideoRef) {
-                        playStream(remoteStream, remoteVideoRef.current);
-                    }
-                });
-                setNewCall(newCall);
-                setAnswer(true);
-            });
+        peer?.on("call", async (newCall: MediaConnection) => {
+            onPeerConnection(newCall);
         });
     }, [peer, call]);
 
-    // on disconnect event
     useEffect(() => {
         socket?.on("callDisconnected", () => {
-            tracks?.forEach((track: MediaStreamTrack) => {
-                track.stop();
-            });
-            if (newCall) {
-                newCall.close();
-            }
-            setCall(null);
+            reset();
         });
-
-        return () => {
-            socket?.off("callDisconnected");
-        };
-    }, [socket, tracks, newCall]);
-
-    // user offline event
-    useEffect(() => {
-        socket?.on("callingUserIsOffline", () => {
-            console.log("User is offline");
-            endCall();
-        });
-    }, [socket]);
+    }, [socket, call, newCall, tracks.current]);
 
     return (
         <div className={classes.root}>
@@ -162,7 +120,7 @@ const CallModal = (props: Props) => {
                                 className={classes.remoteAvatar}
                             />
                             <h4 className={classes.remoteName}>{user?.name}</h4>
-                            <div>{convertDuration(callDuration)}</div>
+                            {/* <div>{convertDuration(callDuration)}</div> */}
                             <div>
                                 {call?.video ? "Video call" : "Audio call"}
                             </div>
@@ -188,24 +146,28 @@ const CallModal = (props: Props) => {
                 <section
                     className={classes.answerSection}
                     style={{
-                        display: answer ? "grid" : "none",
+                        display: answer ? "block" : "none",
                     }}
                 >
                     <div className={classes.videoList}>
                         <video
-                            ref={myVideoRef}
+                            ref={(r: HTMLVideoElement) =>
+                                (myVideoRef.current = r)
+                            }
                             className={classes.myVideo}
                             playsInline
                             muted
                         />
                         <video
-                            ref={remoteVideoRef}
+                            ref={(r: HTMLVideoElement) =>
+                                (remoteVideoRef.current = r)
+                            }
                             className={classes.remoteVideo}
                             playsInline
                         />
                     </div>
                     <div className={classes.timeVideo}>
-                        {convertDuration(callDuration)}
+                        {/* {convertDuration(callDuration)} */}
                     </div>
                     <button className={classes.endCallBtn} onClick={endCall}>
                         <HiOutlinePhoneMissedCall />

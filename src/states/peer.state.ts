@@ -1,7 +1,6 @@
-import Peer from "peerjs";
 import { atom } from "recoil";
 
-export const peerState = atom<Peer | null>({
+export const peerState = atom<any | null>({
     key: 'peerState',
     default: null
 })
