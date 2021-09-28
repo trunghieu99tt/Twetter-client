@@ -77,16 +77,16 @@ const useSocket = () => {
         socket.on('joinDmRoom', (res: any) => {
             console.log('res joinDmRoom: ', res)
             setJoinDMRoom(null);
-            setConnectedRooms([...(connectedRooms || []), res]);
+            // merge connectedRooms with res
+            if (!connectedRooms?.some((room: any) => room._id === res._id)) {
+                setConnectedRooms([...(connectedRooms || []), res]);
+            }
             // Go to DM room
             history.push(`/chat/${res._id}`);
         })
 
         socket.on('newMessage', (res: any) => {
-            console.log(`res newMessage`, res);
             setNewMessage(null);
-            const queryKey = [MESSAGES_QUERIES.GET_MESSAGES, res.roomId];
-            console.log(`queryKey`, queryKey)
             queryClient.invalidateQueries(
                 [MESSAGES_QUERIES.GET_MESSAGES, res.roomId],
             )

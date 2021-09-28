@@ -1,21 +1,18 @@
 import { useAppContext } from "@context/app.context";
 import { useUser } from "@talons/useUser";
 import { MediaConnection } from "peerjs";
-import React, {
-    MutableRefObject,
-    RefObject,
-    useEffect,
-    useRef,
-    useState,
-} from "react";
+import React, { MutableRefObject, useEffect, useRef, useState } from "react";
 import { HiOutlinePhoneMissedCall } from "react-icons/hi";
 import { useRecoilState } from "recoil";
 import { callState } from "states/call.state";
+import { FiPhoneCall } from "react-icons/fi";
 
 // Styles
 import classes from "./callModal.module.css";
 
 interface Props {}
+
+let callTimeInterval: NodeJS.Timeout | null = null;
 
 const CallModal = (props: Props) => {
     const [call, setCall] = useRecoilState(callState);
@@ -96,6 +93,42 @@ const CallModal = (props: Props) => {
         onPeerConnection(null);
     };
 
+    // convert call duration to seconds, minutes and hours
+    const convertDuration = () => {
+        const hours = Math.floor(callDuration / 3600);
+        const minutes = (Math.floor((callDuration % 3600) / 60) + "").padStart(
+            2,
+            "0"
+        );
+        const seconds = ((callDuration % 60) + "").padStart(2, "0");
+        return `${hours}h ${minutes}m ${seconds}s`;
+    };
+
+    // start call interval
+    useEffect(() => {
+        callTimeInterval = setInterval(() => {
+            setCallDuration((val) => val + 1);
+        }, 1000);
+
+        return () => {
+            if (callTimeInterval) clearInterval(callTimeInterval);
+        };
+    }, []);
+
+    // stop call interval after 15 seconds if no answer
+    useEffect(() => {
+        if (callDuration > 15 && !answer) {
+            endCall();
+        }
+    }, [callDuration]);
+
+    // when user answer, reset call duration
+    useEffect(() => {
+        if (answer) {
+            setCallDuration(0);
+        }
+    }, [answer]);
+
     useEffect(() => {
         peer?.on("call", async (newCall: MediaConnection) => {
             onPeerConnection(newCall);
@@ -107,6 +140,8 @@ const CallModal = (props: Props) => {
             reset();
         });
     }, [socket, call, newCall, tracks.current]);
+
+    const myCall = call?.senderId === user?._id;
 
     return (
         <div className={classes.root}>
@@ -120,18 +155,20 @@ const CallModal = (props: Props) => {
                                 className={classes.remoteAvatar}
                             />
                             <h4 className={classes.remoteName}>{user?.name}</h4>
-                            {/* <div>{convertDuration(callDuration)}</div> */}
-                            <div>
+                            <div>{convertDuration()}</div>
+
+                            <div className={classes.callDescription}>
+                                {!myCall && <p>Incoming </p>}
                                 {call?.video ? "Video call" : "Audio call"}
                             </div>
                         </div>
                         <div className={classes.callMenu}>
                             {call && user._id === call.guestId && (
                                 <button
-                                    className={classes.answerBtn}
+                                    className={classes.answerCallBtn}
                                     onClick={answerCall}
                                 >
-                                    Answer
+                                    <FiPhoneCall />
                                 </button>
                             )}
                             <button

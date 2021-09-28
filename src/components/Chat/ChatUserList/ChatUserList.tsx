@@ -21,7 +21,7 @@ interface Props {}
 const ChatUserList = (props: Props) => {
     const { user: currentUser } = useUser();
     const setJoinRoomState = useSetRecoilState(joinDMRoomState);
-    const connectedRoom = useRecoilValue(connectedRoomsState);
+    const connectedRooms = useRecoilValue(connectedRoomsState);
     const connectedUsers = useRecoilValue(connectedUsersState);
 
     const history = useHistory();
@@ -38,42 +38,58 @@ const ChatUserList = (props: Props) => {
         );
     };
 
-    const onGoChat = (userId: string) => {
-        const userIds = [currentUser._id, userId].sort();
+    const onGoChat = (roomId: string) => {
+        // const userIds = [currentUser._id, userId].sort();
         // Check if we already has room with these users
 
-        const room = connectedRoom?.find((room: iRoom) => {
-            if (room.isDm) {
-                const roomMembers = room.members
-                    .map((u: iUser) => u._id)
-                    .sort();
+        // const room = connectedRooms?.find((room: iRoom) => {
+        //     if (room.isDm) {
+        //         const roomMembers = room.members
+        //             .map((u: iUser) => u._id)
+        //             .sort();
 
-                return JSON.stringify(roomMembers) === JSON.stringify(userIds);
-            }
+        //         return JSON.stringify(roomMembers) === JSON.stringify(userIds);
+        //     }
 
-            return false;
-        });
+        //     return false;
+        // });
 
-        if (room) {
-            history.push(`/chat/${room._id}`);
-        } else {
-            setJoinRoomState({ userIds });
-        }
+        // if (room) {
+        history.push(`/chat/${roomId}`);
+        // } else {
+        //     setJoinRoomState({ userIds });
+        // }
     };
 
     return (
         <Wrapper>
             <Heading>Contacts</Heading>
-            {userLists?.map((user: iUser) => {
-                return (
-                    <ChatUserListItem
-                        key={`chat-user-list-item-${user._id}`}
-                        onClick={() => onGoChat(user._id)}
-                    >
-                        <UserAvatarSmall user={user} />
-                        <ChatUserListItemName>{user.name}</ChatUserListItemName>
-                    </ChatUserListItem>
-                );
+            {connectedRooms?.map((room: iRoom) => {
+                // 1. if room is DM
+                if (room.isDm) {
+                    const user = room.members.find(
+                        (u: iUser) => u._id !== currentUser._id
+                    );
+                    if (user) {
+                        return (
+                            <ChatUserListItem
+                                key={`chat-user-list-item-${user._id}`}
+                                onClick={() => onGoChat(room._id)}
+                            >
+                                <UserAvatarSmall user={user} />
+                                <ChatUserListItemName>
+                                    {user.name}
+                                </ChatUserListItemName>
+                            </ChatUserListItem>
+                        );
+                    }
+
+                    return null;
+                }
+
+                // 2. TODO:  if room is not DM
+
+                return null;
             })}
             <ChatBoxList>
                 {activeChatBoxUsers?.map((user: iUser) => {

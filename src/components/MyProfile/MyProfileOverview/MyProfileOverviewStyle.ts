@@ -63,10 +63,16 @@ export const Bio = styled.p`
     line-height: 2.5rem;
 `;
 
-export const RightButton = styled.button`
+export const RightButtons = styled.div`
     position: absolute;
     top: 2.5rem;
     right: 2.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+`;
+
+export const SendMessageBtn = styled.button`
     cursor: pointer;
     background: var(--blue-1);
     color: #fff;
@@ -74,5 +80,8 @@ export const RightButton = styled.button`
     align-items: center;
     gap: 1rem;
     padding: 0.8rem 2.4rem;
-    border-radius: .4rem;
+    border-radius: .5rem;
+`
+
+export const RightButton = styled(SendMessageBtn)`
 `;

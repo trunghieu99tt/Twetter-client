@@ -14,6 +14,7 @@ import ImageWithUpdater from "@components/ImageWithUpdater";
 
 // icons
 import { IoPersonAdd } from "react-icons/io5";
+import { AiOutlineMessage } from "react-icons/ai";
 
 // types
 import { iUser } from "@type/user.types";
@@ -30,6 +31,8 @@ import {
     RightButton,
     SecondaryInfo,
     FollowersCounter,
+    RightButtons,
+    SendMessageBtn,
 } from "./MyProfileOverviewStyle";
 import { Container } from "@shared/style/sharedStyle.style";
 
@@ -48,6 +51,7 @@ const MyProfileOverview = ({ user }: Props) => {
         updatingFollowStatus,
         followerOrFollowingList,
 
+        onGoChat,
         closeModal,
         showFollowers,
         showFollowing,
@@ -143,9 +147,18 @@ const MyProfileOverview = ({ user }: Props) => {
                             <Bio>{user?.bio}</Bio>
                         </SecondaryInfo>
                     </Info>
-                    <RightButton onClick={rightButtonAction}>
-                        {rightButtonContent}
-                    </RightButton>
+
+                    <RightButtons>
+                        <RightButton onClick={rightButtonAction}>
+                            {rightButtonContent}
+                        </RightButton>
+                        {!isMe && (
+                            <SendMessageBtn onClick={() => onGoChat(user._id)}>
+                                <AiOutlineMessage />
+                                Send message
+                            </SendMessageBtn>
+                        )}
+                    </RightButtons>
                 </Main>
             </Container>
         </Wrapper>

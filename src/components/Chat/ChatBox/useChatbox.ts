@@ -101,8 +101,6 @@ export const useChatBox = () => {
         setMessages(orderedByDate);
     }
 
-    const joinChannel = () => {
-    }
 
     const onCloseImageMessageForm = () => {
         setMessageImage({

@@ -4,9 +4,11 @@ import { MutableRefObject, useEffect, useRef } from "react";
 import { useHistory, useLocation } from "react-router";
 import { useUser } from "./useUser";
 import Peer from "peerjs";
+import { useRoom } from "./useRoom";
 
 export const useApp = () => {
     const { user, getMeQuery } = useUser();
+    const { getAllUserRooms } = useRoom();
     const history = useHistory();
     const location = useLocation();
     const currentPathRef = useRef(null) as MutableRefObject<string | null>;
@@ -24,7 +26,8 @@ export const useApp = () => {
         dispatch({
             type: 'SET_PEER',
             payload: newPeer,
-        })
+        });
+        getAllUserRooms();
     }, []);
 
     useEffect(() => {

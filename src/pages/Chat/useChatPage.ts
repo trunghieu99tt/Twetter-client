@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import { iMessage, iNewMessage } from "../../types/message.types";
 import client from "../../api/client";
@@ -19,7 +19,6 @@ const useChatPage = () => {
             peer,
             socket,
         },
-        dispatch
     } = useAppContext();
     const [call, setCall] = useRecoilState(callState);
     const params: any = useParams();
@@ -34,6 +33,7 @@ const useChatPage = () => {
 
     const [message, setMessage] = useState<string>('');
     const [room, setRoom] = useState<iRoom | null>(null);
+    const [guestUser, setGuest] = useState<iUser | null>(null);
     const [loading, setLoading] = useState<boolean>(false);
     const [messages, setMessages] = useState<iMessage[]>([]);
     const [chosenEmoji, setChosenEmoji] = useState<any>(null);
@@ -49,10 +49,9 @@ const useChatPage = () => {
 
     const getRoomInfo = async (roomId: string) => {
         try {
-            const response = await client.get(`/room/${roomId}`);
+            const response = await client.get(`/rooms/${roomId}`);
             const room = response.data.data;
             setRoom(room);
-            setConnectedRooms([...(connectedRooms || []), room]);
         } catch (error) {
             console.log('error getRoomInfo: ', error);
         }
@@ -176,12 +175,14 @@ const useChatPage = () => {
 
     useEffect(() => {
         const currentRoom = connectedRooms && connectedRooms.find((room: iRoom) => room._id === roomId);
-
-        if (!currentRoom) {
-            getRoomInfo(roomId);
+        if (currentRoom) {
+            const otherUser = currentRoom?.members?.find((member: iUser) => member._id !== currentUser?._id);
+            if (otherUser) {
+                setGuest(otherUser);
+            }
+            setRoom(currentRoom);
         }
-
-    }, [roomId]);
+    }, [roomId, connectedRooms]);
 
     useEffect(() => {
         getMessages(data);
@@ -195,7 +196,6 @@ const useChatPage = () => {
         }
     }, [chosenEmoji]);
 
-    const guestUser = room?.members?.find((member: iUser) => member._id !== currentUser?._id);
 
     return {
         call,

@@ -58,7 +58,19 @@
     margin: 1rem;
 }
 
-.endCallBtn {
+.callMenu {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.callDescription {
+    font-size: 1.3rem;
+    font-weight: 500;
+}
+
+.endCallBtn,
+.answerCallBtn {
     background: red;
     --size: 5rem;
     width: var(--size);
@@ -71,7 +83,12 @@
     margin: 1rem auto;
 }
 
-.endCallBtn svg {
+.answerCallBtn {
+    background-color: green;
+}
+
+.endCallBtn svg,
+.answerCallBtn svg {
     --size: 2rem;
     width: var(--size);
     height: var(--size);

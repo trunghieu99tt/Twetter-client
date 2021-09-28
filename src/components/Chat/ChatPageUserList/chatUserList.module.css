@@ -10,11 +10,16 @@
     padding: 1rem;
     border-radius: 0.8rem;
     transition: all 0.2s;
+    color: #000;
 }
 
 .item:hover {
     background-color: var(--gray-5);
     cursor: pointer;
+}
+
+.item img {
+    flex-shrink: 0;
 }
 
 .name {

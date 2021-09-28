@@ -1,7 +1,11 @@
 import { useUpload } from '@talons/useUpload';
 import { useUser } from '@talons/useUser';
+import { iRoom } from '@type/room.types';
 import { iUser } from '@type/user.types';
 import { ChangeEvent, useState } from 'react';
+import { useHistory } from 'react-router';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { connectedRoomsState, joinDMRoomState } from 'states/room.state';
 
 type LIST_TYPE = "followers" | "following" | "";
 type MODAL_TYPE = "list_user" | "update_info" | "";
@@ -13,8 +17,11 @@ type Props = {
 export const useMyProfileOverview = ({
     user,
 }: Props) => {
+    const connectedRooms = useRecoilValue(connectedRoomsState);
+    const setJoinRoomState = useSetRecoilState(joinDMRoomState);
     const { user: currentUser, followUserMutation, updateUserMutation } = useUser();
     const { uploadImage } = useUpload();
+    const history = useHistory();
 
     const [listType, setListType] = useState<LIST_TYPE>("");
     const [modalType, setModalType] = useState<MODAL_TYPE>("");
@@ -75,6 +82,28 @@ export const useMyProfileOverview = ({
         }
     };
 
+    const onGoChat = (userId: string) => {
+        const userIds = [currentUser._id, userId].sort();
+        // Check if we already has room with these users
+        const room = connectedRooms?.find((room: iRoom) => {
+            if (room.isDm) {
+                const roomMembers = room.members
+                    .map((u: iUser) => u._id)
+                    .sort();
+
+                return JSON.stringify(roomMembers) === JSON.stringify(userIds);
+            }
+
+            return false;
+        });
+
+        if (room) {
+            history.push(`/chat/${room._id}`);
+        } else {
+            setJoinRoomState({ userIds });
+        }
+    };
+
     const updateFollowStatus = (userId: string) => followUserMutation.mutate(userId)
 
 
@@ -115,6 +144,7 @@ export const useMyProfileOverview = ({
         followerOrFollowingList,
         updatingFollowStatus: followUserMutation.isLoading,
 
+        onGoChat,
         closeModal,
         showFollowers,
         showFollowing,

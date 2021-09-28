@@ -8,6 +8,8 @@ import { useQueryClient } from "react-query";
 import { USER_QUERY } from "constants/user.constants";
 import { useSetRecoilState } from "recoil";
 import { prevUserState } from "states/user.state";
+import { useAppContext } from "@context/app.context";
+import { useUser } from "@talons/useUser";
 
 
 type Props = {
@@ -28,7 +30,11 @@ type Props = {
 const useAuth = ({ isRegister = false }: Props) => {
     const { register, handleSubmit } = useForm();
     const history = useHistory();
+    const { user } = useUser();
     const queryClient = useQueryClient();
+    const { state: {
+        socket
+    } } = useAppContext();
 
     const [gender, setGender] = useState<number>(2);
     const [visibleEmailForm, setVisibleEmailForm] = useState<boolean>(false);
@@ -62,6 +68,7 @@ const useAuth = ({ isRegister = false }: Props) => {
         const response = await client.post(AUTH_ENDPOINTS.LOG_OUT);
         const message = response?.data?.message;
         localStorage.setItem("accessToken", "");
+        socket?.emit('userOff', user);
         history.push("/login");
         queryClient.invalidateQueries(USER_QUERY.GET_ME);
         toast.info(message);

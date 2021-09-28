@@ -1,9 +1,9 @@
 import { iRoom } from '@type/room.types';
 import { atom } from 'recoil';
 
-export const connectedRoomsState = atom<iRoom[] | null>({
+export const connectedRoomsState = atom<iRoom[]>({
     key: 'connectedRoomsState',
-    default: null
+    default: []
 })
 
 export const joinDMRoomState = atom<{ userIds: string[] } | null>({
