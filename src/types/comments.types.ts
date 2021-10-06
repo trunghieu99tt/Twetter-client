@@ -4,9 +4,7 @@ import { iUser } from "./user.types";
 export interface iComment {
     _id: string;
     tweet: iTweet;
-    media: {
-        url: string;
-    };
+    media: string;
     author: iUser;
     content: string;
     isEdited: boolean;

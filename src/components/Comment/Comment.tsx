@@ -18,6 +18,7 @@ import {
     Interaction,
     CommentMedia,
 } from "./CommentStyle";
+import MediaViewer from "@components/MediaViewer";
 
 interface Props {
     data: iComment;
@@ -39,11 +40,17 @@ const Comment = ({ data, level = 0 }: Props) => {
                         </CreatedAt>
                     </div>
                     <Content>{data?.content}</Content>
-                    {data?.media?.url && (
-                        <CommentMedia
-                            src={data.media.url}
-                            alt={`comment-${data._id}-media`}
-                        />
+                    {data?.media && (
+                        <CommentMedia>
+                            <MediaViewer
+                                media={{
+                                    url: data.media,
+                                    type: data.media.includes("image")
+                                        ? "image"
+                                        : "video",
+                                }}
+                            />
+                        </CommentMedia>
                     )}
                 </MainInfo>
                 <Interaction>

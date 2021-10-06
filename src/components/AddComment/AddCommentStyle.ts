@@ -50,9 +50,9 @@ export const CommentImageWrapper = styled.div`
     margin-top: 1rem;
 `;
 
-export const CommentImage = styled.img`
-    height: auto;
-    max-height: 100%;
+export const CommentMedia = styled.div`
+    height: 10rem;
+    max-width: 20rem;
 `;
 
 export const CommentImageCancelButton = styled.button`

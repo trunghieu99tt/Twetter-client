@@ -64,6 +64,7 @@ export const LikeCounter = styled.div`
 
 export const RepliesWrapper = styled.div``;
 
-export const CommentMedia = styled.img`
+export const CommentMedia = styled.div`
     height: 15rem;
+    max-width: 20rem;
 `;

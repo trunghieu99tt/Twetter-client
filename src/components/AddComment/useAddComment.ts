@@ -1,22 +1,24 @@
 import { useComment } from "@talons/useComment";
 import { useUpload } from "@talons/useUpload";
 import { useUser } from "@talons/useUser";
+import { TMedia } from "@type/app.types";
 import { ChangeEvent, useState } from "react";
+import { v4 } from "uuid";
 
 export const useAddComment = ({
     tweetId = ""
 }) => {
 
     const [comment, setComment] = useState<string>("");
-    const [file, setFile] = useState<File | null>(null);
-    const [imagePreview, setImagePreview] = useState<string>("");
+    const [media, setMedia] = useState<TMedia | null>(null);
 
     const { user } = useUser();
-    const { uploadImage } = useUpload();
+    const { uploadSingleMedia } = useUpload();
+
     const { createCommentMutation } = useComment({
         userId: user?._id,
         tweetId
-    })
+    });
 
     const onChangeComment = (event: ChangeEvent<HTMLInputElement>) => {
         setComment(event.target.value);
@@ -25,31 +27,33 @@ export const useAddComment = ({
     const onChangeFile = (event: ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0];
         if (file) {
-            setFile(file);
-            setImagePreview(URL.createObjectURL(file));
+            const newMedia: TMedia = ({
+                id: v4(),
+                file,
+                url: URL.createObjectURL(file),
+                type: file.type.split("/")[0]
+            });
+            setMedia(newMedia);
         }
     };
 
-    const onCancelImage = () => {
-        setFile(null);
-        setImagePreview("");
-    };
+    const onCancelMedia = () => setMedia(null);
 
     const resetFields = () => {
-        onCancelImage();
+        onCancelMedia();
         setComment("");
-    }
+    };
 
     const onSubmit = async (event: any) => {
         event.preventDefault();
-        let media = '';
-        if (file) {
-            media = await uploadImage(file);
+        let url = '';
+        if (media?.file) {
+            url = await uploadSingleMedia(media?.file);
         }
         const newComment = {
             content: comment,
-            media,
-        }
+            media: url,
+        };
         createCommentMutation.mutate({
             newComment,
             tweetId
@@ -63,16 +67,15 @@ export const useAddComment = ({
 
     return {
         user,
-        file,
+        media,
         comment,
-        imagePreview,
         error: createCommentMutation.error,
         loading: createCommentMutation.isLoading,
 
         onSubmit,
         onChangeFile,
-        onCancelImage,
+        onCancelMedia,
         onChangeComment,
-    }
+    };
 
-}
+};

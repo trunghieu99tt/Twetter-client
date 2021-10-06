@@ -1,15 +1,20 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { v4 } from "uuid";
+import { convertFromRaw, EditorState } from "draft-js";
 
 // talons
 import { useTweet } from "./useTweet";
 
 // components
+import EditTweet from "../EditTweet";
 import Comment from "@components/Comment";
 import Dropdown from "@components/Dropdown";
 import { Spinner1 } from "@components/Loaders";
 import AddComment from "@components/AddComment";
+import MediaViewer from "@components/MediaViewer";
 import { Carousel } from "react-responsive-carousel";
+import RichTextInput from "@components/RichTextInput";
 import UserAvatarSmall from "@components/UserAvatarSmall";
 
 // icons
@@ -23,7 +28,9 @@ import {
 import { BiComment, BiBookmark, BiDotsVertical } from "react-icons/bi";
 
 // types
+import { TMedia } from "@type/app.types";
 import { iTweet } from "@type/tweet.types";
+import { iComment } from "@type/comments.types";
 
 // styles
 import {
@@ -47,12 +54,6 @@ import {
     InteractionSummaryItem,
     InteractionButtonGroup,
 } from "./TweetStyle";
-
-// types and constants
-import { iComment } from "@type/comments.types";
-import EditTweet from "../EditTweet";
-import RichTextInput from "@components/RichTextInput";
-import { convertFromRaw, EditorState } from "draft-js";
 
 type Props = {
     tweet: iTweet;
@@ -165,9 +166,27 @@ const Tweet = ({ tweet }: Props) => {
                                 showStatus={tweet?.media?.length > 1}
                                 showThumbs={false}
                             >
-                                {tweet.media.map((media, index) => (
-                                    <TweetMedia key={index} src={media} />
-                                ))}
+                                {tweet.media.map(
+                                    (url: string, index: number) => {
+                                        const mediaData: TMedia = {
+                                            url: url,
+                                            type: url.includes("video")
+                                                ? "video"
+                                                : "image",
+                                            id: v4(),
+                                        };
+
+                                        return (
+                                            <TweetMedia
+                                                key={`tweet-media-${mediaData.id}`}
+                                            >
+                                                <MediaViewer
+                                                    media={mediaData}
+                                                />
+                                            </TweetMedia>
+                                        );
+                                    }
+                                )}
                             </Carousel>
                         </TweetMediaWrapper>
                     )}

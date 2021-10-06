@@ -40,7 +40,7 @@ export const TweetContentInput = styled.input`
     
 `;
 
-export const TweetImage = styled.img`
+export const MediaItem = styled.div`
     width: 100%;
     height: 100%;
     object-fit: cover;
@@ -80,27 +80,27 @@ export const TweetImageWrapper = styled('div') <{
         grid-template-rows: repeat(2, 20rem);
         grid-template-columns: repeat(6, 1fr);
         
-        ${TweetImage}:nth-of-type(1){
+        ${MediaItem}:nth-of-type(1){
             grid-row: 1;
             grid-column: 1/span 3;
         }
         
-        ${TweetImage}:nth-of-type(2){
+        ${MediaItem}:nth-of-type(2){
             grid-row: 1;
             grid-column: 4/-1;
         }
         
-        ${TweetImage}:nth-of-type(3){
+        ${MediaItem}:nth-of-type(3){
             grid-row: 2;
             grid-column: 1/span 2;
         }
         
-        ${TweetImage}:nth-of-type(4){
+        ${MediaItem}:nth-of-type(4){
             grid-row: 2;
             grid-column: 3/span 2;
         }
         
-        ${TweetImage}:nth-of-type(5),
+        ${MediaItem}:nth-of-type(5),
         ${ImageLeftPlaceHolder}{
             grid-row: 2;
             grid-column: 5/-1;

@@ -16,13 +16,14 @@ import {
     Input,
     Wrapper,
     FileInput,
-    CommentImage,
+    CommentMedia,
     InputLoading,
     InputWrapper,
     FileInputLabel,
     CommentImageWrapper,
     CommentImageCancelButton,
 } from "./AddCommentStyle";
+import MediaViewer from "@components/MediaViewer";
 
 type Props = {
     tweetId: string;
@@ -32,13 +33,13 @@ type Props = {
 const AddComment = ({ addCommentRef, tweetId }: Props) => {
     const {
         user,
+        media,
         comment,
         loading,
-        imagePreview,
 
         onSubmit,
         onChangeFile,
-        onCancelImage,
+        onCancelMedia,
         onChangeComment,
     } = useAddComment({
         tweetId,
@@ -72,12 +73,14 @@ const AddComment = ({ addCommentRef, tweetId }: Props) => {
                     />
                 </InputWrapper>
             </Wrapper>
-            {imagePreview && (
+            {media?.url && (
                 <CommentImageWrapper>
-                    <CommentImageCancelButton onClick={onCancelImage}>
+                    <CommentImageCancelButton onClick={onCancelMedia}>
                         <ImCancelCircle />
                     </CommentImageCancelButton>
-                    <CommentImage src={imagePreview} alt="comment image" />
+                    <CommentMedia>
+                        <MediaViewer media={media} />
+                    </CommentMedia>
                 </CommentImageWrapper>
             )}
         </React.Fragment>

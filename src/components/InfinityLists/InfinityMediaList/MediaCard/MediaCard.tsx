@@ -1,21 +1,19 @@
-import { iTweet } from "@type/tweet.types";
 import React from "react";
+import MediaViewer from "@components/MediaViewer";
 
-import { Image, ImageCaption, ImageWrapper, Wrapper } from "./MediaCardStyle";
+import { MediaWrapper, Wrapper } from "./MediaCardStyle";
 
 interface Props {
-    data: iTweet;
+    data: any;
 }
 
 const MediaCard = ({ data }: Props) => {
+    console.log(`data`, data);
     return (
         <Wrapper>
-            <ImageWrapper>
-                <Image src={data?.media?.[0]} alt={data?.content} />
-                <ImageCaption>
-                    <span>{data?.content}</span>
-                </ImageCaption>
-            </ImageWrapper>
+            <MediaWrapper>
+                <MediaViewer media={data.media} />
+            </MediaWrapper>
         </Wrapper>
     );
 };

@@ -25,8 +25,7 @@ import {
     HeadLine,
     FileLabel,
     FileInput,
-    TweetImage,
-    TweetContentInput,
+    MediaItem,
     TweetSubmitButton,
     TweetImageWrapper,
     DeleteImagesButton,
@@ -35,6 +34,8 @@ import {
 } from "./TweetFormStyle";
 import { Flex } from "@shared/style/sharedStyle.style";
 import RichTextInput from "@components/RichTextInput";
+import { TMedia } from "@type/app.types";
+import MediaViewer from "@components/MediaViewer";
 
 type modeType = "block" | "flex" | "grid" | "none";
 
@@ -45,10 +46,10 @@ interface Props {
 
 const TweetForm = ({ tweet, onCancel }: Props) => {
     const {
+        media,
         loading,
         content,
         audience,
-        imagesPreview,
 
         onSubmit,
         setContent,
@@ -61,18 +62,18 @@ const TweetForm = ({ tweet, onCancel }: Props) => {
 
     const { user } = useUser();
 
-    let imageViewMode: modeType = "none";
-    const imagesLen = imagesPreview?.length;
+    let mediaViewMode: modeType = "none";
+    const mediaLen = media?.length;
 
-    if (imagesLen > 2) {
-        imageViewMode = "grid";
-    } else if (imagesLen > 1) {
-        imageViewMode = "flex";
-    } else if (imagesLen > 0) {
-        imageViewMode = "block";
+    if (mediaLen > 2) {
+        mediaViewMode = "grid";
+    } else if (mediaLen > 1) {
+        mediaViewMode = "flex";
+    } else if (mediaLen > 0) {
+        mediaViewMode = "block";
     }
 
-    const remainingImageCount = Math.max(0, imagesLen - 5);
+    const remainingImageCount = Math.max(0, mediaLen - 5);
 
     const inputFileId = tweet
         ? `update-tweet-media-${tweet._id}`
@@ -100,19 +101,19 @@ const TweetForm = ({ tweet, onCancel }: Props) => {
                                 placeholder="What's on your mind?"
                             />
                         </TweetContentInputWrapper>
-                        <TweetImageWrapper mode={imageViewMode}>
+                        <TweetImageWrapper mode={mediaViewMode}>
                             <DeleteImagesButton onClick={onCancelImage}>
                                 <ImCancelCircle />
                             </DeleteImagesButton>
-                            {imagesPreview?.length > 0 &&
-                                imagesPreview
-                                    .slice(0, Math.min(5, imagesLen))
-                                    .map((image, index) => (
-                                        <TweetImage
-                                            key={`add-tweet-file-image-${index}`}
-                                            src={image}
-                                            alt={`add-tweet-file-image-${index}`}
-                                        />
+                            {media?.length > 0 &&
+                                media
+                                    .slice(0, Math.min(5, mediaLen))
+                                    .map((media: TMedia, index) => (
+                                        <MediaItem
+                                            key={`tweet-form-media-${media.id}`}
+                                        >
+                                            <MediaViewer media={media} />
+                                        </MediaItem>
                                     ))}
                             {(remainingImageCount &&
                                 remainingImageCount > 0 && (

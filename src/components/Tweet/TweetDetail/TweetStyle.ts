@@ -9,7 +9,7 @@ export const RetweetedBy = styled(Link)`
     color: var(--gray-1);
     gap: 1rem;
     align-items: center;
-`
+`;
 
 export const Wrapper = styled.div`
     background: #fff;
@@ -69,7 +69,7 @@ margin-bottom: 2rem;
 
 export const TweetMediaWrapper = styled.div``;
 
-export const TweetMedia = styled.img`
+export const TweetMedia = styled.div`
 height: 40rem;
 object-fit: contain;
 border-radius: .8rem;

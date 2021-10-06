@@ -7,7 +7,7 @@ export const Wrapper = styled.article`
 	cursor: pointer;
 `;
 
-export const ImageWrapper = styled.figure`
+export const MediaWrapper = styled.div`
     width: 100%;
     overflow: hidden;
 `;
