@@ -1,16 +1,29 @@
+import { boundUpDown } from "@shared/style/sharedStyle.style";
 import styled from "styled-components";
 
 export const Wrapper = styled.div`
     position: fixed;
-    top: 6.6rem;
-    right: 0;
-    max-width: 300px;
     width: 28rem;
-    height: calc(100% - 6.6rem);
-    background: #fff;
     padding: 1.5rem;
-    overflow: auto;
     z-index: 2;
+    bottom: 5rem;
+    right: 5rem;
+    border-radius: 10px;
+`;
+
+export const ChatListWrapper = styled('div') <{
+    isOpen: boolean;
+}>`
+    transform: translate(-30%, -25%) scale(${props => (props.isOpen ? 1 : 0)});
+    position: absolute;
+    bottom: 0;
+    max-height: 20rem;
+    background: #fff;
+    padding: 2rem;
+    border-radius: 1rem;
+    width: 25rem;
+    transform-origin: bottom right;
+    transition: all 0.1s ease-in-out;
 `;
 
 export const Heading = styled.div`
@@ -35,6 +48,30 @@ export const ChatUserListItem = styled.article`
     
 `
     ;
+
+
+
+export const ToggleChatButton = styled.button`
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    padding: 1rem;
+    border: 1.5rem solid var(--blue-1);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: ${boundUpDown} 3s ease-in-out infinite;
+
+    svg {
+        --size: 2rem;
+        width: var(--size);
+        height: var(--size);
+    }
+    
+`;
+
+
 
 export const ChatUserListItemName = styled.p`
     font-size: 1.2rem;

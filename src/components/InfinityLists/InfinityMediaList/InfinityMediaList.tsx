@@ -66,7 +66,7 @@ const InfinityMediaList = ({ query }: Props) => {
                 dataLength={mediaList.length}
                 next={fetchNextPage}
                 hasMore={hasMore}
-                loader={<TweetSkeleton />}
+                loader={<p>Loading...</p>}
             >
                 <Masonry
                     className={classes.grid}

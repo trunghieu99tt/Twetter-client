@@ -22,6 +22,24 @@
     display: flex;
     gap: 1rem;
     align-items: center;
+    justify-content: space-between;
+    padding: 0 2rem;
+}
+
+.left {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.callButton {
+    margin: 0 0.5rem;
+}
+
+.callButton svg {
+    --size: 2rem;
+    width: var(--size);
+    height: var(--size);
 }
 
 .roomImage {

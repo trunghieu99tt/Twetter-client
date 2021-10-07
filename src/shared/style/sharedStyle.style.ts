@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 
 export const Container = styled.div`
     width: 100%;
@@ -24,7 +24,7 @@ export const Container = styled.div`
     //     width: 1320px;
     // }
   
-`
+`;
 
 export const Flex = styled('div') <
     {
@@ -37,4 +37,19 @@ export const Flex = styled('div') <
     ${({ gap }) => gap && `gap: ${gap}`};
     ${({ align }) => align && `align-items: ${align};`}
     ${({ justify }) => justify && `justify-content: ${justify}`};
+`;
+
+export const boundUpDown = keyframes`
+    0% {
+        -webkit-transform: translateY(0);
+        transform: translateY(0);
+    }
+    50% {
+        -webkit-transform: translateY(20px);
+        transform: translateY(20px);
+    }
+    100% {
+        -webkit-transform: translateY(0);
+        transform: translateY(0);
+    }
 `;
