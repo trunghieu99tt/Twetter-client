@@ -6,7 +6,7 @@ import { iUser } from "@type/user.types";
 import { USER_QUERY } from "constants/user.constants";
 import { ContentState, convertFromRaw, convertToRaw, EditorState } from "draft-js";
 import { UserModel } from "model/user.model";
-import { ChangeEvent, useEffect, useState } from "react";
+import { ChangeEvent, useState } from "react";
 import { useQueryClient } from "react-query";
 import { v4 as uuid } from "uuid";
 

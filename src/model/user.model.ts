@@ -1,4 +1,4 @@
-import { iUser } from "@type/user.types"
+import { iUser } from "@type/user.types";
 
 const defaultUser = {
     _id: '',
@@ -13,7 +13,8 @@ const defaultUser = {
     coverPhoto: '',
     isThirdParty: false,
     birthday: new Date(),
-}
+    storyAudience: 0,
+};
 
 export class UserModel {
     _id: string;
@@ -28,6 +29,7 @@ export class UserModel {
     following: iUser[];
     followers: iUser[];
     isThirdParty: boolean;
+    storyAudience: number;
 
     constructor(user: iUser | undefined | null) {
         this.bio = user?.bio || defaultUser.bio;
@@ -39,6 +41,7 @@ export class UserModel {
         this.username = user?.username || defaultUser.username;
         this.birthday = user?.birthday || defaultUser.birthday;
         this.coverPhoto = user?.coverPhoto || defaultUser.coverPhoto;
+        this.storyAudience = user?.storyAudience || defaultUser.storyAudience;
         this.isThirdParty = user?.isThirdParty || defaultUser.isThirdParty;
 
         this.followers = [];
@@ -50,9 +53,9 @@ export class UserModel {
                     return {
                         ...defaultUser,
                         _id: user,
-                    }
+                    };
                 return user;
-            })
+            });
         }
         if (user && user?.following?.length > 0) {
             this.following = user.following.map(user => {
@@ -60,9 +63,9 @@ export class UserModel {
                     return {
                         ...defaultUser,
                         _id: user,
-                    }
+                    };
                 return user;
-            })
+            });
         }
     }
 
@@ -80,6 +83,7 @@ export class UserModel {
             following: this.following,
             coverPhoto: this.coverPhoto,
             isThirdParty: this.isThirdParty,
-        }
+            storyAudience: this.storyAudience,
+        };
     }
 }

@@ -1,0 +1,91 @@
+.root {
+    max-width: 50%;
+    margin: 0 auto;
+}
+
+.aside {
+    padding: 2rem;
+    box-shadow: 0px 0px 5px 0px rgb(0 0 0 / 20%);
+    border-radius: 1rem;
+    background: #fff;
+}
+
+.label {
+    font-size: 1.2rem;
+    margin: 1rem 0;
+    font-weight: 500;
+    border-top: 1px solid var(--gray-4);
+    padding-top: 1rem;
+    margin-bottom: 2rem;
+}
+
+.main {
+    background: #fff;
+    border-radius: 1rem;
+    padding: 1rem 3rem 3rem 3rem;
+    box-shadow: 0px 0px 5px 0px rgb(0 0 0 / 20%);
+}
+
+.textStoryPreview {
+    --size: 40rem;
+    width: var(--size);
+    height: var(--size);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 1rem;
+}
+
+.textarea {
+    padding: 1rem;
+    border-radius: 8px;
+    resize: none;
+}
+
+.backgroundList {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(4rem, 1fr));
+    grid-gap: 0.5rem;
+    grid-gap: 1rem;
+    gap: 1rem;
+    margin: 0;
+    padding: 0;
+    margin-bottom: 1rem;
+    border-bottom: 1px solid var(--gray-4);
+    padding-bottom: 2rem;
+}
+
+.backgroundList li {
+    list-style: none;
+    --size: 3rem;
+    width: var(--size);
+    height: var(--size);
+    border-radius: 50%;
+}
+
+.text {
+    font-size: 2rem;
+    color: #fff;
+    word-break: break-all;
+    padding: 1.5rem;
+}
+
+.btnGroup {
+    display: flex;
+    justify-content: flex-end;
+    gap: 2rem;
+}
+
+.saveBtn,
+.cancelBtn {
+    padding: 0.8rem 2.4rem;
+    background: var(--blue-1);
+    color: #fff;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 2rem;
+}
+
+.cancelBtn {
+    background: var(--red);
+}

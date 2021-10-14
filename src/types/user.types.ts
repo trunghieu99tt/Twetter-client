@@ -7,8 +7,9 @@ export interface iUser {
     avatar: string;
     birthday: Date;
     username: string;
-    coverPhoto: string;
-    isThirdParty?: boolean;
-    following: iUser[];
     followers: iUser[];
+    following: iUser[];
+    coverPhoto: string;
+    storyAudience: number;
+    isThirdParty?: boolean;
 }

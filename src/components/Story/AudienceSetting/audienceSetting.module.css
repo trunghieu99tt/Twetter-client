@@ -1,0 +1,35 @@
+.root {
+    position: relative;
+    cursor: pointer;
+}
+
+.audience {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    justify-content: center;
+}
+
+.audienceIcon {
+}
+
+.audienceLabel {
+}
+
+.audienceSelectionItem {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.audienceSelectionItem svg {
+    --size: 1.5rem;
+    width: var(--size);
+    height: var(--size);
+    flex-shrink: 0;
+}
+
+.audienceSelectionItem span {
+    flex-shrink: 0;
+    display: block;
+}

@@ -5,6 +5,7 @@ import { useTweets } from "@talons/useTweets";
 
 // components
 import AddTweet from "@components/Tweet/AddTweet";
+import StoryList from "@components/Story/StoryList";
 import PopularTags from "@components/NewsFeed/PopularTags";
 import PopularPeople from "@components/NewsFeed/PopularPeople";
 import InfinityTweetsList from "@components/InfinityLists/InfinityTweetsList";
@@ -32,6 +33,7 @@ const NewsFeed = () => {
             <Container>
                 <Inner>
                     <Main>
+                        <StoryList />
                         <AddTweet />
                         <InfinityTweetsList query={getNewsFeedTweetsQuery} />
                     </Main>

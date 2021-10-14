@@ -1,0 +1,96 @@
+.root {
+    height: 100vh;
+}
+
+.top {
+    padding: 2rem;
+    width: 40rem;
+    margin: 2rem auto;
+    box-shadow: 0 0 5px rgb(0 0 0 / 20%);
+    border-radius: 1rem;
+    text-align: center;
+    margin-bottom: 5rem;
+    background-color: #fff;
+}
+
+.topMain {
+    margin: 1.5rem 0;
+}
+
+.topFooter {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    font-size: 1.1rem;
+    font-weight: 500;
+}
+
+.userInfo {
+    display: flex;
+    gap: 2rem;
+    align-items: center;
+    justify-content: center;
+}
+
+.userFullName {
+    font-size: 1.2rem;
+    font-weight: 600;
+}
+
+.userAvatar {
+    --size: 6rem;
+    width: var(--size);
+    height: var(--size);
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.main {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+    gap: 2rem;
+}
+
+.createImageButton,
+.createTextButton {
+    width: 20rem;
+    height: 30rem;
+    border-radius: 1rem;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.createImageButton > div,
+y .createTextButton > div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 1rem;
+    background-color: var(--gray-6);
+    padding: 1rem;
+    border-radius: 50%;
+}
+
+.createImageButton {
+    background: linear-gradient(
+        138deg,
+        rgb(168, 74, 217) 0%,
+        rgb(202, 88, 186) 55%,
+        rgb(229, 83, 128) 100%
+    );
+}
+
+.createTextButton {
+    background: linear-gradient(
+        138deg,
+        rgb(55, 31, 68) 0%,
+        rgb(115, 88, 202) 55%,
+        rgb(97, 0, 30) 100%
+    );
+}

@@ -1,0 +1,56 @@
+.root {
+    background-color: rgb(36, 37, 38);
+    width: 10rem;
+    height: 17rem;
+    border-radius: 1rem;
+    overflow: hidden;
+}
+
+.userAvatar {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: all 0.3s;
+}
+
+.root:hover .userAvatar {
+    transform: scale(1.05);
+}
+
+.addItemPlaceHolder {
+    height: 3rem;
+    position: relative;
+}
+
+.addIcon {
+    position: absolute;
+    top: -2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--blue-1);
+    padding: 0.5rem;
+    border-radius: 50%;
+    color: #fff;
+}
+
+.addIcon svg {
+    --size: 1.5rem;
+    width: var(--size);
+    height: var(--size);
+}
+
+.addIcon svg path {
+    stroke: #fff;
+}
+
+.addItemPlaceHolder p {
+    font-size: 1.1rem;
+    color: #fff;
+    text-align: center;
+    padding-top: 1rem;
+    font-weight: 600;
+    text-transform: capitalize;
+}

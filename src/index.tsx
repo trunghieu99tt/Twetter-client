@@ -3,11 +3,13 @@ import ReactDOM from "react-dom";
 import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter } from "react-router-dom";
 import AppProvider from "context/app.context";
+import { ToastContainer, toast } from "react-toastify";
 import { QueryClient, QueryClientProvider } from "react-query";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import "draft-js/dist/Draft.css";
 import "react-datepicker/dist/react-datepicker.css";
 import "react-virtualized/styles.css";
+import "react-toastify/dist/ReactToastify.css";
 import "./index.css";
 import App from "./App";
 import { RecoilRoot } from "recoil";
@@ -23,6 +25,7 @@ ReactDOM.render(
                     <QueryClientProvider client={queryClient}>
                         <RecoilRoot>
                             <App />
+                            <ToastContainer />
                         </RecoilRoot>
                     </QueryClientProvider>
                 </BrowserRouter>

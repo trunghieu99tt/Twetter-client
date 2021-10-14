@@ -2,6 +2,7 @@ import { Route, Switch } from "react-router-dom";
 
 // pages
 import Chat from "@pages/Chat";
+import Form from "@pages/Story/Form";
 import Explore from "@pages/Explore";
 import NotFound from "@pages/NotFound";
 import NewsFeed from "@pages/NewsFeed";
@@ -17,6 +18,7 @@ const PrivateRouteController = () => {
     return (
         <Switch>
             <PrivateRoute path="/" exact component={NewsFeed} />
+            <PrivateRoute path="/stories/create" exact component={Form} />
             <PrivateRoute path="/bookmarks" exact component={BookMarks} />
             <PrivateRoute path="/chat/:roomId" exact component={Chat} />
             <PrivateRoute
