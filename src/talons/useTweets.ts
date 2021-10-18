@@ -53,7 +53,6 @@ const getMedias = async ({ pageParam = 0 }: QueryFunctionContext) => {
 };
 
 const createTweet = async (newTweet: iCreateTweetDTO) => {
-    console.log(`newTweet`, newTweet);
     const response = await client.post(TWEET_ENDPOINTS.BASE, newTweet);
     return response?.data;
 };

@@ -1,0 +1,115 @@
+.root {
+    display: flex;
+    height: 100vh;
+    background-color: #000;
+}
+
+.aside {
+    width: 20%;
+    background: var(--gray-3);
+    padding: 3rem;
+    color: #fff;
+}
+
+.asideHeading {
+    font-size: 1.5rem;
+    margin: 2rem 0;
+}
+
+.userStoryCard {
+    display: flex;
+    align-items: center;
+    margin-bottom: 2rem;
+    gap: 2rem;
+}
+
+.userAvatar {
+    --size: 5rem;
+    width: var(--size);
+    height: var(--size);
+    object-fit: cover;
+    border-radius: 50%;
+    border: 4px solid rgba(256, 256, 256, 0.5);
+}
+
+.userAvatar.notViewedStory {
+    border: 4px solid rgb(0 137 255 / 50%);
+}
+
+.userName {
+    font-size: 1.2rem;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+}
+
+.newestStoryTime {
+}
+
+.main {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.inner {
+    --size: 45rem;
+    width: var(--size);
+    height: calc(var(--size) * 1.5);
+    background: var(--gray-3);
+    position: relative;
+    border-radius: 5px;
+}
+
+.progresses {
+    position: absolute;
+    width: 98%;
+    height: 6px;
+    top: 0.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    border-radius: 5px;
+    display: flex;
+    gap: 2px;
+}
+
+/* Source for loader animation: https://codepen.io/konamax123/pen/PoPLZKo */
+
+.progress {
+    height: 2px;
+    flex-grow: 1;
+    border-radius: 4px;
+    margin: 0 5px;
+    display: flex;
+    background-image: -webkit-linear-gradient(
+        left,
+        rgba(255, 255, 255, 0.5) 0%,
+        rgba(255, 255, 255, 0.5) 50%,
+        rgba(88, 89, 104, 0.5) 50.001%,
+        rgba(88, 89, 104, 0.5) 100%
+    );
+    background-repeat: no-repeat;
+    background-size: 200%;
+    background-color: #666;
+    background-position: 100% 50%;
+    animation-timing-function: linear;
+    animation-delay: 0.2s;
+    animation-duration: 5s;
+}
+
+.progress.active {
+    animation-name: Loader;
+}
+
+.progress.passed {
+    background-position: 0 0;
+}
+
+@keyframes Loader {
+    0% {
+        background-position: 100% 0;
+    }
+    100% {
+        background-position: 0 0;
+    }
+}

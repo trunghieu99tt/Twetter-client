@@ -1,12 +1,15 @@
-import { iStoryCreate } from "@type/story.types";
-import { getInfinityList } from "@utils/query";
+import { iStory, iStoryCreate, iStoryGroup } from "@type/story.types";
 import client from "api/client";
-import { INFINITY_QUERY_LIST_CONFIG } from "constants/config.constant";
 import { STORY_ENDPOINTS, STORY_QUERY } from "constants/story.constants";
-import { QueryFunctionContext, useInfiniteQuery, useMutation, useQueryClient } from "react-query";
+import { useEffect } from "react";
+import { useMutation, useQuery, useQueryClient } from "react-query";
+import { useSetRecoilState } from "recoil";
+import { storiesState } from "states/story.state";
 
-const getStoriesFeed = async ({ pageParam = 0 }: QueryFunctionContext) => {
-    return getInfinityList(STORY_ENDPOINTS.BASE, pageParam);
+const getStoriesFeed = async () => {
+    const response = await client.get(`${STORY_ENDPOINTS.BASE}?page=0&limit=1000`);
+    console.log(`response`, response);
+    return response.data.data;
 };
 
 const createStory = async (newStory: iStoryCreate) => {
@@ -31,13 +34,14 @@ const deleteStory = async ({ storyId }: {
 
 export const useStory = () => {
 
+    const setStories = useSetRecoilState(storiesState);
     const queryClient = useQueryClient();
 
     const invalidateStoryQuery = () => {
         queryClient.invalidateQueries(STORY_QUERY.GET_STORIES);
     };
 
-    const getStoriesFeedQuery = useInfiniteQuery([STORY_QUERY.GET_STORIES], getStoriesFeed, INFINITY_QUERY_LIST_CONFIG);
+    const getStoriesFeedQuery = useQuery(STORY_QUERY.GET_STORIES, getStoriesFeed);
 
     const createStoryMutation = useMutation(createStory, {
         onSuccess: () => {
@@ -56,6 +60,30 @@ export const useStory = () => {
             invalidateStoryQuery();
         }
     });
+
+    const storyList = getStoriesFeedQuery.data;
+
+    useEffect(() => {
+        const groupStoryByUser: iStoryGroup = storyList?.reduce(
+            (
+                res: {
+                    [key: string]: iStory[];
+                },
+                curr: iStory
+            ) => {
+                const { owner } = curr;
+                if (res.hasOwnProperty(owner._id)) {
+                    res[owner._id].push(curr);
+                } else {
+                    res[owner._id] = [curr];
+                }
+                return res;
+            },
+            {}
+        );
+        setStories(groupStoryByUser);
+    }, [storyList]);
+
 
     return {
         getStoriesFeedQuery,

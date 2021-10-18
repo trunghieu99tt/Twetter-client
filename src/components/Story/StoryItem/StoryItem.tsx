@@ -1,23 +1,46 @@
-import React from "react";
+import { Link } from "react-router-dom";
+import { useSetRecoilState } from "recoil";
+import { useHistory } from "react-router-dom";
 
 import { useUser } from "@talons/useUser";
+
+import StoryViewer from "../StoryViewer";
+// components
 
 // icons
 import { GrAdd } from "react-icons/gr";
 
+// states
+import { activeUserStoryState } from "states/story.state";
+
+// types
+import { iStory } from "@type/story.types";
+
+// styles
 import classes from "./storyItem.module.css";
-import { Link } from "react-router-dom";
 
 interface Props {
-    isCreate?: boolean;
+    data?: iStory;
+    userId?: string;
+    isSmall?: boolean;
 }
 
-const StoryItem = ({ isCreate = false }: Props) => {
+const StoryItem = ({ data, isSmall, userId }: Props) => {
     const { user } = useUser();
+    const history = useHistory();
+
+    const setActiveUserStory = useSetRecoilState(activeUserStoryState);
+
+    const onClick = () => {
+        if (userId) {
+            history.push("/stories/view");
+            setActiveUserStory(userId);
+        }
+    };
 
     return (
-        <article className={classes.root}>
-            {isCreate && (
+        <article className={classes.root} onClick={onClick}>
+            {(!data && (
                 <Link to="/stories/create">
                     <figure className={classes.imageWrapper}>
                         <img
@@ -33,7 +56,7 @@ const StoryItem = ({ isCreate = false }: Props) => {
                         <p>Create story</p>
                     </div>
                 </Link>
-            )}
+            )) || <StoryViewer data={data!} isSmall={isSmall} />}
         </article>
     );
 };

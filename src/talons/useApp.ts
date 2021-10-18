@@ -1,12 +1,14 @@
-import { useAppContext } from "@context/app.context"
+import { useAppContext } from "@context/app.context";
 import { useWindowSize } from "@hooks/useWindowSize";
 import { MutableRefObject, useEffect, useRef } from "react";
 import { useHistory, useLocation } from "react-router";
 import { useUser } from "./useUser";
 import Peer from "peerjs";
 import { useRoom } from "./useRoom";
+import { useStory } from "./useStory";
 
 export const useApp = () => {
+    const storyTalons = useStory();
     const { user, getMeQuery } = useUser();
     const { getAllUserRooms } = useRoom();
     const history = useHistory();
@@ -78,6 +80,6 @@ export const useApp = () => {
     return {
         user,
         isLoading: getMeQuery.isLoading
-    }
+    };
 
-}
+};
