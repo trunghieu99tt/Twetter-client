@@ -8,7 +8,6 @@ import { storiesState } from "states/story.state";
 
 const getStoriesFeed = async () => {
     const response = await client.get(`${STORY_ENDPOINTS.BASE}?page=0&limit=1000`);
-    console.log(`response`, response);
     return response.data.data;
 };
 
@@ -20,7 +19,7 @@ const createStory = async (newStory: iStoryCreate) => {
 const updateStory = async ({ storyId }: {
     storyId: string;
 }) => {
-    const response = await client.put(`${STORY_ENDPOINTS.BASE}/${storyId}`);
+    const response = await client.patch(`${STORY_ENDPOINTS.BASE}/${storyId}`);
     return response.data;
 };
 
@@ -41,7 +40,9 @@ export const useStory = () => {
         queryClient.invalidateQueries(STORY_QUERY.GET_STORIES);
     };
 
-    const getStoriesFeedQuery = useQuery(STORY_QUERY.GET_STORIES, getStoriesFeed);
+    const getStoriesFeedQuery = useQuery(STORY_QUERY.GET_STORIES, getStoriesFeed, {
+        staleTime: 1000 * 60 * 60, // 1 hour
+    });
 
     const createStoryMutation = useMutation(createStory, {
         onSuccess: () => {
@@ -50,8 +51,18 @@ export const useStory = () => {
     });
 
     const updateStoryMutation = useMutation(updateStory, {
-        onSuccess: () => {
-            invalidateStoryQuery();
+        onSuccess: (response: any) => {
+            const data = response?.data;
+            // find and replace the story in react-query
+            const stories = getStoriesFeedQuery.data;
+
+            const updatedStory = stories.map((story: iStory) => {
+                if (story._id === data._id) {
+                    return data;
+                }
+                return story;
+            });
+            queryClient.setQueryData(STORY_QUERY.GET_STORIES, updatedStory);
         }
     });
 

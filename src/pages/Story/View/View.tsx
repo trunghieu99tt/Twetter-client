@@ -1,55 +1,97 @@
+import React, { useEffect, useMemo, useRef } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
 import cn from "classnames";
+import { useHistory } from "react-router";
 
 // talons
 import { useUser } from "@talons/useUser";
 
 // components
 import Logo from "@components/Logo";
+import StoryViewer from "@components/Story/StoryViewer";
+
+// icons
+import { AiFillLeftCircle, AiFillRightCircle } from "react-icons/ai";
 
 // types
 import { iStory } from "@type/story.types";
 import { iUser } from "@type/user.types";
 
 // states
-import { activeUserStoryState, storiesState } from "states/story.state";
+import { activeStoryGroupOwnerIdState, storiesState } from "states/story.state";
 
 // models
 import { UserModel } from "model/user.model";
 
 // styles
 import classes from "./view.module.css";
-import React, { useEffect, useRef } from "react";
-import StoryViewer from "@components/Story/StoryViewer";
+import { useStory } from "@talons/useStory";
+
+type TDirection = "LEFT" | "RIGHT";
 
 const View = () => {
     const { user: currentUser } = useUser();
+    const { updateStoryMutation } = useStory();
+
+    const history = useHistory();
     const storyGroups = useRecoilValue(storiesState);
     const itemsRef = useRef<Array<HTMLDivElement | null>>([]);
+    const [activeStoryGroupOwnerId, setActiveStoryGroupOwnerId] =
+        useRecoilState(activeStoryGroupOwnerIdState);
 
-    const [activeUserStory, setActiveUserStory] =
-        useRecoilState(activeUserStoryState);
-
-    const [activeIdx, setActiveIdx] = React.useState<number>(0);
-
-    const onClick = (userId: string) => {
-        setActiveUserStory(userId);
-    };
+    const [activeStoryIdx, setActiveStoryIdx] = React.useState<number>(0);
+    const [activeStoryGroupIdx, setActiveStoryGroupIdx] =
+        React.useState<number>(0);
 
     const owners =
         storyGroups &&
         Object.values(storyGroups).map((stories: iStory[]) =>
             new UserModel(stories[0].owner).getData()
         );
+    const stories = useMemo(() => {
+        return (storyGroups && Object.entries(storyGroups)) || [];
+    }, [storyGroups]);
 
-    const stories = (activeUserStory && storyGroups?.[activeUserStory]) || [];
+    const activeGroupStories =
+        (stories &&
+            stories?.[activeStoryGroupIdx]?.length > 1 &&
+            stories?.[activeStoryGroupIdx][1]) ||
+        [];
+    const activeStory: iStory | null =
+        activeGroupStories?.[activeStoryIdx] || null;
+
+    const onClick = (userId: string) => {
+        setActiveStoryGroupOwnerId(userId);
+    };
+
+    const onArrowClick = (direction: TDirection) => {
+        if (direction === "LEFT") {
+            const nextActiveStoryIdx = activeStoryIdx - 1;
+
+            if (nextActiveStoryIdx < 0) {
+                if (activeStoryGroupIdx > 0) {
+                    setActiveStoryGroupIdx(activeStoryGroupIdx - 1);
+                    setActiveStoryIdx(0);
+                }
+            } else {
+                setActiveStoryIdx(nextActiveStoryIdx);
+            }
+        } else {
+            const nextActiveIdx = activeStoryIdx + 1;
+
+            if (nextActiveIdx >= itemsRef.current.length) {
+                if (activeStoryGroupIdx < owners!.length - 1) {
+                    setActiveStoryGroupIdx(activeStoryGroupIdx + 1);
+                    setActiveStoryIdx(0);
+                }
+            } else {
+                setActiveStoryIdx(nextActiveIdx);
+            }
+        }
+    };
 
     useEffect(() => {
-        if (
-            itemsRef?.current &&
-            stories &&
-            itemsRef.current.length === stories.length
-        ) {
+        if (itemsRef?.current) {
             // add animationend event listener for each item
             itemsRef.current.forEach((item: HTMLDivElement | null, idx) => {
                 if (item) {
@@ -63,18 +105,54 @@ const View = () => {
                         // remove animation
                         item.classList.remove(classes.active);
                         item.classList.add(classes.passed);
-                        // setActiveIdx(nextIdx);
+
+                        if (nextIdx < activeGroupStories.length) {
+                            setActiveStoryIdx(nextIdx);
+                        } else {
+                            if (activeStoryGroupIdx < stories!.length - 1) {
+                                setActiveStoryIdx(0);
+                                setActiveStoryGroupIdx(activeStoryGroupIdx + 1);
+                            } else {
+                                setActiveStoryGroupOwnerId(null);
+                                history.push("/");
+                            }
+                        }
                     });
                 }
             });
         }
-    }, [itemsRef, stories]);
+    }, [itemsRef, activeGroupStories]);
 
-    const activeStory: iStory | null = stories?.[activeIdx] || null;
+    useEffect(() => {
+        setActiveStoryGroupIdx(
+            stories.findIndex(([userId]) => userId === activeStoryGroupOwnerId)
+        );
+    }, [stories, activeStoryGroupOwnerId]);
 
-    console.log(`storyGroups`, storyGroups);
-    console.log(`stories`, stories);
-    console.log(`activeStory`, activeStory);
+    useEffect(() => {
+        if (activeStory) {
+            const viewerIds = activeStory?.viewerIds || [];
+
+            if (!viewerIds.includes(currentUser?._id)) {
+                updateStoryMutation.mutate({
+                    storyId: activeStory._id,
+                });
+            }
+        }
+    }, [activeStory]);
+
+    const hasPreviousButton =
+        activeGroupStories.length > 0 &&
+        (activeStoryGroupIdx > 0 ||
+            (activeStoryGroupIdx === 0 && activeStoryIdx > 0));
+
+    const hasNextButton =
+        owners &&
+        owners.length > 0 &&
+        activeGroupStories.length > 0 &&
+        (activeStoryGroupIdx < owners!.length - 1 ||
+            (activeStoryGroupIdx === owners!.length - 1 &&
+                activeStoryIdx < activeGroupStories.length - 1));
 
     return (
         <div className={classes.root}>
@@ -143,10 +221,24 @@ const View = () => {
             <main className={classes.main}>
                 <div className={classes.inner}>
                     {!stories && <p>Choose a story to view!</p>}
-                    {stories && (
+                    {owners && stories && (
                         <React.Fragment>
-                            <div className={classes.progresses}>
-                                {[...Array(stories.length)].map(
+                            {hasPreviousButton && (
+                                <button
+                                    onClick={() => onArrowClick("LEFT")}
+                                    className={cn(
+                                        classes.arrow,
+                                        classes.arrowLeft
+                                    )}
+                                >
+                                    <AiFillLeftCircle />
+                                </button>
+                            )}
+                            <div
+                                className={classes.progresses}
+                                key={`user-story-progress-${activeStoryGroupIdx}`}
+                            >
+                                {[...Array(activeGroupStories.length)].map(
                                     (_, idx: number) => {
                                         return (
                                             <div
@@ -154,7 +246,8 @@ const View = () => {
                                                     classes.progress,
                                                     {
                                                         [classes.active]:
-                                                            idx === activeIdx,
+                                                            idx ===
+                                                            activeStoryIdx,
                                                     }
                                                 )}
                                                 ref={(el) =>
@@ -166,6 +259,17 @@ const View = () => {
                                 )}
                             </div>
                             {activeStory && <StoryViewer data={activeStory} />}
+                            {hasNextButton && (
+                                <button
+                                    onClick={() => onArrowClick("RIGHT")}
+                                    className={cn(
+                                        classes.arrow,
+                                        classes.arrowRight
+                                    )}
+                                >
+                                    <AiFillRightCircle />
+                                </button>
+                            )}
                         </React.Fragment>
                     )}
                 </div>

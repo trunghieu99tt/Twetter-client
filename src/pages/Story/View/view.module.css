@@ -59,6 +59,7 @@
     background: var(--gray-3);
     position: relative;
     border-radius: 5px;
+    position: relative;
 }
 
 .progresses {
@@ -71,6 +72,7 @@
     border-radius: 5px;
     display: flex;
     gap: 2px;
+    z-index: 1;
 }
 
 /* Source for loader animation: https://codepen.io/konamax123/pen/PoPLZKo */
@@ -103,6 +105,30 @@
 
 .progress.passed {
     background-position: 0 0;
+}
+
+.inner:hover .progress.active {
+    animation-play-state: paused;
+}
+
+.arrow {
+    position: absolute;
+    top: 50%;
+}
+
+.arrow svg {
+    fill: #fff;
+    --size: 4rem;
+    width: var(--size);
+    height: var(--size);
+}
+
+.arrowLeft {
+    left: -5rem;
+}
+
+.arrowRight {
+    right: -5rem;
 }
 
 @keyframes Loader {

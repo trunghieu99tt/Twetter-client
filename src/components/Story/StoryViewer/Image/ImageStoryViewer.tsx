@@ -18,11 +18,6 @@ const ImageStoryViewer = ({ data, classes: propClasses }: Props) => {
     const { editor, onReady } = useFabricJSEditor();
 
     useEffect(() => {
-        if (editor) {
-            editor.canvas.setWidth(100);
-            editor.canvas.setHeight(100);
-        }
-
         if (data && editor) {
             editor?.canvas.loadFromJSON(data, () => {
                 const canvasWidth = editor?.canvas.getWidth();
@@ -32,8 +27,8 @@ const ImageStoryViewer = ({ data, classes: propClasses }: Props) => {
                 const obj = editor?.canvas.getObjects();
                 obj?.forEach((o: any) => {
                     if (o.type === "image") {
-                        o.scaleToWidth(canvasWidth || 100);
-                        o.scaleToHeight(canvasHeight || 100);
+                        o.scaleToWidth(canvasWidth * 0.8 || 100);
+                        o.scaleToHeight(canvasHeight * 0.8 || 100);
                         editor?.canvas.centerObject(o);
                     } else {
                         // o.moveToFront();

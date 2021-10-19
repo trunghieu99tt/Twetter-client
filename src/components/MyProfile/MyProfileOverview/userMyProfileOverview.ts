@@ -11,8 +11,8 @@ type LIST_TYPE = "followers" | "following" | "";
 type MODAL_TYPE = "list_user" | "update_info" | "";
 
 type Props = {
-    user: iUser
-}
+    user: iUser;
+};
 
 export const useMyProfileOverview = ({
     user,
@@ -41,7 +41,8 @@ export const useMyProfileOverview = ({
 
     const closeModal = () => {
         setModalType("");
-    }
+        setListType("");
+    };
 
     const onChangeAvatar = (e: ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
@@ -53,9 +54,9 @@ export const useMyProfileOverview = ({
                     file,
                     preview: reader.result as string,
                 });
-            }
+            };
         }
-    }
+    };
 
     const onCancelChangeAvatar = () =>
         setNewAvatar({
@@ -104,7 +105,7 @@ export const useMyProfileOverview = ({
         }
     };
 
-    const updateFollowStatus = (userId: string) => followUserMutation.mutate(userId)
+    const updateFollowStatus = (userId: string) => followUserMutation.mutate(userId);
 
 
     const followed = currentUser?.following.some((u: iUser) => {
@@ -153,5 +154,5 @@ export const useMyProfileOverview = ({
         updateFollowStatus,
         onCancelChangeAvatar,
         setIsVisibleEditForm,
-    }
-}
+    };
+};

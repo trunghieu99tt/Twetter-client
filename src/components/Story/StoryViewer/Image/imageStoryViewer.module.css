@@ -1,6 +1,5 @@
 .canvas {
-    --size: 50rem;
-    width: var(--size);
-    height: var(--size);
+    width: 100%;
+    height: 100%;
     border: 1px solid;
 }

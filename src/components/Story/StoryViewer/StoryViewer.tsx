@@ -19,8 +19,6 @@ const StoryViewer = ({ data, isSmall }: Props) => {
     const contentData = JSON.parse(data.content);
 
     const additionalClasses = {
-        canvas: classes.full,
-        root: classes.full,
         text: classes.smallText,
     };
 
@@ -28,7 +26,7 @@ const StoryViewer = ({ data, isSmall }: Props) => {
         return (
             <TextStoryViewer data={contentData} classes={additionalClasses} />
         );
-    return <ImageStoryViewer data={contentData} classes={additionalClasses} />;
+    return <ImageStoryViewer data={contentData} />;
 };
 
 export default StoryViewer;

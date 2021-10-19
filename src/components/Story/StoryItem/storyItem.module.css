@@ -4,6 +4,15 @@
     height: 17rem;
     border-radius: 1rem;
     overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    cursor: pointer;
+}
+
+.root > div {
+    filter: brightness(0.5);
 }
 
 .userAvatar {
@@ -53,4 +62,24 @@
     padding-top: 1rem;
     font-weight: 600;
     text-transform: capitalize;
+}
+
+.ownerAvatar {
+    --size: 3rem;
+    width: var(--size);
+    height: var(--size);
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    border-radius: 50%;
+    border: 2px solid rgba(256, 256, 256, 0.5);
+}
+
+.ownerName {
+    position: absolute;
+    bottom: 0;
+    color: #fff;
+    font-size: 1.2rem;
+    padding: 0.5rem;
+    font-weight: bold;
 }

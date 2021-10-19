@@ -15,7 +15,7 @@ export const storySelector = selectorFamily<iStory[] | null, string>({
     },
 });
 
-export const activeUserStoryState = atom<string | null>({
-    key: 'activeUserStoryState',
+export const activeStoryGroupOwnerIdState = atom<string | null>({
+    key: 'activeStoryGroupOwnerIdState',
     default: null,
 });
