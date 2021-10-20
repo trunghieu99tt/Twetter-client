@@ -30,12 +30,9 @@ const StoryItem = ({ data, isSmall, userId }: Props) => {
     const { user } = useUser();
     const history = useHistory();
 
-    const setActiveUserStory = useSetRecoilState(activeStoryGroupOwnerIdState);
-
     const onClick = () => {
         if (userId) {
-            history.push("/stories/view");
-            setActiveUserStory(userId);
+            history.push(`/stories/view/${userId}`);
         }
     };
 

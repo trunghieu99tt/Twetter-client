@@ -1,10 +1,11 @@
-import React, { useEffect, useMemo, useRef } from "react";
-import { useRecoilState, useRecoilValue } from "recoil";
+import React, { useEffect, useRef } from "react";
+import { useRecoilValue } from "recoil";
 import cn from "classnames";
-import { useHistory } from "react-router";
+import { useHistory, useParams } from "react-router";
 
 // talons
 import { useUser } from "@talons/useUser";
+import { useStory } from "@talons/useStory";
 
 // components
 import Logo from "@components/Logo";
@@ -13,79 +14,80 @@ import StoryViewer from "@components/Story/StoryViewer";
 // icons
 import { AiFillLeftCircle, AiFillRightCircle } from "react-icons/ai";
 
+// constants
+import { STORY_ROUTES } from "routes/routes";
+
 // types
 import { iStory } from "@type/story.types";
 import { iUser } from "@type/user.types";
 
 // states
-import { activeStoryGroupOwnerIdState, storiesState } from "states/story.state";
-
-// models
-import { UserModel } from "model/user.model";
+import {
+    ownersSelector,
+    storiesState,
+    storySelector,
+    userStoryMetadataSelector,
+} from "states/story.state";
 
 // styles
 import classes from "./view.module.css";
-import { useStory } from "@talons/useStory";
 
 type TDirection = "LEFT" | "RIGHT";
 
 const View = () => {
+    const params: {
+        userId: string;
+    } = useParams();
+    const userId = params.userId;
+
     const { user: currentUser } = useUser();
     const { updateStoryMutation } = useStory();
 
     const history = useHistory();
+    const owners = useRecoilValue(ownersSelector);
     const storyGroups = useRecoilValue(storiesState);
-    const itemsRef = useRef<Array<HTMLDivElement | null>>([]);
-    const [activeStoryGroupOwnerId, setActiveStoryGroupOwnerId] =
-        useRecoilState(activeStoryGroupOwnerIdState);
+    const userStories = useRecoilValue(storySelector(userId));
+    const userStoryMetadata = useRecoilValue(userStoryMetadataSelector(userId));
 
     const [activeStoryIdx, setActiveStoryIdx] = React.useState<number>(0);
-    const [activeStoryGroupIdx, setActiveStoryGroupIdx] =
-        React.useState<number>(0);
+    const itemsRef = useRef<Array<HTMLDivElement | null>>([]);
 
-    const owners =
-        storyGroups &&
-        Object.values(storyGroups).map((stories: iStory[]) =>
-            new UserModel(stories[0].owner).getData()
-        );
-    const stories = useMemo(() => {
-        return (storyGroups && Object.entries(storyGroups)) || [];
-    }, [storyGroups]);
+    const activeStory: iStory | null = userStories?.[activeStoryIdx] || null;
 
-    const activeGroupStories =
-        (stories &&
-            stories?.[activeStoryGroupIdx]?.length > 1 &&
-            stories?.[activeStoryGroupIdx][1]) ||
-        [];
-    const activeStory: iStory | null =
-        activeGroupStories?.[activeStoryIdx] || null;
-
-    const onClick = (userId: string) => {
-        setActiveStoryGroupOwnerId(userId);
+    const onViewUserStories = (userId: string) => {
+        history.push(`${STORY_ROUTES.VIEW}/${userId}`);
+        setActiveStoryIdx(0);
     };
 
     const onArrowClick = (direction: TDirection) => {
-        if (direction === "LEFT") {
-            const nextActiveStoryIdx = activeStoryIdx - 1;
+        /**
+         * 1. click on the left arrow
+         * a. if the active story is the first story, if we have prev user, go to view stories of prev user
+         * b. if the active story is not the first story, go to prev story
+         */
 
-            if (nextActiveStoryIdx < 0) {
-                if (activeStoryGroupIdx > 0) {
-                    setActiveStoryGroupIdx(activeStoryGroupIdx - 1);
-                    setActiveStoryIdx(0);
+        if (direction === "LEFT") {
+            if (activeStoryIdx === 0) {
+                if (userStoryMetadata?.prevUserId) {
+                    onViewUserStories(userStoryMetadata.prevUserId);
                 }
             } else {
-                setActiveStoryIdx(nextActiveStoryIdx);
+                setActiveStoryIdx(activeStoryIdx - 1);
             }
         } else {
-            const nextActiveIdx = activeStoryIdx + 1;
-
-            if (nextActiveIdx >= itemsRef.current.length) {
-                if (activeStoryGroupIdx < owners!.length - 1) {
-                    setActiveStoryGroupIdx(activeStoryGroupIdx + 1);
-                    setActiveStoryIdx(0);
+            /**
+             * 2. click on the right arrow
+             * a. if the active story is the last story, if we have next user, go to view stories of next user
+             * b. if the active story is not the last story, go to next story
+             */
+            if (userStories) {
+                if (activeStoryIdx === userStories.length - 1) {
+                    if (userStoryMetadata?.nextUserId) {
+                        onViewUserStories(userStoryMetadata.nextUserId);
+                    }
+                } else {
+                    setActiveStoryIdx(activeStoryIdx + 1);
                 }
-            } else {
-                setActiveStoryIdx(nextActiveIdx);
             }
         }
     };
@@ -106,14 +108,12 @@ const View = () => {
                         item.classList.remove(classes.active);
                         item.classList.add(classes.passed);
 
-                        if (nextIdx < activeGroupStories.length) {
+                        if (nextIdx < userStories!.length) {
                             setActiveStoryIdx(nextIdx);
                         } else {
-                            if (activeStoryGroupIdx < stories!.length - 1) {
-                                setActiveStoryIdx(0);
-                                setActiveStoryGroupIdx(activeStoryGroupIdx + 1);
+                            if (userStoryMetadata?.nextUserId) {
+                                onViewUserStories(userStoryMetadata.nextUserId);
                             } else {
-                                setActiveStoryGroupOwnerId(null);
                                 history.push("/");
                             }
                         }
@@ -121,13 +121,7 @@ const View = () => {
                 }
             });
         }
-    }, [itemsRef, activeGroupStories]);
-
-    useEffect(() => {
-        setActiveStoryGroupIdx(
-            stories.findIndex(([userId]) => userId === activeStoryGroupOwnerId)
-        );
-    }, [stories, activeStoryGroupOwnerId]);
+    }, [itemsRef, userStories]);
 
     useEffect(() => {
         if (activeStory) {
@@ -141,18 +135,25 @@ const View = () => {
         }
     }, [activeStory]);
 
+    /**
+     * Has next button:
+     * 1. If current user has more than 1 story and we are not on the last story
+     * 2. if there's a next user
+     *
+     * Has prev button:
+     * 1. If current user has more than 1 story and we are not on the first story
+     * 2. if there's a prev user
+     */
+
     const hasPreviousButton =
-        activeGroupStories.length > 0 &&
-        (activeStoryGroupIdx > 0 ||
-            (activeStoryGroupIdx === 0 && activeStoryIdx > 0));
+        (userStories && userStories?.length > 1 && activeStoryIdx > 0) ||
+        userStoryMetadata?.prevUserId !== null;
 
     const hasNextButton =
-        owners &&
-        owners.length > 0 &&
-        activeGroupStories.length > 0 &&
-        (activeStoryGroupIdx < owners!.length - 1 ||
-            (activeStoryGroupIdx === owners!.length - 1 &&
-                activeStoryIdx < activeGroupStories.length - 1));
+        (userStories &&
+            userStories?.length > 1 &&
+            activeStoryIdx < userStories.length - 1) ||
+        userStoryMetadata?.nextUserId !== null;
 
     return (
         <div className={classes.root}>
@@ -198,7 +199,7 @@ const View = () => {
                         <figure
                             className={classes.userStoryCard}
                             key={`user-story-card-list-${owner._id}`}
-                            onClick={() => onClick(owner._id)}
+                            onClick={() => onViewUserStories(owner._id)}
                         >
                             <img
                                 src={owner.avatar}
@@ -220,8 +221,8 @@ const View = () => {
             </aside>
             <main className={classes.main}>
                 <div className={classes.inner}>
-                    {!stories && <p>Choose a story to view!</p>}
-                    {owners && stories && (
+                    {!userId && <p>Choose a story to view!</p>}
+                    {owners && userStories && (
                         <React.Fragment>
                             {hasPreviousButton && (
                                 <button
@@ -236,9 +237,9 @@ const View = () => {
                             )}
                             <div
                                 className={classes.progresses}
-                                key={`user-story-progress-${activeStoryGroupIdx}`}
+                                key={`progress-${userId}`}
                             >
-                                {[...Array(activeGroupStories.length)].map(
+                                {[...Array(userStories.length)].map(
                                     (_, idx: number) => {
                                         return (
                                             <div
@@ -253,6 +254,7 @@ const View = () => {
                                                 ref={(el) =>
                                                     (itemsRef.current[idx] = el)
                                                 }
+                                                key={`progress-bar-${userId}-${idx}`}
                                             />
                                         );
                                     }

@@ -14,13 +14,21 @@ import StoryView from "@pages/Story/View";
 
 // components
 import PrivateRoute from "@components/routes/PrivateRoute";
+import { STORY_ROUTES } from "./routes";
 
 const PrivateRouteController = () => {
     return (
         <Switch>
             <PrivateRoute path="/" exact component={NewsFeed} />
-            <PrivateRoute path="/stories/create" exact component={StoryForm} />
-            <PrivateRoute path="/stories/view" exact component={StoryView} />
+            <PrivateRoute
+                path={STORY_ROUTES.CREATE}
+                exact
+                component={StoryForm}
+            />
+            <PrivateRoute
+                path={`${STORY_ROUTES.VIEW}/:userId`}
+                component={StoryView}
+            />
             <PrivateRoute path="/bookmarks" exact component={BookMarks} />
             <PrivateRoute path="/chat/:roomId" exact component={Chat} />
             <PrivateRoute
