@@ -5,6 +5,8 @@ import { FabricJSCanvas, useFabricJSEditor } from "fabricjs-react";
 import classes from "./imageStory.module.css";
 import { BsCardImage } from "react-icons/bs";
 import { Flex } from "@shared/style/sharedStyle.style";
+import { useUpload } from "@talons/useUpload";
+import { Object } from "fabric/fabric-impl";
 
 interface Props {
     onCancel: () => void;
@@ -13,8 +15,10 @@ interface Props {
 
 const ImageStory = ({ onCancel, onSubmit }: Props) => {
     const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
+    const [file, setFile] = useState<File | null>(null);
 
     const { editor, onReady } = useFabricJSEditor();
+    const { uploadImage } = useUpload();
 
     const deleteSelections = () => {
         editor?.canvas.getActiveObjects().forEach((object) => {
@@ -43,6 +47,7 @@ const ImageStory = ({ onCancel, onSubmit }: Props) => {
     const onChange = (event: ChangeEvent<HTMLInputElement>) => {
         const file = event?.target?.files?.[0];
         if (file && file.type.match(/image.*/)) {
+            setFile(file);
             fabric.Image.fromURL(URL.createObjectURL(file), function (img) {
                 const canvasWidth = editor?.canvas.getWidth();
                 const canvasHeight = editor?.canvas.getHeight();
@@ -62,10 +67,29 @@ const ImageStory = ({ onCancel, onSubmit }: Props) => {
         }
     };
 
-    const saveToServer = () => {
-        const objects = editor?.canvas.toJSON();
-        if (objects) {
-            onSubmit(JSON.stringify(objects));
+    const saveToServer = async () => {
+        if (file) {
+            const image = await uploadImage(file);
+
+            const canvasWidth = editor?.canvas.getWidth();
+            const canvasHeight = editor?.canvas.getHeight();
+
+            // change url of image object
+            const obj = editor?.canvas.getObjects();
+            obj?.forEach((o: any) => {
+                if (o.type === "image") {
+                    o.setSrc(image, () => {
+                        o.scaleToWidth(canvasWidth || 100);
+                        o.scaleToHeight(canvasHeight || 100);
+                        o.set("dirty", true);
+                        editor?.canvas.requestRenderAll();
+                        const objects = editor?.canvas.toJSON();
+                        if (objects) {
+                            onSubmit(JSON.stringify(objects));
+                        }
+                    });
+                }
+            });
         }
     };
 

@@ -32,20 +32,23 @@ const StoryForm = (props: Props) => {
 
     const onSubmit = async (data: string) => {
         setLoading(true);
-        createStoryMutation.mutate(
-            {
-                content: data,
-                audience: user.storyAudience,
-            },
-            {
-                onSuccess: () => {
-                    setLoading(false);
+        if (storyType) {
+            createStoryMutation.mutate(
+                {
+                    content: data,
+                    type: storyType,
+                    audience: user.storyAudience,
                 },
-                onError: () => {
-                    setLoading(false);
-                },
-            }
-        );
+                {
+                    onSuccess: () => {
+                        setLoading(false);
+                    },
+                    onError: () => {
+                        setLoading(false);
+                    },
+                }
+            );
+        }
     };
 
     let content = null;

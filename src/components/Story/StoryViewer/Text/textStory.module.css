@@ -1,7 +1,6 @@
 .root {
-    --size: 500px;
-    width: var(--size);
-    height: var(--size);
+    width: 100%;
+    height: 100%;
     border: 1px solid;
     display: flex;
     align-items: center;
