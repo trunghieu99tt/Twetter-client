@@ -31,6 +31,7 @@ import {
 
 // styles
 import classes from "./view.module.css";
+import { calcDiffTimeString } from "@utils/helper";
 
 type TDirection = "LEFT" | "RIGHT";
 
@@ -164,31 +165,17 @@ const View = () => {
                 {owners?.map((owner: iUser) => {
                     const userStories = storyGroups?.[owner._id];
 
-                    const newestCreatedStoryTime = userStories?.reduce(
-                        (acc: Date, story: iStory) => {
+                    const newestCreatedStoryTime =
+                        userStories?.reduce((acc: Date, story: iStory) => {
                             const storyTime = new Date(story.createdAt);
                             return storyTime.getTime() > new Date(acc).getTime()
                                 ? storyTime
                                 : acc;
-                        },
-                        new Date("1990-01-01")
+                        }, new Date("1990-01-01")) || new Date();
+
+                    let storyTimeText = calcDiffTimeString(
+                        newestCreatedStoryTime
                     );
-
-                    const diff = Math.floor(
-                        (Date.now() - newestCreatedStoryTime!.getTime()) / 1000
-                    );
-
-                    let storyTimeText = null;
-
-                    if (diff < 60) {
-                        storyTimeText = `${diff} seconds ago`;
-                    } else if (diff < 3600) {
-                        storyTimeText = `${Math.floor(diff / 60)} minutes ago`;
-                    } else if (diff < 86400) {
-                        storyTimeText = `${Math.floor(diff / 3600)} hours ago`;
-                    } else {
-                        storyTimeText = `${Math.floor(diff / 86400)} days ago`;
-                    }
 
                     const isViewedAllStories = userStories?.every(
                         (story: iStory) =>
