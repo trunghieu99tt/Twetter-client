@@ -108,22 +108,28 @@ export const useTweet = ({ tweet }: Props) => {
     const onRetweet = () => {
         retweetMutation.mutate(tweet._id);
         if (!retweeted) {
-            socket?.emit("tweet-interaction", {
-                tweetId: tweet._id,
-                userId: currentUser?._id,
-                action: 'retweet',
-            });
+            const msg: iNotificationDTO = {
+                text: `retweet your tweet`,
+                receivers: [tweet.author._id],
+                url: `/tweet/${tweet._id}`,
+                type: 'retweet',
+            };
+
+            createNotificationAction(msg);
         }
     };
 
     const onSaveTweet = () => {
         saveTweetMutation.mutate(tweet._id);
         if (!saved) {
-            socket?.emit("tweet-interaction", {
-                tweetId: tweet._id,
-                userId: currentUser?._id,
-                action: 'save',
-            });
+            const msg: iNotificationDTO = {
+                text: `saved your tweet`,
+                receivers: [tweet.author._id],
+                url: `/tweet/${tweet._id}`,
+                type: 'save',
+            };
+
+            createNotificationAction(msg);
         }
     };
 

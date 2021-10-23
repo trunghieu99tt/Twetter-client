@@ -1,6 +1,6 @@
 import React from "react";
-import { Link } from "react-router-dom";
 import cn from "classnames";
+import { useHistory } from "react-router";
 
 // utils
 import { calcDiffTimeString } from "@utils/helper";
@@ -10,18 +10,34 @@ import { iNotification } from "@type/notify.types";
 
 // styles
 import classes from "./notificationItem.module.css";
+import { useUser } from "@talons/useUser";
+import { useNotify } from "@talons/useNotify";
 
 type Props = {
     data: iNotification;
 };
 
 const NotificationItem = ({ data }: Props) => {
+    const { user } = useUser();
+    const history = useHistory();
+    const { readNotificationAction } = useNotify();
+
+    const onClick = () => {
+        if (data?._id) {
+            readNotificationAction([data._id]);
+        }
+
+        if (data?.url) {
+            history.push(data.url);
+        }
+    };
+
     return (
-        <Link
+        <button
             className={cn(classes.root, {
-                [classes.unread]: data?.isRead === false,
+                [classes.unread]: !data?.isRead?.includes(user?._id),
             })}
-            to={`${data?.url || "/"}`}
+            onClick={onClick}
         >
             <figure className={classes.senderAvatarWrapper}>
                 <img
@@ -39,7 +55,7 @@ const NotificationItem = ({ data }: Props) => {
                     {calcDiffTimeString(data?.createdAt || new Date())}
                 </p>
             </div>
-        </Link>
+        </button>
     );
 };
 

@@ -8,7 +8,7 @@ export interface iNotification {
     type: string;
     image?: string;
     sender: iUser;
-    isRead: boolean;
+    isRead: string[];
     content?: string;
     createdAt: Date;
     receiver: string[];

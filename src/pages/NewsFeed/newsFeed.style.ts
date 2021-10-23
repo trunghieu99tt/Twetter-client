@@ -40,12 +40,6 @@ background: #FFFFFF;
     max-height: 50rem;
     overflow: auto;
     padding: 2rem;
-    max-width: 30rem;
-    
-    & > p {
-        font-size: 1.2rem;
-        font-weight: 500;
-        margin-bottom: 1.5rem;
-    }
+    width: 30rem;
 `;
 

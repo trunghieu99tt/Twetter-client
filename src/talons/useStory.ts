@@ -72,6 +72,9 @@ export const useStory = () => {
         }
     });
 
+    const refetchAll = () => {
+    };
+
     const storyList = getStoriesFeedQuery.data;
 
     useEffect(() => {
@@ -97,6 +100,7 @@ export const useStory = () => {
 
 
     return {
+        refetchAll,
         getStoriesFeedQuery,
         createStoryMutation,
         updateStoryMutation,

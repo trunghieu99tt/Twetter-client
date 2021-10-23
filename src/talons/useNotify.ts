@@ -22,7 +22,7 @@ import {
 } from "constants/config.constant";
 
 // types
-import { iNotification, iNotificationDTO } from "@type/notify.types";
+import { iNotificationDTO } from "@type/notify.types";
 
 const getNotifications = async ({
     pageParam = 0,
@@ -47,8 +47,8 @@ const readNotification = async (notificationIds: string[]) => {
     try {
         const response = await Promise.all(
             notificationIds.map(async (id) => {
-                const response = await client.post(
-                    `${NOTIFICATION_ENDPOINT.BASE}/${id}`
+                const response = await client.patch(
+                    `${NOTIFICATION_ENDPOINT.READ_NOTIFICATION}/${id}`
                 );
 
                 return response?.data;
@@ -84,7 +84,6 @@ export const useNotify = () => {
         createNotificationMutation.mutate(newNotification, {
             onSuccess: (response) => {
                 if (socket) {
-                    console.log(`response`, response);
                     if (response) {
                         socket.emit("createNotification", {
                             ...response,
@@ -105,16 +104,16 @@ export const useNotify = () => {
         });
     };
 
-    const notifications: iNotification[] = getNotificationsQuery?.data?.pages?.reduce(
-        (res: iNotification[], curr: {
-            data: iNotification[];
-            total: number;
-        }) => [...res, ...curr.data],
-        []
-    ) || [];
+    const refetchAll = () => {
+        // queryClient.invalidateQueries(
+        //     NOTIFICATION_QUERIES.GET_NOTIFICATIONS
+        // );
+    };
+
 
     return {
-        notifications,
+        refetchAll,
+        getNotificationsQuery,
         readNotificationAction,
         createNotificationAction,
     };

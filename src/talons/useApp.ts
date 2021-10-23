@@ -42,6 +42,8 @@ export const useApp = () => {
                 history.push("/auth");
             }
         } else {
+            storyTalons.refetchAll();
+            notificationTalons.refetchAll();
             if (windowHref.includes("auth")) {
                 if (
                     currentPathRef.current &&

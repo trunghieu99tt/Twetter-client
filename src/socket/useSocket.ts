@@ -3,13 +3,13 @@ import { showNotificationToast } from "@components/Notification/notificationUtil
 import { useAppContext } from "@context/app.context";
 import { useUser } from "@talons/useUser";
 import { MESSAGES_QUERIES } from "constants/message.constants";
+import { NOTIFICATION_QUERIES } from "constants/notify.constants";
 import { useEffect, useRef } from "react";
 import { useQueryClient } from "react-query";
 import { useHistory } from "react-router";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { callState } from "states/call.state";
 import { newMessageState } from "states/message.state";
-import { notificationState } from "states/notification.state";
 import { connectedRoomsState, joinDMRoomState } from "states/room.state";
 import { connectedUsersState, prevUserState } from "states/user.state";
 import { Socket } from "./socket";
@@ -118,7 +118,7 @@ const useSocket = () => {
                 res?.url || '',
                 'Tweeter'
             );
-
+            queryClient.invalidateQueries(NOTIFICATION_QUERIES.GET_NOTIFICATIONS);
         });
 
     };

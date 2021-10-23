@@ -1,4 +1,6 @@
+import React from "react";
 import { useQueryClient } from "react-query";
+import { Helmet } from "react-helmet";
 
 // talons
 import { useTweets } from "@talons/useTweets";
@@ -36,25 +38,33 @@ const NewsFeed = () => {
     const { getNewsFeedTweetsQuery } = useTweets(user?._id || "");
 
     return (
-        <Wrapper>
-            <Container>
-                <Inner>
-                    <RightSidebar>
-                        <p>Activities</p>
-                        <NotificationList />
-                    </RightSidebar>
-                    <Main>
-                        <StoryList />
-                        <AddTweet />
-                        <InfinityTweetsList query={getNewsFeedTweetsQuery} />
-                    </Main>
-                    <Sidebar>
-                        <PopularTags />
-                        <PopularPeople />
-                    </Sidebar>
-                </Inner>
-            </Container>
-        </Wrapper>
+        <React.Fragment>
+            <Helmet>
+                <meta charSet="utf-8" />
+                <title> News feed </title>
+            </Helmet>
+            <button onClick={() => setNumber((val) => val + 1)}>Test</button>
+            <Wrapper>
+                <Container>
+                    <Inner>
+                        <RightSidebar>
+                            <NotificationList />
+                        </RightSidebar>
+                        <Main>
+                            <StoryList />
+                            <AddTweet />
+                            <InfinityTweetsList
+                                query={getNewsFeedTweetsQuery}
+                            />
+                        </Main>
+                        <Sidebar>
+                            <PopularTags />
+                            <PopularPeople />
+                        </Sidebar>
+                    </Inner>
+                </Container>
+            </Wrapper>
+        </React.Fragment>
     );
 };
 
