@@ -6,8 +6,9 @@ import { useTweetForm } from "../useTweetForm";
 
 // components
 import { Spinner1 } from "@components/Loaders";
+import MediaViewer from "@components/MediaViewer";
+import RichTextEditor from "@components/RichTextEditor";
 import UserAvatarSmall from "@components/UserAvatarSmall";
-// import RichTextInput from "@components/RichTextInput";
 import AudienceSelector from "@components/AudienceSelector";
 
 // icons
@@ -15,6 +16,7 @@ import { BsCardImage } from "react-icons/bs";
 import { ImCancelCircle } from "react-icons/im";
 
 // types
+import { TMedia } from "@type/app.types";
 import { iTweet } from "@type/tweet.types";
 
 // styles
@@ -33,9 +35,6 @@ import {
     TweetContentInputWrapper,
 } from "./TweetFormStyle";
 import { Flex } from "@shared/style/sharedStyle.style";
-import RichTextInput from "@components/RichTextInput";
-import { TMedia } from "@type/app.types";
-import MediaViewer from "@components/MediaViewer";
 
 type modeType = "block" | "flex" | "grid" | "none";
 
@@ -46,13 +45,13 @@ interface Props {
 
 const TweetForm = ({ tweet, onCancel }: Props) => {
     const {
+        body,
         media,
         loading,
-        content,
         audience,
 
+        setBody,
         onSubmit,
-        setContent,
         setAudience,
         onChangeFile,
         onCancelImage,
@@ -88,17 +87,10 @@ const TweetForm = ({ tweet, onCancel }: Props) => {
                     <UserAvatarSmall user={user} />
                     <div>
                         <TweetContentInputWrapper>
-                            {/* <TweetContentInput
-                                value={content}
-                                name="tweet-content"
-                                onChange={onChangeContent}
-                                placeholder="What's on your mind?"
-                            /> */}
-                            {/* // TODO: Update later */}
-                            <RichTextInput
-                                data={content}
-                                onChange={setContent}
-                                placeholder="What's on your mind?"
+                            <RichTextEditor
+                                isEdit={!!tweet}
+                                value={body}
+                                onChangeValue={setBody}
                             />
                         </TweetContentInputWrapper>
                         <TweetImageWrapper mode={mediaViewMode}>

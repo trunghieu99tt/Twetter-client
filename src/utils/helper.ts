@@ -1,3 +1,9 @@
+import { SyntheticEvent } from 'react';
+
+//@ts-ignore
+import TinyURL from 'tinyurl';
+
+
 const nFormatter = (num: number, digits: number = 2) => {
     const lookup = [
         { value: 1, symbol: "" },
@@ -66,5 +72,37 @@ const calcDiffTimeString = (date: Date): string => {
     return `${Math.floor(diff / 86400)} days ago`;
 
 };
+
+// Parse the tweet to extract hashtags and the first url ( for the link's preview )
+export const extractMetadata = (body: string) => {
+    let hashtags = body.match(/(#[\w]+)/g);
+
+    const urls = body.match(/https?:\/\/\S+/g);
+
+    // Remove duplicates
+    if (hashtags && hashtags?.length > 0) {
+        hashtags = Array.from(new Set(hashtags));
+    }
+    return {
+        hashtags,
+        urls,
+    };
+};
+
+export const shortenURLS = async (
+    urls: string[]
+): Promise<{ original: string; shorten: string; }[]> => {
+    const tinyURLS = [];
+    for (let url of urls) {
+        const res = await TinyURL.shorten(url);
+        tinyURLS.push({
+            original: url,
+            shorten: res,
+        });
+    }
+    return tinyURLS;
+};
+
+export const stopPropagation = (e: SyntheticEvent) => e.stopPropagation();
 
 export { formatNumber, randomDate, getDaysDiffBetweenDates, urlify, isEqual, validateEmail, nFormatter, calcDiffTimeString };

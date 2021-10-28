@@ -14,7 +14,7 @@ export const Wrapper = styled.div`
 export const ChatListWrapper = styled('div') <{
     isOpen: boolean;
 }>`
-    transform: translate(-30%, -25%) scale(${props => (props.isOpen ? 1 : 0)});
+    transform: translate(15%,-40%) scale(${props => (props.isOpen ? 1 : 0)});
     position: absolute;
     bottom: 0;
     max-height: 20rem;
@@ -22,7 +22,7 @@ export const ChatListWrapper = styled('div') <{
     padding: 2rem;
     border-radius: 1rem;
     width: 25rem;
-    transform-origin: bottom right;
+    transform-origin: bottom center;
     transition: all 0.1s ease-in-out;
 `;
 

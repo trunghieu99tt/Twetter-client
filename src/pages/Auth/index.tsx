@@ -9,6 +9,7 @@ import Auth from "@components/Auth";
 
 // styles
 import { Right, Wrapper, Main, Heading } from "./AuthPageStyle";
+import { Helmet } from "react-helmet";
 
 const AuthPage = () => {
     const { user } = useUser();
@@ -21,14 +22,19 @@ const AuthPage = () => {
     }, [user]);
 
     return (
-        <Wrapper>
-            <Main>
-                <Right>
-                    <Heading>It's time to make new friends</Heading>
-                    <Auth />
-                </Right>
-            </Main>
-        </Wrapper>
+        <React.Fragment>
+            <Helmet>
+                <title>Authentication</title>
+            </Helmet>
+            <Wrapper>
+                <Main>
+                    <Right>
+                        <Heading>It's time to make new friends</Heading>
+                        <Auth />
+                    </Right>
+                </Main>
+            </Wrapper>
+        </React.Fragment>
     );
 };
 

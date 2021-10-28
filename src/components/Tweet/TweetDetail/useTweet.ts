@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useQueryClient } from "react-query";
 
 // hooks
@@ -15,8 +15,8 @@ import { iUser } from "@type/user.types";
 
 // constants
 import { USER_QUERY } from "constants/user.constants";
-import { useAppContext } from "@context/app.context";
 import { iNotificationDTO } from "@type/notify.types";
+import { extractMetadata } from "@utils/helper";
 
 
 type Props = {
@@ -24,6 +24,7 @@ type Props = {
 };
 
 export const useTweet = ({ tweet }: Props) => {
+    const [urls, setUrls] = useState<string[]>([]);
     const [visibleEditForm, setVisibleEditForm] = useState<boolean>(false);
     const [visibleDropdown, setVisibleDropdown] = useState<boolean>(false);
     const currentUser: iUser | undefined = useQueryClient().getQueryData(
@@ -43,11 +44,6 @@ export const useTweet = ({ tweet }: Props) => {
             tweetId: tweet._id,
             userId: currentUser?._id,
         });
-
-    const { state: {
-        socket
-    } } = useAppContext();
-
 
     const dropdownRef = useRef() as React.RefObject<HTMLDivElement>;
     const addCommentRef = useRef(null) as React.RefObject<HTMLInputElement>;
@@ -141,7 +137,22 @@ export const useTweet = ({ tweet }: Props) => {
         }
     };
 
+    const updateUrls = (content: string) => {
+        const { urls } = extractMetadata(content);
+        if (urls && urls?.length > 0) {
+            setUrls(urls);
+        }
+    };
+
+    useEffect(() => {
+        if (tweet?.content) {
+            updateUrls(tweet.content);
+        }
+    }, [tweet]);
+
+
     return {
+        urls,
         liked,
         saved,
         isAuthor,
@@ -159,6 +170,7 @@ export const useTweet = ({ tweet }: Props) => {
         tweetRetweetCount,
         totalTweetComments,
 
+        setUrls,
         onRetweet,
         onSaveTweet,
         onReactTweet,

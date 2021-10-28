@@ -43,7 +43,6 @@ const NewsFeed = () => {
                 <meta charSet="utf-8" />
                 <title> News feed </title>
             </Helmet>
-            <button onClick={() => setNumber((val) => val + 1)}>Test</button>
             <Wrapper>
                 <Container>
                     <Inner>

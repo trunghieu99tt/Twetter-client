@@ -64,7 +64,8 @@ button {
 
     --red: #eb5757;
 
-    --box-shadow-1: 0px 2px 4px rgba(0, 0, 0, 0.05);
+    /* --box-shadow-1: 0px 2px 4px rgba(0, 0, 0, 0.05); */
+    --box-shadow-1: 0 10px 25px 0 rgb(27 44 113 / 15%);
 
     --border-1: 1px solid var(--gray-5);
 }

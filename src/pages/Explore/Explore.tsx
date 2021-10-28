@@ -6,6 +6,7 @@ import MainLayout from "@layout/Main";
 import { Container } from "@shared/style/sharedStyle.style";
 import { useTweets } from "@talons/useTweets";
 import { useUser } from "@talons/useUser";
+import { Helmet } from "react-helmet";
 import { useParams } from "react-router";
 
 // styles
@@ -55,6 +56,9 @@ const Explore = () => {
 
     return (
         <Wrapper>
+            <Helmet>
+                <title>Explore</title>
+            </Helmet>
             <Container>
                 <Content>
                     <Sidebar>

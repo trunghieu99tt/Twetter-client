@@ -26,6 +26,9 @@ export const Main = styled.section`
 export const Sidebar = styled.aside`
     flex: 1;
     max-width: 30rem;
+    max-height: 100vh;
+    position: sticky;
+    top: 7rem;
     
     @media (max-width: 1024px){
         display: none;
@@ -34,7 +37,10 @@ export const Sidebar = styled.aside`
 `;
 
 export const RightSidebar = styled.aside`
-background: #FFFFFF;
+    max-height: 100vh;
+    position: sticky;
+    top: 7rem;
+    background: #FFFFFF;
     box-shadow: var(--box-shadow-1);
     border-radius: 1.2rem;
     max-height: 50rem;

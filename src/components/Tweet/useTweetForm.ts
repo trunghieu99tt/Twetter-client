@@ -4,7 +4,6 @@ import { TMedia } from "@type/app.types";
 import { iCreateTweetDTO, iTweet } from "@type/tweet.types";
 import { iUser } from "@type/user.types";
 import { USER_QUERY } from "constants/user.constants";
-import { ContentState, convertFromRaw, convertToRaw, EditorState } from "draft-js";
 import { UserModel } from "model/user.model";
 import { ChangeEvent, useState } from "react";
 import { useQueryClient } from "react-query";
@@ -20,15 +19,11 @@ export const useTweetForm = ({ tweet }: Props) => {
         USER_QUERY.GET_ME
     )).getData();
 
-    const [content, setContent] = useState(
-        tweet?.content
-            ? EditorState.createWithContent(convertFromRaw(JSON.parse(tweet.content)))
-            : EditorState.createEmpty()
-    );
 
-    const [audience, setAudience] = useState<number>(tweet?.audience || 0);
-    const [loading, setLoading] = useState<boolean>(false);
+    const [body, setBody] = useState(tweet?.content || "");
     const [media, setMedia] = useState<TMedia[]>([]);
+    const [loading, setLoading] = useState<boolean>(false);
+    const [audience, setAudience] = useState<number>(tweet?.audience || 0);
 
     const {
         createTweetMutation,
@@ -58,8 +53,7 @@ export const useTweetForm = ({ tweet }: Props) => {
 
 
     const resetContent = () => {
-        const editorState = EditorState.push(content, ContentState.createFromText(''), 'remove-range');
-        setContent(editorState);
+        setBody("");
     };
 
     const resetAll = () => {
@@ -70,12 +64,12 @@ export const useTweetForm = ({ tweet }: Props) => {
     };
 
     const onSubmit = async () => {
-        if (content || media.length > 0) {
+        if (body || media.length > 0) {
             setLoading(true);
             const mediaResponse = await uploadMultiMedia(media?.map(media => media.file as File) || []);
-            const contentRaw = JSON.stringify(convertToRaw(content.getCurrentContent()));
+
             const newTweet: iCreateTweetDTO = {
-                content: contentRaw,
+                content: body,
                 audience,
                 media: mediaResponse,
             };
@@ -108,13 +102,13 @@ export const useTweetForm = ({ tweet }: Props) => {
     };
 
     return {
+        body,
         loading,
-        content,
         audience,
         media,
 
+        setBody,
         onSubmit,
-        setContent,
         setAudience,
         onChangeFile,
         onCancelImage: onCancelMedia,

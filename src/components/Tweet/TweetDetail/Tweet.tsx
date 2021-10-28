@@ -1,7 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { v4 } from "uuid";
-import { convertFromRaw, EditorState } from "draft-js";
+import nl2br from "react-nl2br";
+import reactStringReplace from "react-string-replace";
 
 // talons
 import { useTweet } from "./useTweet";
@@ -14,7 +15,6 @@ import { Spinner1 } from "@components/Loaders";
 import AddComment from "@components/AddComment";
 import MediaViewer from "@components/MediaViewer";
 import { Carousel } from "react-responsive-carousel";
-import RichTextInput from "@components/RichTextInput";
 import UserAvatarSmall from "@components/UserAvatarSmall";
 
 // icons
@@ -54,6 +54,8 @@ import {
     InteractionSummaryItem,
     InteractionButtonGroup,
 } from "./TweetStyle";
+import { stopPropagation } from "@utils/helper";
+import CustomLinkPreview from "@components/CustomLinkPreview";
 
 type Props = {
     tweet: iTweet;
@@ -61,6 +63,7 @@ type Props = {
 
 const Tweet = ({ tweet }: Props) => {
     const {
+        urls,
         liked,
         saved,
         isAuthor,
@@ -89,6 +92,45 @@ const Tweet = ({ tweet }: Props) => {
     } = useTweet({
         tweet,
     });
+
+    const renderParsedTweet = () => {
+        let replacedText;
+
+        replacedText = reactStringReplace(
+            nl2br(tweet.content),
+            /(https?:\/\/\S+)/g,
+            (match, i) => {
+                return (
+                    <a
+                        className="text-primary hover:text-primary_hover"
+                        key={match + i}
+                        href={match}
+                        onClick={stopPropagation}
+                        target="_blank"
+                        rel="noopener, noreferrer"
+                    >
+                        {match}
+                    </a>
+                );
+            }
+        );
+        // Match hashtags
+        replacedText = reactStringReplace(
+            replacedText,
+            /#(\w+)/g,
+            (match, i) => (
+                <a
+                    className="font-bold hover:text-gray-500 transition-colors duration-300"
+                    key={match + i}
+                    href={`/hashtag/${match}`}
+                    onClick={stopPropagation}
+                >
+                    #{match}
+                </a>
+            )
+        );
+        return replacedText;
+    };
 
     return (
         <React.Fragment>
@@ -148,14 +190,12 @@ const Tweet = ({ tweet }: Props) => {
                 <Content>
                     {tweet?.content && (
                         <TweetDescription>
-                            <RichTextInput
-                                data={EditorState.createWithContent(
-                                    convertFromRaw(
-                                        JSON.parse(tweet.content || "{}")
-                                    )
-                                )}
-                            />
+                            {renderParsedTweet()}
                         </TweetDescription>
+                    )}
+
+                    {urls && urls?.length > 0 && !tweet?.media?.length && (
+                        <CustomLinkPreview url={urls[0]} />
                     )}
 
                     {tweet?.media?.length > 0 && (

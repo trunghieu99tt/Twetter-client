@@ -14,10 +14,13 @@
     min-width: 30rem;
 }
 
+.main,
+.canvas {
+    width: 40rem;
+    height: 60rem;
+}
+
 .main {
-    --size: 40rem;
-    width: var(--size);
-    height: var(--size);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -25,12 +28,6 @@
     position: relative;
     background-color: #fff;
     box-shadow: var(--shadow-1);
-}
-
-.canvas {
-    --size: 40rem;
-    width: var(--size);
-    height: var(--size);
 }
 
 .imageForm {

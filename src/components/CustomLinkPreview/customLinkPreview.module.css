@@ -1,0 +1,24 @@
+.root {
+    min-height: 15rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    background: gray;
+    color: #fff;
+}
+
+.linkNotFound {
+    font-size: 1.5rem;
+}
+
+.linkNotFound svg {
+    --size: 2rem;
+    width: var(--size);
+    height: var(--size);
+}
+
+.linkPreview {
+    width: 100%;
+    height: 100%;
+}
