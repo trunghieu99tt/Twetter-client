@@ -27,6 +27,8 @@ const InfinityTweetList = ({ query }: Props) => {
             []
         ) || [];
 
+    console.log("myTweets: ", myTweets);
+
     const hasMore = myTweets.length < totalRecords;
 
     return (

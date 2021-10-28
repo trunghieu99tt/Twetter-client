@@ -34,6 +34,14 @@ const getLatestTweets = async ({ pageParam = 0 }: QueryFunctionContext) => {
     return getInfinityList(TWEET_ENDPOINTS.LATEST_TWEETS, pageParam);
 };
 
+const getTweetsByTags = async ({ pageParam = 0, queryKey }: QueryFunctionContext) => {
+    const tags = queryKey[1];
+    if (tags) {
+        return getInfinityList(`${TWEET_ENDPOINTS.TWEETS_BY_HASHTAG}/${tags}`, pageParam);
+    }
+
+    return DEFAULT_LIST_RESPONSE;
+};
 
 const getMySavedTweets = async ({ pageParam = 0 }: QueryFunctionContext) => {
     return getInfinityList(TWEET_ENDPOINTS.MY_SAVED_TWEETS, pageParam);
@@ -86,7 +94,7 @@ const saveTweet = async (tweetId: string) => {
 };
 
 
-export const useTweets = (userId = "") => {
+export const useTweets = (userId = "", tag = "") => {
 
     const queryClient = useQueryClient();
 
@@ -110,6 +118,8 @@ export const useTweets = (userId = "") => {
     const getMySavedTweetsQuery = useInfiniteQuery(TWEET_QUERY.GET_MY_SAVED_TWEETS, getMySavedTweets, INFINITY_QUERY_LIST_CONFIG);
 
     const getMediasQuery = useInfiniteQuery(TWEET_QUERY.GET_MEDIAS, getMedias, INFINITY_QUERY_LIST_CONFIG);
+
+    const getTweetsByTagQuery = useInfiniteQuery([TWEET_QUERY.GET_TWEETS_BY_HASHTAG, tag], getTweetsByTags, INFINITY_QUERY_LIST_CONFIG);
 
 
     const createTweetMutation = useMutation(createTweet, {
@@ -151,6 +161,7 @@ export const useTweets = (userId = "") => {
 
     return {
         getMediasQuery,
+        getTweetsByTagQuery,
         getLatestTweetsQuery,
         getMySavedTweetsQuery,
         getPopularTweetsQuery,

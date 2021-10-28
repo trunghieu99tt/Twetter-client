@@ -51,3 +51,7 @@ export type TMedia = {
     type?: string;
     file?: File | null;
 };
+
+export type TMapExistence = {
+    [key: string]: boolean;
+};

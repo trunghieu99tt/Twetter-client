@@ -13,6 +13,7 @@ import "react-toastify/dist/ReactToastify.css";
 import "./index.css";
 import App from "./App";
 import { RecoilRoot } from "recoil";
+import { HelmetProvider } from "react-helmet-async";
 
 // Create a client
 const queryClient = new QueryClient();
@@ -24,7 +25,9 @@ ReactDOM.render(
                 <BrowserRouter>
                     <QueryClientProvider client={queryClient}>
                         <RecoilRoot>
-                            <App />
+                            <HelmetProvider>
+                                <App />
+                            </HelmetProvider>
                             <ToastContainer
                                 position="bottom-left"
                                 hideProgressBar

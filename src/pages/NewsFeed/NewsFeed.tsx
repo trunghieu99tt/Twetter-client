@@ -1,6 +1,6 @@
 import React from "react";
 import { useQueryClient } from "react-query";
-import { Helmet } from "react-helmet";
+import { Helmet } from "react-helmet-async";
 
 // talons
 import { useTweets } from "@talons/useTweets";
@@ -29,6 +29,7 @@ import {
     RightSidebar,
     Container,
 } from "./newsFeed.style";
+import PageMetadata from "@components/PageMetadata";
 
 const NewsFeed = () => {
     const user: iUser | undefined = useQueryClient().getQueryData(
@@ -39,10 +40,7 @@ const NewsFeed = () => {
 
     return (
         <React.Fragment>
-            <Helmet>
-                <meta charSet="utf-8" />
-                <title> News feed </title>
-            </Helmet>
+            <PageMetadata title="New feed" />
             <Wrapper>
                 <Container>
                     <Inner>

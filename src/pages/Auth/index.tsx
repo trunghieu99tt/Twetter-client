@@ -9,7 +9,7 @@ import Auth from "@components/Auth";
 
 // styles
 import { Right, Wrapper, Main, Heading } from "./AuthPageStyle";
-import { Helmet } from "react-helmet";
+import { Helmet } from "react-helmet-async";
 
 const AuthPage = () => {
     const { user } = useUser();

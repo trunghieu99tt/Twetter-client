@@ -44,11 +44,6 @@ const ImageStoryViewer = ({ data, classes: propClasses }: Props) => {
                 height: canvasHeight,
             });
 
-            console.log(`canvasWidth`, canvasWidth);
-            console.log(`canvasHeight`, canvasHeight);
-
-            console.log(`factor`, factor);
-
             editor?.canvas.loadFromJSON(data, () => {
                 const objects = editor?.canvas.getObjects();
 

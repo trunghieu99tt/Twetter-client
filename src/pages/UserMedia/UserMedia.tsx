@@ -1,3 +1,5 @@
+import React from "react";
+
 import { useParams } from "react-router";
 
 // talons
@@ -15,6 +17,7 @@ import InfinityMediaList from "@components/InfinityLists/InfinityMediaList";
 // styles
 import { Wrapper, Content, Main, Sidebar } from "./userMediaStyle";
 import { Container } from "@shared/style/sharedStyle.style";
+import PageMetadata from "@components/PageMetadata";
 
 const UserMedia = () => {
     const params: { userId: string } = useParams();
@@ -28,19 +31,23 @@ const UserMedia = () => {
     if (!userData) return null;
 
     return (
-        <Wrapper>
-            <MyProfileOverview user={userData} />
-            <Container>
-                <Content>
-                    <Sidebar>
-                        <LeftSidebar type="PROFILE" />
-                    </Sidebar>
-                    <Main>
-                        <InfinityMediaList query={getProfileTweetsQuery} />
-                    </Main>
-                </Content>
-            </Container>
-        </Wrapper>
+        <React.Fragment>
+            <PageMetadata title={`${userData.name}'s media`} />
+
+            <Wrapper>
+                <MyProfileOverview user={userData} />
+                <Container>
+                    <Content>
+                        <Sidebar>
+                            <LeftSidebar type="PROFILE" />
+                        </Sidebar>
+                        <Main>
+                            <InfinityMediaList query={getProfileTweetsQuery} />
+                        </Main>
+                    </Content>
+                </Container>
+            </Wrapper>
+        </React.Fragment>
     );
 };
 

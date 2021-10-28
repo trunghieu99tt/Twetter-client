@@ -17,6 +17,7 @@ import { iUser } from "@type/user.types";
 import { USER_QUERY } from "constants/user.constants";
 import { iNotificationDTO } from "@type/notify.types";
 import { extractMetadata } from "@utils/helper";
+import { useHashtag } from "@talons/useHashtag";
 
 
 type Props = {
@@ -38,12 +39,14 @@ export const useTweet = ({ tweet }: Props) => {
         saveTweetMutation,
     } = useTweets();
     const { createNotificationAction } = useNotify();
-
     const { tweetComments, totalTweetComments, fetchMoreTweetComment } =
         useComment({
             tweetId: tweet._id,
             userId: currentUser?._id,
         });
+    const {
+        updateHashTags,
+    } = useHashtag();
 
     const dropdownRef = useRef() as React.RefObject<HTMLDivElement>;
     const addCommentRef = useRef(null) as React.RefObject<HTMLInputElement>;
@@ -83,7 +86,12 @@ export const useTweet = ({ tweet }: Props) => {
     const toggleDropdown = () => setVisibleDropdown((isVisible) => !isVisible);
 
     const onDeleteTweet = () => {
-        deleteTweetMutation.mutate(tweet._id);
+        deleteTweetMutation.mutate(tweet._id, {
+            onSuccess: () => {
+                const initialTags = tweet?.tags || [];
+                updateHashTags(initialTags, []);
+            }
+        });
     };
 
     const onReactTweet = () => {

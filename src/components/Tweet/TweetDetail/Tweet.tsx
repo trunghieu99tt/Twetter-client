@@ -56,6 +56,7 @@ import {
 } from "./TweetStyle";
 import { stopPropagation } from "@utils/helper";
 import CustomLinkPreview from "@components/CustomLinkPreview";
+import { HASHTAG_ROUTES } from "routes/routes";
 
 type Props = {
     tweet: iTweet;
@@ -119,14 +120,14 @@ const Tweet = ({ tweet }: Props) => {
             replacedText,
             /#(\w+)/g,
             (match, i) => (
-                <a
+                <Link
                     className="font-bold hover:text-gray-500 transition-colors duration-300"
                     key={match + i}
-                    href={`/hashtag/${match}`}
+                    to={`${HASHTAG_ROUTES.BASE}/${match}`}
                     onClick={stopPropagation}
                 >
                     #{match}
-                </a>
+                </Link>
             )
         );
         return replacedText;
