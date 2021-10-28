@@ -1,7 +1,7 @@
 import React from "react";
 import { useParams } from "react-router";
 import { v4 as uuid } from "uuid";
-import { Helmet } from "react-helmet";
+import { Helmet } from "react-helmet-async";
 
 // talons
 import { useUser } from "@talons/useUser";
@@ -19,6 +19,7 @@ import MyProfileOverview from "@components/MyProfile/MyProfileOverview";
 // styles
 import { Sidebar, Wrapper, Main, Content } from "./MyProfileStyle";
 import { Container } from "@shared/style/sharedStyle.style";
+import PageMetadata from "@components/PageMetadata";
 
 const MyProfile = () => {
     const params: { userId: string } = useParams();
@@ -34,9 +35,7 @@ const MyProfile = () => {
 
     return (
         <React.Fragment>
-            <Helmet>
-                <title>{`${userData.name}'s profile`}</title>
-            </Helmet>
+            <PageMetadata title={`${userData.name}'s profile`} />
             <Wrapper>
                 <MyProfileOverview user={userData} />
                 <Container>

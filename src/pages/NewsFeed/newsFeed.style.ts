@@ -12,6 +12,7 @@ export const Wrapper = styled.section`
 export const Inner = styled.div`
     display: flex;
     gap: 2.5rem;
+    align-items: flex-start;
 `;
 
 export const Main = styled.section`

@@ -6,18 +6,31 @@ import SidebarBlock from "@components/Sidebar/SidebarBlock";
 
 // styles
 import { TagCounter, TagName, TagWrapper } from "./PopularTagsStyle";
+import { useHashtag } from "@talons/useHashtag";
+import { iHashtag } from "@type/hashtag.types";
+import { HASHTAG_ROUTES } from "routes/routes";
 
-interface Props {}
+const PopularTags = () => {
+    const { getMostPopularHashtagQuery } = useHashtag();
 
-const PopularTags = (props: Props) => {
+    const mostPopularHashtags: iHashtag[] =
+        getMostPopularHashtagQuery.data || [];
+
+    if (!mostPopularHashtags?.length) return null;
+
     const title = "Popular Tags";
 
-    const content = [...Array(6)].map((_, i) => {
+    const content = mostPopularHashtags.map((hashtag: iHashtag) => {
+        const { _id, name, count } = hashtag;
+
         return (
-            <TagWrapper key={`popular-tag-${Math.random()}`}>
-                <TagName>#programing</TagName>
+            <TagWrapper
+                key={`popular-tag-${_id}`}
+                to={`${HASHTAG_ROUTES.BASE}/${name}`}
+            >
+                <TagName>#{name}</TagName>
                 <TagCounter>
-                    {nFormatter(Math.random() * 1e5)} Tweets
+                    {nFormatter(count)} {count > 1 ? "tweets" : "tweet"}
                 </TagCounter>
             </TagWrapper>
         );

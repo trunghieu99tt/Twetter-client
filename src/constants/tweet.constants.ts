@@ -1,4 +1,4 @@
-const prefix = '/tweet'
+const prefix = '/tweet';
 
 export const TWEET_ENDPOINTS = {
     BASE: prefix,
@@ -11,7 +11,8 @@ export const TWEET_ENDPOINTS = {
     MY_LIKED_TWEETS: `${prefix}/liked`,
     POPULAR_TWEETS: `${prefix}/popular`,
     MY_SAVED_TWEETS: `${prefix}/user/saved`,
-}
+    TWEETS_BY_HASHTAG: `${prefix}/hashtag`,
+};
 
 export const TWEET_QUERY = {
     GET_MEDIAS: 'GET_MEDIAS',
@@ -24,5 +25,5 @@ export const TWEET_QUERY = {
     GET_MY_SAVED_TWEETS: 'GET_MY_SAVED_TWEETS',
     GET_NEWS_FEED_TWEETS: 'GET_NEWS_FEED_TWEETS',
     GET_USER_LIKED_TWEETS: 'GET_USER_LIKED_TWEETS',
-
-}
+    GET_TWEETS_BY_HASHTAG: 'GET_TWEETS_BY_HASHTAG',
+};

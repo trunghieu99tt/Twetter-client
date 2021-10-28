@@ -81,7 +81,7 @@ export const extractMetadata = (body: string) => {
 
     // Remove duplicates
     if (hashtags && hashtags?.length > 0) {
-        hashtags = Array.from(new Set(hashtags));
+        hashtags = Array.from(new Set(hashtags)).map(h => h.toString());
     }
     return {
         hashtags,

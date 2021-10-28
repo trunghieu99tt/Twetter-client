@@ -2,10 +2,11 @@ import { Route, Switch } from "react-router-dom";
 
 // pages
 import Chat from "@pages/Chat";
-import StoryForm from "@pages/Story/Form";
+import HashTag from "@pages/HashTag";
 import Explore from "@pages/Explore";
 import NotFound from "@pages/NotFound";
 import NewsFeed from "@pages/NewsFeed";
+import StoryForm from "@pages/Story/Form";
 import MyProfile from "@pages/MyProfile";
 import BookMarks from "@pages/BookMarks";
 import UserMedia from "@pages/UserMedia";
@@ -14,7 +15,9 @@ import StoryView from "@pages/Story/View";
 
 // components
 import PrivateRoute from "@components/routes/PrivateRoute";
-import { STORY_ROUTES } from "./routes";
+
+// routes
+import { HASHTAG_ROUTES, STORY_ROUTES } from "./routes";
 
 const PrivateRouteController = () => {
     return (
@@ -30,6 +33,11 @@ const PrivateRouteController = () => {
                 component={StoryView}
             />
             <PrivateRoute path="/bookmarks" exact component={BookMarks} />
+            <PrivateRoute
+                path={`${HASHTAG_ROUTES.BASE}/:hashtag`}
+                exact
+                component={HashTag}
+            />
             <PrivateRoute path="/chat/:roomId" exact component={Chat} />
             <PrivateRoute
                 path="/profile/media/:userId"

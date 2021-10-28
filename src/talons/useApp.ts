@@ -7,11 +7,13 @@ import Peer from "peerjs";
 import { useRoom } from "./useRoom";
 import { useStory } from "./useStory";
 import { useNotify } from "./useNotify";
+import { useHashtag } from "./useHashtag";
+
 
 export const useApp = () => {
     const storyTalons = useStory();
     const notificationTalons = useNotify();
-
+    const hashtagTalons = useHashtag();
     const { user, getMeQuery } = useUser();
     const { getAllUserRooms } = useRoom();
     const history = useHistory();

@@ -3,23 +3,25 @@ import SimpleReactLightbox from "simple-react-lightbox";
 
 // talons
 import { useChatPage } from "./useChatPage";
+import { useIntersectionObserver } from "@hooks/useIntersectionObserver";
 
 // components
+import CallModal from "@components/Call/CallModal";
 import MessageContent from "@components/Chat/MessageContent";
 import TextMessageForm from "@components/Chat/TextMessageForm";
 import RoomImageGallery from "@components/Chat/RoomImageGallery";
 import ChatPageUserList from "@components/Chat/ChatPageUserList";
 import ImageMessageForm from "@components/Chat/ImageMessageForm";
 
-// styles
-import classes from "./chatPage.module.css";
+// icons
+import { IoCallSharp } from "react-icons/io5";
+import { BsFillCameraVideoFill } from "react-icons/bs";
 
 // types
 import { iMessage } from "@type/message.types";
-import { useIntersectionObserver } from "@hooks/useIntersectionObserver";
-import CallModal from "@components/Call/CallModal";
-import { IoCallSharp } from "react-icons/io5";
-import { BsFillCameraVideoFill } from "react-icons/bs";
+
+// styles
+import classes from "./chatPage.module.css";
 
 const ChatPage = () => {
     const {

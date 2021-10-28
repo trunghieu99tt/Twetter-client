@@ -7,8 +7,12 @@ import { useHistory, useParams } from "react-router";
 import { useUser } from "@talons/useUser";
 import { useStory } from "@talons/useStory";
 
+// utils
+import { calcDiffTimeString } from "@utils/helper";
+
 // components
 import Logo from "@components/Logo";
+import PageMetadata from "@components/PageMetadata";
 import StoryViewer from "@components/Story/StoryViewer";
 
 // icons
@@ -31,7 +35,6 @@ import {
 
 // styles
 import classes from "./view.module.css";
-import { calcDiffTimeString } from "@utils/helper";
 
 type TDirection = "LEFT" | "RIGHT";
 
@@ -157,113 +160,122 @@ const View = () => {
         userStoryMetadata?.nextUserId !== null;
 
     return (
-        <div className={classes.root}>
-            <aside className={classes.aside}>
-                <Logo />
+        <React.Fragment>
+            <PageMetadata title="Story" />
+            <div className={classes.root}>
+                <aside className={classes.aside}>
+                    <Logo />
 
-                <h3 className={classes.asideHeading}>Stories</h3>
-                {owners?.map((owner: iUser) => {
-                    const userStories = storyGroups?.[owner._id];
+                    <h3 className={classes.asideHeading}>Stories</h3>
+                    {owners?.map((owner: iUser) => {
+                        const userStories = storyGroups?.[owner._id];
 
-                    const newestCreatedStoryTime =
-                        userStories?.reduce((acc: Date, story: iStory) => {
-                            const storyTime = new Date(story.createdAt);
-                            return storyTime.getTime() > new Date(acc).getTime()
-                                ? storyTime
-                                : acc;
-                        }, new Date("1990-01-01")) || new Date();
+                        const newestCreatedStoryTime =
+                            userStories?.reduce((acc: Date, story: iStory) => {
+                                const storyTime = new Date(story.createdAt);
+                                return storyTime.getTime() >
+                                    new Date(acc).getTime()
+                                    ? storyTime
+                                    : acc;
+                            }, new Date("1990-01-01")) || new Date();
 
-                    let storyTimeText = calcDiffTimeString(
-                        newestCreatedStoryTime
-                    );
+                        let storyTimeText = calcDiffTimeString(
+                            newestCreatedStoryTime
+                        );
 
-                    const isViewedAllStories = userStories?.every(
-                        (story: iStory) =>
-                            story.viewerIds.includes(currentUser._id)
-                    );
+                        const isViewedAllStories = userStories?.every(
+                            (story: iStory) =>
+                                story.viewerIds.includes(currentUser._id)
+                        );
 
-                    return (
-                        <figure
-                            className={classes.userStoryCard}
-                            key={`user-story-card-list-${owner._id}`}
-                            onClick={() => onViewUserStories(owner._id)}
-                        >
-                            <img
-                                src={owner.avatar}
-                                alt="owner-avatar"
-                                className={cn(classes.userAvatar, {
-                                    [classes.notViewedStory]:
-                                        !isViewedAllStories,
-                                })}
-                            />
-                            <figcaption className={classes.info}>
-                                <p className={classes.userName}>{owner.name}</p>
-                                <p className={classes.newestStoryTime}>
-                                    {storyTimeText}
-                                </p>
-                            </figcaption>
-                        </figure>
-                    );
-                })}
-            </aside>
-            <main className={classes.main}>
-                <div className={classes.inner}>
-                    {!userId && <p>Choose a story to view!</p>}
-                    {owners && userStories && (
-                        <React.Fragment>
-                            {hasPreviousButton && (
-                                <button
-                                    onClick={() => onArrowClick("LEFT")}
-                                    className={cn(
-                                        classes.arrow,
-                                        classes.arrowLeft
-                                    )}
-                                >
-                                    <AiFillLeftCircle />
-                                </button>
-                            )}
-                            <div
-                                className={classes.progresses}
-                                key={`progress-${userId}`}
+                        return (
+                            <figure
+                                className={classes.userStoryCard}
+                                key={`user-story-card-list-${owner._id}`}
+                                onClick={() => onViewUserStories(owner._id)}
                             >
-                                {[...Array(userStories.length)].map(
-                                    (_, idx: number) => {
-                                        return (
-                                            <div
-                                                className={cn(
-                                                    classes.progress,
-                                                    {
-                                                        [classes.active]:
-                                                            idx ===
-                                                            activeStoryIdx,
-                                                    }
-                                                )}
-                                                ref={(el) =>
-                                                    (itemsRef.current[idx] = el)
-                                                }
-                                                key={`progress-bar-${userId}-${idx}`}
-                                            />
-                                        );
-                                    }
+                                <img
+                                    src={owner.avatar}
+                                    alt="owner-avatar"
+                                    className={cn(classes.userAvatar, {
+                                        [classes.notViewedStory]:
+                                            !isViewedAllStories,
+                                    })}
+                                />
+                                <figcaption className={classes.info}>
+                                    <p className={classes.userName}>
+                                        {owner.name}
+                                    </p>
+                                    <p className={classes.newestStoryTime}>
+                                        {storyTimeText}
+                                    </p>
+                                </figcaption>
+                            </figure>
+                        );
+                    })}
+                </aside>
+                <main className={classes.main}>
+                    <div className={classes.inner}>
+                        {!userId && <p>Choose a story to view!</p>}
+                        {owners && userStories && (
+                            <React.Fragment>
+                                {hasPreviousButton && (
+                                    <button
+                                        onClick={() => onArrowClick("LEFT")}
+                                        className={cn(
+                                            classes.arrow,
+                                            classes.arrowLeft
+                                        )}
+                                    >
+                                        <AiFillLeftCircle />
+                                    </button>
                                 )}
-                            </div>
-                            {activeStory && <StoryViewer data={activeStory} />}
-                            {hasNextButton && (
-                                <button
-                                    onClick={() => onArrowClick("RIGHT")}
-                                    className={cn(
-                                        classes.arrow,
-                                        classes.arrowRight
-                                    )}
+                                <div
+                                    className={classes.progresses}
+                                    key={`progress-${userId}`}
                                 >
-                                    <AiFillRightCircle />
-                                </button>
-                            )}
-                        </React.Fragment>
-                    )}
-                </div>
-            </main>
-        </div>
+                                    {[...Array(userStories.length)].map(
+                                        (_, idx: number) => {
+                                            return (
+                                                <div
+                                                    className={cn(
+                                                        classes.progress,
+                                                        {
+                                                            [classes.active]:
+                                                                idx ===
+                                                                activeStoryIdx,
+                                                        }
+                                                    )}
+                                                    ref={(el) =>
+                                                        (itemsRef.current[idx] =
+                                                            el)
+                                                    }
+                                                    key={`progress-bar-${userId}-${idx}`}
+                                                />
+                                            );
+                                        }
+                                    )}
+                                </div>
+                                {activeStory && (
+                                    <StoryViewer data={activeStory} />
+                                )}
+                                {hasNextButton && (
+                                    <button
+                                        onClick={() => onArrowClick("RIGHT")}
+                                        className={cn(
+                                            classes.arrow,
+                                            classes.arrowRight
+                                        )}
+                                    >
+                                        <AiFillRightCircle />
+                                    </button>
+                                )}
+                            </React.Fragment>
+                        )}
+                    </div>
+                </main>
+            </div>
+        </React.Fragment>
     );
 };
 
