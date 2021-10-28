@@ -1,7 +1,9 @@
 /* eslint-disable no-mixed-operators */
+import { showNotificationToast } from "@components/Notification/notificationUtils";
 import { useAppContext } from "@context/app.context";
 import { useUser } from "@talons/useUser";
 import { MESSAGES_QUERIES } from "constants/message.constants";
+import { NOTIFICATION_QUERIES } from "constants/notify.constants";
 import { useEffect, useRef } from "react";
 import { useQueryClient } from "react-query";
 import { useHistory } from "react-router";
@@ -9,9 +11,20 @@ import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { callState } from "states/call.state";
 import { newMessageState } from "states/message.state";
 import { connectedRoomsState, joinDMRoomState } from "states/room.state";
-import { socketState } from "states/socket.state";
 import { connectedUsersState, prevUserState } from "states/user.state";
 import { Socket } from "./socket";
+
+const spawnNotification = (body: any, icon: any, url: any, title: any) => {
+    let options = {
+        body, icon
+    };
+    let n = new Notification(title, options);
+
+    n.onclick = e => {
+        e.preventDefault();
+        window.open(url, '_blank');
+    };
+};
 
 const useSocket = () => {
     const { dispatch } = useAppContext();
@@ -20,12 +33,12 @@ const useSocket = () => {
     const previousUser = useRecoilValue(prevUserState);
     const setCall = useSetRecoilState(callState);
     const [joinDMRoom, setJoinDMRoom] = useRecoilState(joinDMRoomState);
-    const [connectedRooms, setConnectedRooms] = useRecoilState(connectedRoomsState);
     const [newMessage, setNewMessage] = useRecoilState(newMessageState);
+
+    const [connectedRooms, setConnectedRooms] = useRecoilState(connectedRoomsState);
     const [connectedUsers, setConnectedUsers] = useRecoilState(connectedUsersState);
     const { user } = useUser();
     const history = useHistory();
-    const [socketStore, setSocket] = useRecoilState(socketState);
 
     useEffect(() => {
         if (!socketInstance.current) {
@@ -33,7 +46,7 @@ const useSocket = () => {
             socketInstance.current = newSocket;
             init();
         }
-    }, [])
+    }, []);
 
     useEffect(() => {
         if (user?._id !== previousUser?._id || !previousUser) {
@@ -43,13 +56,13 @@ const useSocket = () => {
                 (socketInstance.current as any).emit("userOff", previousUser);
             }
         }
-    }, [user])
+    }, [user]);
 
     useEffect(() => {
         if (joinDMRoom && joinDMRoom?.userIds && socketInstance?.current) {
             (socketInstance.current as any).emit("joinDmRoom", joinDMRoom);
         }
-    }, [joinDMRoom])
+    }, [joinDMRoom]);
 
     useEffect(() => {
         if ((newMessage && newMessage?.content?.length > 0 || newMessage && newMessage?.file) && socketInstance?.current) {
@@ -64,10 +77,10 @@ const useSocket = () => {
 
 
         socket.on('connect', () => {
-            console.log('Connected')
+            console.log('Connected');
             // setSocket(socket);
             dispatch({ type: "SET_SOCKET", payload: socket });
-        })
+        });
 
         socket.on('users', (res: any) => {
             // console.log(`res users`, res)
@@ -75,7 +88,7 @@ const useSocket = () => {
         });
 
         socket.on('joinDmRoom', (res: any) => {
-            console.log('res joinDmRoom: ', res)
+            console.log('res joinDmRoom: ', res);
             setJoinDMRoom(null);
             // merge connectedRooms with res
             if (!connectedRooms?.some((room: any) => room._id === res._id)) {
@@ -83,13 +96,13 @@ const useSocket = () => {
             }
             // Go to DM room
             history.push(`/chat/${res._id}`);
-        })
+        });
 
         socket.on('newMessage', (res: any) => {
             setNewMessage(null);
             queryClient.invalidateQueries(
                 [MESSAGES_QUERIES.GET_MESSAGES, res.roomId],
-            )
+            );
         });
 
         socket.on('callerConnected', (res: any) => {
@@ -97,54 +110,21 @@ const useSocket = () => {
             setCall(res);
         });
 
-    }
+        socket.on('newNotification', (res: any) => {
+            showNotificationToast(res);
+            spawnNotification(
+                res.text,
+                res.sender.avatar,
+                res?.url || '',
+                'Tweeter'
+            );
+            queryClient.invalidateQueries(NOTIFICATION_QUERIES.GET_NOTIFICATIONS);
+        });
 
-    const createChannel = (channel: any) => {
-        const username = user?.username;
-        if (username) {
-            (socketInstance.current as any).emit('createRoom', { channel, username });
-        }
-    }
-
-    const addMessage = (message: string, roomID: string, file: string | null = null) => {
-        const username = user?.username;
-        if (username) {
-            (socketInstance.current as any).emit("addMessage", {
-                username,
-                content: message,
-                roomID,
-                file
-            });
-        }
-    }
-
-    const joinRoom = (roomID: string, isNew = true) => {
-        const username = user?.username;
-        if (username) {
-            const event = isNew ? 'joinNewRoom' : 'joinOldRoom';
-            (socketInstance.current as any).emit(event, {
-                username,
-                roomID,
-            });
-        }
-    }
-
-
-    const updateChannel = (channel: any) => {
-        const username = user?.username;
-        if (username) {
-            (socketInstance.current as any).emit('updateRoom', { channel, username });
-        }
-    }
-
-
+    };
     return {
-        joinRoom,
-        addMessage,
-        createChannel,
-        updateChannel
-    }
+    };
 
-}
+};
 
 export { useSocket };

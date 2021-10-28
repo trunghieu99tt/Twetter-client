@@ -53,9 +53,8 @@
 }
 
 .inner {
-    --size: 45rem;
-    width: var(--size);
-    height: calc(var(--size) * 1.5);
+    width: 40rem;
+    height: 60rem;
     background: var(--gray-3);
     position: relative;
     border-radius: 5px;

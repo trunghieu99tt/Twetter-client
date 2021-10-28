@@ -1,5 +1,7 @@
+import React from "react";
 import { useParams } from "react-router";
 import { v4 as uuid } from "uuid";
+import { Helmet } from "react-helmet";
 
 // talons
 import { useUser } from "@talons/useUser";
@@ -31,20 +33,25 @@ const MyProfile = () => {
     if (!userData) return null;
 
     return (
-        <Wrapper>
-            <MyProfileOverview user={userData} />
-            <Container>
-                <Content>
-                    <Sidebar>
-                        <LeftSidebar type="PROFILE" />
-                    </Sidebar>
-                    <Main>
-                        {isMe && <AddTweet />}
-                        <InfinityTweetList query={getProfileTweetsQuery} />
-                    </Main>
-                </Content>
-            </Container>
-        </Wrapper>
+        <React.Fragment>
+            <Helmet>
+                <title>{`${userData.name}'s profile`}</title>
+            </Helmet>
+            <Wrapper>
+                <MyProfileOverview user={userData} />
+                <Container>
+                    <Content>
+                        <Sidebar>
+                            <LeftSidebar type="PROFILE" />
+                        </Sidebar>
+                        <Main>
+                            {isMe && <AddTweet />}
+                            <InfinityTweetList query={getProfileTweetsQuery} />
+                        </Main>
+                    </Content>
+                </Container>
+            </Wrapper>
+        </React.Fragment>
     );
 };
 

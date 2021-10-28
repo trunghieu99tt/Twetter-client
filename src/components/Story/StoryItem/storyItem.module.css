@@ -72,6 +72,7 @@
     top: 1rem;
     left: 1rem;
     border-radius: 50%;
+    object-fit: cover;
     border: 2px solid rgba(256, 256, 256, 0.5);
 }
 

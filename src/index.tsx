@@ -25,7 +25,10 @@ ReactDOM.render(
                     <QueryClientProvider client={queryClient}>
                         <RecoilRoot>
                             <App />
-                            <ToastContainer />
+                            <ToastContainer
+                                position="bottom-left"
+                                hideProgressBar
+                            />
                         </RecoilRoot>
                     </QueryClientProvider>
                 </BrowserRouter>

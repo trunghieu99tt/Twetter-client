@@ -6,7 +6,6 @@ import classes from "./imageStory.module.css";
 import { BsCardImage } from "react-icons/bs";
 import { Flex } from "@shared/style/sharedStyle.style";
 import { useUpload } from "@talons/useUpload";
-import { Object } from "fabric/fabric-impl";
 
 interface Props {
     onCancel: () => void;
@@ -30,7 +29,7 @@ const ImageStory = ({ onCancel, onSubmit }: Props) => {
         try {
             editor?.canvas.add(
                 new fabric.Textbox("Type something...", {
-                    fill: "red",
+                    fill: "#000",
                     fontSize: 20,
                     fontFamily: "Arial",
                     fontWeight: "bold",
@@ -49,18 +48,25 @@ const ImageStory = ({ onCancel, onSubmit }: Props) => {
         if (file && file.type.match(/image.*/)) {
             setFile(file);
             fabric.Image.fromURL(URL.createObjectURL(file), function (img) {
-                const canvasWidth = editor?.canvas.getWidth();
-                const canvasHeight = editor?.canvas.getHeight();
+                const canvasWidth = editor?.canvas.getWidth() || 0;
+                const canvasHeight = editor?.canvas.getHeight() || 0;
                 editor?.canvas.add(img);
                 const obj = editor?.canvas.getObjects();
+
                 obj?.forEach((o) => {
-                    if (o.type === "image") {
+                    if (o.type === "image" && o.height && o.width) {
                         o.selectable = false;
-                        o.scaleToHeight(canvasWidth || 100);
-                        o.scaleToHeight(canvasHeight || 100);
+                        o.scaleToHeight((canvasWidth || 100) * 0.8);
+                        o.scaleToHeight((canvasHeight || 100) * 0.8);
+
+                        o.set({
+                            top: canvasHeight / 2,
+                            left: canvasWidth / 2,
+                            // scaleY: canvasHeight / o!.height || 1,
+                            // scaleX: canvasWidth / o!.width || 1,
+                        });
                     }
                 });
-
                 editor?.canvas.centerObject(img);
                 setIsSubmitted(true);
             });

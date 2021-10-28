@@ -59,9 +59,11 @@ const Comment = ({ data, level = 0 }: Props) => {
                         Like
                     </LikeButton>
                     <span>.</span>
-                    <LikeCounter>
-                        {likeCount} {likeCount === 1 ? " Like" : " Likes"}
-                    </LikeCounter>
+                    {likeCount > 0 && (
+                        <LikeCounter>
+                            {likeCount} {likeCount === 1 ? " Like" : " Likes"}
+                        </LikeCounter>
+                    )}
                 </Interaction>
             </Main>
 

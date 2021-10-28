@@ -52,17 +52,18 @@ export const useStory = () => {
 
     const updateStoryMutation = useMutation(updateStory, {
         onSuccess: (response: any) => {
-            const data = response?.data;
-            // find and replace the story in react-query
-            const stories = getStoriesFeedQuery.data;
+            // const data = response?.data;
+            // // find and replace the story in react-query
+            // const stories = getStoriesFeedQuery.data;
 
-            const updatedStory = stories.map((story: iStory) => {
-                if (story._id === data._id) {
-                    return data;
-                }
-                return story;
-            });
-            queryClient.setQueryData(STORY_QUERY.GET_STORIES, updatedStory);
+            // const updatedStory = stories.map((story: iStory) => {
+            //     if (story._id === data._id) {
+            //         return data;
+            //     }
+            //     return story;
+            // });
+            // queryClient.setQueryData(STORY_QUERY.GET_STORIES, updatedStory);
+            invalidateStoryQuery();
         }
     });
 
@@ -72,9 +73,13 @@ export const useStory = () => {
         }
     });
 
+    const refetchAll = () => {
+    };
+
     const storyList = getStoriesFeedQuery.data;
 
     useEffect(() => {
+        console.log('storyList: ', storyList);
         const groupStoryByUser: iStoryGroup = storyList?.reduce(
             (
                 res: {
@@ -92,11 +97,13 @@ export const useStory = () => {
             },
             {}
         );
+        console.log('groupStoryByUser: ', groupStoryByUser);
         setStories(groupStoryByUser);
     }, [storyList]);
 
 
     return {
+        refetchAll,
         getStoriesFeedQuery,
         createStoryMutation,
         updateStoryMutation,
