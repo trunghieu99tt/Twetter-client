@@ -23,6 +23,7 @@ import {
 
 // types
 import { iNotificationDTO } from "@type/notify.types";
+import { useUser } from "./useUser";
 
 const getNotifications = async ({
     pageParam = 0,
@@ -65,6 +66,7 @@ export const useNotify = () => {
     const {
         state: { socket },
     } = useAppContext();
+    const { user: currentUser } = useUser();
     const queryClient = useQueryClient();
 
     // create notify
@@ -81,17 +83,25 @@ export const useNotify = () => {
     const readNotificationMutation = useMutation(readNotification);
 
     const createNotificationAction = (newNotification: iNotificationDTO) => {
-        createNotificationMutation.mutate(newNotification, {
-            onSuccess: (response) => {
-                if (socket) {
-                    if (response) {
-                        socket.emit("createNotification", {
-                            ...response,
-                        });
+        const { receivers } = newNotification;
+        const filteredReceivers = receivers.filter(
+            (receiver) => receiver !== currentUser._id
+        );
+
+        if (filteredReceivers.length > 0) {
+            newNotification.receivers = filteredReceivers;
+            createNotificationMutation.mutate(newNotification, {
+                onSuccess: (response) => {
+                    if (socket) {
+                        if (response) {
+                            socket.emit("createNotification", {
+                                ...response,
+                            });
+                        }
                     }
-                }
-            },
-        });
+                },
+            });
+        }
     };
 
     const readNotificationAction = (notificationIds: string[]) => {
