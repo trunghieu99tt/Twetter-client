@@ -36,13 +36,22 @@ const NotificationList = () => {
         }
     };
 
+    const isNotRead = notifications.filter(
+        (notification) => !notification.isRead.includes(user?._id)
+    ).length;
+
     return (
         <div className={classes.root}>
             <div className={classes.header}>
-                <p>Activities</p>
-                <button onClick={markAllAsRead} className={classes.readAllBtn}>
-                    Read all
-                </button>
+                <p>Notifications</p>
+                {isNotRead > 0 && (
+                    <button
+                        onClick={markAllAsRead}
+                        className={classes.readAllBtn}
+                    >
+                        Read all
+                    </button>
+                )}
             </div>
             <div className={classes.main}>
                 {notifications?.map((notification: iNotification) => {
