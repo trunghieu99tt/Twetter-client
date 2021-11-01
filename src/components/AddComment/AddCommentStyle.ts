@@ -1,6 +1,9 @@
 import styled from "styled-components";
 
-export const Wrapper = styled.form`
+export const Wrapper = styled('form') <{
+    shouldIndent?: boolean;
+}>`
+    ${props => !props.shouldIndent ? '' : 'transform: translateX(4rem); width: 94%;margin: 1rem 0;'}
     display: flex;
     gap: 1.6rem;
 `;

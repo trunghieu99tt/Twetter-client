@@ -23,11 +23,11 @@ const getMyComments = async ({ queryKey, pageParam = 0 }: QueryFunctionContext) 
     if (userId) {
         return getInfinityList(`${COMMENT_ENDPOINTS.GET_USER_COMMENTS}`, pageParam, {
             sort: "createdAt",
-        })
+        });
     }
     return DEFAULT_LIST_RESPONSE;
 
-}
+};
 
 const getTweetComments = async ({ queryKey, pageParam = 0 }: QueryFunctionContext) => {
     const tweetId = queryKey[1];
@@ -38,28 +38,33 @@ const getTweetComments = async ({ queryKey, pageParam = 0 }: QueryFunctionContex
         });
     }
 
-    return DEFAULT_LIST_RESPONSE
-}
+    return DEFAULT_LIST_RESPONSE;
+};
 
-const createComment = async ({ newComment, tweetId }: {
+const createComment = async ({ newComment, parentId }: {
     newComment: iCreateCommentDTO,
-    tweetId: string;
+    parentId: string;
 }) => {
-    if (!tweetId)
+    if (!parentId)
         return {};
-    const response = await client.post(`${COMMENT_ENDPOINTS.BASE}/${tweetId}`, newComment);
+    const response = await client.post(`${COMMENT_ENDPOINTS.BASE}/${parentId}`, newComment);
     return response?.data;
-}
+};
 
 const deleteComment = async (id: string) => {
     const response = await client.delete(`${COMMENT_ENDPOINTS.BASE}/${id}`);
     return response?.data;
-}
+};
+
+type Props = {
+    tweetId?: string;
+    userId?: string;
+};
 
 export const useComment = ({
     tweetId = "",
-    userId = ""
-}) => {
+    userId = "",
+}: Props) => {
 
     const queryClient = useQueryClient();
 
@@ -71,15 +76,21 @@ export const useComment = ({
     const getTweetCommentsQuery = useInfiniteQuery(
         [COMMENT_QUERY.GET_TWEET_COMMENTS, tweetId],
         getTweetComments,
-        INFINITY_QUERY_LIST_CONFIG);
+        {
+            ...INFINITY_QUERY_LIST_CONFIG,
+            retry: false
+        });
 
     const invalidateCommentQuery = () => {
         queryClient.invalidateQueries(COMMENT_QUERY.GET_MY_COMMENTS);
         queryClient.invalidateQueries([COMMENT_QUERY.GET_TWEET_COMMENTS, tweetId]);
-    }
+    };
 
     const createCommentMutation = useMutation(createComment, {
-        onSuccess: invalidateCommentQuery
+        onSuccess: () => {
+            invalidateCommentQuery();
+        },
+        retry: false
     });
     const deleteCommentMutation = useMutation(deleteComment, {
         onSuccess: invalidateCommentQuery
@@ -93,7 +104,7 @@ export const useComment = ({
 
     const tweetComments: iComment[] =
         pages?.reduce(
-            (res: iComment[], curr: { data: iComment[]; total: number }) => [
+            (res: iComment[], curr: { data: iComment[]; total: number; }) => [
                 ...res,
                 ...curr.data,
             ],
@@ -112,5 +123,5 @@ export const useComment = ({
 
         createCommentMutation,
         deleteCommentMutation
-    }
+    };
 };

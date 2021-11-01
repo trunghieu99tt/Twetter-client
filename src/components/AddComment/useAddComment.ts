@@ -5,9 +5,15 @@ import { TMedia } from "@type/app.types";
 import { ChangeEvent, useState } from "react";
 import { v4 } from "uuid";
 
+type Props = {
+    tweetId: string;
+    commentId?: string;
+};
+
 export const useAddComment = ({
-    tweetId = ""
-}) => {
+    tweetId,
+    commentId
+}: Props) => {
 
     const [comment, setComment] = useState<string>("");
     const [media, setMedia] = useState<TMedia | null>(null);
@@ -17,7 +23,7 @@ export const useAddComment = ({
 
     const { createCommentMutation } = useComment({
         userId: user?._id,
-        tweetId
+        tweetId,
     });
 
     const onChangeComment = (event: ChangeEvent<HTMLInputElement>) => {
@@ -56,7 +62,7 @@ export const useAddComment = ({
         };
         createCommentMutation.mutate({
             newComment,
-            tweetId
+            parentId: commentId || tweetId
         }, {
             onSettled: () => {
                 resetFields();

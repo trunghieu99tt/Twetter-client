@@ -27,10 +27,11 @@ import MediaViewer from "@components/MediaViewer";
 
 type Props = {
     tweetId: string;
+    commentId?: string;
     addCommentRef: React.RefObject<HTMLInputElement>;
 };
 
-const AddComment = ({ addCommentRef, tweetId }: Props) => {
+const AddComment = ({ tweetId, commentId = "", addCommentRef }: Props) => {
     const {
         user,
         media,
@@ -43,11 +44,14 @@ const AddComment = ({ addCommentRef, tweetId }: Props) => {
         onChangeComment,
     } = useAddComment({
         tweetId,
+        commentId,
     });
+
+    const shouldIndent = !!commentId;
 
     return (
         <React.Fragment>
-            <Wrapper onSubmit={onSubmit}>
+            <Wrapper onSubmit={onSubmit} shouldIndent={shouldIndent}>
                 <UserAvatarSmall user={user} />
                 <InputWrapper>
                     <Input
@@ -62,13 +66,15 @@ const AddComment = ({ addCommentRef, tweetId }: Props) => {
                             <Spinner2 customStyles="--size: 20px" />
                         </InputLoading>
                     )}
-                    <FileInputLabel htmlFor={`comment-file-${tweetId}`}>
+                    <FileInputLabel
+                        htmlFor={`comment-file-${commentId || tweetId}`}
+                    >
                         <BsCardImage />
                     </FileInputLabel>
                     <FileInput
                         type="file"
                         name="comment-file"
-                        id={`comment-file-${tweetId}`}
+                        id={`comment-file-${commentId || tweetId}`}
                         onChange={onChangeFile}
                     />
                 </InputWrapper>

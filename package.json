@@ -100,5 +100,8 @@
   },
   "resolutions": {
     "styled-components": "^5"
+  },
+  "devDependencies": {
+    "@welldone-software/why-did-you-render": "^6.2.1"
   }
 }

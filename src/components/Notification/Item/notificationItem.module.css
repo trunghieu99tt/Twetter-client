@@ -6,6 +6,7 @@
     padding: 1rem;
     border-radius: 1rem;
     margin-bottom: 1.5rem;
+    width: 100%;
 }
 
 .root.unread {

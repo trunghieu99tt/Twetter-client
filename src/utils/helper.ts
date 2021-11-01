@@ -69,7 +69,7 @@ const calcDiffTimeString = (date: Date): string => {
         return `${Math.floor(diff / 3600)} hours ago`;
     }
 
-    return `${Math.floor(diff / 86400)} days ago`;
+    return date.toLocaleDateString();
 
 };
 
