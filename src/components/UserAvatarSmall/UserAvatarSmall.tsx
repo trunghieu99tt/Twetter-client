@@ -40,10 +40,10 @@ const UserAvatarSmall = ({ user, customStyles }: Props) => {
 
     return (
         <ImageWithPlaceholder
-            src={user.avatar || ""}
+            src={user?.avatar || ""}
             defaultSrc={defaultSrc}
-            alt={`${user.name} avatar`}
-            key={user.avatar}
+            alt={`${user?.name} avatar`}
+            key={user?.avatar}
             customStyles={`--size: 3.5rem;
                 width: var(--size);
                 height: var(--size);

@@ -3,9 +3,6 @@ import styled from "styled-components";
 export const Wrapper = styled('div') <{
     shouldIndent?: boolean;
 }>`
-    display: flex;
-    gap: 1rem;
-    ${props => props.shouldIndent ? '' : 'transform: translateX(-4rem)'}
     margin-bottom: ${props => props.shouldIndent ? '1.8rem' : '1rem'};
 `;
 
@@ -27,17 +24,17 @@ export const MainInfo = styled.div`
 `;
 
 export const AuthorName = styled.p`
-    font-size: 1.4rem;
+    font-size: 1.3rem;
     font-weight: 500;
+    color: var(--gray-2);
 `;
 
 export const Content = styled.p`
-    color: var(--gray-2);
-    font-size: 1.6rem;
+    font-size: 1.4rem;
 `;
 
 export const CreatedAt = styled.p`
-    font-size: 1.2rem;
+    font-size: 1.1rem;
     color: var(--gray-4);
 `;
 

@@ -7,6 +7,7 @@ export interface iComment {
     media: string;
     author: iUser;
     content: string;
+    isChild?: boolean;
     isEdited: boolean;
     createdAt: string;
     modifiedAt: string;
