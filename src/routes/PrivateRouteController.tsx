@@ -1,5 +1,11 @@
 import { Route, Switch } from "react-router-dom";
 
+// talons
+import { useRoom } from "@talons/useRoom";
+import { useStory } from "@talons/useStory";
+import { useNotify } from "@talons/useNotify";
+import { useHashtag } from "@talons/useHashtag";
+
 // pages
 import Chat from "@pages/Chat";
 import HashTag from "@pages/HashTag";
@@ -18,8 +24,18 @@ import PrivateRoute from "@components/routes/PrivateRoute";
 
 // routes
 import { HASHTAG_ROUTES, STORY_ROUTES } from "./routes";
+import { useEffect } from "react";
 
 const PrivateRouteController = () => {
+    const storyTalons = useStory();
+    const notificationTalons = useNotify();
+    const hashtagTalons = useHashtag();
+    const { getAllUserRooms } = useRoom();
+
+    useEffect(() => {
+        getAllUserRooms();
+    }, []);
+
     return (
         <Switch>
             <PrivateRoute path="/" exact component={NewsFeed} />

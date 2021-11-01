@@ -1,4 +1,3 @@
-import { ChangeEvent } from "react";
 import DatePicker from "react-datepicker";
 
 // talons
@@ -19,6 +18,7 @@ import {
     EditItemInput,
 } from "./EditInfoStyle";
 import { Flex } from "@shared/style/sharedStyle.style";
+import { Spinner1 } from "@components/Loaders";
 
 interface Props {
     data: iUser;
@@ -32,25 +32,25 @@ const EditInfo = ({ data, onCancel }: Props) => {
         name,
         newCover,
         newAvatar,
-        isDisabledUpdate,
+        updating,
 
-        setBio,
         setDob,
-        setName,
         onUpdateInfo,
+        onChangeField,
         onChangePicture,
         onCancelChangePicture,
-    } = useEditInfo({ data });
+    } = useEditInfo({ data, closeForm: onCancel });
 
     const body = (
         <Wrapper>
+            {updating && <Spinner1 />}
             <Flex gap="5rem">
                 <EditItem>
                     <EditItemLabel>Cover Photo</EditItemLabel>
                     <ImageWithUpdater
                         data={newCover}
                         name="coverPhoto"
-                        isDisabledUpdate={isDisabledUpdate}
+                        isDisabledUpdate={updating}
                         image={newCover?.preview || data?.coverPhoto}
                         id={`update-cover-photo-${data._id}`}
                         onCancel={() => onCancelChangePicture("coverPhoto")}
@@ -62,7 +62,7 @@ const EditInfo = ({ data, onCancel }: Props) => {
                     <ImageWithUpdater
                         data={newAvatar}
                         name="avatar"
-                        isDisabledUpdate={isDisabledUpdate}
+                        isDisabledUpdate={updating}
                         image={newAvatar?.preview || data?.avatar}
                         id={`update-avatar-photo-${data._id}`}
                         onCancel={() => onCancelChangePicture("avatar")}
@@ -73,19 +73,17 @@ const EditInfo = ({ data, onCancel }: Props) => {
             <EditItem>
                 <EditItemLabel>Name</EditItemLabel>
                 <EditItemInput
+                    name="name"
                     value={name}
-                    onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                        setName(e.target.value)
-                    }
+                    onChange={(e) => onChangeField(e, 50)}
                 />
             </EditItem>
             <EditItem>
                 <EditItemLabel>Bio</EditItemLabel>
                 <EditItemInput
+                    name="bio"
                     value={bio}
-                    onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                        setBio(e.target.value)
-                    }
+                    onChange={(e) => onChangeField(e, 100)}
                 />
             </EditItem>
             <EditItem>
@@ -93,6 +91,7 @@ const EditInfo = ({ data, onCancel }: Props) => {
                 <DatePicker
                     selected={dob}
                     onChange={(date: Date) => setDob(date)}
+                    maxDate={new Date()}
                 />
             </EditItem>
         </Wrapper>
@@ -103,10 +102,7 @@ const EditInfo = ({ data, onCancel }: Props) => {
             header={<h3>Change user info</h3>}
             isOpen={true}
             body={body}
-            onOk={() => {
-                onUpdateInfo();
-                onCancel();
-            }}
+            onOk={onUpdateInfo}
             onCancel={onCancel}
         />
     );

@@ -4,18 +4,10 @@ import { MutableRefObject, useEffect, useRef } from "react";
 import { useHistory, useLocation } from "react-router";
 import { useUser } from "./useUser";
 import Peer from "peerjs";
-import { useRoom } from "./useRoom";
-import { useStory } from "./useStory";
-import { useNotify } from "./useNotify";
-import { useHashtag } from "./useHashtag";
 
 
 export const useApp = () => {
-    const storyTalons = useStory();
-    const notificationTalons = useNotify();
-    const hashtagTalons = useHashtag();
     const { user, getMeQuery } = useUser();
-    const { getAllUserRooms } = useRoom();
     const history = useHistory();
     const location = useLocation();
     const currentPathRef = useRef(null) as MutableRefObject<string | null>;
@@ -34,7 +26,6 @@ export const useApp = () => {
             type: 'SET_PEER',
             payload: newPeer,
         });
-        getAllUserRooms();
     }, []);
 
     useEffect(() => {
@@ -44,8 +35,6 @@ export const useApp = () => {
                 history.push("/auth");
             }
         } else {
-            storyTalons.refetchAll();
-            notificationTalons.refetchAll();
             if (windowHref.includes("auth")) {
                 if (
                     currentPathRef.current &&

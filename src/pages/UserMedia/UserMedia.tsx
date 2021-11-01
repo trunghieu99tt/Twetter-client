@@ -23,7 +23,7 @@ const UserMedia = () => {
     const params: { userId: string } = useParams();
     const { userId } = params;
 
-    const { getProfileTweetsQuery } = useTweets(userId);
+    const { getUserMediasQuery } = useTweets(userId);
     const { user: me, getUserQuery } = useUser(userId);
 
     const userData = userId === me?._id ? me : getUserQuery.data;
@@ -42,7 +42,7 @@ const UserMedia = () => {
                             <LeftSidebar type="PROFILE" />
                         </Sidebar>
                         <Main>
-                            <InfinityMediaList query={getProfileTweetsQuery} />
+                            <InfinityMediaList query={getUserMediasQuery} />
                         </Main>
                     </Content>
                 </Container>

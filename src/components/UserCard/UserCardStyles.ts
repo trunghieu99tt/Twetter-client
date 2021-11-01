@@ -8,6 +8,8 @@ export const Wrapper = styled.article`
     border-bottom: 1px solid var(--gray-5);
     padding: 2rem;
     box-shadow: var(--box-shadow-1);
+    margin-bottom: 1rem;
+    border-radius: .8rem;
 `;
 
 export const UserName = styled.p`

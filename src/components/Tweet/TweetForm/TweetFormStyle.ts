@@ -14,6 +14,7 @@ export const HeadLine = styled.div`
     border-bottom: 1px solid var(--gray-5);
     font-weight: 600;
     margin-bottom: .8rem;
+    font-size: 1.2rem;
 `;
 
 export const Main = styled.div`

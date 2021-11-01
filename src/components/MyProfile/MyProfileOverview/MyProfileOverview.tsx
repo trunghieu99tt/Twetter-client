@@ -46,7 +46,7 @@ const MyProfileOverview = ({ user }: Props) => {
         newAvatar,
         followed,
         listType,
-        isDisabledUpdate,
+        updating,
         isVisibleEditForm,
         updatingFollowStatus,
         followerOrFollowingList,
@@ -119,7 +119,7 @@ const MyProfileOverview = ({ user }: Props) => {
                     <ImageWithUpdater
                         data={newAvatar}
                         name="coverPhoto"
-                        isDisabledUpdate={isDisabledUpdate}
+                        isDisabledUpdate={updating}
                         id={`update-user-avatar-${user._id}`}
                         wrapperCustomStyles="margin-top: -7.5rem;"
                         image={newAvatar?.preview || user?.avatar}

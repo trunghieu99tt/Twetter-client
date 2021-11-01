@@ -59,7 +59,9 @@ export const LikeCounter = styled.div`
     word-spacing: .5rem;
 `;
 
-export const RepliesWrapper = styled.div``;
+export const RepliesWrapper = styled.div`
+    margin-top: 1rem;
+`;
 
 export const CommentMedia = styled.div`
     height: 15rem;

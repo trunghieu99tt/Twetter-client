@@ -1,5 +1,5 @@
 import { getInfinityList } from "@utils/query";
-import { DEFAULT_LIST_RESPONSE, INFINITY_QUERY_LIST_CONFIG, MESSAGE_LIST_LIMIT } from "constants/config.constant";
+import { DEFAULT_LIST_RESPONSE, generateInfinityQueryListConfig, MESSAGE_LIST_LIMIT } from "constants/config.constant";
 import { MESSAGES_QUERIES, MESSAGE_ENDPOINTS } from "constants/message.constants";
 import { QueryFunctionContext, useInfiniteQuery } from "react-query";
 
@@ -14,15 +14,15 @@ const getMessages = async (
     if (roomId) {
         return getInfinityList(`${MESSAGE_ENDPOINTS.BASE}/${roomId}`, pageParam, {
             limit: MESSAGE_LIST_LIMIT
-        })
+        });
     }
-}
+};
 
 export const useMessage = (roomId: string) => {
 
-    const getMessagesQuery = useInfiniteQuery([MESSAGES_QUERIES.GET_MESSAGES, roomId], getMessages, INFINITY_QUERY_LIST_CONFIG);
+    const getMessagesQuery = useInfiniteQuery([MESSAGES_QUERIES.GET_MESSAGES, roomId], getMessages, generateInfinityQueryListConfig());
 
     return {
         getMessagesQuery
-    }
-}
+    };
+};

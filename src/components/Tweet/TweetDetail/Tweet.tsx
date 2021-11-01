@@ -54,7 +54,7 @@ import {
     InteractionSummaryItem,
     InteractionButtonGroup,
 } from "./TweetStyle";
-import { stopPropagation } from "@utils/helper";
+import { calcDiffTimeString, stopPropagation } from "@utils/helper";
 import CustomLinkPreview from "@components/CustomLinkPreview";
 import { HASHTAG_ROUTES } from "routes/routes";
 
@@ -159,9 +159,7 @@ const Tweet = ({ tweet }: Props) => {
                                 <AuthorName>{tweet.author.name}</AuthorName>
                             </Link>
                             <DateCreated>
-                                {new Date(tweet.createdAt).toLocaleString(
-                                    "en-US"
-                                )}
+                                {calcDiffTimeString(tweet?.createdAt)}
                             </DateCreated>
                         </div>
                     </AuthorWrapper>

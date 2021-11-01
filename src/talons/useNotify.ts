@@ -18,7 +18,7 @@ import {
     NOTIFICATION_QUERIES,
 } from "constants/notify.constants";
 import {
-    INFINITY_QUERY_LIST_CONFIG,
+    generateInfinityQueryListConfig,
 } from "constants/config.constant";
 
 // types
@@ -76,7 +76,7 @@ export const useNotify = () => {
     const getNotificationsQuery = useInfiniteQuery(
         NOTIFICATION_QUERIES.GET_NOTIFICATIONS,
         getNotifications,
-        INFINITY_QUERY_LIST_CONFIG
+        generateInfinityQueryListConfig()
     );
 
     // read notifies

@@ -58,7 +58,7 @@ export const useMyProfileOverview = ({
         }
     };
 
-    const onCancelChangeAvatar = () =>
+    const resetData = () =>
         setNewAvatar({
             file: null,
             preview: "",
@@ -69,13 +69,13 @@ export const useMyProfileOverview = ({
             setUpdating(true);
             try {
                 const newAvatarUrl = await uploadImage(newAvatar.file);
-                updateUserMutation.mutate({
+                await updateUserMutation.mutateAsync({
                     updatedUser: {
                         avatar: newAvatarUrl,
                     },
                     userId: user?._id,
                 });
-                onCancelChangeAvatar();
+                resetData();
             } catch (error) {
                 console.log("error: ", error);
             }
@@ -119,17 +119,20 @@ export const useMyProfileOverview = ({
 
     switch (listType) {
         case "followers":
-            followerOrFollowingList = followers;
+            followerOrFollowingList = followers.filter((u: iUser) => {
+                return u._id !== user._id;
+            });
             break;
         case "following":
-            followerOrFollowingList = following;
+            followerOrFollowingList = following.filter((u: iUser) => {
+                return u._id !== user._id;
+            });
             break;
         default:
             followerOrFollowingList = [];
     }
 
     const isMe = currentUser?._id === user?._id || false;
-    const isDisabledUpdate = updating || updateUserMutation.isLoading;
 
 
     return {
@@ -140,7 +143,6 @@ export const useMyProfileOverview = ({
         modalType,
         updating,
         newAvatar,
-        isDisabledUpdate,
         isVisibleEditForm,
         followerOrFollowingList,
         updatingFollowStatus: followUserMutation.isLoading,
@@ -152,7 +154,7 @@ export const useMyProfileOverview = ({
         onChangeAvatar,
         updateUserAvatar,
         updateFollowStatus,
-        onCancelChangeAvatar,
+        onCancelChangeAvatar: resetData,
         setIsVisibleEditForm,
     };
 };

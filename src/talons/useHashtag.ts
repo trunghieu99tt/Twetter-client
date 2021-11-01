@@ -17,12 +17,7 @@ const updateHashtag = async ({
     count
 }: iUpdateHashtagDTO) => {
 
-    console.log(`name`, name);
-    console.log(`count`, count);
-
     const url = `${HASHTAG_ENDPOINTS.BASE}/${name.substr(1)}`;
-
-    console.log(`url`, url);
 
     const response = await client.patch(`${HASHTAG_ENDPOINTS.BASE}/${name.substr(1)}`, { count });
     return response.data;
@@ -61,13 +56,13 @@ export const useHashtag = () => {
 
         const updateHashtagObjects: iUpdateHashtagDTO[] = [];
 
-        newHashtags.forEach((tag: string) => {
+        newHashtags?.forEach((tag: string) => {
             if (!oldTagsExistenceMap[tag]) {
                 updateHashtagObjects.push({ name: tag, count: 1 });
             }
         });
 
-        oldHashtags.forEach((tag: string) => {
+        oldHashtags?.forEach((tag: string) => {
             if (!newTagsExistenceMap[tag]) {
                 updateHashtagObjects.push({ name: tag, count: -1 });
             }

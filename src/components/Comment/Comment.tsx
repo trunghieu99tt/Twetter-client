@@ -70,13 +70,12 @@ const Comment = ({ data, level = 0 }: Props) => {
                             </CommentMedia>
                         )}
                     </MainInfo>
-                    <Flex>
+                    <Flex gap="1rem">
                         <Interaction>
                             <LikeButton>
                                 <AiOutlineHeart />
                                 Like
                             </LikeButton>
-                            <span>.</span>
                             {likeCount > 0 && (
                                 <LikeCounter>
                                     {likeCount}{" "}

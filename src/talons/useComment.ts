@@ -12,9 +12,8 @@ import { iComment, iCreateCommentDTO } from "@type/comments.types";
 // constants
 import {
     DEFAULT_LIST_RESPONSE,
-    INFINITY_QUERY_LIST_CONFIG,
-}
-    from "constants/config.constant";
+    generateInfinityQueryListConfig,
+} from "constants/config.constant";
 import { COMMENT_ENDPOINTS, COMMENT_QUERY } from "constants/comment.constants";
 
 
@@ -71,13 +70,13 @@ export const useComment = ({
     const getMyCommentsQuery = useInfiniteQuery(
         [COMMENT_QUERY.GET_MY_COMMENTS, userId],
         getMyComments,
-        INFINITY_QUERY_LIST_CONFIG);
+        generateInfinityQueryListConfig());
 
     const getTweetCommentsQuery = useInfiniteQuery(
         [COMMENT_QUERY.GET_TWEET_COMMENTS, tweetId],
         getTweetComments,
         {
-            ...INFINITY_QUERY_LIST_CONFIG,
+            ...generateInfinityQueryListConfig(),
             retry: false
         });
 
