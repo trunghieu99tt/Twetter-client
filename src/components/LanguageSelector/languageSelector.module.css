@@ -1,0 +1,48 @@
+.root {
+    position: relative;
+    min-width: 5rem;
+    color: #fff;
+    z-index: 1;
+    width: 100%;
+}
+
+.list {
+    position: absolute;
+    background-color: #fff;
+    padding: 0.5rem;
+    min-width: 6rem;
+    left: 0;
+    width: 100%;
+    z-index: 1;
+}
+
+.listItem {
+    margin-bottom: 1rem;
+    background: rgba(256, 256, 256, 0.2);
+    border-radius: 5px;
+}
+
+.listItem:last-of-type {
+    margin-bottom: 0;
+}
+
+.listItem button,
+.curr {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.icon {
+    --size: 2rem;
+    width: var(--size);
+    height: var(--size);
+    object-fit: cover;
+}
+
+@media (max-width: 1024px) {
+    .root {
+        top: 0;
+        right: 0;
+    }
+}

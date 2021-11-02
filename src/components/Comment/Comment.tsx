@@ -1,3 +1,13 @@
+import { useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
+
+// utils
+import { calcDiffTimeString } from "@utils/helper";
+
+// components
+import AddComment from "@components/AddComment";
+import MediaViewer from "@components/MediaViewer";
+
 // types
 import { iComment } from "@type/comments.types";
 
@@ -19,11 +29,7 @@ import {
     CommentMedia,
     RepliesWrapper,
 } from "./CommentStyle";
-import MediaViewer from "@components/MediaViewer";
-import AddComment from "@components/AddComment";
-import { useRef, useState } from "react";
 import { Flex } from "@shared/style/sharedStyle.style";
-import { calcDiffTimeString } from "@utils/helper";
 
 interface Props {
     data: iComment;
@@ -31,6 +37,8 @@ interface Props {
 }
 
 const Comment = ({ data, level = 0 }: Props) => {
+    const { t } = useTranslation();
+
     const likeCount = data?.likes?.length || 0;
 
     const [shouldShowReplyForm, setShouldShowReplyForm] = useState(false);
@@ -74,19 +82,21 @@ const Comment = ({ data, level = 0 }: Props) => {
                         <Interaction>
                             <LikeButton>
                                 <AiOutlineHeart />
-                                Like
+                                {t("like")}
                             </LikeButton>
                             <span>.</span>
                             {likeCount > 0 && (
                                 <LikeCounter>
                                     {likeCount}{" "}
-                                    {likeCount === 1 ? " Like" : " Likes"}
+                                    {likeCount === 1
+                                        ? ` ${t("like")}`
+                                        : ` ${t("like")}s`}
                                 </LikeCounter>
                             )}
                         </Interaction>
                         {!data?.isChild && (
                             <Interaction onClick={onFocusCommentForm}>
-                                Reply
+                                {t("reply")}
                             </Interaction>
                         )}
                     </Flex>

@@ -1,12 +1,20 @@
-import { useNotify } from "@talons/useNotify";
-import { useUser } from "@talons/useUser";
-import { iNotification } from "@type/notify.types";
+import { useTranslation } from "react-i18next";
 
+// talons
+import { useUser } from "@talons/useUser";
+import { useNotify } from "@talons/useNotify";
+
+// components
 import NotificationItem from "../Item/NotificationItem";
 
+// types
+import { iNotification } from "@type/notify.types";
+
+// styles
 import classes from "./notificationList.module.css";
 
 const NotificationList = () => {
+    const { t } = useTranslation();
     const { readNotificationAction, getNotificationsQuery } = useNotify();
     const { user } = useUser();
 
@@ -43,13 +51,13 @@ const NotificationList = () => {
     return (
         <div className={classes.root}>
             <div className={classes.header}>
-                <p>Notifications</p>
+                <p>{t("notification")}</p>
                 {isNotRead > 0 && (
                     <button
                         onClick={markAllAsRead}
                         className={classes.readAllBtn}
                     >
-                        Read all
+                        {t("readAll")}
                     </button>
                 )}
             </div>

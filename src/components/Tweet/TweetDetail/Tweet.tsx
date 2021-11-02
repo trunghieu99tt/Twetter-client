@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { v4 } from "uuid";
 import nl2br from "react-nl2br";
 import reactStringReplace from "react-string-replace";
+import { useTranslation } from "react-i18next";
 
 // talons
 import { useTweet } from "./useTweet";
@@ -63,6 +64,7 @@ type Props = {
 };
 
 const Tweet = ({ tweet }: Props) => {
+    const { t } = useTranslation();
     const {
         urls,
         liked,
@@ -177,11 +179,11 @@ const Tweet = ({ tweet }: Props) => {
                                         onClick={() => setVisibleEditForm(true)}
                                     >
                                         <AiOutlineEdit />
-                                        Edit
+                                        {t("edit")}
                                     </AuthorAction>,
                                     <AuthorAction onClick={onDeleteTweet}>
                                         <AiOutlineDelete />
-                                        Delete
+                                        {t("delete")}
                                     </AuthorAction>,
                                 ]}
                             ></Dropdown>
@@ -245,38 +247,38 @@ const Tweet = ({ tweet }: Props) => {
                                     : " comments"}
                             </InteractionSummaryItem>
                             <InteractionSummaryItem>
-                                {tweetRetweetCount} retweeted
+                                {tweetRetweetCount} {t("retweeted")}
                             </InteractionSummaryItem>
                             <InteractionSummaryItem>
-                                {tweetSavedCount} saved
+                                {tweetSavedCount} {t("saved")}
                             </InteractionSummaryItem>
                         </InteractionSummary>
 
                         <InteractionButtonGroup>
                             <InteractionButton onClick={focusOnCommentForm}>
                                 <BiComment />
-                                Comment
+                                {t("comment")}
                             </InteractionButton>
                             <InteractionButton
                                 onClick={onRetweet}
                                 retweeted={retweeted}
                             >
                                 <FiRefreshCw />
-                                Retweet
+                                {t("retweet")}
                             </InteractionButton>
                             <InteractionButton
                                 onClick={onReactTweet}
                                 liked={liked}
                             >
                                 <FaRegHeart />
-                                {liked ? "Liked" : "Like"}
+                                {liked ? t("liked") : t("like")}
                             </InteractionButton>
                             <InteractionButton
                                 onClick={onSaveTweet}
                                 saved={saved}
                             >
                                 <BiBookmark />
-                                {saved ? "Saved" : "Save"}
+                                {saved ? t("saved") : t("save")}
                             </InteractionButton>
                         </InteractionButtonGroup>
                     </Interaction>
@@ -288,7 +290,7 @@ const Tweet = ({ tweet }: Props) => {
                     })}
                     {totalTweetComments > tweetComments.length && (
                         <button onClick={() => fetchMoreTweetComment()}>
-                            Load more comments
+                            {t("loadMoreComment")}
                         </button>
                     )}
                 </CommentsWrapper>

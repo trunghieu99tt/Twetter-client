@@ -1,5 +1,5 @@
 import React from "react";
-
+import { useTranslation } from "react-i18next";
 import { useParams } from "react-router";
 
 // talons
@@ -10,16 +10,17 @@ import { useTweets } from "@talons/useTweets";
 import MainLayout from "@layout/Main";
 
 // components
+import PageMetadata from "@components/PageMetadata";
 import LeftSidebar from "@components/Sidebar/LeftSidebar";
 import MyProfileOverview from "@components/MyProfile/MyProfileOverview";
 import InfinityMediaList from "@components/InfinityLists/InfinityMediaList";
 
 // styles
-import { Wrapper, Content, Main, Sidebar } from "./userMediaStyle";
 import { Container } from "@shared/style/sharedStyle.style";
-import PageMetadata from "@components/PageMetadata";
+import { Wrapper, Content, Main, Sidebar } from "./userMediaStyle";
 
 const UserMedia = () => {
+    const { t } = useTranslation();
     const params: { userId: string } = useParams();
     const { userId } = params;
 
@@ -32,7 +33,7 @@ const UserMedia = () => {
 
     return (
         <React.Fragment>
-            <PageMetadata title={`${userData.name}'s media`} />
+            <PageMetadata title={`${userData.name}'s ${t("media")}`} />
 
             <Wrapper>
                 <MyProfileOverview user={userData} />

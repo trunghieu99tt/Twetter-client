@@ -1,6 +1,3 @@
-import { useStory } from "@talons/useStory";
-import { iStory } from "@type/story.types";
-import { Link } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 import { storiesState } from "states/story.state";
 import StoryItem from "../StoryItem";

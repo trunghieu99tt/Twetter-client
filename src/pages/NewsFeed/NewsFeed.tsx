@@ -1,6 +1,6 @@
 import React from "react";
 import { useQueryClient } from "react-query";
-import { Helmet } from "react-helmet-async";
+import { useTranslation } from "react-i18next";
 
 // talons
 import { useTweets } from "@talons/useTweets";
@@ -32,6 +32,8 @@ import {
 import PageMetadata from "@components/PageMetadata";
 
 const NewsFeed = () => {
+    const { t } = useTranslation();
+
     const user: iUser | undefined = useQueryClient().getQueryData(
         USER_QUERY.GET_ME
     );
@@ -40,7 +42,7 @@ const NewsFeed = () => {
 
     return (
         <React.Fragment>
-            <PageMetadata title="New feed" />
+            <PageMetadata title={t("newsFeed")} />
             <Wrapper>
                 <Container>
                     <Inner>

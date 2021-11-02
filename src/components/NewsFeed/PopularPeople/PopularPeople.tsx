@@ -1,3 +1,5 @@
+import { useTranslation } from "react-i18next";
+
 // talons
 import { useUser } from "@talons/useUser";
 
@@ -26,6 +28,8 @@ import {
 } from "./PopularPeopleStyle";
 
 const PopularPeople = () => {
+    const { t } = useTranslation();
+
     const { getLimitedPopularUsersQuery, user: currentUser } = useUser();
 
     const data: iUser[] = getLimitedPopularUsersQuery?.data || [];
@@ -61,15 +65,15 @@ const PopularPeople = () => {
                             </UserName>
                             <UserFollowers>
                                 {nFormatter(followersCount)}
-                                {followersCount > 1
-                                    ? " followers"
-                                    : " follower"}
+                                {`${t("followers")}${
+                                    followersCount > 1 ? "s" : ""
+                                }`}
                             </UserFollowers>
                         </div>
                     </Flex>
                     <FollowButton>
                         <IoPersonAdd />
-                        Follow
+                        {t("follow")}
                     </FollowButton>
                 </Flex>
                 <UserBio>{user?.bio}</UserBio>
@@ -78,7 +82,7 @@ const PopularPeople = () => {
         );
     });
 
-    return <SidebarBlock title="Who to follow" content={items} />;
+    return <SidebarBlock title={t("whoToFollow")} content={items} />;
 };
 
 export default PopularPeople;

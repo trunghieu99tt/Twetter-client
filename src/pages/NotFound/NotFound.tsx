@@ -1,5 +1,6 @@
 import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 import {
     Root,
@@ -10,10 +11,12 @@ import {
 } from "./NotFoundStyles";
 
 const NotFound = () => {
+    const { t } = useTranslation();
+
     return (
         <Root>
             <Helmet>
-                <title>Not found</title>
+                <title>{t("notFound")}</title>
             </Helmet>
             <Main>
                 <HeadingContainer>
@@ -21,9 +24,9 @@ const NotFound = () => {
                         4<span>0</span>4
                     </Heading>
                 </HeadingContainer>
-                <Description>Không tìm thấy trang yêu cầu.</Description>
+                <Description>{t("pageNotFound")}</Description>
                 <Link to="/">
-                    <button>Quay về trang chủ</button>
+                    <button>{t("returnToHomepage")}</button>
                 </Link>
             </Main>
         </Root>

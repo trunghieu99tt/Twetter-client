@@ -13,6 +13,7 @@ export const Wrapper = styled.div`
     transform: translateY(1rem);
     background: #fff;
     min-width: 20rem;
+    z-index: 1;
 `;
 
 export const DropdownList = styled.ul``;

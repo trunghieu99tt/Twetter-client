@@ -1,11 +1,17 @@
-import React, { ChangeEvent, useState } from "react";
+import { ChangeEvent, useState } from "react";
 import { fabric } from "fabric";
 import { FabricJSCanvas, useFabricJSEditor } from "fabricjs-react";
+import { useTranslation } from "react-i18next";
 
-import classes from "./imageStory.module.css";
-import { BsCardImage } from "react-icons/bs";
-import { Flex } from "@shared/style/sharedStyle.style";
+// talons
 import { useUpload } from "@talons/useUpload";
+
+// icons
+import { BsCardImage } from "react-icons/bs";
+
+//styles
+import classes from "./imageStory.module.css";
+import { Flex } from "@shared/style/sharedStyle.style";
 
 interface Props {
     onCancel: () => void;
@@ -13,6 +19,7 @@ interface Props {
 }
 
 const ImageStory = ({ onCancel, onSubmit }: Props) => {
+    const { t } = useTranslation();
     const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
     const [file, setFile] = useState<File | null>(null);
 
@@ -28,7 +35,7 @@ const ImageStory = ({ onCancel, onSubmit }: Props) => {
     const onAddText = () => {
         try {
             editor?.canvas.add(
-                new fabric.Textbox("Type something...", {
+                new fabric.Textbox(`${t("typeSomething")} ...`, {
                     fill: "#000",
                     fontSize: 20,
                     fontFamily: "Arial",
@@ -108,13 +115,13 @@ const ImageStory = ({ onCancel, onSubmit }: Props) => {
                             className={classes.addTextBtn}
                             onClick={onAddText}
                         >
-                            Add Text
+                            {t("addText")}
                         </button>
                         <button
                             className={classes.deleteSelections}
                             onClick={deleteSelections}
                         >
-                            Delete selections
+                            {t("deleteSelections")}
                         </button>
                     </aside>
                 )}
@@ -135,7 +142,7 @@ const ImageStory = ({ onCancel, onSubmit }: Props) => {
                                 className={classes.imageFormLabel}
                             >
                                 <BsCardImage />
-                                <p>Upload Image</p>
+                                <p>{t("updateImage")}</p>
                             </label>
                         </div>
                     )}
@@ -151,10 +158,10 @@ const ImageStory = ({ onCancel, onSubmit }: Props) => {
                     onClick={saveToServer}
                     disabled={!isSubmitted}
                 >
-                    Save
+                    {t("save")}
                 </button>
                 <button className={classes.cancelBtn} onClick={onCancel}>
-                    Cancel
+                    {t("cancel")}
                 </button>
             </div>
         </div>

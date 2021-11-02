@@ -1,4 +1,5 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 
 // talons
 import { useUser } from "@talons/useUser";
@@ -44,6 +45,8 @@ interface Props {
 }
 
 const TweetForm = ({ tweet, onCancel }: Props) => {
+    const { t } = useTranslation();
+
     const {
         body,
         media,
@@ -82,7 +85,7 @@ const TweetForm = ({ tweet, onCancel }: Props) => {
         <React.Fragment>
             {loading && <Spinner1 />}
             <Wrapper>
-                {!tweet && <HeadLine>Tweet something...</HeadLine>}
+                {!tweet && <HeadLine>{t("whatOnYourMind")}</HeadLine>}
                 <Main>
                     <UserAvatarSmall user={user} />
                     <div>
@@ -140,7 +143,7 @@ const TweetForm = ({ tweet, onCancel }: Props) => {
                                 }}
                                 disabled={loading}
                             >
-                                {!tweet ? "Tweet" : "Update"}
+                                {!tweet ? t("tweet") : t("update")}
                             </TweetSubmitButton>
                         </Footer>
                     </div>

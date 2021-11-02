@@ -17,6 +17,8 @@ import App from "./App";
 import { RecoilRoot } from "recoil";
 import { HelmetProvider } from "react-helmet-async";
 
+import "./i18.config";
+
 // Create a client
 const queryClient = new QueryClient();
 

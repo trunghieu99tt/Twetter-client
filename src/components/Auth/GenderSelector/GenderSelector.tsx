@@ -1,6 +1,6 @@
-import React from "react";
-import { useState, useRef } from "react";
+import React, { useState, useRef } from "react";
 import { v4 as uuid } from "uuid";
+import { useTranslation } from "react-i18next";
 
 // talons
 import { useOnClickOutside } from "@hooks/useOnClickOutside";
@@ -20,27 +20,6 @@ import {
     GenderSelectionItem,
 } from "./GenderSelectorStyle";
 
-const genderSelections = [
-    {
-        value: 0,
-        label: "Male",
-        id: uuid(),
-        icon: <IoMdMale />,
-    },
-    {
-        value: 1,
-        label: "Female",
-        id: uuid(),
-        icon: <IoMdFemale />,
-    },
-    {
-        value: 2,
-        label: "Others",
-        id: uuid(),
-        icon: <IoMaleFemaleSharp />,
-    },
-];
-
 type Props = {
     gender: number;
     setGender: (audience: number) => void;
@@ -48,12 +27,33 @@ type Props = {
 
 const GenderSelector = ({ gender, setGender }: Props) => {
     const [visibleDropdown, setVisibleDropdown] = useState<boolean>(false);
-
     const dropdownRef = useRef() as React.RefObject<HTMLDivElement>;
+    const { t } = useTranslation();
 
     const toggleDropdown = () => setVisibleDropdown((isVisible) => !isVisible);
 
     useOnClickOutside(dropdownRef, () => setVisibleDropdown(false));
+
+    const genderSelections = [
+        {
+            value: 0,
+            label: t("male"),
+            id: uuid(),
+            icon: <IoMdMale />,
+        },
+        {
+            value: 1,
+            label: t("female"),
+            id: uuid(),
+            icon: <IoMdFemale />,
+        },
+        {
+            value: 2,
+            label: t("other"),
+            id: uuid(),
+            icon: <IoMaleFemaleSharp />,
+        },
+    ];
 
     const renderGender = () => {
         const { label, icon } = genderSelections[gender];

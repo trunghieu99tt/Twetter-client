@@ -1,8 +1,10 @@
 import React, { useRef, useState, useMemo } from "react";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 // talons
 import { useUser } from "@talons/useUser";
+import { useAuth } from "@components/Auth/useAuth";
 import { useOnClickOutside } from "@hooks/useOnClickOutside";
 
 // components
@@ -11,10 +13,7 @@ import UserAvatarSmall from "@components/UserAvatarSmall";
 
 // icons
 import { BsFillCaretDownFill } from "react-icons/bs";
-import { MdSupervisorAccount } from "react-icons/md";
 import { RiLogoutBoxRLine, RiAccountCircleFill } from "react-icons/ri";
-
-// mock data
 
 // styles
 import {
@@ -24,9 +23,10 @@ import {
     LogoutButton,
     Wrapper,
 } from "./MyAccountStyle";
-import { useAuth } from "@components/Auth/useAuth";
+import LanguageSelector from "@components/LanguageSelector";
 
 const MyAccountMenu = () => {
+    const { t } = useTranslation();
     const [visibleDropdown, setVisibleDropdown] = useState<boolean>(false);
 
     const { user } = useUser();
@@ -43,15 +43,12 @@ const MyAccountMenu = () => {
         () => [
             <Link to={`/profile/${user?._id}`}>
                 <RiAccountCircleFill></RiAccountCircleFill>
-                <p>Profile</p>
+                <p>{t("profile")}</p>
             </Link>,
-            <Link to="/">
-                <MdSupervisorAccount></MdSupervisorAccount>
-                <p>Group chat</p>
-            </Link>,
+            <LanguageSelector />,
             <LogoutButton onClick={handleLogout}>
                 <RiLogoutBoxRLine></RiLogoutBoxRLine>
-                <p>Logout</p>
+                <p>{t("logout")}</p>
             </LogoutButton>,
         ],
         [user]
