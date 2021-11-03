@@ -36,7 +36,7 @@ const MyProfile = () => {
 
     return (
         <React.Fragment>
-            <PageMetadata title={`${userData.name}'s ${t("profile")}`} />
+            <PageMetadata title={`${userData.name}`} />
             <Wrapper>
                 <MyProfileOverview user={userData} />
                 <Container>

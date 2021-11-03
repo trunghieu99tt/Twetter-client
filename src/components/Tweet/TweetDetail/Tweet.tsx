@@ -8,8 +8,12 @@ import { useTranslation } from "react-i18next";
 // talons
 import { useTweet } from "./useTweet";
 
+// utils
+import { stopPropagation } from "@utils/helper";
+
 // components
 import EditTweet from "../EditTweet";
+import Modal from "@components/Modal";
 import Comment from "@components/Comment";
 import Dropdown from "@components/Dropdown";
 import { Spinner1 } from "@components/Loaders";
@@ -26,6 +30,7 @@ import {
     AiOutlineDelete,
     AiOutlineRetweet,
 } from "react-icons/ai";
+import CustomLinkPreview from "@components/CustomLinkPreview";
 import { BiComment, BiBookmark, BiDotsVertical } from "react-icons/bi";
 
 // types
@@ -55,9 +60,9 @@ import {
     InteractionSummaryItem,
     InteractionButtonGroup,
 } from "./TweetStyle";
-import { stopPropagation } from "@utils/helper";
-import CustomLinkPreview from "@components/CustomLinkPreview";
 import { HASHTAG_ROUTES } from "routes/routes";
+import { iUser } from "@type/user.types";
+import UserCard from "@components/UserCard";
 
 type Props = {
     tweet: iTweet;
@@ -75,6 +80,7 @@ const Tweet = ({ tweet }: Props) => {
         isRetweeted,
         retweetedBy,
         deleteLoading,
+        modalUserList,
         tweetComments,
         addCommentRef,
         tweetLikeCount,
@@ -89,8 +95,10 @@ const Tweet = ({ tweet }: Props) => {
         onReactTweet,
         onDeleteTweet,
         toggleDropdown,
+        setModalUserList,
         setVisibleEditForm,
         focusOnCommentForm,
+        onCloseModalUserList,
         fetchMoreTweetComment,
     } = useTweet({
         tweet,
@@ -135,8 +143,36 @@ const Tweet = ({ tweet }: Props) => {
         return replacedText;
     };
 
+    let userListData: iUser[] = [];
+    let modalUserListHeader = "";
+
+    switch (modalUserList) {
+        case "LIKED":
+            userListData = tweet?.likes || [];
+            modalUserListHeader = t("userLikedTweet");
+            break;
+        case "SAVED":
+            userListData = tweet?.saved || [];
+            modalUserListHeader = t("userSavedTweet");
+            break;
+        case "RETWEETED":
+            userListData = tweet?.retweeted || [];
+            modalUserListHeader = t("userRetweetedTweet");
+            break;
+    }
+
+    const userList = userListData.map((user: iUser) => (
+        <UserCard user={user} />
+    ));
+
     return (
         <React.Fragment>
+            <Modal
+                body={userList}
+                header={modalUserListHeader}
+                isOpen={!!modalUserList}
+                onCancel={onCloseModalUserList}
+            />
             {visibleEditForm && (
                 <EditTweet
                     tweet={tweet}
@@ -236,20 +272,24 @@ const Tweet = ({ tweet }: Props) => {
 
                     <Interaction>
                         <InteractionSummary>
-                            <InteractionSummaryItem>
+                            <InteractionSummaryItem
+                                onClick={() => setModalUserList("LIKED")}
+                            >
                                 {tweetLikeCount}
-                                {tweetLikeCount <= 1 ? " like" : " likes"}
+                                {` ${t("like")}`}
                             </InteractionSummaryItem>
                             <InteractionSummaryItem>
                                 {totalTweetComments}
-                                {totalTweetComments <= 1
-                                    ? " comment"
-                                    : " comments"}
+                                {` ${t("comment")}`}
                             </InteractionSummaryItem>
-                            <InteractionSummaryItem>
+                            <InteractionSummaryItem
+                                onClick={() => setModalUserList("RETWEETED")}
+                            >
                                 {tweetRetweetCount} {t("retweeted")}
                             </InteractionSummaryItem>
-                            <InteractionSummaryItem>
+                            <InteractionSummaryItem
+                                onClick={() => setModalUserList("SAVED")}
+                            >
                                 {tweetSavedCount} {t("saved")}
                             </InteractionSummaryItem>
                         </InteractionSummary>

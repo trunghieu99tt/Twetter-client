@@ -99,5 +99,8 @@
     "createNewStory": "Tạo tin mới",
     "chooseStoryToView": "Hãy chọn một story để xem",
     "likedYourTweet": "đã thích tweet của bạn",
-    "savedYourTweet": "đã lưu tweet của bạn"
+    "savedYourTweet": "đã lưu tweet của bạn",
+    "userLikedTweet": "Những người đã thích tweet này",
+    "userSavedTweet": "Những người đã lưu tweet này",
+    "userRetweetedTweet": "Những người đã tweet lại"
 }
