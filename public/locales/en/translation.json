@@ -99,5 +99,8 @@
     "createNewStory": "Create new story",
     "chooseStoryToView": "Choose a story to view!",
     "likedYourTweet": "liked your tweet",
-    "savedYourTweet": "saved your tweet"
+    "savedYourTweet": "saved your tweet",
+    "userLikedTweet": "People who liked this tweet",
+    "userSavedTweet": "People who saved this tweet",
+    "userRetweetedTweet": "People who retweeted this tweet"
 }

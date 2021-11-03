@@ -21,6 +21,7 @@ import {
     Wrapper,
 } from "./UserCardStyles";
 import { useUser } from "@talons/useUser";
+import { Link } from "react-router-dom";
 
 interface Props {
     user: iUser;
@@ -49,13 +50,13 @@ const UserCard = ({ user }: Props) => {
             <Flex justify="space-between">
                 <Flex gap="1.8rem">
                     <UserAvatarSmall user={user} />
-                    <div>
+                    <Link to={`/profile/${user._id}`}>
                         <UserName>{user.name}</UserName>
                         <UserFollowers>
                             {followersCount}{" "}
                             {`${t("follower")}${followersCount > 1 ? "s" : ""}`}
                         </UserFollowers>
-                    </div>
+                    </Link>
                 </Flex>
                 <FollowButton
                     onClick={onFollow}
