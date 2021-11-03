@@ -1,5 +1,6 @@
 import { ChangeEvent } from "react";
 import DatePicker from "react-datepicker";
+import { useTranslation } from "react-i18next";
 
 // talons
 import { useEditInfo } from "./useEditInfo";
@@ -26,6 +27,8 @@ interface Props {
 }
 
 const EditInfo = ({ data, onCancel }: Props) => {
+    const { t } = useTranslation();
+
     const {
         bio,
         dob,
@@ -46,7 +49,7 @@ const EditInfo = ({ data, onCancel }: Props) => {
         <Wrapper>
             <Flex gap="5rem">
                 <EditItem>
-                    <EditItemLabel>Cover Photo</EditItemLabel>
+                    <EditItemLabel>{t("coverPhoto")}</EditItemLabel>
                     <ImageWithUpdater
                         data={newCover}
                         name="coverPhoto"
@@ -58,7 +61,7 @@ const EditInfo = ({ data, onCancel }: Props) => {
                     />
                 </EditItem>
                 <EditItem>
-                    <EditItemLabel>Avatar</EditItemLabel>
+                    <EditItemLabel>{t("avatar")}</EditItemLabel>
                     <ImageWithUpdater
                         data={newAvatar}
                         name="avatar"
@@ -71,7 +74,7 @@ const EditInfo = ({ data, onCancel }: Props) => {
                 </EditItem>
             </Flex>
             <EditItem>
-                <EditItemLabel>Name</EditItemLabel>
+                <EditItemLabel>{t("name")}</EditItemLabel>
                 <EditItemInput
                     value={name}
                     onChange={(e: ChangeEvent<HTMLInputElement>) =>
@@ -80,7 +83,7 @@ const EditInfo = ({ data, onCancel }: Props) => {
                 />
             </EditItem>
             <EditItem>
-                <EditItemLabel>Bio</EditItemLabel>
+                <EditItemLabel>{t("bio")}</EditItemLabel>
                 <EditItemInput
                     value={bio}
                     onChange={(e: ChangeEvent<HTMLInputElement>) =>
@@ -89,7 +92,7 @@ const EditInfo = ({ data, onCancel }: Props) => {
                 />
             </EditItem>
             <EditItem>
-                <EditItemLabel>Birthday</EditItemLabel>
+                <EditItemLabel>{t("birthday")}</EditItemLabel>
                 <DatePicker
                     selected={dob}
                     onChange={(date: Date) => setDob(date)}
@@ -100,7 +103,7 @@ const EditInfo = ({ data, onCancel }: Props) => {
 
     return (
         <Modal
-            header={<h3>Change user info</h3>}
+            header={<h3>{t("changeUserInfo")}</h3>}
             isOpen={true}
             body={body}
             onOk={() => {

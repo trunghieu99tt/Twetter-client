@@ -1,13 +1,13 @@
-import React from "react";
+import { useTranslation } from "react-i18next";
 import { AnimatePresence, motion } from "framer-motion";
 
 // utils
+import mergeClasses from "@utils/mergeClasses";
 
 // styles
 import defaultClasses from "./imagemessageform.module.css";
 
 // types
-import mergeClasses from "@utils/mergeClasses";
 import { iFile } from "@type/message.types";
 
 interface Props {
@@ -34,6 +34,8 @@ const ImageMessageForm = ({
     onChange,
     data,
 }: Props) => {
+    const { t } = useTranslation();
+
     const classes = mergeClasses(defaultClasses, propsClasses);
 
     return (
@@ -63,7 +65,7 @@ const ImageMessageForm = ({
                         </figure>
                         <p className={classes.fileName}>{data.file?.name}</p>
                         <div className={classes.message}>
-                            <label htmlFor="message">Message</label>
+                            <label htmlFor="message">{t("message")}</label>
                             <input
                                 type="text"
                                 name="message"
@@ -75,9 +77,9 @@ const ImageMessageForm = ({
                     </div>
 
                     <div className={classes.btnGroup}>
-                        <button onClick={onCancel}>Cancel</button>
+                        <button onClick={onCancel}>{t("cancel")}</button>
                         <button type="submit" className={classes.btnSubmit}>
-                            Upload
+                            {t("upload")}
                         </button>
                     </div>
                 </form>

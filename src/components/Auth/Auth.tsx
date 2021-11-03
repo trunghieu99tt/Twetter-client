@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 // talons
 import { useAuth } from "./useAuth";
@@ -21,6 +22,8 @@ import {
 } from "./AuthStyle";
 
 const Auth = () => {
+    const { t } = useTranslation();
+
     const [screen, setScreen] = useState<"LOGIN" | "REGISTER">("LOGIN");
 
     const { gender, setGender, handleSubmit, register } = useAuth({
@@ -33,16 +36,16 @@ const Auth = () => {
     const subHeading =
         screen === "REGISTER" ? (
             <SubHeading>
-                Do you have an account?{" "}
+                {t("doYouHaveAnAccount")}?{" "}
                 <RedirectButton onClick={() => changeScreen("LOGIN")}>
-                    Login here
+                    {t("loginHere")}
                 </RedirectButton>
             </SubHeading>
         ) : (
             <SubHeading>
-                Don't have an account?{" "}
+                {t("dontHaveAnAccount")}?{" "}
                 <RedirectButton onClick={() => changeScreen("REGISTER")}>
-                    Register here now
+                    {t("registerHere")}
                 </RedirectButton>
             </SubHeading>
         );
@@ -52,17 +55,17 @@ const Auth = () => {
             {subHeading}
             <Form>
                 <InputGroup>
-                    <InputLabel>Username</InputLabel>
+                    <InputLabel>{t("username")}</InputLabel>
                     <Input required {...register("username")} name="username" />
                 </InputGroup>
                 <InputGroup>
-                    <InputLabel>Password</InputLabel>
+                    <InputLabel>{t("password")}</InputLabel>
                     <Input type="password" required {...register("password")} />
                 </InputGroup>
                 {screen === "REGISTER" && (
                     <React.Fragment>
                         <InputGroup>
-                            <InputLabel>Confirm Password</InputLabel>
+                            <InputLabel>{t("confirmPassword")}</InputLabel>
                             <Input
                                 type="password"
                                 required
@@ -70,7 +73,7 @@ const Auth = () => {
                             />
                         </InputGroup>
                         <InputGroup>
-                            <InputLabel>Gender</InputLabel>
+                            <InputLabel>{t("gender")}</InputLabel>
                             <GenderSelector
                                 gender={gender}
                                 setGender={setGender}
@@ -79,13 +82,13 @@ const Auth = () => {
                     </React.Fragment>
                 )}
                 <SubmitButton onClick={handleSubmit}>
-                    {screen === "REGISTER" ? "Register" : "Login"}
+                    {screen === "REGISTER" ? t("register") : t("login")}
                 </SubmitButton>
             </Form>
             <Hr>
-                <span>Or</span>
+                <span>{t("or")}</span>
             </Hr>
-            <SocialSuggest>Don't want to wait? Login with </SocialSuggest>
+            <SocialSuggest> {t("socialLoginHeading")}</SocialSuggest>
             <SocialLoginIcons />
         </Wrapper>
     );

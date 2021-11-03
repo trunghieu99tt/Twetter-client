@@ -1,4 +1,5 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 
 // icons
 import { BiCamera } from "react-icons/bi";
@@ -40,6 +41,8 @@ const ImageWithUpdater = ({
     onCancel,
     onChange,
 }: Props) => {
+    const { t } = useTranslation();
+
     return (
         <Wrapper customStyles={wrapperCustomStyles}>
             <MainImage src={image} alt={`${name}-${id}`} />
@@ -48,7 +51,7 @@ const ImageWithUpdater = ({
                     <React.Fragment>
                         <label htmlFor={id}>
                             <BiCamera />
-                            <span>Update your avatar</span>
+                            <span>{t("updateYourAvatar")}</span>
                         </label>
                         <input
                             type="file"
@@ -65,14 +68,14 @@ const ImageWithUpdater = ({
                                 onClick={onOk}
                                 disabled={isDisabledUpdate}
                             >
-                                Update
+                                {t("update")}
                             </OkButton>
                         )}
                         <CancelButton
                             onClick={onCancel}
                             disabled={isDisabledUpdate}
                         >
-                            Cancel
+                            {t("cancel")}
                         </CancelButton>
                     </ActionButtons>
                 )}

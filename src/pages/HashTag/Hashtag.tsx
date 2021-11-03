@@ -1,16 +1,22 @@
-import InfinityTweetsList from "@components/InfinityLists/InfinityTweetsList";
-import { useTweets } from "@talons/useTweets";
+import React from "react";
 import { useParams } from "react-router";
+import { useTranslation } from "react-i18next";
+
+// talons
+import { useTweets } from "@talons/useTweets";
+
 // layout
 import MainLayout from "@layout/Main";
 
-import classes from "./hashtag.module.css";
-import React from "react";
+// components
 import PageMetadata from "@components/PageMetadata";
+import InfinityTweetsList from "@components/InfinityLists/InfinityTweetsList";
 
-interface Props {}
+// styles
+import classes from "./hashtag.module.css";
 
-const Hashtag = (props: Props) => {
+const Hashtag = () => {
+    const { t } = useTranslation();
     const params: { hashtag: string } = useParams();
     const { hashtag } = params;
 
@@ -18,10 +24,10 @@ const Hashtag = (props: Props) => {
 
     return (
         <React.Fragment>
-            <PageMetadata title={`#${hashtag} tweets`} />
+            <PageMetadata title={`#${hashtag} ${t("tweet")}`} />
             <div className={classes.root}>
                 <p className={classes.heading}>
-                    All tweets with hashtag <span>#{hashtag}</span>
+                    {t("allTweetByHashtag")} <span>#{hashtag}</span>
                 </p>
                 <InfinityTweetsList query={getTweetsByTagQuery} />
             </div>

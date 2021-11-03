@@ -1,3 +1,5 @@
+import { useTranslation } from "react-i18next";
+
 // talons
 import { useRichTextEditor } from "./useRichTextEditor";
 
@@ -26,6 +28,8 @@ const RichTextEditor = ({
     value,
     isEdit,
 }: Props) => {
+    const { t } = useTranslation();
+
     const classes = mergeClasses(defaultClasses, propsClasses);
 
     const { urls, onChange, removeLinks } = useRichTextEditor({
@@ -40,7 +44,7 @@ const RichTextEditor = ({
                 value={value}
                 onChange={onChange}
                 className={classes.textarea}
-                placeholder="What's on your mind?"
+                placeholder={t("whatOnYourMind")}
             ></textarea>
             {urls?.length > 0 && (
                 <div className={classes.linkPreviewWrapper}>

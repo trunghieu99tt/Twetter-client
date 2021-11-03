@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
-import { useSetRecoilState } from "recoil";
 import { useHistory } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 import { useUser } from "@talons/useUser";
 
@@ -9,9 +9,6 @@ import StoryViewer from "../StoryViewer";
 
 // icons
 import { GrAdd } from "react-icons/gr";
-
-// states
-import { activeStoryGroupOwnerIdState } from "states/story.state";
 
 // types
 import { iStory } from "@type/story.types";
@@ -27,6 +24,8 @@ interface Props {
 }
 
 const StoryItem = ({ data, isSmall, userId }: Props) => {
+    const { t } = useTranslation();
+
     const { user } = useUser();
     const history = useHistory();
 
@@ -54,7 +53,7 @@ const StoryItem = ({ data, isSmall, userId }: Props) => {
                         <div className={classes.addIcon}>
                             <GrAdd />
                         </div>
-                        <p>Create story</p>
+                        <p>{t("createStory")}</p>
                     </div>
                 </Link>
             )) || (

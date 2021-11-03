@@ -1,4 +1,5 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 
 // talons
 import { useTweets } from "@talons/useTweets";
@@ -16,6 +17,7 @@ import { Helmet } from "react-helmet-async";
 
 const BookMark = () => {
     const { getMySavedTweetsQuery } = useTweets();
+    const { t } = useTranslation();
 
     const { data } = getMySavedTweetsQuery;
 
@@ -25,7 +27,7 @@ const BookMark = () => {
     return (
         <React.Fragment>
             <Helmet>
-                <title>Bookmarks</title>
+                <title>{t("bookmark")}</title>
             </Helmet>
             <Wrapper>
                 <Container>
@@ -36,11 +38,7 @@ const BookMark = () => {
                                     query={getMySavedTweetsQuery}
                                 />
                             </Main>
-                        )) || (
-                            <NotFoundText>
-                                You haven't had any bookmarks yet.
-                            </NotFoundText>
-                        )}
+                        )) || <NotFoundText>{t("emptyBookmark")}</NotFoundText>}
                     </Flex>
                 </Container>
             </Wrapper>

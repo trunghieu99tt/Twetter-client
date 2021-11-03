@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useQueryClient } from "react-query";
+import { useTranslation } from "react-i18next";
+
 
 // hooks
 import { useOnClickOutside } from "@hooks/useOnClickOutside";
@@ -25,6 +27,7 @@ type Props = {
 };
 
 export const useTweet = ({ tweet }: Props) => {
+    const { t } = useTranslation();
 
     const [urls, setUrls] = useState<string[]>([]);
     const [visibleEditForm, setVisibleEditForm] = useState<boolean>(false);
@@ -100,7 +103,7 @@ export const useTweet = ({ tweet }: Props) => {
         if (!liked) {
 
             const msg: iNotificationDTO = {
-                text: `liked your tweet`,
+                text: t('likedYourTweet'),
                 receivers: [tweet.author._id],
                 url: `/tweet/${tweet._id}`,
                 type: 'like',
@@ -128,7 +131,7 @@ export const useTweet = ({ tweet }: Props) => {
         saveTweetMutation.mutate(tweet._id);
         if (!saved) {
             const msg: iNotificationDTO = {
-                text: `saved your tweet`,
+                text: t('savedYourTweet'),
                 receivers: [tweet.author._id],
                 url: `/tweet/${tweet._id}`,
                 type: 'save',

@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { useHistory } from "react-router";
+import { useTranslation } from "react-i18next";
 
 // talons
 import { useUser } from "@talons/useUser";
@@ -12,6 +13,7 @@ import { Right, Wrapper, Main, Heading } from "./AuthPageStyle";
 import { Helmet } from "react-helmet-async";
 
 const AuthPage = () => {
+    const { t } = useTranslation();
     const { user } = useUser();
     const history = useHistory();
 
@@ -24,12 +26,12 @@ const AuthPage = () => {
     return (
         <React.Fragment>
             <Helmet>
-                <title>Authentication</title>
+                <title>{t("authentication")}</title>
             </Helmet>
             <Wrapper>
                 <Main>
                     <Right>
-                        <Heading>It's time to make new friends</Heading>
+                        <Heading>{t("authenticationGreeting")}</Heading>
                         <Auth />
                     </Right>
                 </Main>

@@ -1,5 +1,5 @@
-import React from "react";
-import { useState, useRef } from "react";
+import React, { useState, useRef } from "react";
+import { useTranslation } from "react-i18next";
 
 // talons
 import { useOnClickOutside } from "@hooks/useOnClickOutside";
@@ -19,19 +19,6 @@ import {
     AudienceSelectionItem,
 } from "./AudienceSelectorStyle";
 
-const audiences = [
-    {
-        text: "Everyone",
-        icon: <MdPublic />,
-        value: 0,
-    },
-    {
-        text: "People you follow",
-        icon: <BsFillPeopleFill />,
-        value: 1,
-    },
-];
-
 type Props = {
     audience: number;
     setAudience: (audience: number) => void;
@@ -39,12 +26,26 @@ type Props = {
 
 const AudienceSelector = ({ audience, setAudience }: Props) => {
     const [visibleDropdown, setVisibleDropdown] = useState<boolean>(false);
-
     const dropdownRef = useRef() as React.RefObject<HTMLDivElement>;
+
+    const { t } = useTranslation();
 
     const toggleDropdown = () => setVisibleDropdown((isVisible) => !isVisible);
 
     useOnClickOutside(dropdownRef, () => setVisibleDropdown(false));
+
+    const audiences = [
+        {
+            text: t("everyone"),
+            icon: <MdPublic />,
+            value: 0,
+        },
+        {
+            text: t("peopleFollowYou"),
+            icon: <BsFillPeopleFill />,
+            value: 1,
+        },
+    ];
 
     const renderAudience = () => {
         const { text, icon } = audiences[audience];

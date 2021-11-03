@@ -1,3 +1,5 @@
+import { useTranslation } from "react-i18next";
+
 // components
 import UserAvatarSmall from "@components/UserAvatarSmall";
 
@@ -25,6 +27,7 @@ interface Props {
 }
 
 const UserCard = ({ user }: Props) => {
+    const { t } = useTranslation();
     const { followUserMutation, user: currentUser } = useUser();
 
     const followersCount = user.followers ? user.followers.length : 0;
@@ -50,7 +53,7 @@ const UserCard = ({ user }: Props) => {
                         <UserName>{user.name}</UserName>
                         <UserFollowers>
                             {followersCount}{" "}
-                            {followersCount > 1 ? "followers" : "follower"}
+                            {`${t("follower")}${followersCount > 1 ? "s" : ""}`}
                         </UserFollowers>
                     </div>
                 </Flex>
@@ -59,10 +62,10 @@ const UserCard = ({ user }: Props) => {
                     disabled={followUserMutation.isLoading}
                 >
                     <IoPersonAdd />
-                    {followed ? "Followed" : "Follow"}
+                    {followed ? t("followed") : t("follow")}
                 </FollowButton>
             </Flex>
-            <UserBio>{user.bio ? user.bio : "No bio available"}</UserBio>
+            <UserBio>{user?.bio}</UserBio>
         </Wrapper>
     );
 };

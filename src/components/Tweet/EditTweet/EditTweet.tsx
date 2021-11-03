@@ -1,3 +1,5 @@
+import { useTranslation } from "react-i18next";
+
 // components
 import TweetForm from "../TweetForm";
 import Modal from "@components/Modal";
@@ -11,9 +13,11 @@ interface Props {
 }
 
 const EditTweet = ({ tweet, onCancel }: Props) => {
+    const { t } = useTranslation();
+
     return (
         <Modal
-            header={<h3>Edit Tweet</h3>}
+            header={<h3>{t("editTweet")}</h3>}
             isOpen={true}
             body={<TweetForm tweet={tweet} onCancel={onCancel} />}
             onCancel={onCancel}

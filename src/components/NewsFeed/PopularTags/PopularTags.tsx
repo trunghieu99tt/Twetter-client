@@ -1,3 +1,8 @@
+import { useTranslation } from "react-i18next";
+
+// talons
+import { useHashtag } from "@talons/useHashtag";
+
 // utils
 import { nFormatter } from "@utils/helper";
 
@@ -6,11 +11,12 @@ import SidebarBlock from "@components/Sidebar/SidebarBlock";
 
 // styles
 import { TagCounter, TagName, TagWrapper } from "./PopularTagsStyle";
-import { useHashtag } from "@talons/useHashtag";
 import { iHashtag } from "@type/hashtag.types";
 import { HASHTAG_ROUTES } from "routes/routes";
 
 const PopularTags = () => {
+    const { t } = useTranslation();
+
     const { getMostPopularHashtagQuery } = useHashtag();
 
     const mostPopularHashtags: iHashtag[] =
@@ -18,7 +24,7 @@ const PopularTags = () => {
 
     if (!mostPopularHashtags?.length) return null;
 
-    const title = "Popular Tags";
+    const title = t("popularTag");
 
     const content = mostPopularHashtags.map((hashtag: iHashtag) => {
         const { _id, name, count } = hashtag;
@@ -30,7 +36,7 @@ const PopularTags = () => {
             >
                 <TagName>#{name}</TagName>
                 <TagCounter>
-                    {nFormatter(count)} {count > 1 ? "tweets" : "tweet"}
+                    {nFormatter(count)} {`${t("tweet")}${count > 1 ? "s" : ""}`}{" "}
                 </TagCounter>
             </TagWrapper>
         );

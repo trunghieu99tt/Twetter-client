@@ -1,12 +1,23 @@
+import { useState } from "react";
+import { useRecoilValue } from "recoil";
+import { useTranslation } from "react-i18next";
+import { useHistory } from "react-router";
+
+// components
 import UserAvatarSmall from "@components/UserAvatarSmall";
 import { useUser } from "@talons/useUser";
+
+// types
 import { iRoom } from "@type/room.types";
 import { iUser } from "@type/user.types";
-import { useState } from "react";
+
+// icons
 import { AiOutlineMessage } from "react-icons/ai";
-import { useHistory } from "react-router";
-import { useRecoilValue } from "recoil";
+
+// states
 import { connectedRoomsState } from "states/room.state";
+
+// styles
 import {
     Wrapper,
     Heading,
@@ -19,6 +30,7 @@ import {
 interface Props {}
 
 const ChatUserList = (props: Props) => {
+    const { t } = useTranslation();
     const { user: currentUser } = useUser();
     const connectedRooms = useRecoilValue(connectedRoomsState);
     const history = useHistory();
@@ -34,7 +46,7 @@ const ChatUserList = (props: Props) => {
     return (
         <Wrapper>
             <ChatListWrapper isOpen={isChatOpen}>
-                <Heading>Contacts</Heading>
+                <Heading>{t("contact")}</Heading>
                 {connectedRooms?.map((room: iRoom) => {
                     // 1. if room is DM
                     if (room.isDm) {
