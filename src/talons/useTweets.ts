@@ -110,7 +110,6 @@ export const useTweets = (userId = "", tag = "") => {
 
     const getNewsFeedTweetsQuery = useInfiniteQuery(TWEET_QUERY.GET_NEWS_FEED_TWEETS, getNewsFeedTweets, INFINITY_QUERY_LIST_CONFIG);
 
-
     const getLatestTweetsQuery = useInfiniteQuery(TWEET_QUERY.LATEST_TWEETS, getLatestTweets, INFINITY_QUERY_LIST_CONFIG);
 
     const getPopularTweetsQuery = useInfiniteQuery(TWEET_QUERY.POPULAR_TWEETS, getPopularTweets, INFINITY_QUERY_LIST_CONFIG);
@@ -120,7 +119,6 @@ export const useTweets = (userId = "", tag = "") => {
     const getMediasQuery = useInfiniteQuery(TWEET_QUERY.GET_MEDIAS, getMedias, INFINITY_QUERY_LIST_CONFIG);
 
     const getTweetsByTagQuery = useInfiniteQuery([TWEET_QUERY.GET_TWEETS_BY_HASHTAG, tag], getTweetsByTags, INFINITY_QUERY_LIST_CONFIG);
-
 
     const createTweetMutation = useMutation(createTweet, {
         onSuccess: () => {

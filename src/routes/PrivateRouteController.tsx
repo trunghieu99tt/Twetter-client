@@ -12,6 +12,7 @@ import BookMarks from "@pages/BookMarks";
 import UserMedia from "@pages/UserMedia";
 import UserLikes from "@pages/UserLikes";
 import StoryView from "@pages/Story/View";
+import TweetDetail from "@pages/Tweet/TweetDetail";
 
 // components
 import PrivateRoute from "@components/routes/PrivateRoute";
@@ -51,6 +52,7 @@ const PrivateRouteController = () => {
             />
             <PrivateRoute path="/profile/:userId" component={MyProfile} />
             <PrivateRoute path="/explore/:page" component={Explore} />
+            <PrivateRoute path="/tweet/:tweetId" component={TweetDetail} />
             <Route component={NotFound} />
         </Switch>
     );

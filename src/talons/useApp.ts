@@ -1,3 +1,5 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useAppContext } from "@context/app.context";
 import { useWindowSize } from "@hooks/useWindowSize";
 import { MutableRefObject, useEffect, useRef } from "react";
@@ -44,7 +46,6 @@ export const useApp = () => {
                 history.push("/auth");
             }
         } else {
-            storyTalons.refetchAll();
             notificationTalons.refetchAll();
             if (windowHref.includes("auth")) {
                 if (

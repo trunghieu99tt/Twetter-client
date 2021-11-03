@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-mixed-operators */
 import { showNotificationToast } from "@components/Notification/notificationUtils";
 import { useAppContext } from "@context/app.context";
@@ -36,7 +37,7 @@ const useSocket = () => {
     const [newMessage, setNewMessage] = useRecoilState(newMessageState);
 
     const [connectedRooms, setConnectedRooms] = useRecoilState(connectedRoomsState);
-    const [connectedUsers, setConnectedUsers] = useRecoilState(connectedUsersState);
+    const setConnectedUsers = useSetRecoilState(connectedUsersState);
     const { user } = useUser();
     const history = useHistory();
 

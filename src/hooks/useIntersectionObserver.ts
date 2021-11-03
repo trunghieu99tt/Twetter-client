@@ -1,13 +1,14 @@
-import React from 'react'
+/* eslint-disable react-hooks/exhaustive-deps */
+import React from 'react';
 
 type Props = {
-    enabled?: boolean
-    threshold?: number
-    rootMargin?: string
-    onIntersect: () => void
-    root?: React.RefObject<HTMLElement>
-    target?: React.RefObject<HTMLElement>
-}
+    enabled?: boolean;
+    threshold?: number;
+    rootMargin?: string;
+    onIntersect: () => void;
+    root?: React.RefObject<HTMLElement>;
+    target?: React.RefObject<HTMLElement>;
+};
 
 const useIntersectionObserver = ({
     root,
@@ -19,7 +20,7 @@ const useIntersectionObserver = ({
 }: Props) => {
     React.useEffect(() => {
         if (!enabled) {
-            return
+            return;
         }
 
         const observer = new IntersectionObserver(
@@ -30,20 +31,20 @@ const useIntersectionObserver = ({
                 rootMargin,
                 threshold,
             }
-        )
+        );
 
-        const el = target && target.current
+        const el = target && target.current;
 
         if (!el) {
-            return
+            return;
         }
 
-        observer.observe(el)
+        observer.observe(el);
 
         return () => {
-            observer.unobserve(el)
-        }
-    }, [target, enabled])
-}
+            observer.unobserve(el);
+        };
+    }, [target, enabled]);
+};
 
-export { useIntersectionObserver }
+export { useIntersectionObserver };

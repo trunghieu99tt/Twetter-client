@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { iStory, iStoryCreate, iStoryGroup } from "@type/story.types";
 import client from "api/client";
 import { STORY_ENDPOINTS, STORY_QUERY } from "constants/story.constants";
