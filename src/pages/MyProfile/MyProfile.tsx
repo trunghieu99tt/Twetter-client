@@ -1,7 +1,6 @@
 import React from "react";
 import { useParams } from "react-router";
-import { v4 as uuid } from "uuid";
-import { Helmet } from "react-helmet-async";
+import { useTranslation } from "react-i18next";
 
 // talons
 import { useUser } from "@talons/useUser";
@@ -12,6 +11,7 @@ import MainLayout from "@layout/Main";
 
 // components
 import AddTweet from "@components/Tweet/AddTweet";
+import PageMetadata from "@components/PageMetadata";
 import LeftSidebar from "@components/Sidebar/LeftSidebar";
 import InfinityTweetList from "@components/InfinityLists/InfinityTweetsList";
 import MyProfileOverview from "@components/MyProfile/MyProfileOverview";
@@ -19,9 +19,10 @@ import MyProfileOverview from "@components/MyProfile/MyProfileOverview";
 // styles
 import { Sidebar, Wrapper, Main, Content } from "./MyProfileStyle";
 import { Container } from "@shared/style/sharedStyle.style";
-import PageMetadata from "@components/PageMetadata";
 
 const MyProfile = () => {
+    const { t } = useTranslation();
+
     const params: { userId: string } = useParams();
     const { userId } = params;
 
@@ -35,7 +36,7 @@ const MyProfile = () => {
 
     return (
         <React.Fragment>
-            <PageMetadata title={`${userData.name}'s profile`} />
+            <PageMetadata title={`${userData.name}`} />
             <Wrapper>
                 <MyProfileOverview user={userData} />
                 <Container>

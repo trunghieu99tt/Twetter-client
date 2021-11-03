@@ -3,13 +3,19 @@ import { Link } from "react-router-dom";
 import { v4 } from "uuid";
 import nl2br from "react-nl2br";
 import reactStringReplace from "react-string-replace";
+import { useTranslation } from "react-i18next";
 
 // talons
 import { useTweet } from "./useTweet";
 
+// utils
+import { stopPropagation, calcDiffTimeString } from "@utils/helper";
+
 // components
 import EditTweet from "../EditTweet";
+import Modal from "@components/Modal";
 import Comment from "@components/Comment";
+import UserCard from "@components/UserCard";
 import Dropdown from "@components/Dropdown";
 import { Spinner1 } from "@components/Loaders";
 import AddComment from "@components/AddComment";
@@ -25,12 +31,15 @@ import {
     AiOutlineDelete,
     AiOutlineRetweet,
 } from "react-icons/ai";
+import CustomLinkPreview from "@components/CustomLinkPreview";
 import { BiComment, BiBookmark, BiDotsVertical } from "react-icons/bi";
 
 // types
 import { TMedia } from "@type/app.types";
 import { iTweet } from "@type/tweet.types";
 import { iComment } from "@type/comments.types";
+
+import { HASHTAG_ROUTES } from "routes/routes";
 
 // styles
 import {
@@ -54,15 +63,14 @@ import {
     InteractionSummaryItem,
     InteractionButtonGroup,
 } from "./TweetStyle";
-import { calcDiffTimeString, stopPropagation } from "@utils/helper";
-import CustomLinkPreview from "@components/CustomLinkPreview";
-import { HASHTAG_ROUTES } from "routes/routes";
+import { iUser } from "@type/user.types";
 
 type Props = {
     tweet: iTweet;
 };
 
 const Tweet = ({ tweet }: Props) => {
+    const { t } = useTranslation();
     const {
         urls,
         liked,
@@ -73,6 +81,7 @@ const Tweet = ({ tweet }: Props) => {
         isRetweeted,
         retweetedBy,
         deleteLoading,
+        modalUserList,
         tweetComments,
         addCommentRef,
         tweetLikeCount,
@@ -87,8 +96,10 @@ const Tweet = ({ tweet }: Props) => {
         onReactTweet,
         onDeleteTweet,
         toggleDropdown,
+        setModalUserList,
         setVisibleEditForm,
         focusOnCommentForm,
+        onCloseModalUserList,
         fetchMoreTweetComment,
     } = useTweet({
         tweet,
@@ -133,8 +144,36 @@ const Tweet = ({ tweet }: Props) => {
         return replacedText;
     };
 
+    let userListData: iUser[] = [];
+    let modalUserListHeader = "";
+
+    switch (modalUserList) {
+        case "LIKED":
+            userListData = tweet?.likes || [];
+            modalUserListHeader = t("userLikedTweet");
+            break;
+        case "SAVED":
+            userListData = tweet?.saved || [];
+            modalUserListHeader = t("userSavedTweet");
+            break;
+        case "RETWEETED":
+            userListData = tweet?.retweeted || [];
+            modalUserListHeader = t("userRetweetedTweet");
+            break;
+    }
+
+    const userList = userListData.map((user: iUser) => (
+        <UserCard user={user} />
+    ));
+
     return (
         <React.Fragment>
+            <Modal
+                body={userList}
+                header={modalUserListHeader}
+                isOpen={!!modalUserList}
+                onCancel={onCloseModalUserList}
+            />
             {visibleEditForm && (
                 <EditTweet
                     tweet={tweet}
@@ -175,11 +214,11 @@ const Tweet = ({ tweet }: Props) => {
                                         onClick={() => setVisibleEditForm(true)}
                                     >
                                         <AiOutlineEdit />
-                                        Edit
+                                        {t("edit")}
                                     </AuthorAction>,
                                     <AuthorAction onClick={onDeleteTweet}>
                                         <AiOutlineDelete />
-                                        Delete
+                                        {t("delete")}
                                     </AuthorAction>,
                                 ]}
                             ></Dropdown>
@@ -232,49 +271,53 @@ const Tweet = ({ tweet }: Props) => {
 
                     <Interaction>
                         <InteractionSummary>
-                            <InteractionSummaryItem>
+                            <InteractionSummaryItem
+                                onClick={() => setModalUserList("LIKED")}
+                            >
                                 {tweetLikeCount}
-                                {tweetLikeCount <= 1 ? " like" : " likes"}
+                                {` ${t("like")}`}
                             </InteractionSummaryItem>
                             <InteractionSummaryItem>
                                 {totalTweetComments}
-                                {totalTweetComments <= 1
-                                    ? " comment"
-                                    : " comments"}
+                                {` ${t("comment")}`}
                             </InteractionSummaryItem>
-                            <InteractionSummaryItem>
-                                {tweetRetweetCount} retweeted
+                            <InteractionSummaryItem
+                                onClick={() => setModalUserList("RETWEETED")}
+                            >
+                                {tweetRetweetCount} {t("retweeted")}
                             </InteractionSummaryItem>
-                            <InteractionSummaryItem>
-                                {tweetSavedCount} saved
+                            <InteractionSummaryItem
+                                onClick={() => setModalUserList("SAVED")}
+                            >
+                                {tweetSavedCount} {t("saved")}
                             </InteractionSummaryItem>
                         </InteractionSummary>
 
                         <InteractionButtonGroup>
                             <InteractionButton onClick={focusOnCommentForm}>
                                 <BiComment />
-                                Comment
+                                {t("comment")}
                             </InteractionButton>
                             <InteractionButton
                                 onClick={onRetweet}
                                 retweeted={retweeted}
                             >
                                 <FiRefreshCw />
-                                Retweet
+                                {t("retweet")}
                             </InteractionButton>
                             <InteractionButton
                                 onClick={onReactTweet}
                                 liked={liked}
                             >
                                 <FaRegHeart />
-                                {liked ? "Liked" : "Like"}
+                                {liked ? t("liked") : t("like")}
                             </InteractionButton>
                             <InteractionButton
                                 onClick={onSaveTweet}
                                 saved={saved}
                             >
                                 <BiBookmark />
-                                {saved ? "Saved" : "Save"}
+                                {saved ? t("saved") : t("save")}
                             </InteractionButton>
                         </InteractionButtonGroup>
                     </Interaction>
@@ -286,7 +329,7 @@ const Tweet = ({ tweet }: Props) => {
                     })}
                     {totalTweetComments > tweetComments.length && (
                         <button onClick={() => fetchMoreTweetComment()}>
-                            Load more comments
+                            {t("loadMoreComment")}
                         </button>
                     )}
                 </CommentsWrapper>

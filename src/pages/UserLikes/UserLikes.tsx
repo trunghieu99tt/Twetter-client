@@ -1,5 +1,5 @@
 import React from "react";
-
+import { useTranslation } from "react-i18next";
 import { useParams } from "react-router";
 
 // talons
@@ -20,6 +20,7 @@ import { Container } from "@shared/style/sharedStyle.style";
 import PageMetadata from "@components/PageMetadata";
 
 const UserLikes = () => {
+    const { t } = useTranslation();
     const params: { userId: string } = useParams();
     const { userId } = params;
 
@@ -32,7 +33,9 @@ const UserLikes = () => {
 
     return (
         <React.Fragment>
-            <PageMetadata title={`${userData.name}'s liked tweets'`} />
+            <PageMetadata
+                title={`${userData.name}'s ${t("liked")} ${t("tweet")}`}
+            />
             <Wrapper>
                 <MyProfileOverview user={userData} />
                 <Container>

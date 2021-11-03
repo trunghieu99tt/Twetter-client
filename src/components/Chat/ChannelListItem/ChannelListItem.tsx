@@ -1,7 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { useRecoilValue } from "recoil";
 
 // utils
 import mergeClasses from "@utils/mergeClasses";
@@ -15,7 +14,6 @@ import defaultRoomImage from "../../static/images/default_room.png";
 // types
 import { iRoom } from "@type/room.types";
 import { iMessage } from "@type/message.types";
-import { useUser } from "@talons/useUser";
 
 // states
 
@@ -27,12 +25,7 @@ interface Props {
     onLeave: () => void;
 }
 
-const ChannelListItem = ({
-    classes: propsClasses,
-    data,
-    isSelected,
-    onHover,
-}: Props) => {
+const ChannelListItem = ({ classes: propsClasses, data }: Props) => {
     const classes = mergeClasses(defaultClasses, propsClasses);
 
     const messages =

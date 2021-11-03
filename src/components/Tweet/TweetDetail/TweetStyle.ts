@@ -91,6 +91,7 @@ export const InteractionSummaryItem = styled.div`
     color: var(--gray-4);
     font-size: 1.2rem;
     font-weight: 500;
+    cursor: pointer;
 `;
 
 export const InteractionButtonGroup = styled.div`

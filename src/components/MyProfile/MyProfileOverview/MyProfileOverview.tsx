@@ -1,4 +1,5 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 
 // talons
 import { useMyProfileOverview } from "./userMyProfileOverview";
@@ -41,6 +42,8 @@ type Props = {
 };
 
 const MyProfileOverview = ({ user }: Props) => {
+    const { t } = useTranslation();
+
     const {
         isMe,
         newAvatar,
@@ -68,10 +71,18 @@ const MyProfileOverview = ({ user }: Props) => {
 
     switch (listType) {
         case "followers":
-            modalHeader = <p>People are following {user.name}</p>;
+            modalHeader = (
+                <p>
+                    {t("peopleAreFollowing")} {user.name}
+                </p>
+            );
             break;
         case "following":
-            modalHeader = <p>{user.name} is following</p>;
+            modalHeader = (
+                <p>
+                    {user.name} {t("peopleUserFollowing")}
+                </p>
+            );
             break;
         default:
             modalHeader = null;
@@ -85,17 +96,17 @@ const MyProfileOverview = ({ user }: Props) => {
         <React.Fragment>
             <IoPersonAdd />
             {updatingFollowStatus
-                ? "Changing..."
+                ? `${t("changing")}..`
                 : followed
-                ? "Followed"
-                : "Follow"}
+                ? t("followed")
+                : t("follow")}
         </React.Fragment>
     );
 
     let rightButtonAction = () => updateFollowStatus(user._id);
 
     if (isMe) {
-        rightButtonContent = "Update Info";
+        rightButtonContent = t("updateInfo");
         rightButtonAction = () => setIsVisibleEditForm(true);
     }
 
@@ -134,13 +145,13 @@ const MyProfileOverview = ({ user }: Props) => {
                                 <span>
                                     {nFormatter(user?.following?.length || 0)}
                                 </span>
-                                Following
+                                {t("following")}
                             </FollowersCounter>
                             <FollowersCounter onClick={showFollowers}>
                                 <span>
                                     {nFormatter(user?.followers?.length || 0)}
                                 </span>
-                                Followers
+                                {t("followers")}
                             </FollowersCounter>
                         </MainInfo>
                         <SecondaryInfo>
@@ -155,7 +166,7 @@ const MyProfileOverview = ({ user }: Props) => {
                         {!isMe && (
                             <SendMessageBtn onClick={() => onGoChat(user._id)}>
                                 <AiOutlineMessage />
-                                Send message
+                                {t("sendMessage")}
                             </SendMessageBtn>
                         )}
                     </RightButtons>

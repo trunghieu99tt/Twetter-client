@@ -1,5 +1,5 @@
-import { v4 } from "uuid";
 import React, { useMemo, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 // talons
 import { useUser } from "@talons/useUser";
@@ -12,22 +12,11 @@ import Dropdown from "@components/Dropdown";
 import { BsFillPeopleFill } from "react-icons/bs";
 import { MdPublic } from "react-icons/md";
 
+// styles
 import classes from "./audienceSetting.module.css";
 
-const audienceSettings = [
-    {
-        text: "Everyone",
-        icon: <MdPublic />,
-        value: 0,
-    },
-    {
-        text: "People follow you",
-        icon: <BsFillPeopleFill />,
-        value: 1,
-    },
-];
-
 const AudienceSetting = () => {
+    const { t } = useTranslation();
     const { user } = useUser();
 
     const [visibleDropdown, setVisibleDropdown] = useState<boolean>(false);
@@ -40,6 +29,22 @@ const AudienceSetting = () => {
     const toggleDropdown = () => setVisibleDropdown((isVisible) => !isVisible);
 
     useOnClickOutside(dropdownRef, () => setVisibleDropdown(false));
+
+    const audienceSettings = useMemo(
+        () => [
+            {
+                text: t("everyone"),
+                icon: <MdPublic />,
+                value: 0,
+            },
+            {
+                text: t("peopleFollowYou"),
+                icon: <BsFillPeopleFill />,
+                value: 1,
+            },
+        ],
+        []
+    );
 
     const renderAudience = () => {
         const { text, icon } = audienceSettings[selectedAudience];

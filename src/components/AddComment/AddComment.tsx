@@ -1,4 +1,5 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 
 // talons
 import { useAddComment } from "./useAddComment";
@@ -47,6 +48,8 @@ const AddComment = ({ tweetId, commentId = "", addCommentRef }: Props) => {
         commentId,
     });
 
+    const { t } = useTranslation();
+
     const shouldIndent = !!commentId;
 
     return (
@@ -58,7 +61,7 @@ const AddComment = ({ tweetId, commentId = "", addCommentRef }: Props) => {
                         value={comment}
                         ref={addCommentRef}
                         onChange={onChangeComment}
-                        placeholder="Add a comment..."
+                        placeholder={`${t("addAComment")} ...`}
                         disabled={loading}
                     />
                     {loading && (

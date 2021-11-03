@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useQueryClient } from "react-query";
+import { useTranslation } from "react-i18next";
+
 
 // hooks
 import { useOnClickOutside } from "@hooks/useOnClickOutside";
@@ -24,9 +26,13 @@ type Props = {
     tweet: iTweet;
 };
 
+type TUserList = 'LIKED' | 'SAVED' | 'RETWEETED';
+
 export const useTweet = ({ tweet }: Props) => {
+    const { t } = useTranslation();
 
     const [urls, setUrls] = useState<string[]>([]);
+    const [modalUserList, setModalUserList] = useState<TUserList | null>();
     const [visibleEditForm, setVisibleEditForm] = useState<boolean>(false);
     const [visibleDropdown, setVisibleDropdown] = useState<boolean>(false);
     const currentUser: iUser | undefined = useQueryClient().getQueryData(
@@ -62,18 +68,18 @@ export const useTweet = ({ tweet }: Props) => {
 
     // current user liked this tweet or not
     const liked =
-        (currentUser?._id && tweet.likes.includes(currentUser?._id)) || false;
+        (currentUser?._id && tweet.likes.findIndex((u: iUser) => u._id === currentUser?._id) !== -1) || false;
 
     // current user saved this tweet or not
     const saved =
-        (currentUser?._id && tweet?.saved?.includes(currentUser._id)) || false;
+        (currentUser?._id && tweet?.saved?.findIndex((u: iUser) => u._id === currentUser?._id) !== -1) || false;
 
     // get who retweeted this tweet
     const retweetedBy = tweet?.retweetedBy;
 
     // current user retweeted this tweet or not
     const retweeted =
-        (currentUser?._id && tweet?.retweeted?.includes(currentUser._id)) ||
+        (currentUser?._id && tweet?.retweeted?.findIndex((u: iUser) => u._id === currentUser?._id) !== -1) ||
         false;
 
     // interaction counters
@@ -100,7 +106,7 @@ export const useTweet = ({ tweet }: Props) => {
         if (!liked) {
 
             const msg: iNotificationDTO = {
-                text: `liked your tweet`,
+                text: t('likedYourTweet'),
                 receivers: [tweet.author._id],
                 url: `/tweet/${tweet._id}`,
                 type: 'like',
@@ -128,7 +134,7 @@ export const useTweet = ({ tweet }: Props) => {
         saveTweetMutation.mutate(tweet._id);
         if (!saved) {
             const msg: iNotificationDTO = {
-                text: `saved your tweet`,
+                text: t('savedYourTweet'),
                 receivers: [tweet.author._id],
                 url: `/tweet/${tweet._id}`,
                 type: 'save',
@@ -153,6 +159,8 @@ export const useTweet = ({ tweet }: Props) => {
         }
     };
 
+    const onCloseModalUserList = () => setModalUserList(null);
+
     useEffect(() => {
         if (tweet?.content) {
             updateUrls(tweet.content);
@@ -172,6 +180,7 @@ export const useTweet = ({ tweet }: Props) => {
         tweetComments,
         addCommentRef,
         deleteLoading,
+        modalUserList,
         tweetLikeCount,
         tweetSavedCount,
         visibleDropdown,
@@ -185,8 +194,10 @@ export const useTweet = ({ tweet }: Props) => {
         onReactTweet,
         onDeleteTweet,
         toggleDropdown,
+        setModalUserList,
         setVisibleEditForm,
         focusOnCommentForm,
+        onCloseModalUserList,
         fetchMoreTweetComment,
     };
 

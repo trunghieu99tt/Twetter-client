@@ -3,21 +3,21 @@ import { AnimatePresence, motion } from "framer-motion";
 import Picker from "emoji-picker-react";
 
 // talons
+import { useOnClickOutside } from "@hooks/useOnClickOutside";
 
 // utils
+import mergeClasses from "@utils/mergeClasses";
 
 // components
 import VoiceMessageForm from "../VoiceMessageForm";
 
 // icons
 import { IoMdSend } from "react-icons/io";
-import { BsPlus, BsFillImageFill, BsMic } from "react-icons/bs";
 import { HiOutlineEmojiHappy } from "react-icons/hi";
+import { BsPlus, BsFillImageFill, BsMic } from "react-icons/bs";
 
 // styles
 import defaultClasses from "./textmessageform.module.css";
-import { useOnClickOutside } from "@hooks/useOnClickOutside";
-import mergeClasses from "@utils/mergeClasses";
 
 interface Props {
     classes?: object;
@@ -31,7 +31,6 @@ interface Props {
 const TextMessageForm = ({
     classes: propsClasses,
     value,
-    chosenEmoji,
     onSubmit,
     onChange,
     setChosenEmoji,

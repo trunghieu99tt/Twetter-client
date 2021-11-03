@@ -1,3 +1,5 @@
+import { useTranslation } from "react-i18next";
+
 // components
 import UserAvatarSmall from "@components/UserAvatarSmall";
 
@@ -19,12 +21,14 @@ import {
     Wrapper,
 } from "./UserCardStyles";
 import { useUser } from "@talons/useUser";
+import { Link } from "react-router-dom";
 
 interface Props {
     user: iUser;
 }
 
 const UserCard = ({ user }: Props) => {
+    const { t } = useTranslation();
     const { followUserMutation, user: currentUser } = useUser();
 
     const followersCount = user.followers ? user.followers.length : 0;
@@ -46,23 +50,23 @@ const UserCard = ({ user }: Props) => {
             <Flex justify="space-between">
                 <Flex gap="1.8rem">
                     <UserAvatarSmall user={user} />
-                    <div>
+                    <Link to={`/profile/${user._id}`}>
                         <UserName>{user.name}</UserName>
                         <UserFollowers>
                             {followersCount}{" "}
-                            {followersCount > 1 ? "followers" : "follower"}
+                            {`${t("follower")}${followersCount > 1 ? "s" : ""}`}
                         </UserFollowers>
-                    </div>
+                    </Link>
                 </Flex>
                 <FollowButton
                     onClick={onFollow}
                     disabled={followUserMutation.isLoading}
                 >
                     <IoPersonAdd />
-                    {followed ? "Followed" : "Follow"}
+                    {followed ? t("followed") : t("follow")}
                 </FollowButton>
             </Flex>
-            <UserBio>{user.bio ? user.bio : "No bio available"}</UserBio>
+            <UserBio>{user?.bio}</UserBio>
         </Wrapper>
     );
 };

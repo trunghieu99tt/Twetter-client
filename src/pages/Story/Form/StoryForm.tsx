@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 // talons
 import { useUser } from "@talons/useUser";
@@ -6,8 +7,10 @@ import { useStory } from "@talons/useStory";
 
 // components
 import Logo from "@components/Logo";
-import ImageStory from "@components/Story/StoryForm/Image/ImageStory";
+import { Spinner1 } from "@components/Loaders";
+import PageMetadata from "@components/PageMetadata";
 import TextStory from "@components/Story/StoryForm/Text/TextStory";
+import ImageStory from "@components/Story/StoryForm/Image/ImageStory";
 import AudienceSetting from "@components/Story/AudienceSetting/AudienceSetting";
 
 // icons
@@ -16,14 +19,14 @@ import { GoTextSize } from "react-icons/go";
 
 // styles
 import classes from "./storyForm.module.css";
-import { Spinner1 } from "@components/Loaders";
-import PageMetadata from "@components/PageMetadata";
 
 type STORY_TYPE = "IMAGE" | "TEXT";
 
 interface Props {}
 
 const StoryForm = (props: Props) => {
+    const { t } = useTranslation();
+
     const [storyType, setStoryType] = useState<STORY_TYPE | null>(null);
     const [loading, setLoading] = useState<boolean>(false);
     const { user } = useUser();
@@ -65,12 +68,12 @@ const StoryForm = (props: Props) => {
 
     return (
         <React.Fragment>
-            <PageMetadata title="Create new story" />
+            <PageMetadata title={t("createNewStory")} />
             <div className={classes.root}>
                 {loading && <Spinner1 />}
                 <Logo />
                 <div className={classes.top}>
-                    <h2>Stories</h2>
+                    <h2>{t("stories")}</h2>
                     <div className={classes.topMain}>
                         <figure className={classes.userInfo}>
                             <img
@@ -84,7 +87,7 @@ const StoryForm = (props: Props) => {
                         </figure>
                     </div>
                     <div className={classes.topFooter}>
-                        <p>Who can see your story?</p>
+                        <p>{t("whoCanSeeYourStory")}?</p>
                         <AudienceSetting />
                     </div>
                 </div>
@@ -100,7 +103,7 @@ const StoryForm = (props: Props) => {
                                 <div>
                                     <IoIosImages />
                                 </div>
-                                <p> Image Story</p>
+                                <p>{t("imageStory")}</p>
                             </button>
                             <button
                                 className={classes.createTextButton}
@@ -109,7 +112,7 @@ const StoryForm = (props: Props) => {
                                 <div>
                                     <GoTextSize />
                                 </div>
-                                <p>Text Story</p>
+                                <p>{t("textStory")}</p>
                             </button>
                         </div>
                     </React.Fragment>

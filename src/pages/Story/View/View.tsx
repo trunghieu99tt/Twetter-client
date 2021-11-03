@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from "react";
 import { useRecoilValue } from "recoil";
 import cn from "classnames";
 import { useHistory, useParams } from "react-router";
+import { useTranslation } from "react-i18next";
 
 // talons
 import { useUser } from "@talons/useUser";
@@ -39,6 +40,8 @@ import classes from "./view.module.css";
 type TDirection = "LEFT" | "RIGHT";
 
 const View = () => {
+    const { t } = useTranslation();
+
     const params: {
         userId: string;
     } = useParams();
@@ -216,7 +219,7 @@ const View = () => {
                 </aside>
                 <main className={classes.main}>
                     <div className={classes.inner}>
-                        {!userId && <p>Choose a story to view!</p>}
+                        {!userId && <p>{t("chooseStoryToView")}</p>}
                         {owners && userStories && (
                             <React.Fragment>
                                 {hasPreviousButton && (

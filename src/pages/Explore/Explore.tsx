@@ -1,18 +1,26 @@
-import InfinityMediaList from "@components/InfinityLists/InfinityMediaList";
-import InfinityPeopleList from "@components/InfinityLists/InfinityPeopleList";
-import InfinityTweetList from "@components/InfinityLists/InfinityTweetsList";
-import LeftSidebar from "@components/Sidebar/LeftSidebar";
-import MainLayout from "@layout/Main";
-import { Container } from "@shared/style/sharedStyle.style";
-import { useTweets } from "@talons/useTweets";
-import { useUser } from "@talons/useUser";
 import { Helmet } from "react-helmet-async";
 import { useParams } from "react-router";
+import { useTranslation } from "react-i18next";
+
+// talons
+import { useUser } from "@talons/useUser";
+import { useTweets } from "@talons/useTweets";
+
+// layout
+import MainLayout from "@layout/Main";
+
+// components
+import LeftSidebar from "@components/Sidebar/LeftSidebar";
+import InfinityMediaList from "@components/InfinityLists/InfinityMediaList";
+import InfinityTweetList from "@components/InfinityLists/InfinityTweetsList";
+import InfinityPeopleList from "@components/InfinityLists/InfinityPeopleList";
 
 // styles
+import { Container } from "@shared/style/sharedStyle.style";
 import { Wrapper, Content, Sidebar, Main } from "./ExploreStyle";
 
 const Explore = () => {
+    const { t } = useTranslation();
     const params: { page: string } = useParams();
     const { page } = params;
 
@@ -57,7 +65,7 @@ const Explore = () => {
     return (
         <Wrapper>
             <Helmet>
-                <title>Explore</title>
+                <title>{t("explore")}</title>
             </Helmet>
             <Container>
                 <Content>
