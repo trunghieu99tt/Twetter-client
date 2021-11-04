@@ -102,5 +102,18 @@
     "savedYourTweet": "saved your tweet",
     "userLikedTweet": "People who liked this tweet",
     "userSavedTweet": "People who saved this tweet",
-    "userRetweetedTweet": "People who retweeted this tweet"
+    "userRetweetedTweet": "People who retweeted this tweet",
+    "forgotYourPassword": "Forgot your password?",
+    "forgotPasswordHeading": "Enter your user account's verified email address and we will send you a new password",
+    "forgotPasswordSuccess": "Password updated successfully. Please check your email for new password",
+    "send": "Send",
+    "invalidEmail": "Invalid email",
+    "updatePassword": "Update password",
+    "oldPassword": "Old password",
+    "newPassword": "New password",
+    "confirmNewPassword": "Confirm new password",
+    "email": "Email",
+    "passwordMisMatch": "Password mismatch!",
+    "unknownError": "Something went wrong. Please try again later!",
+    "updateSuccess": "Updated successfully"
 }

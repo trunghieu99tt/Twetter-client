@@ -1,4 +1,4 @@
-import { ChangeEvent } from "react";
+import React from "react";
 import DatePicker from "react-datepicker";
 import { useTranslation } from "react-i18next";
 
@@ -7,6 +7,7 @@ import { useEditInfo } from "./useEditInfo";
 
 // components
 import Modal from "@components/Modal";
+import GenderSelector from "@components/Auth/GenderSelector";
 import ImageWithUpdater from "@components/ImageWithUpdater/ImageWithUpdater";
 
 // types
@@ -16,8 +17,10 @@ import { iUser } from "@type/user.types";
 import {
     Wrapper,
     EditItem,
+    EditItemList,
     EditItemLabel,
     EditItemInput,
+    ToggleUpdatePasswordBtn,
 } from "./EditInfoStyle";
 import { Flex } from "@shared/style/sharedStyle.style";
 
@@ -30,20 +33,21 @@ const EditInfo = ({ data, onCancel }: Props) => {
     const { t } = useTranslation();
 
     const {
-        bio,
-        dob,
-        name,
+        userInfo,
         newCover,
         newAvatar,
         isDisabledUpdate,
+        showUpdatePassword,
 
-        setBio,
-        setDob,
-        setName,
         onUpdateInfo,
         onChangePicture,
+        updatePasswordData,
         onCancelChangePicture,
-    } = useEditInfo({ data });
+        onChangeBasicInfoFields,
+        onChangePasswordFields,
+        toggleShowUpdatePassword,
+        onChangeSpecificBasicInfoField,
+    } = useEditInfo({ data, onCancel });
 
     const body = (
         <Wrapper>
@@ -73,31 +77,84 @@ const EditInfo = ({ data, onCancel }: Props) => {
                     />
                 </EditItem>
             </Flex>
-            <EditItem>
-                <EditItemLabel>{t("name")}</EditItemLabel>
-                <EditItemInput
-                    value={name}
-                    onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                        setName(e.target.value)
-                    }
-                />
-            </EditItem>
-            <EditItem>
-                <EditItemLabel>{t("bio")}</EditItemLabel>
-                <EditItemInput
-                    value={bio}
-                    onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                        setBio(e.target.value)
-                    }
-                />
-            </EditItem>
-            <EditItem>
-                <EditItemLabel>{t("birthday")}</EditItemLabel>
-                <DatePicker
-                    selected={dob}
-                    onChange={(date: Date) => setDob(date)}
-                />
-            </EditItem>
+            <EditItemList>
+                <EditItem>
+                    <EditItemLabel>{t("name")}</EditItemLabel>
+                    <EditItemInput
+                        name="name"
+                        value={userInfo.name}
+                        onChange={onChangeBasicInfoFields}
+                    />
+                </EditItem>
+                <EditItem>
+                    <EditItemLabel>{t("email")}</EditItemLabel>
+                    <EditItemInput
+                        name="email"
+                        value={userInfo.email}
+                        onChange={onChangeBasicInfoFields}
+                    />
+                </EditItem>
+                <EditItem>
+                    <EditItemLabel>{t("bio")}</EditItemLabel>
+                    <EditItemInput
+                        name="bio"
+                        value={userInfo.bio}
+                        onChange={onChangeBasicInfoFields}
+                    />
+                </EditItem>
+                <EditItem>
+                    <EditItemLabel>{t("gender")}</EditItemLabel>
+                    <GenderSelector
+                        gender={userInfo.gender!}
+                        setGender={(gender: number) => {
+                            onChangeSpecificBasicInfoField("gender", gender);
+                        }}
+                    />
+                </EditItem>
+                <EditItem>
+                    <EditItemLabel>{t("birthday")}</EditItemLabel>
+                    <DatePicker
+                        selected={userInfo.birthday}
+                        onChange={(date: Date) =>
+                            onChangeSpecificBasicInfoField("birthday", date)
+                        }
+                    />
+                </EditItem>
+            </EditItemList>
+            <ToggleUpdatePasswordBtn onClick={toggleShowUpdatePassword}>
+                {t("updatePassword")}
+            </ToggleUpdatePasswordBtn>
+            {showUpdatePassword && (
+                <EditItemList>
+                    <EditItem>
+                        <EditItemLabel>{t("oldPassword")}</EditItemLabel>
+                        <EditItemInput
+                            type="password"
+                            name="oldPassword"
+                            value={updatePasswordData.oldPassword}
+                            onChange={onChangePasswordFields}
+                        />
+                    </EditItem>
+                    <EditItem>
+                        <EditItemLabel>{t("newPassword")}</EditItemLabel>
+                        <EditItemInput
+                            type="password"
+                            name="newPassword"
+                            value={updatePasswordData.newPassword}
+                            onChange={onChangePasswordFields}
+                        />
+                    </EditItem>
+                    <EditItem>
+                        <EditItemLabel>{t("confirmNewPassword")}</EditItemLabel>
+                        <EditItemInput
+                            type="password"
+                            name="newPasswordConfirm"
+                            value={updatePasswordData.newPasswordConfirm}
+                            onChange={onChangePasswordFields}
+                        />
+                    </EditItem>
+                </EditItemList>
+            )}
         </Wrapper>
     );
 
@@ -106,10 +163,7 @@ const EditInfo = ({ data, onCancel }: Props) => {
             header={<h3>{t("changeUserInfo")}</h3>}
             isOpen={true}
             body={body}
-            onOk={() => {
-                onUpdateInfo();
-                onCancel();
-            }}
+            onOk={onUpdateInfo}
             onCancel={onCancel}
         />
     );

@@ -13,3 +13,9 @@ export interface iUser {
     storyAudience: number;
     isThirdParty?: boolean;
 }
+
+export interface iUpdateUserDTO extends Partial<iUser> {
+    oldPassword?: string;
+    newPassword?: string;
+    newPasswordConfirm?: string;
+}
