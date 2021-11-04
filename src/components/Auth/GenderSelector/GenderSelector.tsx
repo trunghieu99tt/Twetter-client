@@ -22,7 +22,7 @@ import {
 
 type Props = {
     gender: number;
-    setGender: (audience: number) => void;
+    setGender: (gender: number) => void;
 };
 
 const GenderSelector = ({ gender, setGender }: Props) => {

@@ -2,6 +2,14 @@ import styled from "styled-components";
 
 export const Wrapper = styled.div``;
 
+export const EditItemList = styled.div`
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    justify-content: center;
+    align-items: center;
+`;
+
 export const EditItem = styled.div`
     margin-bottom: 1rem;
     
@@ -30,3 +38,11 @@ export const EditItemInput = styled.input`
     border-radius: .5rem;
 `;
 
+export const ToggleUpdatePasswordBtn = styled.button`
+    display: block;
+    color: var(--red);
+    font-weight: 500;
+    text-decoration: underline;
+    padding-left: 0;
+    margin-bottom: .5rem
+`;

@@ -6,27 +6,38 @@ import { useAuth } from "./useAuth";
 
 // components
 import GenderSelector from "./GenderSelector";
+import ForgotPassword from "@components/ForgotPassword";
 import SocialLoginIcons from "@components/Auth/SocialAuthIcons";
 
 import {
+    Hr,
+    Form,
+    Input,
     Wrapper,
     SubHeading,
-    RedirectButton,
-    Form,
     InputGroup,
     InputLabel,
-    Input,
-    Hr,
     SocialSuggest,
     SubmitButton,
+    RedirectButton,
+    ForgotPasswordStyled,
 } from "./AuthStyle";
+import { AnimatePresence } from "framer-motion";
 
 const Auth = () => {
     const { t } = useTranslation();
 
     const [screen, setScreen] = useState<"LOGIN" | "REGISTER">("LOGIN");
 
-    const { gender, setGender, handleSubmit, register } = useAuth({
+    const {
+        gender,
+        setGender,
+        handleSubmit,
+        register,
+        onOpenForgotPasswordForm,
+        onCloseForgotPasswordForm,
+        visibleForgotPasswordForm,
+    } = useAuth({
         isRegister: screen === "REGISTER",
     });
 
@@ -52,6 +63,11 @@ const Auth = () => {
 
     return (
         <Wrapper>
+            <AnimatePresence>
+                {visibleForgotPasswordForm && (
+                    <ForgotPassword onClose={onCloseForgotPasswordForm} />
+                )}
+            </AnimatePresence>
             {subHeading}
             <Form>
                 <InputGroup>
@@ -90,6 +106,9 @@ const Auth = () => {
             </Hr>
             <SocialSuggest> {t("socialLoginHeading")}</SocialSuggest>
             <SocialLoginIcons />
+            <ForgotPasswordStyled onClick={onOpenForgotPasswordForm}>
+                {t("forgotYourPassword")}
+            </ForgotPasswordStyled>
         </Wrapper>
     );
 };

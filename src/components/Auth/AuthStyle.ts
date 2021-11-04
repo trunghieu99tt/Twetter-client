@@ -100,4 +100,12 @@ export const SubmitButton = styled.button`
     font-weight: 500;
     padding: 1rem;
     border-radius: 5px;
-`
+`;
+
+export const ForgotPasswordStyled = styled.button`
+    text-align: center;
+    margin: 0rem auto;
+    display: block;
+    color: var(--red);
+    margin-top: 1rem;
+`;
