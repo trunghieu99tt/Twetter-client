@@ -1,3 +1,4 @@
+import React from "react";
 import DatePicker from "react-datepicker";
 import { useTranslation } from "react-i18next";
 
@@ -6,6 +7,7 @@ import { useEditInfo } from "./useEditInfo";
 
 // components
 import Modal from "@components/Modal";
+import GenderSelector from "@components/Auth/GenderSelector";
 import ImageWithUpdater from "@components/ImageWithUpdater/ImageWithUpdater";
 
 // types
@@ -15,11 +17,12 @@ import { iUser } from "@type/user.types";
 import {
     Wrapper,
     EditItem,
+    EditItemList,
     EditItemLabel,
     EditItemInput,
+    ToggleUpdatePasswordBtn,
 } from "./EditInfoStyle";
 import { Flex } from "@shared/style/sharedStyle.style";
-import { Spinner1 } from "@components/Loaders";
 
 interface Props {
     data: iUser;
@@ -30,30 +33,31 @@ const EditInfo = ({ data, onCancel }: Props) => {
     const { t } = useTranslation();
 
     const {
-        bio,
-        dob,
-        name,
+        userInfo,
         newCover,
         newAvatar,
-        updating,
+        isDisabledUpdate,
+        showUpdatePassword,
 
-        setDob,
         onUpdateInfo,
-        onChangeField,
         onChangePicture,
+        updatePasswordData,
         onCancelChangePicture,
-    } = useEditInfo({ data, closeForm: onCancel });
+        onChangeBasicInfoFields,
+        onChangePasswordFields,
+        toggleShowUpdatePassword,
+        onChangeSpecificBasicInfoField,
+    } = useEditInfo({ data, onCancel });
 
     const body = (
         <Wrapper>
-            {updating && <Spinner1 />}
             <Flex gap="5rem">
                 <EditItem>
                     <EditItemLabel>{t("coverPhoto")}</EditItemLabel>
                     <ImageWithUpdater
                         data={newCover}
                         name="coverPhoto"
-                        isDisabledUpdate={updating}
+                        isDisabledUpdate={isDisabledUpdate}
                         image={newCover?.preview || data?.coverPhoto}
                         id={`update-cover-photo-${data._id}`}
                         onCancel={() => onCancelChangePicture("coverPhoto")}
@@ -65,7 +69,7 @@ const EditInfo = ({ data, onCancel }: Props) => {
                     <ImageWithUpdater
                         data={newAvatar}
                         name="avatar"
-                        isDisabledUpdate={updating}
+                        isDisabledUpdate={isDisabledUpdate}
                         image={newAvatar?.preview || data?.avatar}
                         id={`update-avatar-photo-${data._id}`}
                         onCancel={() => onCancelChangePicture("avatar")}
@@ -73,30 +77,84 @@ const EditInfo = ({ data, onCancel }: Props) => {
                     />
                 </EditItem>
             </Flex>
-            <EditItem>
-                <EditItemLabel>{t("name")}</EditItemLabel>
-                <EditItemInput
-                    name="name"
-                    value={name}
-                    onChange={(e) => onChangeField(e, 50)}
-                />
-            </EditItem>
-            <EditItem>
-                <EditItemLabel>{t("bio")}</EditItemLabel>
-                <EditItemInput
-                    name="bio"
-                    value={bio}
-                    onChange={(e) => onChangeField(e, 100)}
-                />
-            </EditItem>
-            <EditItem>
-                <EditItemLabel>{t("birthday")}</EditItemLabel>
-                <DatePicker
-                    selected={dob}
-                    onChange={(date: Date) => setDob(date)}
-                    maxDate={new Date()}
-                />
-            </EditItem>
+            <EditItemList>
+                <EditItem>
+                    <EditItemLabel>{t("name")}</EditItemLabel>
+                    <EditItemInput
+                        name="name"
+                        value={userInfo.name}
+                        onChange={onChangeBasicInfoFields}
+                    />
+                </EditItem>
+                <EditItem>
+                    <EditItemLabel>{t("email")}</EditItemLabel>
+                    <EditItemInput
+                        name="email"
+                        value={userInfo.email}
+                        onChange={onChangeBasicInfoFields}
+                    />
+                </EditItem>
+                <EditItem>
+                    <EditItemLabel>{t("bio")}</EditItemLabel>
+                    <EditItemInput
+                        name="bio"
+                        value={userInfo.bio}
+                        onChange={onChangeBasicInfoFields}
+                    />
+                </EditItem>
+                <EditItem>
+                    <EditItemLabel>{t("gender")}</EditItemLabel>
+                    <GenderSelector
+                        gender={userInfo.gender!}
+                        setGender={(gender: number) => {
+                            onChangeSpecificBasicInfoField("gender", gender);
+                        }}
+                    />
+                </EditItem>
+                <EditItem>
+                    <EditItemLabel>{t("birthday")}</EditItemLabel>
+                    <DatePicker
+                        selected={userInfo.birthday}
+                        onChange={(date: Date) =>
+                            onChangeSpecificBasicInfoField("birthday", date)
+                        }
+                    />
+                </EditItem>
+            </EditItemList>
+            <ToggleUpdatePasswordBtn onClick={toggleShowUpdatePassword}>
+                {t("updatePassword")}
+            </ToggleUpdatePasswordBtn>
+            {showUpdatePassword && (
+                <EditItemList>
+                    <EditItem>
+                        <EditItemLabel>{t("oldPassword")}</EditItemLabel>
+                        <EditItemInput
+                            type="password"
+                            name="oldPassword"
+                            value={updatePasswordData.oldPassword}
+                            onChange={onChangePasswordFields}
+                        />
+                    </EditItem>
+                    <EditItem>
+                        <EditItemLabel>{t("newPassword")}</EditItemLabel>
+                        <EditItemInput
+                            type="password"
+                            name="newPassword"
+                            value={updatePasswordData.newPassword}
+                            onChange={onChangePasswordFields}
+                        />
+                    </EditItem>
+                    <EditItem>
+                        <EditItemLabel>{t("confirmNewPassword")}</EditItemLabel>
+                        <EditItemInput
+                            type="password"
+                            name="newPasswordConfirm"
+                            value={updatePasswordData.newPasswordConfirm}
+                            onChange={onChangePasswordFields}
+                        />
+                    </EditItem>
+                </EditItemList>
+            )}
         </Wrapper>
     );
 

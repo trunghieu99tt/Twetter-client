@@ -24,7 +24,6 @@ export const Mask = styled.div`
 `;
 
 export const Main = styled.div`
-    width: 500px;
     max-width: 70%;
     background: #fff;
     z-index: 1;
@@ -33,7 +32,7 @@ export const Main = styled.div`
 `;
 
 export const Header = styled('div') <{
-    customHeaderStyles?: string
+    customHeaderStyles?: string;
 }>`
     margin-bottom: 1rem;
     padding-bottom: 0.8rem;   

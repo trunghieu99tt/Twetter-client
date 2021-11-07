@@ -102,5 +102,18 @@
     "savedYourTweet": "đã lưu tweet của bạn",
     "userLikedTweet": "Những người đã thích tweet này",
     "userSavedTweet": "Những người đã lưu tweet này",
-    "userRetweetedTweet": "Những người đã tweet lại"
+    "userRetweetedTweet": "Những người đã tweet lại",
+    "forgotYourPassword": "Bạn quên mật khẩu?",
+    "forgotPasswordHeading": "Nhập email của bạn vào đây và chúng tôi sẽ gửi một mật khẩu mới đến email của bạn",
+    "forgotPasswordSuccess": "Password đã dược cập nhật thành công. Xin hãy kiểm tra email của bạn.",
+    "send": "Gửi",
+    "invalidEmail": "Email không tồn tại",
+    "updatePassword": "Cập nhật mật khẩu",
+    "oldPassword": "Mật khẩu cũ",
+    "newPassword": "Mật khẩu mới",
+    "confirmNewPassword": "Xác nhận mật khẩu mới",
+    "Email": "Email",
+    "passwordMisMatch": "Mật khẩu không khớp",
+    "unknownError": "Đã xảy ra lỗi, vui lòng thử lại sau",
+    "updateSuccess": "Cập nhật thành công"
 }

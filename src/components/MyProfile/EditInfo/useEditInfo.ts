@@ -1,21 +1,37 @@
 import { useUser } from "@talons/useUser";
 import { TImageInput } from "@type/app.types";
-import { iUser } from "@type/user.types";
-import { ChangeEvent, useCallback, useState } from "react";
+import { iUpdateUserDTO, iUser } from "@type/user.types";
+import { ChangeEvent, useState } from "react";
+import { toast } from "react-toastify";
 import { useUpload } from '../../../talons/useUpload';
-import { toast } from 'react-toastify';
-import throttle from "lodash.throttle";
-
+import { useTranslation } from 'react-i18next';
 
 type Props = {
     data: iUser;
-    closeForm: () => void;
+    onCancel: () => void;
 };
 
-export const useEditInfo = ({ data, closeForm }: Props) => {
-    const [name, setName] = useState<string>(data?.name || '');
-    const [bio, setBio] = useState<string>(data?.bio || '');
-    const [dob, setDob] = useState<Date>(new Date(data.birthday));
+export const useEditInfo = ({ data, onCancel }: Props) => {
+
+    const { t } = useTranslation();
+
+    const [userInfo, setUserInfo] = useState<Partial<iUser>>({
+        name: data.name,
+        email: data.email,
+        avatar: data.avatar,
+        bio: data.bio,
+        birthday: data?.birthday ? new Date(data.birthday) : new Date(),
+        gender: data.gender,
+    });
+
+    const [updatePasswordData, setUpdatePasswordData] = useState({
+        oldPassword: '',
+        newPassword: '',
+        newPasswordConfirm: ''
+    });
+
+    const [showUpdatePassword, setShowUpdatePassword] = useState<boolean>(false);
+
     const [newAvatar, setNewAvatar] = useState<TImageInput>({
         file: null,
         preview: data.avatar,
@@ -29,35 +45,6 @@ export const useEditInfo = ({ data, closeForm }: Props) => {
     const { uploadImage } = useUpload();
     const { updateUserMutation } = useUser();
 
-    const logError = useCallback(
-        throttle(
-            (limit) =>
-                toast.error(
-                    `Text is too long! Length of text must be less than ${limit}`
-                ),
-            2000
-        ),
-        []
-    );
-
-    const onChangeField = (e: ChangeEvent<HTMLInputElement>, limit: number) => {
-        const value = e.target.value;
-
-        if (value.trim().length <= limit) {
-            switch (e.target.name) {
-                case 'name':
-                    setName(value);
-                    break;
-                case 'bio':
-                    setBio(value);
-                    break;
-            }
-        }
-        else {
-            logError(limit);
-        }
-
-    };
 
     const onChangePicture = (e: ChangeEvent<HTMLInputElement>) => {
         const { name: targetName, files } = e.target;
@@ -65,7 +52,6 @@ export const useEditInfo = ({ data, closeForm }: Props) => {
             const reader = new FileReader();
             reader.readAsDataURL(files[0]);
             reader.onload = () => {
-                console.log(`targetName`, targetName);
                 const newState = {
                     file: files[0],
                     preview: reader.result as string,
@@ -91,53 +77,100 @@ export const useEditInfo = ({ data, closeForm }: Props) => {
         }
     };
 
-    const onUpdateInfo = async () => {
-
-        setUpdating(true);
-        let avatar = data.avatar;
-        let coverPhoto = data.coverPhoto;
-
-        if (newAvatar.file) {
-            avatar = await uploadImage(newAvatar.file);
-        }
-
-        if (newCover.file) {
-            coverPhoto = await uploadImage(newCover.file);
-        }
-
-        const newInfo: Partial<iUser> = {
-            bio,
-            name,
-            avatar,
-            coverPhoto,
-            birthday: dob,
-        };
-
-        await updateUserMutation.mutateAsync({
-            updatedUser: newInfo,
-            userId: data._id,
+    const onChangeSpecificBasicInfoField = (name: string, value: any) => {
+        setUserInfo({
+            ...userInfo,
+            [name]: value
         });
+    };
 
-        setUpdating(false);
-        closeForm();
-
+    const onChangeBasicInfoFields = (e: ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = e.target;
+        onChangeSpecificBasicInfoField(name, value);
     };
 
 
+    const onChangePasswordFields = (e: ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = e.target;
+        setUpdatePasswordData({
+            ...updatePasswordData,
+            [name]: value
+        });
+    };
+
+    const checkPasswordMatch = () => {
+        return updatePasswordData.newPassword === updatePasswordData.newPasswordConfirm;
+    };
+
+    const onUpdateInfo = async () => {
+
+        if (!checkPasswordMatch) {
+            toast.error(t('passwordMisMatch'));
+            return;
+        }
+
+        setUpdating(true);
+        try {
+
+            let avatar = data.avatar;
+            let coverPhoto = data.coverPhoto;
+
+            if (newAvatar.file) {
+                avatar = await uploadImage(newAvatar.file);
+            }
+
+            if (newCover.file) {
+                coverPhoto = await uploadImage(newCover.file);
+            }
+
+            let newInfo: iUpdateUserDTO = {
+                ...userInfo,
+                avatar,
+                coverPhoto,
+            };
+
+            if (showUpdatePassword) {
+                newInfo = {
+                    ...newInfo,
+                    ...updatePasswordData
+                };
+            }
+
+            await updateUserMutation.mutateAsync({
+                updatedUser: newInfo,
+                userId: data._id,
+            });
+
+            toast.success(t('updateSuccess'));
+            onCancel();
+        } catch (error: any) {
+            const message = error?.response?.data?.error || t('unknownError');
+            toast.error(message);
+        }
+        setUpdating(false);
+
+    };
+
+    const toggleShowUpdatePassword = () => setShowUpdatePassword(v => !v);
+
+    const isDisabledUpdate = updating || updateUserMutation.isLoading;
+
 
     return {
-        bio,
-        dob,
-        name,
+        userInfo,
         newCover,
         newAvatar,
-        updating,
+        isDisabledUpdate,
+        showUpdatePassword,
+        updatePasswordData,
 
-        setDob,
         onUpdateInfo,
-        onChangeField,
         onChangePicture,
-        onCancelChangePicture
+        onCancelChangePicture,
+        onChangeBasicInfoFields,
+        onChangePasswordFields,
+        toggleShowUpdatePassword,
+        onChangeSpecificBasicInfoField,
     };
 
 };

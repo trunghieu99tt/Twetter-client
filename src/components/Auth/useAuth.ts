@@ -6,15 +6,13 @@ import { useState } from "react";
 import { AUTH_ENDPOINTS } from "constants/auth.constants";
 import { useQueryClient } from "react-query";
 import { USER_QUERY } from "constants/user.constants";
-import { useSetRecoilState } from "recoil";
-import { prevUserState } from "states/user.state";
 import { useAppContext } from "@context/app.context";
 import { useUser } from "@talons/useUser";
 
 
 type Props = {
-    isRegister?: boolean
-}
+    isRegister?: boolean;
+};
 
 /**
  * A [React Hook]{@link https://reactjs.org/docs/hooks-intro.html}
@@ -37,7 +35,7 @@ const useAuth = ({ isRegister = false }: Props) => {
     } } = useAppContext();
 
     const [gender, setGender] = useState<number>(2);
-    const [visibleEmailForm, setVisibleEmailForm] = useState<boolean>(false);
+    const [visibleForgotPasswordForm, setVisibleForgotPasswordForm] = useState<boolean>(false);
 
     const onSubmit = async (formData: any) => {
         if (!isRegister)
@@ -45,7 +43,7 @@ const useAuth = ({ isRegister = false }: Props) => {
         else {
             await handleRegister(formData);
         }
-    }
+    };
 
     const handleLogin = async (formData: any) => {
         try {
@@ -55,14 +53,14 @@ const useAuth = ({ isRegister = false }: Props) => {
                 localStorage.setItem("accessToken", `"${accessToken}"`);
                 queryClient.invalidateQueries(USER_QUERY.GET_ME);
                 toast.success("Login successful");
-                history.push('/')
+                history.push('/');
             } else {
                 toast.error("Login Failed");
             }
         } catch (error) {
             // toast.error(error.response.data.message);
         }
-    }
+    };
 
     const handleLogout = async () => {
         const response = await client.post(AUTH_ENDPOINTS.LOG_OUT);
@@ -72,7 +70,7 @@ const useAuth = ({ isRegister = false }: Props) => {
         history.push("/login");
         queryClient.invalidateQueries(USER_QUERY.GET_ME);
         toast.info(message);
-    }
+    };
 
     const handleRegister = async (formData: any) => {
         try {
@@ -81,29 +79,29 @@ const useAuth = ({ isRegister = false }: Props) => {
             if (accessToken) {
                 localStorage.setItem("accessToken", `"${accessToken}"`);
                 queryClient.invalidateQueries(USER_QUERY.GET_ME);
-                history.push('/')
+                history.push('/');
             }
         } catch (error) {
             // toast.error(error.response.data.message);
         }
-    }
+    };
 
 
-    const onCloseEmailForm = () => setVisibleEmailForm(false);
+    const onCloseForgotPasswordForm = () => setVisibleForgotPasswordForm(false);
 
-    const onOpenEmailForm = () => setVisibleEmailForm(true);
+    const onOpenForgotPasswordForm = () => setVisibleForgotPasswordForm(true);
 
     return {
         gender,
         register,
-        visibleEmailForm,
+        visibleForgotPasswordForm,
 
         setGender,
         handleLogout,
-        onOpenEmailForm,
-        onCloseEmailForm,
+        onOpenForgotPasswordForm,
+        onCloseForgotPasswordForm,
         handleSubmit: handleSubmit(onSubmit),
-    }
-}
+    };
+};
 
-export { useAuth }
+export { useAuth };
