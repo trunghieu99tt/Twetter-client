@@ -80,6 +80,7 @@ const CallModal = (props: Props) => {
             newCall = peer?.call(call.peerId, stream) as MediaConnection;
         }
         newCall.on("stream", (stream) => {
+            console.log(`remoteVideoRef`, remoteVideoRef);
             if (remoteVideoRef?.current) {
                 playStream(stream, remoteVideoRef.current);
             }
@@ -201,6 +202,7 @@ const CallModal = (props: Props) => {
                             }
                             className={classes.remoteVideo}
                             playsInline
+                            muted
                         />
                     </div>
                     <div className={classes.timeVideo}>

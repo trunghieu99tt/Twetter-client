@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { useRecoilValue } from "recoil";
+import { useQueryClient, UseInfiniteQueryResult } from "react-query";
 
 // talons
 import { useUser } from "@talons/useUser";
@@ -18,12 +19,23 @@ import { iRoom } from "@type/room.types";
 
 // styles
 import classes from "./chatUserList.module.css";
+import { MESSAGES_QUERIES } from "constants/message.constants";
 
-interface Props {}
-
-const ChatPageUserList = (props: Props) => {
+const ChatPageUserList = () => {
     const connectedRooms = useRecoilValue(connectedRoomsState);
     const { user: currentUser } = useUser();
+    const queryClient = useQueryClient();
+
+    const getLatestMessage = (roomId: string) => {
+        const queryData: any = queryClient.getQueryData([
+            MESSAGES_QUERIES.GET_MESSAGES,
+            roomId,
+        ]);
+
+        const data = queryData?.pages?.[0]?.data?.[0];
+
+        return data || {};
+    };
 
     return (
         <div className={classes.root}>
@@ -38,8 +50,14 @@ const ChatPageUserList = (props: Props) => {
                         return u._id !== currentUser._id;
                     });
                     if (!user) return null;
+
+                    const latestMessage = getLatestMessage(room._id);
+
                     return (
-                        <Link to={`/chat/${room._id}`}>
+                        <Link
+                            to={`/chat/${room._id}`}
+                            key={`chat-page-user-list-${room._id}`}
+                        >
                             <article className={classes.item}>
                                 <UserAvatarSmall
                                     user={user}
@@ -50,8 +68,7 @@ const ChatPageUserList = (props: Props) => {
                                         {user.name}
                                     </div>
                                     <div className={classes.lastMessage}>
-                                        Lorem ipsum dolor sit amet, consectetur
-                                        adipiscing elit.
+                                        {latestMessage?.content}
                                     </div>
                                 </div>
                             </article>

@@ -13,7 +13,7 @@
 
 .inner {
     padding: 2rem;
-    background: #020116;
+    background: #fff;
     border-radius: 0.8rem;
 }
 
@@ -25,7 +25,6 @@
     align-items: center;
     justify-content: center;
     flex-direction: column;
-    color: white;
     padding: 50px 0;
     border-radius: 5px;
 }
