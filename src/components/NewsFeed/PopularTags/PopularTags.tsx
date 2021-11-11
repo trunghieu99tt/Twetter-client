@@ -26,21 +26,24 @@ const PopularTags = () => {
 
     const title = t("popularTag");
 
-    const content = mostPopularHashtags.map((hashtag: iHashtag) => {
-        const { _id, name, count } = hashtag;
+    const content = mostPopularHashtags
+        .slice(0, Math.min(mostPopularHashtags.length, 5))
+        .map((hashtag: iHashtag) => {
+            const { _id, name, count } = hashtag;
 
-        return (
-            <TagWrapper
-                key={`popular-tag-${_id}`}
-                to={`${HASHTAG_ROUTES.BASE}/${name}`}
-            >
-                <TagName>#{name}</TagName>
-                <TagCounter>
-                    {nFormatter(count)} {`${t("tweet")}${count > 1 ? "s" : ""}`}{" "}
-                </TagCounter>
-            </TagWrapper>
-        );
-    });
+            return (
+                <TagWrapper
+                    key={`popular-tag-${_id}`}
+                    to={`${HASHTAG_ROUTES.BASE}/${name}`}
+                >
+                    <TagName>#{name}</TagName>
+                    <TagCounter>
+                        {nFormatter(count)}{" "}
+                        {`${t("tweet")}${count > 1 ? "s" : ""}`}{" "}
+                    </TagCounter>
+                </TagWrapper>
+            );
+        });
 
     return <SidebarBlock title={title} content={content} />;
 };

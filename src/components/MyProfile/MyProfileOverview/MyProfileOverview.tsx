@@ -20,6 +20,11 @@ import { AiOutlineMessage } from "react-icons/ai";
 // types
 import { iUser } from "@type/user.types";
 
+// image
+import DefaultManAvatar from "@images/man.svg";
+import DefaultWomanAvatar from "@images/woman.svg";
+import DefaultUnknownAvatar from "@images/user.png";
+
 // styles
 import {
     Bio,
@@ -110,6 +115,19 @@ const MyProfileOverview = ({ user }: Props) => {
         rightButtonAction = () => setIsVisibleEditForm(true);
     }
 
+    let defaultAvatar = null;
+
+    switch (user.gender) {
+        case 0:
+            defaultAvatar = DefaultManAvatar;
+            break;
+        case 1:
+            defaultAvatar = DefaultWomanAvatar;
+            break;
+        default:
+            defaultAvatar = DefaultUnknownAvatar;
+    }
+
     return (
         <Wrapper>
             <Modal
@@ -133,7 +151,9 @@ const MyProfileOverview = ({ user }: Props) => {
                         isDisabledUpdate={updating}
                         id={`update-user-avatar-${user._id}`}
                         wrapperCustomStyles="margin-top: -7.5rem;"
-                        image={newAvatar?.preview || user?.avatar}
+                        image={
+                            newAvatar?.preview || user?.avatar || defaultAvatar
+                        }
                         onOk={updateUserAvatar}
                         onChange={onChangeAvatar}
                         onCancel={onCancelChangeAvatar}

@@ -7,7 +7,9 @@ import { useSetRecoilState } from "recoil";
 import { storiesState } from "states/story.state";
 
 const getStoriesFeed = async () => {
-    const response = await client.get(`${STORY_ENDPOINTS.BASE}?page=0&limit=1000`);
+    const response = await client.get(
+        `${STORY_ENDPOINTS.BASE}?page=0&limit=1000`
+    );
     return response.data.data;
 };
 
@@ -16,23 +18,17 @@ const createStory = async (newStory: iStoryCreate) => {
     return response.data;
 };
 
-const updateStory = async ({ storyId }: {
-    storyId: string;
-}) => {
+const updateStory = async ({ storyId }: { storyId: string }) => {
     const response = await client.patch(`${STORY_ENDPOINTS.BASE}/${storyId}`);
     return response.data;
 };
 
-const deleteStory = async ({ storyId }: {
-    storyId: string;
-}) => {
+const deleteStory = async ({ storyId }: { storyId: string }) => {
     const response = await client.delete(`${STORY_ENDPOINTS.BASE}/${storyId}`);
     return response.data;
 };
 
-
 export const useStory = () => {
-
     const setStories = useSetRecoilState(storiesState);
     const queryClient = useQueryClient();
 
@@ -40,14 +36,18 @@ export const useStory = () => {
         queryClient.invalidateQueries(STORY_QUERY.GET_STORIES);
     };
 
-    const getStoriesFeedQuery = useQuery(STORY_QUERY.GET_STORIES, getStoriesFeed, {
-        staleTime: 1000 * 60 * 60, // 1 hour
-    });
+    const getStoriesFeedQuery = useQuery(
+        STORY_QUERY.GET_STORIES,
+        getStoriesFeed,
+        {
+            staleTime: 1000 * 60 * 60, // 1 hour
+        }
+    );
 
     const createStoryMutation = useMutation(createStory, {
         onSuccess: () => {
             invalidateStoryQuery();
-        }
+        },
     });
 
     const updateStoryMutation = useMutation(updateStory, {
@@ -64,22 +64,20 @@ export const useStory = () => {
             // });
             // queryClient.setQueryData(STORY_QUERY.GET_STORIES, updatedStory);
             invalidateStoryQuery();
-        }
+        },
     });
 
     const deleteStoryMutation = useMutation(deleteStory, {
         onSuccess: () => {
             invalidateStoryQuery();
-        }
+        },
     });
 
-    const refetchAll = () => {
-    };
+    const refetchAll = () => {};
 
     const storyList = getStoriesFeedQuery.data;
 
     useEffect(() => {
-        console.log('storyList: ', storyList);
         const groupStoryByUser: iStoryGroup = storyList?.reduce(
             (
                 res: {
@@ -97,16 +95,15 @@ export const useStory = () => {
             },
             {}
         );
-        console.log('groupStoryByUser: ', groupStoryByUser);
+        console.log("groupStoryByUser: ", groupStoryByUser);
         setStories(groupStoryByUser);
     }, [storyList]);
-
 
     return {
         refetchAll,
         getStoriesFeedQuery,
         createStoryMutation,
         updateStoryMutation,
-        deleteStoryMutation
+        deleteStoryMutation,
     };
 };

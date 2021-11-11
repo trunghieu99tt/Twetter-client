@@ -26,6 +26,9 @@ import { STORY_ROUTES } from "routes/routes";
 import { iStory } from "@type/story.types";
 import { iUser } from "@type/user.types";
 
+// images
+import DefaultUnknownAvatar from "@images/user.png";
+
 // states
 import {
     ownersSelector,
@@ -56,8 +59,8 @@ const View = () => {
     const userStories = useRecoilValue(storySelector(userId));
     const userStoryMetadata = useRecoilValue(userStoryMetadataSelector(userId));
 
-    const [activeStoryIdx, setActiveStoryIdx] = React.useState<number>(0);
     const itemsRef = useRef<Array<HTMLDivElement | null>>([]);
+    const [activeStoryIdx, setActiveStoryIdx] = React.useState<number>(0);
 
     const activeStory: iStory | null = userStories?.[activeStoryIdx] || null;
 
@@ -198,7 +201,7 @@ const View = () => {
                                 onClick={() => onViewUserStories(owner._id)}
                             >
                                 <img
-                                    src={owner.avatar}
+                                    src={owner?.avatar || DefaultUnknownAvatar}
                                     alt="owner-avatar"
                                     className={cn(classes.userAvatar, {
                                         [classes.notViewedStory]:

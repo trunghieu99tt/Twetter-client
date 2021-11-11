@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { useHistory } from "react-router";
+import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
 
 // talons
@@ -17,15 +19,17 @@ import AudienceSetting from "@components/Story/AudienceSetting/AudienceSetting";
 import { IoIosImages } from "react-icons/io";
 import { GoTextSize } from "react-icons/go";
 
+// images
+import DefaultUnknownAvatar from "@images/user.png";
+
 // styles
 import classes from "./storyForm.module.css";
 
 type STORY_TYPE = "IMAGE" | "TEXT";
 
-interface Props {}
-
-const StoryForm = (props: Props) => {
+const StoryForm = () => {
     const { t } = useTranslation();
+    const history = useHistory();
 
     const [storyType, setStoryType] = useState<STORY_TYPE | null>(null);
     const [loading, setLoading] = useState<boolean>(false);
@@ -35,8 +39,9 @@ const StoryForm = (props: Props) => {
     const onCancel = () => setStoryType(null);
 
     const onSubmit = async (data: string) => {
-        setLoading(true);
         if (storyType) {
+            console.log("audience: ", user.storyAudience);
+
             createStoryMutation.mutate(
                 {
                     content: data,
@@ -45,6 +50,8 @@ const StoryForm = (props: Props) => {
                 },
                 {
                     onSuccess: () => {
+                        toast.success(t("createStorySuccess"));
+                        history.push("/");
                         setLoading(false);
                     },
                     onError: () => {
@@ -59,10 +66,22 @@ const StoryForm = (props: Props) => {
 
     switch (storyType) {
         case "IMAGE":
-            content = <ImageStory onCancel={onCancel} onSubmit={onSubmit} />;
+            content = (
+                <ImageStory
+                    onCancel={onCancel}
+                    onSubmit={onSubmit}
+                    setLoading={setLoading}
+                />
+            );
             break;
         case "TEXT":
-            content = <TextStory onCancel={onCancel} onSubmit={onSubmit} />;
+            content = (
+                <TextStory
+                    onCancel={onCancel}
+                    onSubmit={onSubmit}
+                    setLoading={setLoading}
+                />
+            );
             break;
     }
 
@@ -71,13 +90,15 @@ const StoryForm = (props: Props) => {
             <PageMetadata title={t("createNewStory")} />
             <div className={classes.root}>
                 {loading && <Spinner1 />}
-                <Logo />
+                <header className={classes.header}>
+                    <Logo />
+                </header>
                 <div className={classes.top}>
                     <h2>{t("stories")}</h2>
                     <div className={classes.topMain}>
                         <figure className={classes.userInfo}>
                             <img
-                                src={user?.avatar}
+                                src={user?.avatar || DefaultUnknownAvatar}
                                 alt={user?.name}
                                 className={classes.userAvatar}
                             />

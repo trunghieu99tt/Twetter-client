@@ -115,5 +115,7 @@
     "email": "Email",
     "passwordMisMatch": "Password mismatch!",
     "unknownError": "Something went wrong. Please try again later!",
-    "updateSuccess": "Updated successfully"
+    "updateSuccess": "Updated successfully",
+    "textColor": "Text color",
+    "createStorySuccess": "Created new story successfully"
 }

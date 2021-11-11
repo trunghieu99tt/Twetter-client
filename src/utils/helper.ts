@@ -1,8 +1,7 @@
-import { SyntheticEvent } from 'react';
+import { SyntheticEvent } from "react";
 
 //@ts-ignore
-import TinyURL from 'tinyurl';
-
+import TinyURL from "tinyurl";
 
 const nFormatter = (num: number, digits: number = 2) => {
     const lookup = [
@@ -12,13 +11,18 @@ const nFormatter = (num: number, digits: number = 2) => {
         { value: 1e9, symbol: "G" },
         { value: 1e12, symbol: "T" },
         { value: 1e15, symbol: "P" },
-        { value: 1e18, symbol: "E" }
+        { value: 1e18, symbol: "E" },
     ];
     const rx = /\.0+$|(\.[0-9]*[1-9])0+$/;
-    var item = lookup.slice().reverse().find(function (item) {
-        return num >= item.value;
-    });
-    return item ? (num / item.value).toFixed(digits).replace(rx, "$1") + item.symbol : "0";
+    var item = lookup
+        .slice()
+        .reverse()
+        .find(function (item) {
+            return num >= item.value;
+        });
+    return item
+        ? (num / item.value).toFixed(digits).replace(rx, "$1") + item.symbol
+        : "0";
 };
 
 const formatNumber = (value: any) => {
@@ -42,22 +46,21 @@ const urlify = (text: string) => {
     return text.replace(urlRegex, '<a href="$1" target="_blank">$1</a>');
 };
 
-const isEqual = (objA: any, objB: any) => JSON.stringify(objA) === JSON.stringify(objB);
+const isEqual = (objA: any, objB: any) =>
+    JSON.stringify(objA) === JSON.stringify(objB);
 
 const validateEmail = (email: string) => {
-    const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    const re =
+        /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     return re.test(String(email).toLowerCase());
 };
 
 const calcDiffTimeString = (date: Date): string => {
-
     if (!(date instanceof Date)) {
         date = new Date(date);
     }
 
-    const diff = Math.floor(
-        (Date.now() - date.getTime()) / 1000
-    );
+    const diff = Math.floor((Date.now() - date.getTime()) / 1000);
 
     if (diff < 60) {
         return `${diff} seconds ago`;
@@ -70,28 +73,28 @@ const calcDiffTimeString = (date: Date): string => {
     }
 
     return date.toLocaleDateString();
-
 };
 
 // Parse the tweet to extract hashtags and the first url ( for the link's preview )
 export const extractMetadata = (body: string) => {
     let hashtags = body.match(/(#[\w]+)/g);
-
     const urls = body.match(/https?:\/\/\S+/g);
 
-    // Remove duplicates
+    let tags: string[] = [];
+
+    // Remove duplicates and the hash
     if (hashtags && hashtags?.length > 0) {
-        hashtags = Array.from(new Set(hashtags)).map(h => h.toString());
+        tags = Array.from(new Set(hashtags)).map((h) => h.toString().substr(1));
     }
     return {
-        hashtags,
+        hashtags: tags,
         urls,
     };
 };
 
 export const shortenURLS = async (
     urls: string[]
-): Promise<{ original: string; shorten: string; }[]> => {
+): Promise<{ original: string; shorten: string }[]> => {
     const tinyURLS = [];
     for (let url of urls) {
         const res = await TinyURL.shorten(url);
@@ -105,4 +108,13 @@ export const shortenURLS = async (
 
 export const stopPropagation = (e: SyntheticEvent) => e.stopPropagation();
 
-export { formatNumber, randomDate, getDaysDiffBetweenDates, urlify, isEqual, validateEmail, nFormatter, calcDiffTimeString };
+export {
+    formatNumber,
+    randomDate,
+    getDaysDiffBetweenDates,
+    urlify,
+    isEqual,
+    validateEmail,
+    nFormatter,
+    calcDiffTimeString,
+};

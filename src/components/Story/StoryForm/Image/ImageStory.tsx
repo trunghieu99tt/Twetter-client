@@ -16,20 +16,26 @@ import { Flex } from "@shared/style/sharedStyle.style";
 interface Props {
     onCancel: () => void;
     onSubmit: (data: string) => void;
+    setLoading: (loading: boolean) => void;
 }
 
-const ImageStory = ({ onCancel, onSubmit }: Props) => {
+const ImageStory = ({ onCancel, onSubmit, setLoading }: Props) => {
     const { t } = useTranslation();
-    const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
+
     const [file, setFile] = useState<File | null>(null);
+    const [textBoxCounter, setTextBoxCounter] = useState<number>(0);
+    const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
 
     const { editor, onReady } = useFabricJSEditor();
     const { uploadImage } = useUpload();
 
     const deleteSelections = () => {
+        let deletedTextBoxCounter = 0;
         editor?.canvas.getActiveObjects().forEach((object) => {
+            deletedTextBoxCounter += object?.type === "textbox" ? 1 : 0;
             editor?.canvas.remove(object);
         });
+        setTextBoxCounter(Math.max(0, textBoxCounter - deletedTextBoxCounter));
     };
 
     const onAddText = () => {
@@ -44,6 +50,7 @@ const ImageStory = ({ onCancel, onSubmit }: Props) => {
                     name: "my-text",
                 })
             );
+            setTextBoxCounter((v) => v + 1);
             editor?.canvas.renderAll();
         } catch (error) {
             console.log(error);
@@ -65,13 +72,6 @@ const ImageStory = ({ onCancel, onSubmit }: Props) => {
                         o.selectable = false;
                         o.scaleToHeight((canvasWidth || 100) * 0.8);
                         o.scaleToHeight((canvasHeight || 100) * 0.8);
-
-                        o.set({
-                            top: canvasHeight / 2,
-                            left: canvasWidth / 2,
-                            // scaleY: canvasHeight / o!.height || 1,
-                            // scaleX: canvasWidth / o!.width || 1,
-                        });
                     }
                 });
                 editor?.canvas.centerObject(img);
@@ -80,25 +80,30 @@ const ImageStory = ({ onCancel, onSubmit }: Props) => {
         }
     };
 
+    const onChangeTextColor = (e: ChangeEvent<HTMLInputElement>) => {
+        const color = e?.target?.value;
+        editor?.canvas.getActiveObjects().forEach((object) => {
+            if (object.type === "textbox") {
+                object.set("fill", color);
+            }
+        });
+        editor?.canvas.renderAll();
+    };
+
     const saveToServer = async () => {
         if (file) {
+            setLoading(true);
             const image = await uploadImage(file);
-
-            const canvasWidth = editor?.canvas.getWidth();
-            const canvasHeight = editor?.canvas.getHeight();
-
-            // change url of image object
             const obj = editor?.canvas.getObjects();
             obj?.forEach((o: any) => {
                 if (o.type === "image") {
                     o.setSrc(image, () => {
-                        o.scaleToWidth(canvasWidth || 100);
-                        o.scaleToHeight(canvasHeight || 100);
-                        o.set("dirty", true);
-                        editor?.canvas.requestRenderAll();
                         const objects = editor?.canvas.toJSON();
                         if (objects) {
+                            console.log("Go submit");
                             onSubmit(JSON.stringify(objects));
+                        } else {
+                            setLoading(false);
                         }
                     });
                 }
@@ -123,6 +128,22 @@ const ImageStory = ({ onCancel, onSubmit }: Props) => {
                         >
                             {t("deleteSelections")}
                         </button>
+                        {textBoxCounter > 0 && (
+                            <div className={classes.textColorForm}>
+                                <label
+                                    htmlFor="image-story-text-color"
+                                    className={classes.textColorLabel}
+                                >
+                                    {t("textColor")}
+                                </label>
+                                <input
+                                    className={classes.textColorInput}
+                                    type="color"
+                                    id="image-story-text-color"
+                                    onChange={onChangeTextColor}
+                                />
+                            </div>
+                        )}
                     </aside>
                 )}
 

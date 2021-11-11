@@ -115,5 +115,7 @@
     "Email": "Email",
     "passwordMisMatch": "Mật khẩu không khớp",
     "unknownError": "Đã xảy ra lỗi, vui lòng thử lại sau",
-    "updateSuccess": "Cập nhật thành công"
+    "updateSuccess": "Cập nhật thành công",
+    "textColor": "Màu văn bản",
+    "createStorySuccess": "Tin đã được tạo thành công"
 }

@@ -1,14 +1,13 @@
 import { useForm } from "react-hook-form";
 import { useHistory } from "react-router";
 import client from "../../api/client";
-import { toast } from 'react-toastify';
+import { toast } from "react-toastify";
 import { useState } from "react";
 import { AUTH_ENDPOINTS } from "constants/auth.constants";
 import { useQueryClient } from "react-query";
 import { USER_QUERY } from "constants/user.constants";
 import { useAppContext } from "@context/app.context";
 import { useUser } from "@talons/useUser";
-
 
 type Props = {
     isRegister?: boolean;
@@ -30,35 +29,43 @@ const useAuth = ({ isRegister = false }: Props) => {
     const history = useHistory();
     const { user } = useUser();
     const queryClient = useQueryClient();
-    const { state: {
-        socket
-    } } = useAppContext();
+    const {
+        state: { socket },
+    } = useAppContext();
 
     const [gender, setGender] = useState<number>(2);
-    const [visibleForgotPasswordForm, setVisibleForgotPasswordForm] = useState<boolean>(false);
+    const [birthday, setBirthday] = useState<Date>(new Date());
+    const [visibleForgotPasswordForm, setVisibleForgotPasswordForm] =
+        useState<boolean>(false);
 
     const onSubmit = async (formData: any) => {
-        if (!isRegister)
-            await handleLogin(formData);
+        if (!isRegister) await handleLogin(formData);
         else {
             await handleRegister(formData);
         }
     };
 
+    const checkPassword = (password: string, confirmPassword: string) => {
+        return password === confirmPassword;
+    };
+
     const handleLogin = async (formData: any) => {
         try {
-            const response = await client.post(AUTH_ENDPOINTS.SIGN_IN, formData);
+            const response = await client.post(
+                AUTH_ENDPOINTS.SIGN_IN,
+                formData
+            );
             const accessToken = response?.data?.accessToken;
             if (accessToken) {
                 localStorage.setItem("accessToken", `"${accessToken}"`);
                 queryClient.invalidateQueries(USER_QUERY.GET_ME);
                 toast.success("Login successful");
-                history.push('/');
+                history.push("/");
             } else {
                 toast.error("Login Failed");
             }
-        } catch (error) {
-            // toast.error(error.response.data.message);
+        } catch (error: any) {
+            toast.error(error.response.data.message);
         }
     };
 
@@ -66,7 +73,7 @@ const useAuth = ({ isRegister = false }: Props) => {
         const response = await client.post(AUTH_ENDPOINTS.LOG_OUT);
         const message = response?.data?.message;
         localStorage.setItem("accessToken", "");
-        socket?.emit('userOff', user);
+        socket?.emit("userOff", user);
         history.push("/login");
         queryClient.invalidateQueries(USER_QUERY.GET_ME);
         toast.info(message);
@@ -74,18 +81,27 @@ const useAuth = ({ isRegister = false }: Props) => {
 
     const handleRegister = async (formData: any) => {
         try {
-            const response = await client.post(AUTH_ENDPOINTS.SIGN_UP, formData);
+            if (!checkPassword(formData.password, formData.passwordConfirm)) {
+                toast.error("Password does not match");
+                return;
+            }
+
+            const response = await client.post(AUTH_ENDPOINTS.SIGN_UP, {
+                ...formData,
+                birthday,
+            });
+
             const accessToken = response?.data?.accessToken;
+
             if (accessToken) {
                 localStorage.setItem("accessToken", `"${accessToken}"`);
                 queryClient.invalidateQueries(USER_QUERY.GET_ME);
-                history.push('/');
+                history.push("/");
             }
-        } catch (error) {
-            // toast.error(error.response.data.message);
+        } catch (error: any) {
+            toast.error(error.response.data.message);
         }
     };
-
 
     const onCloseForgotPasswordForm = () => setVisibleForgotPasswordForm(false);
 
@@ -94,9 +110,11 @@ const useAuth = ({ isRegister = false }: Props) => {
     return {
         gender,
         register,
+        birthday,
         visibleForgotPasswordForm,
 
         setGender,
+        setBirthday,
         handleLogout,
         onOpenForgotPasswordForm,
         onCloseForgotPasswordForm,

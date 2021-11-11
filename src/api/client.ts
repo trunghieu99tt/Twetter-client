@@ -24,7 +24,7 @@ client.interceptors.request.use(
     },
 
     (error) => {
-        console.log(`error`, error);
+        console.log(`error client`, error);
         return Promise.reject(error);
     }
 );

@@ -44,6 +44,8 @@ const ImageWithUpdater = ({
     onChange,
 }: Props) => {
     const { t } = useTranslation();
+    
+    
 
     return (
         <Wrapper customStyles={wrapperCustomStyles}>

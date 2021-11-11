@@ -3,8 +3,8 @@ import { TImageInput } from "@type/app.types";
 import { iUpdateUserDTO, iUser } from "@type/user.types";
 import { ChangeEvent, useState } from "react";
 import { toast } from "react-toastify";
-import { useUpload } from '../../../talons/useUpload';
-import { useTranslation } from 'react-i18next';
+import { useUpload } from "../../../talons/useUpload";
+import { useTranslation } from "react-i18next";
 
 type Props = {
     data: iUser;
@@ -12,7 +12,6 @@ type Props = {
 };
 
 export const useEditInfo = ({ data, onCancel }: Props) => {
-
     const { t } = useTranslation();
 
     const [userInfo, setUserInfo] = useState<Partial<iUser>>({
@@ -25,12 +24,13 @@ export const useEditInfo = ({ data, onCancel }: Props) => {
     });
 
     const [updatePasswordData, setUpdatePasswordData] = useState({
-        oldPassword: '',
-        newPassword: '',
-        newPasswordConfirm: ''
+        oldPassword: "",
+        newPassword: "",
+        newPasswordConfirm: "",
     });
 
-    const [showUpdatePassword, setShowUpdatePassword] = useState<boolean>(false);
+    const [showUpdatePassword, setShowUpdatePassword] =
+        useState<boolean>(false);
 
     const [newAvatar, setNewAvatar] = useState<TImageInput>({
         file: null,
@@ -45,7 +45,6 @@ export const useEditInfo = ({ data, onCancel }: Props) => {
     const { uploadImage } = useUpload();
     const { updateUserMutation } = useUser();
 
-
     const onChangePicture = (e: ChangeEvent<HTMLInputElement>) => {
         const { name: targetName, files } = e.target;
         if (files && files?.length > 0) {
@@ -56,7 +55,7 @@ export const useEditInfo = ({ data, onCancel }: Props) => {
                     file: files[0],
                     preview: reader.result as string,
                 };
-                if (targetName === 'avatar') {
+                if (targetName === "avatar") {
                     setNewAvatar(newState);
                 } else {
                     setNewCover(newState);
@@ -68,9 +67,9 @@ export const useEditInfo = ({ data, onCancel }: Props) => {
     const onCancelChangePicture = (targetName: string) => {
         const initialState = {
             file: null,
-            preview: null
+            preview: null,
         };
-        if (targetName === 'avatar') {
+        if (targetName === "avatar") {
             setNewAvatar(initialState);
         } else {
             setNewCover(initialState);
@@ -80,7 +79,7 @@ export const useEditInfo = ({ data, onCancel }: Props) => {
     const onChangeSpecificBasicInfoField = (name: string, value: any) => {
         setUserInfo({
             ...userInfo,
-            [name]: value
+            [name]: value,
         });
     };
 
@@ -89,29 +88,29 @@ export const useEditInfo = ({ data, onCancel }: Props) => {
         onChangeSpecificBasicInfoField(name, value);
     };
 
-
     const onChangePasswordFields = (e: ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
         setUpdatePasswordData({
             ...updatePasswordData,
-            [name]: value
+            [name]: value,
         });
     };
 
     const checkPasswordMatch = () => {
-        return updatePasswordData.newPassword === updatePasswordData.newPasswordConfirm;
+        return (
+            updatePasswordData.newPassword ===
+            updatePasswordData.newPasswordConfirm
+        );
     };
 
     const onUpdateInfo = async () => {
-
         if (!checkPasswordMatch) {
-            toast.error(t('passwordMisMatch'));
+            toast.error(t("passwordMisMatch"));
             return;
         }
 
         setUpdating(true);
         try {
-
             let avatar = data.avatar;
             let coverPhoto = data.coverPhoto;
 
@@ -132,7 +131,7 @@ export const useEditInfo = ({ data, onCancel }: Props) => {
             if (showUpdatePassword) {
                 newInfo = {
                     ...newInfo,
-                    ...updatePasswordData
+                    ...updatePasswordData,
                 };
             }
 
@@ -141,20 +140,18 @@ export const useEditInfo = ({ data, onCancel }: Props) => {
                 userId: data._id,
             });
 
-            toast.success(t('updateSuccess'));
+            toast.success(t("updateSuccess"));
             onCancel();
         } catch (error: any) {
-            const message = error?.response?.data?.error || t('unknownError');
+            const message = error?.response?.data?.error || t("unknownError");
             toast.error(message);
         }
         setUpdating(false);
-
     };
 
-    const toggleShowUpdatePassword = () => setShowUpdatePassword(v => !v);
+    const toggleShowUpdatePassword = () => setShowUpdatePassword((v) => !v);
 
     const isDisabledUpdate = updating || updateUserMutation.isLoading;
-
 
     return {
         userInfo,
@@ -172,5 +169,4 @@ export const useEditInfo = ({ data, onCancel }: Props) => {
         toggleShowUpdatePassword,
         onChangeSpecificBasicInfoField,
     };
-
 };
