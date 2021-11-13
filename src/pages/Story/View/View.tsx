@@ -196,7 +196,10 @@ const View = () => {
 
                         return (
                             <figure
-                                className={classes.userStoryCard}
+                                className={cn(classes.userStoryCard, {
+                                    [classes.active]:
+                                        owner._id === activeStory?.owner._id,
+                                })}
                                 key={`user-story-card-list-${owner._id}`}
                                 onClick={() => onViewUserStories(owner._id)}
                             >

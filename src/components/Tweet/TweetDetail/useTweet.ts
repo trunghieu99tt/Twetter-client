@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from "react";
 import { useQueryClient } from "react-query";
 import { useTranslation } from "react-i18next";
 
-
 // hooks
 import { useOnClickOutside } from "@hooks/useOnClickOutside";
 
@@ -21,12 +20,11 @@ import { iNotificationDTO } from "@type/notify.types";
 import { extractMetadata } from "@utils/helper";
 import { useHashtag } from "@talons/useHashtag";
 
-
 type Props = {
     tweet: iTweet;
 };
 
-type TUserList = 'LIKED' | 'SAVED' | 'RETWEETED';
+type TUserList = "LIKED" | "SAVED" | "RETWEETED";
 
 export const useTweet = ({ tweet }: Props) => {
     const { t } = useTranslation();
@@ -51,9 +49,7 @@ export const useTweet = ({ tweet }: Props) => {
             tweetId: tweet._id,
             userId: currentUser?._id,
         });
-    const {
-        updateHashTags,
-    } = useHashtag();
+    const { updateHashTags } = useHashtag();
 
     const dropdownRef = useRef() as React.RefObject<HTMLDivElement>;
     const addCommentRef = useRef(null) as React.RefObject<HTMLInputElement>;
@@ -68,18 +64,28 @@ export const useTweet = ({ tweet }: Props) => {
 
     // current user liked this tweet or not
     const liked =
-        (currentUser?._id && tweet.likes.findIndex((u: iUser) => u._id === currentUser?._id) !== -1) || false;
+        (currentUser?._id &&
+            tweet.likes.findIndex((u: iUser) => u._id === currentUser?._id) !==
+                -1) ||
+        false;
 
     // current user saved this tweet or not
     const saved =
-        (currentUser?._id && tweet?.saved?.findIndex((u: iUser) => u._id === currentUser?._id) !== -1) || false;
+        (currentUser?._id &&
+            tweet?.saved?.findIndex(
+                (u: iUser) => u._id === currentUser?._id
+            ) !== -1) ||
+        false;
 
     // get who retweeted this tweet
     const retweetedBy = tweet?.retweetedBy;
 
     // current user retweeted this tweet or not
     const retweeted =
-        (currentUser?._id && tweet?.retweeted?.findIndex((u: iUser) => u._id === currentUser?._id) !== -1) ||
+        (currentUser?._id &&
+            tweet?.retweeted?.findIndex(
+                (u: iUser) => u._id === currentUser?._id
+            ) !== -1) ||
         false;
 
     // interaction counters
@@ -97,19 +103,18 @@ export const useTweet = ({ tweet }: Props) => {
             onSuccess: () => {
                 const initialTags = tweet?.tags || [];
                 updateHashTags(initialTags, []);
-            }
+            },
         });
     };
 
     const onReactTweet = () => {
         reactTweetMutation.mutate(tweet._id);
         if (!liked) {
-
             const msg: iNotificationDTO = {
-                text: t('likedYourTweet'),
+                text: t("likedYourTweet"),
                 receivers: [tweet.author._id],
                 url: `/tweet/${tweet._id}`,
-                type: 'like',
+                type: "like",
             };
 
             createNotificationAction(msg);
@@ -123,7 +128,7 @@ export const useTweet = ({ tweet }: Props) => {
                 text: `retweet your tweet`,
                 receivers: [tweet.author._id],
                 url: `/tweet/${tweet._id}`,
-                type: 'retweet',
+                type: "retweet",
             };
 
             createNotificationAction(msg);
@@ -134,10 +139,10 @@ export const useTweet = ({ tweet }: Props) => {
         saveTweetMutation.mutate(tweet._id);
         if (!saved) {
             const msg: iNotificationDTO = {
-                text: t('savedYourTweet'),
+                text: t("savedYourTweet"),
                 receivers: [tweet.author._id],
                 url: `/tweet/${tweet._id}`,
-                type: 'save',
+                type: "save",
             };
 
             createNotificationAction(msg);
@@ -166,7 +171,6 @@ export const useTweet = ({ tweet }: Props) => {
             updateUrls(tweet.content);
         }
     }, [tweet]);
-
 
     return {
         urls,
@@ -200,5 +204,4 @@ export const useTweet = ({ tweet }: Props) => {
         onCloseModalUserList,
         fetchMoreTweetComment,
     };
-
 };

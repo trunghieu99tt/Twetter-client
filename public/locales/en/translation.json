@@ -29,7 +29,7 @@
     "ago": "ago",
     "second": "second",
     "media": "Media",
-    "popularTag": "Popular Tag",
+    "popularTag": "Popular Tags",
     "whoToFollow": "Who to follow",
     "follow": "Follow",
     "followed": "Followed",
@@ -117,5 +117,11 @@
     "unknownError": "Something went wrong. Please try again later!",
     "updateSuccess": "Updated successfully",
     "textColor": "Text color",
-    "createStorySuccess": "Created new story successfully"
+    "createStorySuccess": "Created new story successfully",
+    "repliedYourComment": "replied to your comment",
+    "commentedYourTweet": "commented on your tweet",
+    "tweetNotFound": "Tweet not found",
+    "search": "Search",
+    "viewAllNotification": "View all notifications",
+    "searchCategory": "Search category"
 }

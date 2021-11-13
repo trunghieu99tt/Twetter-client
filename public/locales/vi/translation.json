@@ -117,5 +117,11 @@
     "unknownError": "Đã xảy ra lỗi, vui lòng thử lại sau",
     "updateSuccess": "Cập nhật thành công",
     "textColor": "Màu văn bản",
-    "createStorySuccess": "Tin đã được tạo thành công"
+    "createStorySuccess": "Tin đã được tạo thành công",
+    "repliedYourComment": "đã trả lời bình luận của bạn",
+    "commentedYourTweet": "đã bình luận tweet của bạn",
+    "tweetNotFound": "Tweet không tồn tại",
+    "search": "Tìm kiếm",
+    "viewAllNotification": "Xem toàn bộ thông báo",
+    "searchCategory": "Loại tìm kiếm"
 }

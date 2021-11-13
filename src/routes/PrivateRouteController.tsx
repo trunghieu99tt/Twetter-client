@@ -26,6 +26,8 @@ import PrivateRoute from "@components/routes/PrivateRoute";
 // routes
 import { HASHTAG_ROUTES, STORY_ROUTES } from "./routes";
 import { useEffect } from "react";
+import Notification from "@pages/Notification";
+import Search from "@pages/Search";
 
 const PrivateRouteController = () => {
     const storyTalons = useStory();
@@ -50,6 +52,12 @@ const PrivateRouteController = () => {
                 component={StoryView}
             />
             <PrivateRoute path="/bookmarks" exact component={BookMarks} />
+            <PrivateRoute path="/search" exact component={Search} />
+            <PrivateRoute
+                path="/notifications"
+                exact
+                component={Notification}
+            />
             <PrivateRoute
                 path={`${HASHTAG_ROUTES.BASE}/:hashtag`}
                 exact

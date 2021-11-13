@@ -24,6 +24,7 @@ import {
     CreatedAt,
     LikeButton,
     AuthorName,
+    ReplyButton,
     LikeCounter,
     Interaction,
     CommentMedia,
@@ -94,9 +95,9 @@ const Comment = ({ data, level = 0 }: Props) => {
                             )}
                         </Interaction>
                         {!data?.isChild && (
-                            <Interaction onClick={onFocusCommentForm}>
+                            <ReplyButton onClick={onFocusCommentForm}>
                                 {t("reply")}
-                            </Interaction>
+                            </ReplyButton>
                         )}
                     </Flex>
                     <RepliesWrapper>
@@ -113,9 +114,9 @@ const Comment = ({ data, level = 0 }: Props) => {
                 }}
             >
                 <AddComment
+                    tweet={data.tweet}
+                    commentData={data}
                     addCommentRef={addCommentRef}
-                    tweetId={data.tweet._id}
-                    commentId={data._id}
                 />
             </div>
         </Wrapper>

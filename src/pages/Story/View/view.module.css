@@ -21,6 +21,15 @@
     align-items: center;
     margin-bottom: 2rem;
     gap: 2rem;
+    cursor: pointer;
+    padding: 1rem;
+    border-radius: 1rem;
+    transition: all 0.2s;
+}
+
+.userStoryCard.active,
+.userStoryCard:hover {
+    background: var(--gray-2);
 }
 
 .userAvatar {
@@ -40,9 +49,6 @@
     font-size: 1.2rem;
     font-weight: 500;
     margin-bottom: 0.5rem;
-}
-
-.newestStoryTime {
 }
 
 .main {

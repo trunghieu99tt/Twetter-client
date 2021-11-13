@@ -1,11 +1,11 @@
-import { useUpload } from '@talons/useUpload';
-import { useUser } from '@talons/useUser';
-import { iRoom } from '@type/room.types';
-import { iUser } from '@type/user.types';
-import { ChangeEvent, useState } from 'react';
-import { useHistory } from 'react-router';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
-import { connectedRoomsState, joinDMRoomState } from 'states/room.state';
+import { useUpload } from "@talons/useUpload";
+import { useUser } from "@talons/useUser";
+import { iRoom } from "@type/room.types";
+import { iUser } from "@type/user.types";
+import { ChangeEvent, useEffect, useState } from "react";
+import { useHistory } from "react-router";
+import { useRecoilValue, useSetRecoilState } from "recoil";
+import { connectedRoomsState, joinDMRoomState } from "states/room.state";
 
 type LIST_TYPE = "followers" | "following" | "";
 type MODAL_TYPE = "list_user" | "update_info" | "";
@@ -14,12 +14,14 @@ type Props = {
     user: iUser;
 };
 
-export const useMyProfileOverview = ({
-    user,
-}: Props) => {
+export const useMyProfileOverview = ({ user }: Props) => {
     const connectedRooms = useRecoilValue(connectedRoomsState);
     const setJoinRoomState = useSetRecoilState(joinDMRoomState);
-    const { user: currentUser, followUserMutation, updateUserMutation } = useUser();
+    const {
+        user: currentUser,
+        followUserMutation,
+        updateUserMutation,
+    } = useUser();
     const { uploadImage } = useUpload();
     const history = useHistory();
 
@@ -105,8 +107,13 @@ export const useMyProfileOverview = ({
         }
     };
 
-    const updateFollowStatus = (userId: string) => followUserMutation.mutate(userId);
+    useEffect(() => {
+        resetData();
+        closeModal();
+    }, [user]);
 
+    const updateFollowStatus = (userId: string) =>
+        followUserMutation.mutate(userId);
 
     const followed = currentUser?.following.some((u: iUser) => {
         return u._id === user._id;
@@ -133,7 +140,6 @@ export const useMyProfileOverview = ({
     }
 
     const isMe = currentUser?._id === user?._id || false;
-
 
     return {
         isMe,

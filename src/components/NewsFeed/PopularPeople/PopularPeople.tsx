@@ -30,9 +30,17 @@ import {
 const PopularPeople = () => {
     const { t } = useTranslation();
 
-    const { getLimitedPopularUsersQuery, user: currentUser } = useUser();
+    const {
+        getLimitedPopularUsersQuery,
+        user: currentUser,
+        followUserMutation,
+    } = useUser();
 
     const data: iUser[] = getLimitedPopularUsersQuery?.data || [];
+
+    const onToggleFollow = async (userId: string) => {
+        await followUserMutation.mutateAsync(userId);
+    };
 
     const filteredUsers =
         (data?.length > 0 &&
@@ -77,7 +85,7 @@ const PopularPeople = () => {
                                 </UserFollowers>
                             </div>
                         </Flex>
-                        <FollowButton>
+                        <FollowButton onClick={() => onToggleFollow(user._id)}>
                             <IoPersonAdd />
                             {t("follow")}
                         </FollowButton>

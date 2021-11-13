@@ -180,14 +180,15 @@ const Tweet = ({ tweet }: Props) => {
                     onCancel={() => setVisibleEditForm(false)}
                 />
             )}
-            {isRetweeted && retweetedBy && (
-                <RetweetedBy to={`/profile/${retweetedBy._id}`}>
-                    <AiOutlineRetweet /> {`${retweetedBy.name} retweeted`}
-                </RetweetedBy>
-            )}
+
             <Wrapper>
                 {deleteLoading && <Spinner1 />}
 
+                {isRetweeted && retweetedBy && (
+                    <RetweetedBy to={`/profile/${retweetedBy._id}`}>
+                        <AiOutlineRetweet /> {`${retweetedBy.name} retweeted`}
+                    </RetweetedBy>
+                )}
                 <Header>
                     <AuthorWrapper>
                         <Link to={`/profile/${tweet.author._id}`}>
@@ -322,7 +323,7 @@ const Tweet = ({ tweet }: Props) => {
                         </InteractionButtonGroup>
                     </Interaction>
                 </Content>
-                <AddComment addCommentRef={addCommentRef} tweetId={tweet._id} />
+                <AddComment addCommentRef={addCommentRef} tweet={tweet} />
                 <CommentsWrapper>
                     {tweetComments?.map((comment: iComment) => {
                         return <Comment data={comment} key={comment._id} />;

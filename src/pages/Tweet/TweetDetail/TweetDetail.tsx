@@ -8,24 +8,43 @@ import { useTweetDetail } from "./useTweetDetail";
 import MainLayout from "@layout/Main";
 
 // components
+import { Spinner1 } from "@components/Loaders";
 import Tweet from "@components/Tweet/TweetDetail";
 import PageMetadata from "@components/PageMetadata";
 
 // constants
 import { MAX_LENGTH_TWEET_META_HEADING } from "constants/app.constants";
-import NotFound from "@pages/NotFound";
-import { Spinner1 } from "@components/Loaders";
+import { useTranslation } from "react-i18next";
 
 const Wrapper = styled.div`
     margin-top: 2rem;
 `;
 
+const TweetNotFound = styled.div`
+    display: flex;
+    align-items: center;
+    height: 100vh;
+    justify-content: center;
+    font-size: 2rem;
+    font-weight: 500;
+    color: var(--red);
+`;
+
 const TweetDetail = () => {
     const { data, loading } = useTweetDetail();
+    const { t } = useTranslation();
 
     if (loading) return <Spinner1 />;
 
-    if (!data) return <NotFound />;
+    if (!data)
+        return (
+            <React.Fragment>
+                <PageMetadata title={t("tweetNotFound")} />
+                <TweetNotFound>
+                    This tweet has been deleted or does not exist.
+                </TweetNotFound>
+            </React.Fragment>
+        );
 
     return (
         <React.Fragment>

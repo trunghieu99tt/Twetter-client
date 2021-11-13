@@ -7,9 +7,6 @@ import ImageStoryViewer from "./Image/ImageStoryViewer";
 // types
 import { iStory } from "@type/story.types";
 
-// classes
-import classes from "./storyViewer.module.css";
-
 interface Props {
     data: iStory;
     isSmall?: boolean;
@@ -18,14 +15,7 @@ interface Props {
 const StoryViewer = ({ data, isSmall }: Props) => {
     const contentData = JSON.parse(data.content);
 
-    const additionalClasses = {
-        text: classes.smallText,
-    };
-
-    if (data.type === "TEXT")
-        return (
-            <TextStoryViewer data={contentData} classes={additionalClasses} />
-        );
+    if (data.type === "TEXT") return <TextStoryViewer data={contentData} />;
     return <ImageStoryViewer data={contentData} />;
 };
 

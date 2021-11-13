@@ -45,6 +45,11 @@ const TopMenu = () => {
                 path: "/bookmarks",
                 id: uuidv4(),
             },
+            {
+                name: t("search"),
+                path: "/search",
+                id: uuidv4(),
+            },
         ],
         []
     );

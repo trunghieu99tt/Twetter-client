@@ -2,16 +2,21 @@ import React from "react";
 import cn from "classnames";
 import { useHistory } from "react-router";
 
+// talons
+import { useUser } from "@talons/useUser";
+import { useNotify } from "@talons/useNotify";
+
 // utils
 import { calcDiffTimeString } from "@utils/helper";
 
 // types
 import { iNotification } from "@type/notify.types";
 
+// images
+import DefaultUnknownAvatar from "@images/user.png";
+
 // styles
 import classes from "./notificationItem.module.css";
-import { useUser } from "@talons/useUser";
-import { useNotify } from "@talons/useNotify";
 
 type Props = {
     data: iNotification;
@@ -33,7 +38,7 @@ const NotificationItem = ({ data }: Props) => {
     };
 
     return (
-        <button
+        <article
             className={cn(classes.root, {
                 [classes.unread]: !data?.isRead?.includes(user?._id),
             })}
@@ -41,7 +46,7 @@ const NotificationItem = ({ data }: Props) => {
         >
             <figure className={classes.senderAvatarWrapper}>
                 <img
-                    src={data?.sender.avatar}
+                    src={data?.sender?.avatar || DefaultUnknownAvatar}
                     alt="sender avatar"
                     className={classes.senderAvatar}
                 />
@@ -55,7 +60,7 @@ const NotificationItem = ({ data }: Props) => {
                     {calcDiffTimeString(data?.createdAt || new Date())}
                 </p>
             </div>
-        </button>
+        </article>
     );
 };
 

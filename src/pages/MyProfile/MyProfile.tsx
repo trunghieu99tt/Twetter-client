@@ -21,8 +21,6 @@ import { Sidebar, Wrapper, Main, Content } from "./MyProfileStyle";
 import { Container } from "@shared/style/sharedStyle.style";
 
 const MyProfile = () => {
-    const { t } = useTranslation();
-
     const params: { userId: string } = useParams();
     const { userId } = params;
 
@@ -32,7 +30,6 @@ const MyProfile = () => {
     const userData = userId === me?._id ? me : getUserQuery.data;
     const isMe = userId === me?._id;
 
-    
     if (!userData) return null;
 
     return (

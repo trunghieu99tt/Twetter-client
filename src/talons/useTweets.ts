@@ -152,8 +152,9 @@ export const useTweets = (userId = "", tag = "") => {
 
     const invalidateTweetQueries = () => {
         queryClient.invalidateQueries(TWEET_QUERY.GET_MY_TWEETS);
-        queryClient.invalidateQueries(TWEET_QUERY.GET_NEWS_FEED_TWEETS);
         queryClient.invalidateQueries(TWEET_QUERY.LATEST_TWEETS);
+        queryClient.invalidateQueries(TWEET_QUERY.GET_MY_SAVED_TWEETS);
+        queryClient.invalidateQueries(TWEET_QUERY.GET_NEWS_FEED_TWEETS);
     };
 
     const getProfileTweetsQuery = useInfiniteQuery(
