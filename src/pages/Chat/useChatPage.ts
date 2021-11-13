@@ -1,10 +1,10 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import { iMessage, iNewMessage } from "../../types/message.types";
-import client from "../../api/client";
 import { useUser } from "@talons/useUser";
 import { useUpload } from "@talons/useUpload";
-import { useRecoilState, useSetRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { newMessageState } from "states/message.state";
 import { useMessage } from "@talons/useMessage";
 import { connectedRoomsState } from "states/room.state";
@@ -27,7 +27,7 @@ const useChatPage = () => {
     const { user: currentUser } = useUser();
     const { getMessagesQuery } = useMessage(roomId);
     const setNewMessage = useSetRecoilState(newMessageState);
-    const [connectedRooms, setConnectedRooms] = useRecoilState(connectedRoomsState);
+    const connectedRooms = useRecoilValue(connectedRoomsState);
 
     const { data, fetchNextPage } = getMessagesQuery;
 
@@ -45,17 +45,7 @@ const useChatPage = () => {
     }>({
         file: null,
         url: ""
-    })
-
-    const getRoomInfo = async (roomId: string) => {
-        try {
-            const response = await client.get(`/rooms/${roomId}`);
-            const room = response.data.data;
-            setRoom(room);
-        } catch (error) {
-            console.log('error getRoomInfo: ', error);
-        }
-    }
+    });
 
     const onSubmit = async (event: any) => {
         event.preventDefault();
@@ -63,7 +53,7 @@ const useChatPage = () => {
             author: currentUser,
             content: message,
             roomId: roomId,
-        }
+        };
         if (messageImage.file) {
             const imageUrl = await uploadImage(messageImage.file);
             newMessage.file = imageUrl;
@@ -74,7 +64,7 @@ const useChatPage = () => {
             setMessage('');
             setLoading(false);
         }
-    }
+    };
 
     const onChange = (event: any, file = false) => {
         if (!file) {
@@ -84,10 +74,10 @@ const useChatPage = () => {
             const newPhoto = {
                 file,
                 url: URL.createObjectURL(file)
-            }
+            };
             setMessageImage(newPhoto);
         }
-    }
+    };
 
     const getMessages = (data: any) => {
         const pages = data?.pages;
@@ -102,7 +92,7 @@ const useChatPage = () => {
                         if (message.file && message.file.includes('.jpg')) {
                             images.push(message.file);
                         }
-                    })
+                    });
                     return [...acc, ...pageMessages];
                 }
                 return acc;
@@ -112,14 +102,14 @@ const useChatPage = () => {
         setChatImages(images);
         setMessages(messagesUtils);
         setTotalMessage(totalRecords);
-    }
+    };
 
     const onCloseImageMessageForm = () => {
         setMessageImage({
             file: null,
             url: ''
-        })
-    }
+        });
+    };
 
     // initialize call message
     const initNewCall = (video: boolean = false) => {
@@ -134,12 +124,12 @@ const useChatPage = () => {
                 name,
                 video,
                 peerId: ''
-            }
+            };
             return newCall;
         }
 
         return null;
-    }
+    };
 
     // update call context
     const caller = (video: boolean = false) => {
@@ -147,7 +137,7 @@ const useChatPage = () => {
         if (newCall) {
             setCall(newCall);
         }
-    }
+    };
 
     // fire call event to socket
     const callUserSocket = (video: boolean = false) => {
@@ -159,19 +149,19 @@ const useChatPage = () => {
             }
             socket?.emit('startCall', newCall);
         }
-    }
+    };
 
     // open audio call
     const openAudioCall = () => {
         caller();
         callUserSocket();
-    }
+    };
 
     // open video call
     const openVideoCall = () => {
         caller(true);
         callUserSocket(true);
-    }
+    };
 
     useEffect(() => {
         const currentRoom = connectedRooms && connectedRooms.find((room: iRoom) => room._id === roomId);
@@ -186,7 +176,7 @@ const useChatPage = () => {
 
     useEffect(() => {
         getMessages(data);
-    }, [data])
+    }, [data]);
 
     useEffect(() => {
         if (chosenEmoji) {
@@ -217,7 +207,7 @@ const useChatPage = () => {
         fetchNextPage,
         setChosenEmoji,
         onCloseImageMessageForm,
-    }
-}
+    };
+};
 
 export { useChatPage };

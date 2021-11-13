@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useLocalStorage } from "@hooks/useLocalStorage";
 import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
