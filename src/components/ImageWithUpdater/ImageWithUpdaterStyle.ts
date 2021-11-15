@@ -82,3 +82,15 @@ export const CancelButton = styled.button`
     border-radius: 5px;
     color: #fff;
 `;
+
+export const LoadingStyle = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,.5);
+`;

@@ -14,9 +14,10 @@ import classes from "./textStory.module.css";
 type Prop = {
     onCancel: () => void;
     onSubmit: (text: string) => void;
+    setLoading: (loading: boolean) => void;
 };
 
-const TextStory = ({ onCancel, onSubmit }: Prop) => {
+const TextStory = ({ onCancel, onSubmit, setLoading }: Prop) => {
     const { t } = useTranslation();
 
     const [text, setText] = useState("");

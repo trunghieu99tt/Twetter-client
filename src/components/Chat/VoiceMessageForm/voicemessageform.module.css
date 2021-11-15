@@ -1,7 +1,7 @@
 .root {
     background: var(--mGray1);
     position: absolute;
-    bottom: 0;
+    bottom: 1rem;
     transform: translateY(-40%);
     border-radius: 5px;
     overflow: hidden;
@@ -20,7 +20,7 @@
 }
 
 .btn {
-    --record-size: 1.5rem;
+    --record-size: 2.5rem;
     width: var(--record-size);
     height: var(--record-size);
 }

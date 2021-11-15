@@ -17,18 +17,16 @@ import {
     NOTIFICATION_ENDPOINT,
     NOTIFICATION_QUERIES,
 } from "constants/notify.constants";
-import {
-    INFINITY_QUERY_LIST_CONFIG,
-} from "constants/config.constant";
+import { generateInfinityQueryListConfig } from "constants/config.constant";
 
 // types
 import { iNotificationDTO } from "@type/notify.types";
 import { useUser } from "./useUser";
 
-const getNotifications = async ({
-    pageParam = 0,
-}: QueryFunctionContext) => {
-    return getInfinityList(`${NOTIFICATION_ENDPOINT.BASE}`, pageParam);
+const getNotifications = async ({ pageParam = 0 }: QueryFunctionContext) => {
+    return getInfinityList(`${NOTIFICATION_ENDPOINT.BASE}`, pageParam, {
+        limit: 12,
+    });
 };
 
 const createNotification = async (newNotification: iNotificationDTO) => {
@@ -76,7 +74,7 @@ export const useNotify = () => {
     const getNotificationsQuery = useInfiniteQuery(
         NOTIFICATION_QUERIES.GET_NOTIFICATIONS,
         getNotifications,
-        INFINITY_QUERY_LIST_CONFIG
+        generateInfinityQueryListConfig()
     );
 
     // read notifies
@@ -92,10 +90,12 @@ export const useNotify = () => {
             newNotification.receivers = filteredReceivers;
             createNotificationMutation.mutate(newNotification, {
                 onSuccess: (response) => {
+                    console.log(`response`, response);
                     if (socket) {
                         if (response) {
                             socket.emit("createNotification", {
                                 ...response,
+                                sender: currentUser,
                             });
                         }
                     }
@@ -119,7 +119,6 @@ export const useNotify = () => {
         //     NOTIFICATION_QUERIES.GET_NOTIFICATIONS
         // );
     };
-
 
     return {
         refetchAll,

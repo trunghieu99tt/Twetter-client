@@ -1,4 +1,3 @@
-import React from "react";
 import { Link } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 
@@ -19,9 +18,7 @@ import { iRoom } from "@type/room.types";
 // styles
 import classes from "./chatUserList.module.css";
 
-interface Props {}
-
-const ChatPageUserList = (props: Props) => {
+const ChatPageUserList = () => {
     const connectedRooms = useRecoilValue(connectedRoomsState);
     const { user: currentUser } = useUser();
 
@@ -38,8 +35,12 @@ const ChatPageUserList = (props: Props) => {
                         return u._id !== currentUser._id;
                     });
                     if (!user) return null;
+
                     return (
-                        <Link to={`/chat/${room._id}`}>
+                        <Link
+                            to={`/chat/${room._id}`}
+                            key={`chat-page-user-list-${room._id}`}
+                        >
                             <article className={classes.item}>
                                 <UserAvatarSmall
                                     user={user}
@@ -48,10 +49,6 @@ const ChatPageUserList = (props: Props) => {
                                 <div>
                                     <div className={classes.name}>
                                         {user.name}
-                                    </div>
-                                    <div className={classes.lastMessage}>
-                                        Lorem ipsum dolor sit amet, consectetur
-                                        adipiscing elit.
                                     </div>
                                 </div>
                             </article>

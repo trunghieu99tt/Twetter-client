@@ -10,7 +10,7 @@ interface Props {
 const MediaCard = ({ data }: Props) => {
     console.log(`data`, data);
     return (
-        <Wrapper>
+        <Wrapper to={`/tweet/${data._id}`}>
             <MediaWrapper>
                 <MediaViewer media={data.media} />
             </MediaWrapper>

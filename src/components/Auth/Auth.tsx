@@ -23,6 +23,7 @@ import {
     ForgotPasswordStyled,
 } from "./AuthStyle";
 import { AnimatePresence } from "framer-motion";
+import ReactDatePicker from "react-datepicker";
 
 const Auth = () => {
     const { t } = useTranslation();
@@ -31,9 +32,12 @@ const Auth = () => {
 
     const {
         gender,
-        setGender,
-        handleSubmit,
+        birthday,
+
         register,
+        setGender,
+        setBirthday,
+        handleSubmit,
         onOpenForgotPasswordForm,
         onCloseForgotPasswordForm,
         visibleForgotPasswordForm,
@@ -85,7 +89,26 @@ const Auth = () => {
                             <Input
                                 type="password"
                                 required
-                                {...register("username")}
+                                {...register("passwordConfirm")}
+                            />
+                        </InputGroup>
+                        <InputGroup>
+                            <InputLabel>{t("name")}</InputLabel>
+                            <Input type="text" required {...register("name")} />
+                        </InputGroup>
+                        <InputGroup>
+                            <InputLabel>{t("email")}</InputLabel>
+                            <Input
+                                type="text"
+                                required
+                                {...register("email")}
+                            />
+                        </InputGroup>
+                        <InputGroup>
+                            <InputLabel>{t("birthday")}</InputLabel>
+                            <ReactDatePicker
+                                selected={birthday}
+                                onChange={(date: Date) => setBirthday(date)}
                             />
                         </InputGroup>
                         <InputGroup>

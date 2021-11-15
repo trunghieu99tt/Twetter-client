@@ -22,32 +22,34 @@ const TopMenu = () => {
         dispatch,
     } = useAppContext();
 
-    const menu = useMemo(
-        () => [
-            {
-                name: t("home"),
-                path: "/",
-                id: uuidv4(),
-            },
-            {
-                name: t("explore"),
-                path: "/explore/top",
-                submenus: [
-                    "/explore/latest",
-                    "/explore/top",
-                    "/explore/people",
-                    "/explore/media",
-                ],
-                id: uuidv4(),
-            },
-            {
-                name: t("bookmark"),
-                path: "/bookmarks",
-                id: uuidv4(),
-            },
-        ],
-        []
-    );
+    const menu = [
+        {
+            name: t("home"),
+            path: "/",
+            id: uuidv4(),
+        },
+        {
+            name: t("explore"),
+            path: "/explore/top",
+            submenus: [
+                "/explore/latest",
+                "/explore/top",
+                "/explore/people",
+                "/explore/media",
+            ],
+            id: uuidv4(),
+        },
+        {
+            name: t("bookmark"),
+            path: "/bookmarks",
+            id: uuidv4(),
+        },
+        {
+            name: t("search"),
+            path: "/search",
+            id: uuidv4(),
+        },
+    ];
 
     const closeMenu = () =>
         dispatch({

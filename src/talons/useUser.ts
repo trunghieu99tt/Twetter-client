@@ -1,22 +1,25 @@
 import { QueryFunctionContext, useInfiniteQuery, useMutation, useQuery, useQueryClient } from "react-query";
-
+import { useSetRecoilState } from "recoil";
 
 // utils
 import { getInfinityList } from "@utils/query";
 
 // api
-import client from "api/client"
+import client from "api/client";
+
+// states
+import { prevUserState } from "states/user.state";
 
 // types
 import { iUser } from "../types/user.types";
 
 // constants
-import { USER_ENDPOINTS, USER_QUERY } from "constants/user.constants";
-import { INFINITY_QUERY_LIST_CONFIG, LONG_STATE_TIME } from "constants/config.constant";
-import { UserModel } from "model/user.model";
 import { TWEET_QUERY } from "constants/tweet.constants";
-import { useSetRecoilState } from "recoil";
-import { prevUserState } from "states/user.state";
+import { USER_ENDPOINTS, USER_QUERY } from "constants/user.constants";
+import { generateInfinityQueryListConfig, LONG_STATE_TIME } from "constants/config.constant";
+
+// models
+import { UserModel } from "model/user.model";
 
 export const parseUser = (user: iUser) => {
     if (!user)
@@ -28,12 +31,12 @@ export const parseUser = (user: iUser) => {
         user.following = user.following.map(following => new UserModel(following));
     }
     return new UserModel(user).getData();
-}
+};
 
 const getMe = async () => {
     const response = await client.get(USER_ENDPOINTS.GET_ME);
     return parseUser(response?.data?.data);
-}
+};
 
 const getUser = async ({ queryKey }: QueryFunctionContext) => {
     const userId = queryKey[1];
@@ -41,11 +44,11 @@ const getUser = async ({ queryKey }: QueryFunctionContext) => {
         return;
     const response = await client.get(`${USER_ENDPOINTS.BASE}/${userId}`);
     return parseUser(response?.data?.data);
-}
+};
 
 const getPopularUsers = async ({ pageParam = 0 }: QueryFunctionContext) => {
     return getInfinityList(USER_ENDPOINTS.POPULAR_USERS, pageParam);
-}
+};
 
 // get 5 most popular users
 const getLimitedPopularUsers = async () => {
@@ -56,21 +59,21 @@ const getLimitedPopularUsers = async () => {
         },
     });
     return response?.data?.data || [];
-}
+};
 
-const updateUser = async ({ userId, updatedUser }: { updatedUser: Partial<iUser>, userId: string }) => {
+const updateUser = async ({ userId, updatedUser }: { updatedUser: Partial<iUser>, userId: string; }) => {
     if (!userId)
         return;
     const response = await client.patch(USER_ENDPOINTS.UPDATE_ME, updatedUser);
     return response?.data?.data;
-}
+};
 
 const followUser = async (userId: string) => {
     if (!userId)
         return;
     const response = await client.post(`${USER_ENDPOINTS.FOLLOW}/${userId}`);
     return response?.data;
-}
+};
 
 export const useUser = (
     userId = ""
@@ -84,7 +87,7 @@ export const useUser = (
         queryClient.invalidateQueries(USER_QUERY.GET_ME);
         queryClient.invalidateQueries(USER_QUERY.GET_POPULAR_USERS);
         queryClient.invalidateQueries(USER_QUERY.GET_LIMITED_POPULAR_USERS);
-    }
+    };
 
     // Have to separate into 2 query because we need to get the user by token for the
     // first time we load the page. At that time we don't have the userId yet.
@@ -92,7 +95,7 @@ export const useUser = (
         staleTime: LONG_STATE_TIME,
         retry: 1,
         onError: () => {
-            localStorage.removeItem('accessToken')
+            localStorage.removeItem('accessToken');
         },
         onSuccess: (data: iUser | undefined) => {
             if (data) {
@@ -106,7 +109,7 @@ export const useUser = (
         retry: 5
     });
 
-    const getPopularUsersQuery = useInfiniteQuery(USER_QUERY.GET_POPULAR_USERS, getPopularUsers, INFINITY_QUERY_LIST_CONFIG);
+    const getPopularUsersQuery = useInfiniteQuery(USER_QUERY.GET_POPULAR_USERS, getPopularUsers, generateInfinityQueryListConfig());
 
     const getLimitedPopularUsersQuery = useQuery<iUser[] | undefined>(USER_QUERY.GET_LIMITED_POPULAR_USERS, getLimitedPopularUsers, {
         staleTime: LONG_STATE_TIME,
@@ -141,5 +144,5 @@ export const useUser = (
 
         updateUserMutation,
         followUserMutation
-    }
-}
+    };
+};

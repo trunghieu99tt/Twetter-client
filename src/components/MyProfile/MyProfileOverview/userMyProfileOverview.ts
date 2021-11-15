@@ -1,11 +1,11 @@
-import { useUpload } from '@talons/useUpload';
-import { useUser } from '@talons/useUser';
-import { iRoom } from '@type/room.types';
-import { iUser } from '@type/user.types';
-import { ChangeEvent, useState } from 'react';
-import { useHistory } from 'react-router';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
-import { connectedRoomsState, joinDMRoomState } from 'states/room.state';
+import { useUpload } from "@talons/useUpload";
+import { useUser } from "@talons/useUser";
+import { iRoom } from "@type/room.types";
+import { iUser } from "@type/user.types";
+import { ChangeEvent, useEffect, useState } from "react";
+import { useHistory } from "react-router";
+import { useRecoilValue, useSetRecoilState } from "recoil";
+import { connectedRoomsState, joinDMRoomState } from "states/room.state";
 
 type LIST_TYPE = "followers" | "following" | "";
 type MODAL_TYPE = "list_user" | "update_info" | "";
@@ -14,12 +14,14 @@ type Props = {
     user: iUser;
 };
 
-export const useMyProfileOverview = ({
-    user,
-}: Props) => {
+export const useMyProfileOverview = ({ user }: Props) => {
     const connectedRooms = useRecoilValue(connectedRoomsState);
     const setJoinRoomState = useSetRecoilState(joinDMRoomState);
-    const { user: currentUser, followUserMutation, updateUserMutation } = useUser();
+    const {
+        user: currentUser,
+        followUserMutation,
+        updateUserMutation,
+    } = useUser();
     const { uploadImage } = useUpload();
     const history = useHistory();
 
@@ -58,7 +60,7 @@ export const useMyProfileOverview = ({
         }
     };
 
-    const onCancelChangeAvatar = () =>
+    const resetData = () =>
         setNewAvatar({
             file: null,
             preview: "",
@@ -69,13 +71,13 @@ export const useMyProfileOverview = ({
             setUpdating(true);
             try {
                 const newAvatarUrl = await uploadImage(newAvatar.file);
-                updateUserMutation.mutate({
+                await updateUserMutation.mutateAsync({
                     updatedUser: {
                         avatar: newAvatarUrl,
                     },
                     userId: user?._id,
                 });
-                onCancelChangeAvatar();
+                resetData();
             } catch (error) {
                 console.log("error: ", error);
             }
@@ -105,8 +107,13 @@ export const useMyProfileOverview = ({
         }
     };
 
-    const updateFollowStatus = (userId: string) => followUserMutation.mutate(userId);
+    useEffect(() => {
+        resetData();
+        closeModal();
+    }, [user]);
 
+    const updateFollowStatus = (userId: string) =>
+        followUserMutation.mutate(userId);
 
     const followed = currentUser?.following.some((u: iUser) => {
         return u._id === user._id;
@@ -119,18 +126,20 @@ export const useMyProfileOverview = ({
 
     switch (listType) {
         case "followers":
-            followerOrFollowingList = followers;
+            followerOrFollowingList = followers.filter((u: iUser) => {
+                return u._id !== user._id;
+            });
             break;
         case "following":
-            followerOrFollowingList = following;
+            followerOrFollowingList = following.filter((u: iUser) => {
+                return u._id !== user._id;
+            });
             break;
         default:
             followerOrFollowingList = [];
     }
 
     const isMe = currentUser?._id === user?._id || false;
-    const isDisabledUpdate = updating || updateUserMutation.isLoading;
-
 
     return {
         isMe,
@@ -140,7 +149,6 @@ export const useMyProfileOverview = ({
         modalType,
         updating,
         newAvatar,
-        isDisabledUpdate,
         isVisibleEditForm,
         followerOrFollowingList,
         updatingFollowStatus: followUserMutation.isLoading,
@@ -152,7 +160,7 @@ export const useMyProfileOverview = ({
         onChangeAvatar,
         updateUserAvatar,
         updateFollowStatus,
-        onCancelChangeAvatar,
+        onCancelChangeAvatar: resetData,
         setIsVisibleEditForm,
     };
 };

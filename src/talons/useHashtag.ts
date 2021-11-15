@@ -5,26 +5,15 @@ import { ONE_HOUR } from "constants/app.constants";
 import { HASHTAG_ENDPOINTS, HASHTAG_QUERY } from "constants/hashtag.constants";
 import { useMutation, useQuery } from "react-query";
 
-
-
 const getMostPopularHashtag = async () => {
     const response = await client.get(`${HASHTAG_ENDPOINTS.MOST_POPULAR}`);
     return response.data?.data || [];
 };
 
-const updateHashtag = async ({
-    name,
-    count
-}: iUpdateHashtagDTO) => {
-
-    console.log(`name`, name);
-    console.log(`count`, count);
-
-    const url = `${HASHTAG_ENDPOINTS.BASE}/${name.substr(1)}`;
-
-    console.log(`url`, url);
-
-    const response = await client.patch(`${HASHTAG_ENDPOINTS.BASE}/${name.substr(1)}`, { count });
+const updateHashtag = async ({ name, count }: iUpdateHashtagDTO) => {
+    const response = await client.patch(`${HASHTAG_ENDPOINTS.BASE}/${name}`, {
+        count,
+    });
     return response.data;
 };
 
@@ -33,7 +22,7 @@ export const useHashtag = () => {
         HASHTAG_QUERY.GET_MOST_POPULAR,
         getMostPopularHashtag,
         {
-            staleTime: ONE_HOUR
+            staleTime: ONE_HOUR,
         }
     );
 
@@ -43,39 +32,45 @@ export const useHashtag = () => {
         {
             onSuccess: () => {
                 getMostPopularHashtagQuery.refetch();
-            }
+            },
         }
     );
 
     const getTagsExistenceMap = (tags: string[] = []): TMapExistence => {
         const tagsExistenceMap: TMapExistence = {};
-        tags && tags.forEach((tag) => {
-            tagsExistenceMap[tag] = true;
-        });
+        tags &&
+            tags.forEach((tag) => {
+                tagsExistenceMap[tag] = true;
+            });
         return tagsExistenceMap;
     };
 
-    const updateHashTags = async (oldHashtags: string[], newHashtags: string[]) => {
+    const updateHashTags = async (
+        oldHashtags: string[],
+        newHashtags: string[]
+    ) => {
         const oldTagsExistenceMap = getTagsExistenceMap(oldHashtags);
         const newTagsExistenceMap = getTagsExistenceMap(newHashtags);
 
         const updateHashtagObjects: iUpdateHashtagDTO[] = [];
 
-        newHashtags.forEach((tag: string) => {
+        newHashtags?.forEach((tag: string) => {
             if (!oldTagsExistenceMap[tag]) {
                 updateHashtagObjects.push({ name: tag, count: 1 });
             }
         });
 
-        oldHashtags.forEach((tag: string) => {
+        oldHashtags?.forEach((tag: string) => {
             if (!newTagsExistenceMap[tag]) {
                 updateHashtagObjects.push({ name: tag, count: -1 });
             }
         });
 
-        const updateHashtagResponse = await Promise.all(updateHashtagObjects.map(async (updateObj: iUpdateHashtagDTO) => {
-            return await updateHashtagMutation.mutateAsync(updateObj);
-        }));
+        const updateHashtagResponse = await Promise.all(
+            updateHashtagObjects.map(async (updateObj: iUpdateHashtagDTO) => {
+                return await updateHashtagMutation.mutateAsync(updateObj);
+            })
+        );
 
         return updateHashtagResponse;
     };
@@ -85,5 +80,4 @@ export const useHashtag = () => {
         updateHashtagMutation,
         getMostPopularHashtagQuery,
     };
-
 };

@@ -8,6 +8,10 @@ export const Wrapper = styled.article`
     border-bottom: 1px solid var(--gray-5);
     padding: 2rem;
     box-shadow: var(--box-shadow-1);
+    margin-bottom: 1rem;
+    border-radius: 0.8rem;
+    min-width: 50rem;
+    max-width: 100%;
 `;
 
 export const UserName = styled.p`
@@ -27,9 +31,9 @@ export const FollowButton = styled.button`
     gap: 1rem;
     padding: 0.8rem 2.4rem;
     height: 3rem;
-    border-radius: .4rem;
-    
-    &:disabled{
+    border-radius: 0.4rem;
+
+    &:disabled {
         cursor: initial;
         background: var(--gray-4);
     }

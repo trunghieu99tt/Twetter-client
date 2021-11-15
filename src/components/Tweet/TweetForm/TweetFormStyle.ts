@@ -1,11 +1,13 @@
 import styled from "styled-components";
 
 export const Wrapper = styled.div`
-    background: #FFFFFF;
+    background: #ffffff;
     box-shadow: var(--box-shadow-1);
     border-radius: 1.2rem;
     padding: 1rem 2rem;
     margin-bottom: 2.5rem;
+    min-width: 70rem;
+    max-width: 100%;
 `;
 
 export const HeadLine = styled.div`
@@ -13,17 +15,17 @@ export const HeadLine = styled.div`
     padding-bottom: 0.8rem;
     border-bottom: 1px solid var(--gray-5);
     font-weight: 600;
-    margin-bottom: .8rem;
+    margin-bottom: 0.8rem;
+    font-size: 1.2rem;
 `;
 
 export const Main = styled.div`
     display: flex;
     gap: 1.2rem;
-    
-    & > div{
+
+    & > div {
         flex: 1;
     }
-    
 `;
 
 export const TweetContentInputWrapper = styled.div`
@@ -36,7 +38,6 @@ export const TweetContentInput = styled.input`
     outline: none;
     border: none;
     width: 100%;
-    
 `;
 
 export const MediaItem = styled.div`
@@ -51,31 +52,37 @@ export const ImageLeftPlaceHolder = styled.div`
     justify-content: center;
     font-size: 3rem;
     font-weight: 500;
-    background: rgba(0,0,0,.5);
+    background: rgba(0, 0, 0, 0.5);
     color: #fff;
 `;
 
-export const TweetImageWrapper = styled('div') <{
-    mode: 'block' | 'flex' | 'grid' | 'none';
+export const TweetImageWrapper = styled("div")<{
+    mode: "block" | "flex" | "grid" | "none";
 }>`
     position: relative;
     margin-top: 1rem;
     margin-bottom: 2rem;
     position: relative;
-    
-    display: ${props => props.mode};
-    
-    ${props => props.mode === 'block' && `
+
+    display: ${(props) => props.mode};
+
+    ${(props) =>
+        props.mode === "block" &&
+        `
         height: 30rem;
     `};
-    
-    ${props => props.mode === 'flex' && `
+
+    ${(props) =>
+        props.mode === "flex" &&
+        `
         & > img{
             width: 50%;
         }
     `};
-    
-    ${props => props.mode === 'grid' && `
+
+    ${(props) =>
+        props.mode === "grid" &&
+        `
         grid-template-rows: repeat(2, 20rem);
         grid-template-columns: repeat(6, 1fr);
         
@@ -113,8 +120,8 @@ export const DeleteImagesButton = styled.button`
     top: 1rem;
     right: 1rem;
     cursor: pointer;
-    
-    svg{
+
+    svg {
         --size: 1.5rem;
         width: var(--size);
         height: var(--size);
@@ -128,7 +135,7 @@ export const Footer = styled.div`
 `;
 
 export const FileLabel = styled.label`
-    svg{
+    svg {
         --size: 1.5rem;
         width: var(--size);
         height: var(--size);
@@ -142,14 +149,13 @@ export const FileInput = styled.input`
 `;
 
 export const TweetSubmitButton = styled.button`
-    padding: .8rem 2.4rem;
+    padding: 0.8rem 2.4rem;
     background: var(--blue-1);
     color: #fff;
     border-radius: 4px;
     cursor: pointer;
-    
-    &:disabled{
+
+    &:disabled {
         background: var(--gray-1);
     }
-    
 `;

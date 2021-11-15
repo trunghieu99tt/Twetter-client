@@ -7,6 +7,12 @@
     border-radius: 1rem;
     margin-bottom: 1.5rem;
     width: 100%;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.root:hover {
+    background-color: var(--light-2);
 }
 
 .root.unread {

@@ -16,30 +16,20 @@ type Props = {
 };
 
 export const useTweetForm = ({ tweet }: Props) => {
-
-    const user: iUser = new UserModel(useQueryClient().getQueryData(
-        USER_QUERY.GET_ME
-    )).getData();
-
+    const user: iUser = new UserModel(
+        useQueryClient().getQueryData(USER_QUERY.GET_ME)
+    ).getData();
 
     const [body, setBody] = useState(tweet?.content || "");
     const [media, setMedia] = useState<TMedia[]>([]);
     const [loading, setLoading] = useState<boolean>(false);
     const [audience, setAudience] = useState<number>(tweet?.audience || 0);
 
-    const {
-        createTweetMutation,
-        updateTweetMutation,
-    } = useTweets(user?._id);
+    const { createTweetMutation, updateTweetMutation } = useTweets(user?._id);
 
-    const {
-        uploadMultiMedia
-    } = useUpload();
+    const { uploadMultiMedia } = useUpload();
 
-    const {
-        updateHashTags
-    } = useHashtag();
-
+    const { updateHashTags } = useHashtag();
 
     const onChangeFile = (event: ChangeEvent<HTMLInputElement>) => {
         const files = event.target.files || [];
@@ -48,7 +38,7 @@ export const useTweetForm = ({ tweet }: Props) => {
                 id: uuid(),
                 file,
                 url: URL.createObjectURL(file),
-                type: file.type.split("/")[0]
+                type: file.type.split("/")[0],
             }));
             setMedia(newMedia);
         }
@@ -57,7 +47,6 @@ export const useTweetForm = ({ tweet }: Props) => {
     const onCancelMedia = () => {
         setMedia([]);
     };
-
 
     const resetContent = () => {
         setBody("");
@@ -70,46 +59,48 @@ export const useTweetForm = ({ tweet }: Props) => {
         setLoading(false);
     };
 
-
     const onSubmitSuccess = () => {
-        console.log('Go update onSubmitSuccess ');
         const initialHashtags = tweet?.tags || [];
+
         const { hashtags: newHashtags } = extractMetadata(body || "") || [];
+
         updateHashTags(initialHashtags, newHashtags as string[]);
         resetAll();
     };
 
-
     const onSubmit = async () => {
         if (body || media.length > 0) {
             setLoading(true);
-            const mediaResponse = await uploadMultiMedia(media?.map(media => media.file as File) || []);
+            const mediaResponse = await uploadMultiMedia(
+                media?.map((media) => media.file as File) || []
+            );
             const { hashtags } = extractMetadata(body || "") || [];
 
             const newTweet: iCreateTweetDTO = {
                 content: body,
                 audience,
-                media: mediaResponse,
-                tags: hashtags?.map(tag => tag.substring(1)) || []
+                media: mediaResponse || tweet?.media,
+                tags: hashtags,
             };
-
 
             if (tweet) {
                 try {
-                    await updateTweetMutation.mutateAsync({ tweetId: tweet._id, updatedTweet: newTweet });
+                    await updateTweetMutation.mutateAsync({
+                        tweetId: tweet._id,
+                        updatedTweet: newTweet,
+                    });
                     onSubmitSuccess();
                 } catch (error) {
                     resetAll();
-                    console.log('error: ', error);
+                    console.log("error: ", error);
                 }
-
             } else {
                 try {
                     await createTweetMutation.mutateAsync(newTweet);
                     onSubmitSuccess();
                 } catch (error) {
                     resetAll();
-                    console.log('error: ', error);
+                    console.log("error: ", error);
                 }
             }
 

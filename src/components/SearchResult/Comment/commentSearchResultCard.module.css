@@ -1,0 +1,40 @@
+.root {
+    margin-top: 1rem;
+    background-color: #fff;
+    padding: 1rem 2rem;
+    display: block;
+    color: #000;
+    width: 100%;
+}
+
+.header {
+    border-bottom: 1px solid #e1e4e8;
+    display: flex;
+    align-items: center;
+    padding: 1rem 0;
+    gap: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.authorAvatar {
+    --size: 4rem;
+    width: var(--size);
+    height: var(--size);
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.authorName {
+    font-size: 1.3rem;
+    font-weight: 500;
+}
+
+.main {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+}
+
+.content {
+    font-size: 1.3rem;
+}

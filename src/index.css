@@ -90,6 +90,10 @@ button:focus {
     background: #333;
 }
 
+.react-datepicker-popper[data-placement^="bottom"] {
+    z-index: 5;
+}
+
 .react-datepicker__current-month,
 .react-datepicker-time__header,
 .react-datepicker-year-header {

@@ -14,6 +14,7 @@ import InfinityTweetsList from "@components/InfinityLists/InfinityTweetsList";
 
 // styles
 import classes from "./hashtag.module.css";
+import { Container } from "@shared/style/sharedStyle.style";
 
 const Hashtag = () => {
     const { t } = useTranslation();
@@ -29,7 +30,9 @@ const Hashtag = () => {
                 <p className={classes.heading}>
                     {t("allTweetByHashtag")} <span>#{hashtag}</span>
                 </p>
-                <InfinityTweetsList query={getTweetsByTagQuery} />
+                <Container>
+                    <InfinityTweetsList query={getTweetsByTagQuery} />
+                </Container>
             </div>
         </React.Fragment>
     );

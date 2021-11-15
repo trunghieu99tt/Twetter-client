@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import SimpleReactLightbox from "simple-react-lightbox";
+import { useTranslation } from "react-i18next";
 
 // talons
 import { useChatPage } from "./useChatPage";
@@ -7,6 +8,7 @@ import { useIntersectionObserver } from "@hooks/useIntersectionObserver";
 
 // components
 import CallModal from "@components/Call/CallModal";
+import PageMetadata from "@components/PageMetadata";
 import MessageContent from "@components/Chat/MessageContent";
 import TextMessageForm from "@components/Chat/TextMessageForm";
 import RoomImageGallery from "@components/Chat/RoomImageGallery";
@@ -17,15 +19,22 @@ import ImageMessageForm from "@components/Chat/ImageMessageForm";
 import { IoCallSharp } from "react-icons/io5";
 import { BsFillCameraVideoFill } from "react-icons/bs";
 
+// images
+import DefaultUnknownAvatar from "@images/user.png";
+
 // types
 import { iMessage } from "@type/message.types";
 
 // styles
 import classes from "./chatPage.module.css";
+import { Spinner1 } from "@components/Loaders";
 
 const ChatPage = () => {
+    const { t } = useTranslation();
+
     const {
         call,
+        loading,
         message,
         messages,
         guestUser,
@@ -34,6 +43,7 @@ const ChatPage = () => {
         chosenEmoji,
         messageImage,
         totalMessage,
+
         onSubmit,
         onChange,
         openAudioCall,
@@ -66,6 +76,8 @@ const ChatPage = () => {
 
     return (
         <React.Fragment>
+            <PageMetadata title={t("chatPage")} />
+            {loading && <Spinner1 />}
             {call && <CallModal />}
             <div className={classes.root}>
                 <aside className={classes.userList}>
@@ -77,7 +89,10 @@ const ChatPage = () => {
                             <div className={classes.left}>
                                 <figure className={classes.roomImage}>
                                     <img
-                                        src={guestUser?.avatar}
+                                        src={
+                                            guestUser?.avatar ||
+                                            DefaultUnknownAvatar
+                                        }
                                         alt={`${guestUser?.name}-wallpaper`}
                                     />
                                 </figure>
@@ -150,7 +165,7 @@ const ChatPage = () => {
                     <article className={classes.roomInfo}>
                         <figure className={classes.roomInfoImageWrapper}>
                             <img
-                                src={guestUser?.avatar}
+                                src={guestUser?.avatar || DefaultUnknownAvatar}
                                 alt={`${guestUser?.name} avatar`}
                                 className={classes.roomInfoImage}
                             />

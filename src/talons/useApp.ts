@@ -1,40 +1,33 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useAppContext } from "@context/app.context";
 import { useWindowSize } from "@hooks/useWindowSize";
 import { MutableRefObject, useEffect, useRef } from "react";
 import { useHistory, useLocation } from "react-router";
 import { useUser } from "./useUser";
 import Peer from "peerjs";
-import { useRoom } from "./useRoom";
-import { useStory } from "./useStory";
-import { useNotify } from "./useNotify";
-import { useHashtag } from "./useHashtag";
-
 
 export const useApp = () => {
-    const storyTalons = useStory();
-    const notificationTalons = useNotify();
-    const hashtagTalons = useHashtag();
     const { user, getMeQuery } = useUser();
-    const { getAllUserRooms } = useRoom();
     const history = useHistory();
     const location = useLocation();
     const currentPathRef = useRef(null) as MutableRefObject<string | null>;
 
-    const { state: {
-        screenSize,
-    }, dispatch } = useAppContext();
+    const {
+        state: { screenSize },
+        dispatch,
+    } = useAppContext();
     const { width = 1920 } = useWindowSize();
 
     useEffect(() => {
         currentPathRef.current = location.pathname;
         const newPeer = new Peer(undefined, {
-            path: '/',
+            path: "/",
         });
         dispatch({
-            type: 'SET_PEER',
+            type: "SET_PEER",
             payload: newPeer,
         });
-        getAllUserRooms();
     }, []);
 
     useEffect(() => {
@@ -44,8 +37,6 @@ export const useApp = () => {
                 history.push("/auth");
             }
         } else {
-            storyTalons.refetchAll();
-            notificationTalons.refetchAll();
             if (windowHref.includes("auth")) {
                 if (
                     currentPathRef.current &&
@@ -59,26 +50,24 @@ export const useApp = () => {
 
     useEffect(() => {
         if (width < 768) {
-            if (screenSize !== 'MOBILE') {
+            if (screenSize !== "MOBILE") {
                 dispatch({
                     type: "SET_SCREEN_SIZE",
-                    payload: "MOBILE"
+                    payload: "MOBILE",
                 });
             }
-        }
-        else if (width >= 768 && width < 1024) {
-            if (screenSize !== 'TABLET') {
+        } else if (width >= 768 && width < 1024) {
+            if (screenSize !== "TABLET") {
                 dispatch({
                     type: "SET_SCREEN_SIZE",
-                    payload: "TABLET"
+                    payload: "TABLET",
                 });
             }
-        }
-        else {
-            if (screenSize !== 'DESKTOP') {
+        } else {
+            if (screenSize !== "DESKTOP") {
                 dispatch({
                     type: "SET_SCREEN_SIZE",
-                    payload: "DESKTOP"
+                    payload: "DESKTOP",
                 });
             }
         }
@@ -86,7 +75,6 @@ export const useApp = () => {
 
     return {
         user,
-        isLoading: getMeQuery.isLoading
+        isLoading: getMeQuery.isLoading,
     };
-
 };

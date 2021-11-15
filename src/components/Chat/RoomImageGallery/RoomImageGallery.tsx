@@ -19,7 +19,7 @@ const RoomImageGallery = ({ classes: propsClasses, images }: Props) => {
     return (
         <aside className={classes.root}>
             <p className={classes.heading}>{t("sharedImage")}</p>
-            <SRLWrapper>
+            <SRLWrapper key={Math.random()}>
                 <div className={classes.content}>
                     {images.map((image: string) => {
                         return (

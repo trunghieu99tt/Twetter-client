@@ -42,7 +42,8 @@ const MessageContent = ({ data, isMyMessage }: Props) => {
                         onLoad={() => {
                             console.log("Loaded");
                         }}
-                        onError={() => {
+                        onError={(error) => {
+                            console.log("error: ", error);
                             console.log("Error");
                         }}
                     />
@@ -71,14 +72,16 @@ const MessageContent = ({ data, isMyMessage }: Props) => {
                         {date} at {time}
                     </span>
                 </div>
-                <p
-                    className={classes.content}
-                    dangerouslySetInnerHTML={{ __html: urlify(data.content) }}
-                ></p>
+                {data?.content?.length > 0 && (
+                    <p
+                        className={classes.content}
+                        dangerouslySetInnerHTML={{
+                            __html: urlify(data.content),
+                        }}
+                    ></p>
+                )}
                 {data?.file && (
-                    <div className={classes.content}>
-                        <SRLWrapper>{fileContent}</SRLWrapper>
-                    </div>
+                    <div className={classes.content}>{fileContent}</div>
                 )}
             </div>
         </article>

@@ -11,10 +11,12 @@ import {
     Wrapper,
     OkButton,
     MainImage,
+    LoadingStyle,
     CancelButton,
     UpdateWrapper,
     ActionButtons,
 } from "./ImageWithUpdaterStyle";
+import { Spinner2 } from "@components/Loaders";
 
 interface Props {
     id: string;
@@ -42,9 +44,16 @@ const ImageWithUpdater = ({
     onChange,
 }: Props) => {
     const { t } = useTranslation();
+    
+    
 
     return (
         <Wrapper customStyles={wrapperCustomStyles}>
+            {isDisabledUpdate && (
+                <LoadingStyle>
+                    <Spinner2 customStyles="--size: 2rem;" />
+                </LoadingStyle>
+            )}
             <MainImage src={image} alt={`${name}-${id}`} />
             <UpdateWrapper>
                 {!data?.file ? (

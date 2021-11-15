@@ -3,22 +3,23 @@ import styled from "styled-components";
 
 export const RetweetedBy = styled(Link)`
     margin-bottom: 1rem;
-    margin-left: 2rem;
     display: flex;
     font-size: 14px;
     color: var(--gray-1);
     gap: 1rem;
     align-items: center;
+    font-weight: 500;
+    color: var(--blue-2);
 `;
 
 export const Wrapper = styled.div`
     background: #fff;
     box-shadow: var(--box-shadow-1);
-    border-radius: .5rem;
+    border-radius: 0.5rem;
     padding: 2rem;
     margin: 0 auto;
     margin-bottom: 3.5rem;
-    max-width: 75rem;
+    max-width: 100%;
 `;
 
 export const Header = styled.header`
@@ -26,9 +27,9 @@ export const Header = styled.header`
 `;
 
 export const AuthorWrapper = styled.div`
-   display: flex;
-   gap: 2rem;
-   margin-bottom: 2rem;
+    display: flex;
+    gap: 2rem;
+    margin-bottom: 2rem;
 `;
 
 export const AuthorName = styled.h4`
@@ -62,17 +63,17 @@ export const AuthorAction = styled.button`
 export const Content = styled.div``;
 
 export const TweetDescription = styled.div`
-font-size: 1.5rem;
-color: var(--gray-2);
-margin-bottom: 2rem;
+    font-size: 1.5rem;
+    color: var(--gray-2);
+    margin-bottom: 2rem;
 `;
 
 export const TweetMediaWrapper = styled.div``;
 
 export const TweetMedia = styled.div`
-height: 40rem;
-object-fit: contain;
-border-radius: .8rem;
+    height: 40rem;
+    object-fit: contain;
+    border-radius: 0.8rem;
 `;
 
 export const Interaction = styled.div`
@@ -84,7 +85,7 @@ export const InteractionSummary = styled.div`
     gap: 1.6rem;
     align-items: center;
     justify-content: flex-end;
-    margin-bottom: .8rem;
+    margin-bottom: 0.8rem;
 `;
 
 export const InteractionSummaryItem = styled.div`
@@ -97,12 +98,12 @@ export const InteractionSummaryItem = styled.div`
 export const InteractionButtonGroup = styled.div`
     border-top: 1px solid var(--light-1);
     border-bottom: 1px solid var(--light-1);
-    padding: .4rem 0;
+    padding: 0.4rem 0;
     display: flex;
     justify-content: space-between;
 `;
 
-export const InteractionButton = styled('button') <{
+export const InteractionButton = styled("button")<{
     customStyle?: string;
     liked?: boolean;
     saved?: boolean;
@@ -110,25 +111,31 @@ export const InteractionButton = styled('button') <{
 }>`
     cursor: pointer;
     padding: 1.1rem 4rem;
-    border-radius: .8rem;
+    border-radius: 0.8rem;
     display: flex;
     gap: 1.2rem;
     align-items: center;
     font-weight: 500;
-    
-    ${(props) => props.liked && `
+
+    ${(props) =>
+        props.liked &&
+        `
         color: var(--red);
     `}
-    
-    ${(props) => props.saved && `
+
+    ${(props) =>
+        props.saved &&
+        `
         color: var(--blue-2);
     `}
 
-    ${(props) => props.retweeted && `
+    ${(props) =>
+        props.retweeted &&
+        `
         color: var(--green-2);
     `}
     
-    &:hover{
+    &:hover {
         background: var(--light-1);
     }
 `;

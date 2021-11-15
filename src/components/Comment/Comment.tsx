@@ -1,6 +1,11 @@
 import { useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 
+// talons
+import { useNotify } from "@talons/useNotify";
+import { useUser } from "@talons/useUser";
+import { useComment } from "@talons/useComment";
+
 // utils
 import { calcDiffTimeString } from "@utils/helper";
 
@@ -24,12 +29,14 @@ import {
     CreatedAt,
     LikeButton,
     AuthorName,
+    ReplyButton,
     LikeCounter,
     Interaction,
     CommentMedia,
     RepliesWrapper,
 } from "./CommentStyle";
 import { Flex } from "@shared/style/sharedStyle.style";
+import { iNotificationDTO } from "@type/notify.types";
 
 interface Props {
     data: iComment;
@@ -38,6 +45,12 @@ interface Props {
 
 const Comment = ({ data, level = 0 }: Props) => {
     const { t } = useTranslation();
+    const { user: currentUser } = useUser();
+    const { reactCommentMutation } = useComment({
+        tweetId: data.tweet._id,
+        userId: "",
+    });
+    const { createNotificationAction } = useNotify();
 
     const likeCount = data?.likes?.length || 0;
 
@@ -52,6 +65,34 @@ const Comment = ({ data, level = 0 }: Props) => {
         }
     };
 
+    const toggleLike = async () => {
+        const response = await reactCommentMutation.mutateAsync(data._id);
+
+        // create a notification if the user reacted
+
+        const likes = response?.data?.likes || [];
+
+        if (
+            likes.length > 0 &&
+            likes.includes(currentUser?._id) &&
+            data.author._id !== currentUser?._id
+        ) {
+            // push notification
+            const msg: iNotificationDTO = {
+                text: "likedYourComment",
+                receivers: [data.author._id],
+                url: `/tweet/${data?.tweet?._id || data?.tweet}`,
+                type: "likedComment",
+            };
+
+            createNotificationAction(msg);
+        }
+    };
+
+    const didUserLike = data?.likes?.some(
+        (userId) => userId === currentUser._id
+    );
+
     return (
         <Wrapper>
             <Flex>
@@ -59,7 +100,9 @@ const Comment = ({ data, level = 0 }: Props) => {
                 <Main>
                     <MainInfo>
                         <div>
-                            <AuthorName>{data?.author?.name}</AuthorName>
+                            <AuthorName to={`/profile/${data.author._id}`}>
+                                {data?.author?.name}
+                            </AuthorName>
                             <CreatedAt>
                                 {calcDiffTimeString(new Date(data?.createdAt))}
                             </CreatedAt>
@@ -78,31 +121,39 @@ const Comment = ({ data, level = 0 }: Props) => {
                             </CommentMedia>
                         )}
                     </MainInfo>
-                    <Flex>
+                    <Flex gap="1rem">
                         <Interaction>
-                            <LikeButton>
+                            <LikeButton
+                                onClick={toggleLike}
+                                liked={didUserLike}
+                            >
                                 <AiOutlineHeart />
-                                {t("like")}
+                                {didUserLike ? t("liked") : t("like")}
                             </LikeButton>
-                            <span>.</span>
                             {likeCount > 0 && (
                                 <LikeCounter>
                                     {likeCount}{" "}
                                     {likeCount === 1
                                         ? ` ${t("like")}`
-                                        : ` ${t("like")}s`}
+                                        : ` ${t("like")}`}
                                 </LikeCounter>
                             )}
                         </Interaction>
                         {!data?.isChild && (
-                            <Interaction onClick={onFocusCommentForm}>
+                            <ReplyButton onClick={onFocusCommentForm}>
                                 {t("reply")}
-                            </Interaction>
+                            </ReplyButton>
                         )}
                     </Flex>
                     <RepliesWrapper>
                         {data?.replies?.map((reply: any) => {
-                            return <Comment data={reply} level={level + 1} />;
+                            return (
+                                <Comment
+                                    data={reply}
+                                    level={level + 1}
+                                    key={`comment-reply-data-${reply._id}`}
+                                />
+                            );
                         })}
                     </RepliesWrapper>
                 </Main>
@@ -114,9 +165,9 @@ const Comment = ({ data, level = 0 }: Props) => {
                 }}
             >
                 <AddComment
+                    tweet={data.tweet}
+                    commentData={data}
                     addCommentRef={addCommentRef}
-                    tweetId={data.tweet._id}
-                    commentId={data._id}
                 />
             </div>
         </Wrapper>

@@ -6,13 +6,13 @@ export interface iComment {
     tweet: iTweet;
     media: string;
     author: iUser;
+    likes: string[];
     content: string;
     isChild?: boolean;
     isEdited: boolean;
     createdAt: string;
     modifiedAt: string;
     replies: iComment[];
-    likes: Partial<iUser>[];
 }
 
 export interface iCreateCommentDTO {

@@ -30,9 +30,17 @@ import {
 const PopularPeople = () => {
     const { t } = useTranslation();
 
-    const { getLimitedPopularUsersQuery, user: currentUser } = useUser();
+    const {
+        getLimitedPopularUsersQuery,
+        user: currentUser,
+        followUserMutation,
+    } = useUser();
 
     const data: iUser[] = getLimitedPopularUsersQuery?.data || [];
+
+    const onToggleFollow = async (userId: string) => {
+        await followUserMutation.mutateAsync(userId);
+    };
 
     const filteredUsers =
         (data?.length > 0 &&
@@ -51,36 +59,44 @@ const PopularPeople = () => {
 
     if (filteredUsers?.length === 0) return null;
 
-    const items = filteredUsers.map((user: iUser) => {
-        const followersCount = user?.followers.length || 0;
+    const items = filteredUsers
+        .slice(0, Math.min(filteredUsers.length, 5))
+        .map((user: iUser) => {
+            const followersCount = user?.followers.length || 0;
 
-        return (
-            <UserCard key={`user-card-${user._id}`}>
-                <Flex gap="1.8rem" align="flex-start" justify="space-between">
-                    <Flex gap="1.8rem">
-                        <UserAvatarSmall user={user} />
-                        <div>
-                            <UserName to={`/profile/${user._id}`}>
-                                {user?.name}
-                            </UserName>
-                            <UserFollowers>
-                                {nFormatter(followersCount)}
-                                {`${t("followers")}${
-                                    followersCount > 1 ? "s" : ""
-                                }`}
-                            </UserFollowers>
-                        </div>
+            return (
+                <UserCard key={`user-card-${user._id}`}>
+                    <Flex
+                        gap="1.8rem"
+                        align="flex-start"
+                        justify="space-between"
+                    >
+                        <Flex gap="1.8rem">
+                            <UserAvatarSmall user={user} />
+                            <div>
+                                <UserName to={`/profile/${user._id}`}>
+                                    {user?.name}
+                                </UserName>
+                                <UserFollowers>
+                                    {nFormatter(followersCount)}{" "}
+                                    {`${t("follower")}${
+                                        followersCount > 1 ? "s" : ""
+                                    }`}
+                                </UserFollowers>
+                            </div>
+                        </Flex>
+                        <FollowButton onClick={() => onToggleFollow(user._id)}>
+                            <IoPersonAdd />
+                            {t("follow")}
+                        </FollowButton>
                     </Flex>
-                    <FollowButton>
-                        <IoPersonAdd />
-                        {t("follow")}
-                    </FollowButton>
-                </Flex>
-                <UserBio>{user?.bio}</UserBio>
-                {user?.coverPhoto && <UserCoverPhoto src={user?.coverPhoto} />}
-            </UserCard>
-        );
-    });
+                    <UserBio>{user?.bio}</UserBio>
+                    {user?.coverPhoto && (
+                        <UserCoverPhoto src={user?.coverPhoto} />
+                    )}
+                </UserCard>
+            );
+        });
 
     return <SidebarBlock title={t("whoToFollow")} content={items} />;
 };

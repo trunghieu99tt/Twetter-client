@@ -13,6 +13,9 @@ import { GrAdd } from "react-icons/gr";
 // types
 import { iStory } from "@type/story.types";
 
+// image
+import DefaultUnknownAvatar from "@images/user.png";
+
 // styles
 import classes from "./storyItem.module.css";
 import React from "react";
@@ -44,7 +47,7 @@ const StoryItem = ({ data, isSmall, userId }: Props) => {
                 <Link to="/stories/create">
                     <figure className={classes.imageWrapper}>
                         <img
-                            src={user?.avatar}
+                            src={user?.avatar || DefaultUnknownAvatar}
                             alt={user?.name}
                             className={classes.userAvatar}
                         />
@@ -58,7 +61,7 @@ const StoryItem = ({ data, isSmall, userId }: Props) => {
                 </Link>
             )) || (
                 <React.Fragment>
-                    <StoryViewer data={data!} isSmall={isSmall} />
+                    <StoryViewer data={data!} />
                     {ownerAvatar && (
                         <figure className={classes.ownerAvatarWrapper}>
                             <img

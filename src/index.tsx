@@ -1,4 +1,4 @@
-import "./wdyr";
+// import "./wdyr";
 
 import React, { Suspense } from "react";
 import ReactDOM from "react-dom";

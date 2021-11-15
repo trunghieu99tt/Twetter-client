@@ -25,14 +25,16 @@ import {
     CommentImageCancelButton,
 } from "./AddCommentStyle";
 import MediaViewer from "@components/MediaViewer";
+import { iTweet } from "@type/tweet.types";
+import { iComment } from "@type/comments.types";
 
 type Props = {
-    tweetId: string;
-    commentId?: string;
+    tweet: iTweet;
+    commentData?: iComment;
     addCommentRef: React.RefObject<HTMLInputElement>;
 };
 
-const AddComment = ({ tweetId, commentId = "", addCommentRef }: Props) => {
+const AddComment = ({ addCommentRef, tweet, commentData }: Props) => {
     const {
         user,
         media,
@@ -44,13 +46,14 @@ const AddComment = ({ tweetId, commentId = "", addCommentRef }: Props) => {
         onCancelMedia,
         onChangeComment,
     } = useAddComment({
-        tweetId,
-        commentId,
+        tweet,
+        commentData,
     });
 
     const { t } = useTranslation();
 
-    const shouldIndent = !!commentId;
+    const shouldIndent = !!commentData;
+    const fileInputId = `comment-file-${commentData?._id || tweet?._id}`;
 
     return (
         <React.Fragment>
@@ -69,15 +72,13 @@ const AddComment = ({ tweetId, commentId = "", addCommentRef }: Props) => {
                             <Spinner2 customStyles="--size: 20px" />
                         </InputLoading>
                     )}
-                    <FileInputLabel
-                        htmlFor={`comment-file-${commentId || tweetId}`}
-                    >
+                    <FileInputLabel htmlFor={fileInputId}>
                         <BsCardImage />
                     </FileInputLabel>
                     <FileInput
                         type="file"
+                        id={fileInputId}
                         name="comment-file"
-                        id={`comment-file-${commentId || tweetId}`}
                         onChange={onChangeFile}
                     />
                 </InputWrapper>

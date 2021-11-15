@@ -9,12 +9,13 @@ import { useTranslation } from "react-i18next";
 import { useTweet } from "./useTweet";
 
 // utils
-import { stopPropagation } from "@utils/helper";
+import { stopPropagation, calcDiffTimeString } from "@utils/helper";
 
 // components
 import EditTweet from "../EditTweet";
 import Modal from "@components/Modal";
 import Comment from "@components/Comment";
+import UserCard from "@components/UserCard";
 import Dropdown from "@components/Dropdown";
 import { Spinner1 } from "@components/Loaders";
 import AddComment from "@components/AddComment";
@@ -38,6 +39,8 @@ import { TMedia } from "@type/app.types";
 import { iTweet } from "@type/tweet.types";
 import { iComment } from "@type/comments.types";
 
+import { HASHTAG_ROUTES } from "routes/routes";
+
 // styles
 import {
     Header,
@@ -60,9 +63,7 @@ import {
     InteractionSummaryItem,
     InteractionButtonGroup,
 } from "./TweetStyle";
-import { HASHTAG_ROUTES } from "routes/routes";
 import { iUser } from "@type/user.types";
-import UserCard from "@components/UserCard";
 
 type Props = {
     tweet: iTweet;
@@ -179,14 +180,15 @@ const Tweet = ({ tweet }: Props) => {
                     onCancel={() => setVisibleEditForm(false)}
                 />
             )}
-            {isRetweeted && retweetedBy && (
-                <RetweetedBy to={`/profile/${retweetedBy._id}`}>
-                    <AiOutlineRetweet /> {`${retweetedBy.name} retweeted`}
-                </RetweetedBy>
-            )}
+
             <Wrapper>
                 {deleteLoading && <Spinner1 />}
 
+                {isRetweeted && retweetedBy && (
+                    <RetweetedBy to={`/profile/${retweetedBy._id}`}>
+                        <AiOutlineRetweet /> {`${retweetedBy.name} retweeted`}
+                    </RetweetedBy>
+                )}
                 <Header>
                     <AuthorWrapper>
                         <Link to={`/profile/${tweet.author._id}`}>
@@ -197,9 +199,7 @@ const Tweet = ({ tweet }: Props) => {
                                 <AuthorName>{tweet.author.name}</AuthorName>
                             </Link>
                             <DateCreated>
-                                {new Date(tweet.createdAt).toLocaleString(
-                                    "en-US"
-                                )}
+                                {calcDiffTimeString(tweet?.createdAt)}
                             </DateCreated>
                         </div>
                     </AuthorWrapper>
@@ -323,7 +323,7 @@ const Tweet = ({ tweet }: Props) => {
                         </InteractionButtonGroup>
                     </Interaction>
                 </Content>
-                <AddComment addCommentRef={addCommentRef} tweetId={tweet._id} />
+                <AddComment addCommentRef={addCommentRef} tweet={tweet} />
                 <CommentsWrapper>
                     {tweetComments?.map((comment: iComment) => {
                         return <Comment data={comment} key={comment._id} />;

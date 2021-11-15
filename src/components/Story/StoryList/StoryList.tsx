@@ -20,6 +20,7 @@ const StoryList = () => {
                             data={value[0]}
                             isSmall={true}
                             userId={key}
+                            key={`story-item-${value[0]._id}`}
                         />
                     ))}
         </section>

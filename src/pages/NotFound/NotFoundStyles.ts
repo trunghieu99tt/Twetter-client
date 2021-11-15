@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { Link } from "react-router-dom";
 
 export const Root = styled.div`
     position: relative;
@@ -40,6 +41,17 @@ export const Description = styled.p`
     color: #c9c9c9;
     font-size: 16px;
     font-weight: 400;
-    margin-top: 0px;
-    margin-bottom: 15px;
+    margin-top: 1.5rem;
+    margin-bottom: 1.5rem;
+    display: block;
+`;
+
+export const BackToHome = styled(Link)`
+    color: #fff;
+    font-size: 1.2rem;
+    border: 1px solid;
+    padding: 1rem;
+    margin-top: 1rem;
+    display: inline-block;
+    border-radius: .5rem;
 `;

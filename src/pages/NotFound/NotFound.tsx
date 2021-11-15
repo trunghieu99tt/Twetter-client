@@ -5,9 +5,10 @@ import { useTranslation } from "react-i18next";
 import {
     Root,
     Main,
-    HeadingContainer,
     Heading,
+    BackToHome,
     Description,
+    HeadingContainer,
 } from "./NotFoundStyles";
 
 const NotFound = () => {
@@ -25,9 +26,7 @@ const NotFound = () => {
                     </Heading>
                 </HeadingContainer>
                 <Description>{t("pageNotFound")}</Description>
-                <Link to="/">
-                    <button>{t("returnToHomepage")}</button>
-                </Link>
+                <BackToHome to="/">{t("returnToHomepage")}</BackToHome>
             </Main>
         </Root>
     );

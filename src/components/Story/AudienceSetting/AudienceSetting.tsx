@@ -1,5 +1,6 @@
 import React, { useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
+import debounce from "lodash/debounce";
 
 // talons
 import { useUser } from "@talons/useUser";
@@ -17,12 +18,31 @@ import classes from "./audienceSetting.module.css";
 
 const AudienceSetting = () => {
     const { t } = useTranslation();
-    const { user } = useUser();
+    const { user, updateUserMutation } = useUser();
 
     const [visibleDropdown, setVisibleDropdown] = useState<boolean>(false);
     const [selectedAudience, setSelectedAudience] = useState<number>(
         user?.storyAudience || 0
     );
+
+    // create debounced function to change user story audience using usecallback
+    const debouncedUpdateUserStoryAudience = useMemo(
+        () =>
+            debounce(async (storyAudience: number) => {
+                updateUserMutation.mutate({
+                    updatedUser: {
+                        storyAudience,
+                    },
+                    userId: user?._id,
+                });
+            }, 1000),
+        [updateUserMutation, user]
+    );
+
+    const onChangeUserStoryAudience = async (audience: number) => {
+        setSelectedAudience(audience);
+        debouncedUpdateUserStoryAudience(audience);
+    };
 
     const dropdownRef = useRef() as React.RefObject<HTMLDivElement>;
 
@@ -62,7 +82,7 @@ const AudienceSetting = () => {
                 <button
                     className={classes.audienceSelectionItem}
                     key={`audience-setting-${idx}`}
-                    onClick={() => setSelectedAudience(audience.value)}
+                    onClick={() => onChangeUserStoryAudience(audience.value)}
                 >
                     {audience.icon}
                     <span>{audience.text}</span>

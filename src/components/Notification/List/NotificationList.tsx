@@ -1,4 +1,6 @@
 import { useTranslation } from "react-i18next";
+import { Link } from "react-router-dom";
+import InfiniteScroll from "react-infinite-scroll-component";
 
 // talons
 import { useUser } from "@talons/useUser";
@@ -13,13 +15,22 @@ import { iNotification } from "@type/notify.types";
 // styles
 import classes from "./notificationList.module.css";
 
-const NotificationList = () => {
+type Props = {
+    isPage?: boolean;
+};
+
+const LIST_LIMIT = 4;
+
+const NotificationList = ({ isPage = false }: Props) => {
     const { t } = useTranslation();
     const { readNotificationAction, getNotificationsQuery } = useNotify();
     const { user } = useUser();
+    const { data, fetchNextPage } = getNotificationsQuery;
+    const pages = data?.pages;
+    const totalRecords = pages?.[0].total || 0;
 
     const notifications: iNotification[] =
-        getNotificationsQuery?.data?.pages?.reduce(
+        data?.pages?.reduce(
             (
                 res: iNotification[],
                 curr: {
@@ -48,6 +59,13 @@ const NotificationList = () => {
         (notification) => !notification.isRead.includes(user?._id)
     ).length;
 
+    const shouldHaveViewAll = notifications.length > LIST_LIMIT;
+
+    const list = isPage
+        ? notifications
+        : notifications.slice(0, Math.min(LIST_LIMIT, notifications.length));
+    const hasMore = list.length < totalRecords;
+
     return (
         <div className={classes.root}>
             <div className={classes.header}>
@@ -62,15 +80,42 @@ const NotificationList = () => {
                 )}
             </div>
             <div className={classes.main}>
-                {notifications?.map((notification: iNotification) => {
-                    return (
-                        <NotificationItem
-                            key={notification._id}
-                            data={notification}
-                        />
-                    );
-                })}
+                {!isPage &&
+                    list?.map((notification: iNotification) => {
+                        return (
+                            <NotificationItem
+                                key={notification._id}
+                                data={notification}
+                            />
+                        );
+                    })}
+                {isPage && (
+                    <InfiniteScroll
+                        dataLength={list.length}
+                        next={fetchNextPage}
+                        hasMore={hasMore}
+                        loader={<div>Loading...</div>}
+                    >
+                        {list?.map((notification: iNotification) => {
+                            return (
+                                <NotificationItem
+                                    key={notification._id}
+                                    data={notification}
+                                />
+                            );
+                        })}
+                    </InfiniteScroll>
+                )}
             </div>
+
+            {!isPage && shouldHaveViewAll && (
+                <Link
+                    to="/notifications"
+                    className={classes.readAllNotifications}
+                >
+                    {t("viewAllNotification")}
+                </Link>
+            )}
         </div>
     );
 };

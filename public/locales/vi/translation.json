@@ -115,5 +115,19 @@
     "Email": "Email",
     "passwordMisMatch": "Mật khẩu không khớp",
     "unknownError": "Đã xảy ra lỗi, vui lòng thử lại sau",
-    "updateSuccess": "Cập nhật thành công"
+    "updateSuccess": "Cập nhật thành công",
+    "textColor": "Màu văn bản",
+    "createStorySuccess": "Tin đã được tạo thành công",
+    "repliedYourComment": "đã trả lời bình luận của bạn",
+    "commentedYourTweet": "đã bình luận tweet của bạn",
+    "tweetNotFound": "Tweet không tồn tại",
+    "search": "Tìm kiếm",
+    "viewAllNotification": "Xem toàn bộ thông báo",
+    "searchCategory": "Loại tìm kiếm",
+    "hashtag": "Hashtag",
+    "numberOfTweet": "Số lượng tweet",
+    "searchNoResult": "Không tìm thấy kết quả",
+    "chatPage": "Trang chat",
+    "likedYourComment": "Đã thích bình luận của bạn",
+    "retweetedYourTweet": "đã retweet tweet của bạn"
 }

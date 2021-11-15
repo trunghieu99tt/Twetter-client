@@ -21,8 +21,6 @@ import { Sidebar, Wrapper, Main, Content } from "./MyProfileStyle";
 import { Container } from "@shared/style/sharedStyle.style";
 
 const MyProfile = () => {
-    const { t } = useTranslation();
-
     const params: { userId: string } = useParams();
     const { userId } = params;
 
