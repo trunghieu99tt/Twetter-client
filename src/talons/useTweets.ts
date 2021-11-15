@@ -155,6 +155,7 @@ export const useTweets = (userId = "", tag = "") => {
         queryClient.invalidateQueries(TWEET_QUERY.LATEST_TWEETS);
         queryClient.invalidateQueries(TWEET_QUERY.GET_MY_SAVED_TWEETS);
         queryClient.invalidateQueries(TWEET_QUERY.GET_NEWS_FEED_TWEETS);
+        queryClient.invalidateQueries(TWEET_QUERY.GET_USER_LIKED_TWEETS);
     };
 
     const getProfileTweetsQuery = useInfiniteQuery(

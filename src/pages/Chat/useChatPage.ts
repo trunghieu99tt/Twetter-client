@@ -15,10 +15,7 @@ import { callState } from "states/call.state";
 
 const useChatPage = () => {
     const {
-        state: {
-            peer,
-            socket,
-        },
+        state: { peer, socket },
     } = useAppContext();
     const [call, setCall] = useRecoilState(callState);
     const params: any = useParams();
@@ -31,24 +28,25 @@ const useChatPage = () => {
 
     const { data, fetchNextPage } = getMessagesQuery;
 
-    const [message, setMessage] = useState<string>('');
+    const [message, setMessage] = useState<string>("");
     const [room, setRoom] = useState<iRoom | null>(null);
-    const [guestUser, setGuest] = useState<iUser | null>(null);
     const [loading, setLoading] = useState<boolean>(false);
     const [messages, setMessages] = useState<iMessage[]>([]);
     const [chosenEmoji, setChosenEmoji] = useState<any>(null);
-    const [totalMessage, setTotalMessage] = useState<number>(0);
     const [chatImages, setChatImages] = useState<string[]>([]);
+    const [guestUser, setGuest] = useState<iUser | null>(null);
+    const [totalMessage, setTotalMessage] = useState<number>(0);
     const [messageImage, setMessageImage] = useState<{
-        file: File | null,
-        url: string,
+        file: File | null;
+        url: string;
     }>({
         file: null,
-        url: ""
+        url: "",
     });
 
     const onSubmit = async (event: any) => {
         event.preventDefault();
+        setLoading(true);
         const newMessage: iNewMessage = {
             author: currentUser,
             content: message,
@@ -61,9 +59,9 @@ const useChatPage = () => {
         }
         if (newMessage.content.length > 0 || newMessage.file) {
             setNewMessage(newMessage);
-            setMessage('');
-            setLoading(false);
+            setMessage("");
         }
+        setLoading(false);
     };
 
     const onChange = (event: any, file = false) => {
@@ -73,7 +71,7 @@ const useChatPage = () => {
             const file = event.target.files[0];
             const newPhoto = {
                 file,
-                url: URL.createObjectURL(file)
+                url: URL.createObjectURL(file),
             };
             setMessageImage(newPhoto);
         }
@@ -84,21 +82,20 @@ const useChatPage = () => {
         const images: string[] = [];
         const totalRecords = pages?.[0].total || 0;
 
-        const messagesUtils = pages?.reduce(
-            (acc: iMessage[], page: any) => {
+        const messagesUtils = pages
+            ?.reduce((acc: iMessage[], page: any) => {
                 const pageMessages = page?.data;
                 if (pageMessages) {
                     pageMessages.forEach((message: iMessage) => {
-                        if (message.file && message.file.includes('.jpg')) {
+                        if (message.file && message.file.includes(".jpg")) {
                             images.push(message.file);
                         }
                     });
                     return [...acc, ...pageMessages];
                 }
                 return acc;
-            },
-            []
-        ).reverse();
+            }, [])
+            .reverse();
         setChatImages(images);
         setMessages(messagesUtils);
         setTotalMessage(totalRecords);
@@ -107,14 +104,16 @@ const useChatPage = () => {
     const onCloseImageMessageForm = () => {
         setMessageImage({
             file: null,
-            url: ''
+            url: "",
         });
     };
 
     // initialize call message
     const initNewCall = (video: boolean = false) => {
         const { _id, avatar, name } = currentUser;
-        const guestUser: iUser | undefined = room?.members.find((member: iUser) => member._id !== _id);
+        const guestUser: iUser | undefined = room?.members.find(
+            (member: iUser) => member._id !== _id
+        );
 
         if (guestUser) {
             const newCall = {
@@ -123,7 +122,7 @@ const useChatPage = () => {
                 avatar,
                 name,
                 video,
-                peerId: ''
+                peerId: "",
             };
             return newCall;
         }
@@ -147,7 +146,7 @@ const useChatPage = () => {
             if (peer) {
                 newCall.peerId = peer.id;
             }
-            socket?.emit('startCall', newCall);
+            socket?.emit("startCall", newCall);
         }
     };
 
@@ -164,9 +163,13 @@ const useChatPage = () => {
     };
 
     useEffect(() => {
-        const currentRoom = connectedRooms && connectedRooms.find((room: iRoom) => room._id === roomId);
+        const currentRoom =
+            connectedRooms &&
+            connectedRooms.find((room: iRoom) => room._id === roomId);
         if (currentRoom) {
-            const otherUser = currentRoom?.members?.find((member: iUser) => member._id !== currentUser?._id);
+            const otherUser = currentRoom?.members?.find(
+                (member: iUser) => member._id !== currentUser?._id
+            );
             if (otherUser) {
                 setGuest(otherUser);
             }
@@ -181,11 +184,12 @@ const useChatPage = () => {
     useEffect(() => {
         if (chosenEmoji) {
             const newMessage = `${message} ${chosenEmoji!.emoji}`;
+            console.log("chosenEmoji: ", chosenEmoji);
+            console.log("chosenEmoji!.emoji:", chosenEmoji!.emoji);
             setMessage(newMessage);
             setChosenEmoji(null);
         }
     }, [chosenEmoji]);
-
 
     return {
         call,

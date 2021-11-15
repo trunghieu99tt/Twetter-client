@@ -23,13 +23,13 @@
     background: var(--mGray6);
     display: flex;
     align-items: center;
-    gap: 1rem;
+    gap: 2rem;
     color: #fff;
     padding: 0 1rem;
 }
 
 .mediaItem {
-    --size: 3rem;
+    --size: 2rem;
     width: var(--size);
     height: var(--size);
     display: flex;
@@ -37,9 +37,16 @@
     justify-content: center;
 }
 
-.mediaGroup svg {
+.mediaItem label {
     width: 100%;
     height: 100%;
+    cursor: pointer;
+}
+
+.mediaGroup svg {
+    --size: 2rem;
+    width: var(--size);
+    height: var(--size);
     color: #000;
 }
 

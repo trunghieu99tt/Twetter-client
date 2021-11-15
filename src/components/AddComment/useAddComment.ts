@@ -82,8 +82,8 @@ export const useAddComment = ({ commentData, tweet }: Props) => {
             // push notification
             const msg: iNotificationDTO = {
                 text: commentData?._id
-                    ? t("repliedYourComment")
-                    : t("commentedYourTweet"),
+                    ? "repliedYourComment"
+                    : "commentedYourTweet",
                 receivers: [
                     commentData?._id
                         ? commentData.author._id
@@ -92,8 +92,6 @@ export const useAddComment = ({ commentData, tweet }: Props) => {
                 url: `/tweet/${tweet._id}`,
                 type: "comment",
             };
-
-            console.log(`msg`, msg);
 
             createNotificationAction(msg);
         }

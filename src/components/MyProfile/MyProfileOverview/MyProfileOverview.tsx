@@ -171,7 +171,7 @@ const MyProfileOverview = ({ user }: Props) => {
                                 <span>
                                     {nFormatter(user?.followers?.length || 0)}
                                 </span>
-                                {t("followers")}
+                                {t("follower")}
                             </FollowersCounter>
                         </MainInfo>
                         <SecondaryInfo>

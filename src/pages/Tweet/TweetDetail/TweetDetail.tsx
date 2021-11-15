@@ -15,8 +15,11 @@ import PageMetadata from "@components/PageMetadata";
 // constants
 import { MAX_LENGTH_TWEET_META_HEADING } from "constants/app.constants";
 import { useTranslation } from "react-i18next";
+import { Container } from "@shared/style/sharedStyle.style";
 
 const Wrapper = styled.div`
+    max-width: 70rem;
+    margin: 0 auto;
     margin-top: 2rem;
 `;
 
@@ -56,9 +59,11 @@ const TweetDetail = () => {
                 description={data?.content}
                 image={data?.media?.[0]}
             />
-            <Wrapper>
-                <Tweet tweet={data!} />
-            </Wrapper>
+            <Container>
+                <Wrapper>
+                    <Tweet tweet={data!} />
+                </Wrapper>
+            </Container>
         </React.Fragment>
     );
 };

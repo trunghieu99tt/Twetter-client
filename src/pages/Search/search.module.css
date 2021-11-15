@@ -37,6 +37,11 @@
     padding: 1rem;
     background-color: #fff;
     outline: none;
+    text-transform: capitalize;
+}
+
+.CategorySelections option {
+    text-transform: capitalize;
 }
 
 .submit {
@@ -53,6 +58,10 @@
     margin-top: 5rem;
     display: flex;
     flex-direction: column;
-    align-items: center;
     justify-content: center;
+}
+
+.searchNoResult {
+    font-size: 1.5rem;
+    text-align: center;
 }

@@ -123,5 +123,11 @@
     "tweetNotFound": "Tweet not found",
     "search": "Search",
     "viewAllNotification": "View all notifications",
-    "searchCategory": "Search category"
+    "searchCategory": "Search category",
+    "hashtag": "Hashtag",
+    "numberOfTweet": "Number of tweet",
+    "searchNoResult": "There is no result found",
+    "chatPage": "Chat Page",
+    "likedYourComment": "liked your comment",
+    "retweetedYourTweet": "retweeted your tweet"
 }

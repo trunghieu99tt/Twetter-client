@@ -123,5 +123,11 @@
     "tweetNotFound": "Tweet không tồn tại",
     "search": "Tìm kiếm",
     "viewAllNotification": "Xem toàn bộ thông báo",
-    "searchCategory": "Loại tìm kiếm"
+    "searchCategory": "Loại tìm kiếm",
+    "hashtag": "Hashtag",
+    "numberOfTweet": "Số lượng tweet",
+    "searchNoResult": "Không tìm thấy kết quả",
+    "chatPage": "Trang chat",
+    "likedYourComment": "Đã thích bình luận của bạn",
+    "retweetedYourTweet": "đã retweet tweet của bạn"
 }

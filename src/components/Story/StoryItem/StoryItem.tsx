@@ -61,7 +61,7 @@ const StoryItem = ({ data, isSmall, userId }: Props) => {
                 </Link>
             )) || (
                 <React.Fragment>
-                    <StoryViewer data={data!} isSmall={isSmall} />
+                    <StoryViewer data={data!} />
                     {ownerAvatar && (
                         <figure className={classes.ownerAvatarWrapper}>
                             <img

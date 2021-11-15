@@ -25,13 +25,13 @@ const CommentSearchResultCard = ({ data }: Props) => {
                     alt="avatar"
                     className={classes.authorAvatar}
                 />
-                <p>{data.author.name}</p>
+                <p className={classes.authorName}>{data.author.name}</p>
             </header>
             <main className={classes.main}>
                 <p className={classes.content}>
                     {data?.content?.slice(
                         0,
-                        Math.min(data.content.length, 100)
+                        Math.min(data.content.length, 200)
                     )}
                 </p>
 

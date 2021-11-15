@@ -1,11 +1,23 @@
-import { useAppContext } from "@context/app.context";
-import { useUser } from "@talons/useUser";
-import { MediaConnection } from "peerjs";
 import React, { MutableRefObject, useEffect, useRef, useState } from "react";
-import { HiOutlinePhoneMissedCall } from "react-icons/hi";
+import { toast } from "react-toastify";
 import { useRecoilState } from "recoil";
-import { callState } from "states/call.state";
+import { MediaConnection } from "peerjs";
 import { FiPhoneCall } from "react-icons/fi";
+
+// talons
+import { useUser } from "@talons/useUser";
+
+// context
+import { useAppContext } from "@context/app.context";
+
+// states
+import { callState } from "states/call.state";
+
+// images
+import DefaultUnknownAvatar from "@images/user.png";
+
+// icons
+import { HiOutlinePhoneMissedCall } from "react-icons/hi";
 
 // Styles
 import classes from "./callModal.module.css";
@@ -119,6 +131,7 @@ const CallModal = (props: Props) => {
     // stop call interval after 15 seconds if no answer
     useEffect(() => {
         if (callDuration > 15 && !answer) {
+            toast.error("No answer");
             endCall();
         }
     }, [callDuration]);
@@ -134,12 +147,21 @@ const CallModal = (props: Props) => {
         peer?.on("call", async (newCall: MediaConnection) => {
             onPeerConnection(newCall);
         });
+
+        // return () => {
+        //     peer?.off("call", () => {});
+        //     reset();
+        // };
     }, [peer, call]);
 
     useEffect(() => {
         socket?.on("callDisconnected", () => {
             reset();
         });
+
+        // return () => {
+        //     reset();
+        // };
     }, [socket, call, newCall, tracks.current]);
 
     const myCall = call?.senderId === user?._id;
@@ -151,12 +173,14 @@ const CallModal = (props: Props) => {
                     <section className={classes.callBox}>
                         <div className={classes.info}>
                             <img
-                                src={user?.avatar}
+                                src={user?.avatar || DefaultUnknownAvatar}
                                 alt={user?.name}
                                 className={classes.remoteAvatar}
                             />
                             <h4 className={classes.remoteName}>{user?.name}</h4>
-                            <div>{convertDuration()}</div>
+                            <div className={classes.callDuration}>
+                                {convertDuration()}
+                            </div>
 
                             <div className={classes.callDescription}>
                                 {!myCall && <p>Incoming </p>}
@@ -205,9 +229,7 @@ const CallModal = (props: Props) => {
                             muted
                         />
                     </div>
-                    <div className={classes.timeVideo}>
-                        {/* {convertDuration(callDuration)} */}
-                    </div>
+                    <div className={classes.timeVideo}>{convertDuration()}</div>
                     <button className={classes.endCallBtn} onClick={endCall}>
                         <HiOutlinePhoneMissedCall />
                     </button>

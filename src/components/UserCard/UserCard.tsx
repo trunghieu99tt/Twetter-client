@@ -58,13 +58,15 @@ const UserCard = ({ user }: Props) => {
                         </UserFollowers>
                     </Link>
                 </Flex>
-                <FollowButton
-                    onClick={onFollow}
-                    disabled={followUserMutation.isLoading}
-                >
-                    <IoPersonAdd />
-                    {followed ? t("followed") : t("follow")}
-                </FollowButton>
+                {user._id !== currentUser?._id && (
+                    <FollowButton
+                        onClick={onFollow}
+                        disabled={followUserMutation.isLoading}
+                    >
+                        <IoPersonAdd />
+                        {followed ? t("followed") : t("follow")}
+                    </FollowButton>
+                )}
             </Flex>
             <UserBio>{user?.bio}</UserBio>
         </Wrapper>

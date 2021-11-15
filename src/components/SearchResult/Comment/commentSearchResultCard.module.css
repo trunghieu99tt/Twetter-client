@@ -24,6 +24,11 @@
     object-fit: cover;
 }
 
+.authorName {
+    font-size: 1.3rem;
+    font-weight: 500;
+}
+
 .main {
     display: flex;
     gap: 1rem;

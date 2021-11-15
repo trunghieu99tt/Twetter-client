@@ -7,12 +7,7 @@ type Params = {
     onChangeValue: (value: string) => void;
 };
 
-export const useRichTextEditor = ({
-    value,
-    isEdit,
-    onChangeValue,
-}: Params) => {
-
+export const useRichTextEditor = ({ value, isEdit, onChangeValue }: Params) => {
     const [urls, setUrls] = useState<string[]>([]);
 
     const updateUrls = (content: string) => {
@@ -32,6 +27,10 @@ export const useRichTextEditor = ({
         if (value) {
             updateUrls(value);
         }
+
+        if (!value) {
+            setUrls([]);
+        }
     }, [isEdit, value]);
 
     const removeLinks = () => setUrls([]);
@@ -42,5 +41,4 @@ export const useRichTextEditor = ({
         onChange,
         removeLinks,
     };
-
 };

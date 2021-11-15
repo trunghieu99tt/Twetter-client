@@ -136,6 +136,24 @@
     right: -5rem;
 }
 
+.storyAction {
+    position: absolute;
+    top: 2rem;
+    right: 1rem;
+    z-index: 1;
+    color: #fff;
+}
+
+.storyAction > button {
+    color: #fff;
+}
+
+.storyActionDelete {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
 @keyframes Loader {
     0% {
         background-position: 100% 0;

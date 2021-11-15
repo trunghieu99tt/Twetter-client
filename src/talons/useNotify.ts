@@ -86,8 +86,6 @@ export const useNotify = () => {
             (receiver) => receiver !== currentUser._id
         );
 
-        console.log(`filteredReceivers`, filteredReceivers);
-
         if (filteredReceivers.length > 0) {
             newNotification.receivers = filteredReceivers;
             createNotificationMutation.mutate(newNotification, {

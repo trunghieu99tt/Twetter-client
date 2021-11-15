@@ -78,8 +78,8 @@ const PopularPeople = () => {
                                     {user?.name}
                                 </UserName>
                                 <UserFollowers>
-                                    {nFormatter(followersCount)}
-                                    {`${t("followers")}${
+                                    {nFormatter(followersCount)}{" "}
+                                    {`${t("follower")}${
                                         followersCount > 1 ? "s" : ""
                                     }`}
                                 </UserFollowers>

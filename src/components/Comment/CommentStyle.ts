@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 
 export const Wrapper = styled("div")<{
@@ -22,7 +23,7 @@ export const MainInfo = styled.div`
     }
 `;
 
-export const AuthorName = styled.p`
+export const AuthorName = styled(Link)`
     font-size: 1.3rem;
     font-weight: 500;
     color: var(--gray-2);
@@ -45,13 +46,16 @@ export const Interaction = styled.div`
     color: var(--gray-4);
 `;
 
-export const LikeButton = styled.button`
+export const LikeButton = styled("button")<{
+    liked?: boolean;
+}>`
     cursor: pointer;
     display: flex;
     color: var(--gray-4);
     align-items: center;
     font-size: 1.2rem;
     gap: 0.5rem;
+    ${(props) => props.liked && `color: var(--blue-1); font-weight: 500`}
 `;
 
 export const ReplyButton = styled(LikeButton)``;

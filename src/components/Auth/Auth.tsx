@@ -97,6 +97,14 @@ const Auth = () => {
                             <Input type="text" required {...register("name")} />
                         </InputGroup>
                         <InputGroup>
+                            <InputLabel>{t("email")}</InputLabel>
+                            <Input
+                                type="text"
+                                required
+                                {...register("email")}
+                            />
+                        </InputGroup>
+                        <InputGroup>
                             <InputLabel>{t("birthday")}</InputLabel>
                             <ReactDatePicker
                                 selected={birthday}

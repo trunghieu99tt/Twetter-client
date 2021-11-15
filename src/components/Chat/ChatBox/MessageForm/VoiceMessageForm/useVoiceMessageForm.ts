@@ -36,11 +36,11 @@ const useVoiceMessageForm = () => {
     };
 
     const sendMessage = async () => {
+        const newMessage = {};
         setFileUrl(null);
         setRecordData(null);
         setRecording(false);
     };
-
 
     return {
         recording,
@@ -49,7 +49,7 @@ const useVoiceMessageForm = () => {
         stopRecording,
         onRecordData,
         onStopRecord,
-        sendAudio
+        sendAudio,
     };
 };
 

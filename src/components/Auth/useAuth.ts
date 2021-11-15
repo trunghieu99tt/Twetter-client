@@ -74,9 +74,9 @@ const useAuth = ({ isRegister = false }: Props) => {
         const message = response?.data?.message;
         localStorage.setItem("accessToken", "");
         socket?.emit("userOff", user);
-        history.push("/login");
-        queryClient.invalidateQueries(USER_QUERY.GET_ME);
+        history.push("/auth");
         toast.info(message);
+        window.location.reload();
     };
 
     const handleRegister = async (formData: any) => {

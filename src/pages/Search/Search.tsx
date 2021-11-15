@@ -9,6 +9,7 @@ import MainLayout from "@layout/Main/Main.layout";
 
 // components
 import PageMetadata from "@components/PageMetadata";
+import HashtagSearchResult from "@components/SearchResult/Hashtag/HashtagSearchResult";
 import TweetSearchResultCard from "@components/SearchResult/Tweet/TweetSearchResultCard";
 import CommentSearchResultCard from "@components/SearchResult/Comment/CommentSearchResultCard";
 
@@ -22,6 +23,9 @@ import { iComment } from "@type/comments.types";
 // styles
 import classes from "./search.module.css";
 import { Container } from "@shared/style/sharedStyle.style";
+import { iHashtag } from "@type/hashtag.types";
+import { iUser } from "@type/user.types";
+import UserCard from "@components/UserCard";
 
 const Search = () => {
     const { t } = useTranslation();
@@ -54,8 +58,21 @@ const Search = () => {
 
                 break;
             case "people":
+                resultContent = response.data.map((user: iUser) => (
+                    <UserCard
+                        user={user}
+                        key={`UserSearchResultCard-${user._id}`}
+                    />
+                ));
                 break;
             case "hashtag":
+                resultContent = response.data.map((hashtag: iHashtag) => (
+                    <HashtagSearchResult
+                        data={hashtag}
+                        key={`HashtagSearchResult-${hashtag._id}`}
+                    />
+                ));
+                break;
         }
     }
 
@@ -111,7 +128,11 @@ const Search = () => {
                         {response && (
                             <section className={classes.searchResult}>
                                 {(response?.data?.length > 0 &&
-                                    resultContent) || <p>{t("noResult")}</p>}
+                                    resultContent) || (
+                                    <p className={classes.searchNoResult}>
+                                        {t("searchNoResult")}
+                                    </p>
+                                )}
                             </section>
                         )}
                     </main>

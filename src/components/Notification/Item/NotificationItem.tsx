@@ -1,6 +1,7 @@
 import React from "react";
 import cn from "classnames";
 import { useHistory } from "react-router";
+import { useTranslation } from "react-i18next";
 
 // talons
 import { useUser } from "@talons/useUser";
@@ -23,6 +24,7 @@ type Props = {
 };
 
 const NotificationItem = ({ data }: Props) => {
+    const { t } = useTranslation();
     const { user } = useUser();
     const history = useHistory();
     const { readNotificationAction } = useNotify();
@@ -54,7 +56,7 @@ const NotificationItem = ({ data }: Props) => {
             <div className={classes.main}>
                 <p className={classes.text}>
                     <strong>{data?.sender?.name || ""}</strong>{" "}
-                    {data?.text || ""}
+                    {t(data?.text || "")}
                 </p>
                 <p className={classes.time}>
                     {calcDiffTimeString(data?.createdAt || new Date())}

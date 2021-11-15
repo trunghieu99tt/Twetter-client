@@ -79,7 +79,7 @@ export const useTweetForm = ({ tweet }: Props) => {
             const newTweet: iCreateTweetDTO = {
                 content: body,
                 audience,
-                media: mediaResponse,
+                media: mediaResponse || tweet?.media,
                 tags: hashtags,
             };
 

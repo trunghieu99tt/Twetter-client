@@ -62,7 +62,7 @@ const SocialIcon = styled("button")<{
 `;
 
 const SocialLoginIcons = () => {
-    const { responseGoogle, showAlert } = useSocialLogin();
+    const { responseGoogle, showAlert, githubUrl } = useSocialLogin();
 
     return (
         <Wrapper>
@@ -100,7 +100,7 @@ const SocialLoginIcons = () => {
                 onFailure={responseGoogle}
                 cookiePolicy={"single_host_origin"}
             />
-            <SocialIcon typeName="facebook" onClick={showAlert}>
+            {/* <SocialIcon typeName="facebook" onClick={showAlert}>
                 <svg
                     width="43"
                     height="43"
@@ -167,12 +167,8 @@ const SocialLoginIcons = () => {
                         </clipPath>
                     </defs>
                 </svg>
-            </SocialIcon>
-            <SocialIcon
-                typeName="github"
-                className="social-icons"
-                onClick={showAlert}
-            >
+            </SocialIcon> */}
+            <a className="social-icons" href={githubUrl}>
                 <svg
                     width="43"
                     height="43"
@@ -203,7 +199,7 @@ const SocialLoginIcons = () => {
                         </clipPath>
                     </defs>
                 </svg>
-            </SocialIcon>
+            </a>
         </Wrapper>
     );
 };

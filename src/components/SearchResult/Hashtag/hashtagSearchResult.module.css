@@ -1,0 +1,27 @@
+.root {
+    margin-top: 1rem;
+    background-color: #fff;
+    padding: 1rem 2rem;
+    display: block;
+    color: #000;
+    width: 100%;
+    box-shadow: var(--box-shadow-1);
+    border-radius: 0.8rem;
+}
+
+.hashtagName {
+    font-size: 1.5rem;
+    font-weight: 500;
+    color: var(--blue-2);
+}
+
+.count {
+    font-size: 1.3rem;
+}
+
+.count span {
+    font-size: 1.5rem;
+    font-weight: 500;
+    color: var(--red);
+    margin-left: 1rem;
+}

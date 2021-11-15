@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useRecoilValue } from "recoil";
 import cn from "classnames";
 import { useHistory, useParams } from "react-router";
@@ -17,7 +17,11 @@ import PageMetadata from "@components/PageMetadata";
 import StoryViewer from "@components/Story/StoryViewer";
 
 // icons
-import { AiFillLeftCircle, AiFillRightCircle } from "react-icons/ai";
+import {
+    AiFillLeftCircle,
+    AiFillRightCircle,
+    AiOutlineDelete,
+} from "react-icons/ai";
 
 // constants
 import { STORY_ROUTES } from "routes/routes";
@@ -39,6 +43,9 @@ import {
 
 // styles
 import classes from "./view.module.css";
+import { useOnClickOutside } from "@hooks/useOnClickOutside";
+import { BiDotsVertical } from "react-icons/bi";
+import Dropdown from "@components/Dropdown";
 
 type TDirection = "LEFT" | "RIGHT";
 
@@ -51,7 +58,7 @@ const View = () => {
     const userId = params.userId;
 
     const { user: currentUser } = useUser();
-    const { updateStoryMutation } = useStory();
+    const { updateStoryMutation, deleteStoryMutation } = useStory();
 
     const history = useHistory();
     const owners = useRecoilValue(ownersSelector);
@@ -59,8 +66,13 @@ const View = () => {
     const userStories = useRecoilValue(storySelector(userId));
     const userStoryMetadata = useRecoilValue(userStoryMetadataSelector(userId));
 
+    const [activeStoryIdx, setActiveStoryIdx] = useState<number>(0);
+    const [visibleDropdown, setVisibleDropdown] = useState<boolean>(false);
+
     const itemsRef = useRef<Array<HTMLDivElement | null>>([]);
-    const [activeStoryIdx, setActiveStoryIdx] = React.useState<number>(0);
+    const dropdownRef = useRef() as React.RefObject<HTMLDivElement>;
+
+    useOnClickOutside(dropdownRef, () => setVisibleDropdown(false));
 
     const activeStory: iStory | null = userStories?.[activeStoryIdx] || null;
 
@@ -102,6 +114,20 @@ const View = () => {
         }
     };
 
+    const toggleDropDown = () => setVisibleDropdown((v) => !v);
+
+    const deleteStory = async () => {
+        if (activeStory?._id) {
+            const { _id } = activeStory;
+            await deleteStoryMutation.mutateAsync({
+                storyId: _id,
+            });
+
+            // reload the page
+            window.location.reload();
+        }
+    };
+
     useEffect(() => {
         if (itemsRef?.current) {
             // add animationend event listener for each item
@@ -131,6 +157,22 @@ const View = () => {
                 }
             });
         }
+
+        console.log(`userStories`, userStories);
+
+        if (!userStories || userStories?.length === 0) {
+            history.push("/");
+        }
+
+        return () => {
+            if (itemsRef?.current) {
+                itemsRef.current.forEach((item: HTMLDivElement | null) => {
+                    if (item) {
+                        item.removeEventListener("animationend", () => {});
+                    }
+                });
+            }
+        };
     }, [itemsRef, userStories]);
 
     useEffect(() => {
@@ -164,6 +206,8 @@ const View = () => {
             userStories?.length > 1 &&
             activeStoryIdx < userStories.length - 1) ||
         userStoryMetadata?.nextUserId !== null;
+
+    const isCurrentUserOwner = currentUser?._id === activeStory?.owner._id;
 
     return (
         <React.Fragment>
@@ -228,6 +272,30 @@ const View = () => {
                         {!userId && <p>{t("chooseStoryToView")}</p>}
                         {owners && userStories && (
                             <React.Fragment>
+                                {isCurrentUserOwner && (
+                                    <div
+                                        ref={dropdownRef}
+                                        className={classes.storyAction}
+                                    >
+                                        <button onClick={toggleDropDown}>
+                                            <BiDotsVertical />
+                                        </button>
+                                        <Dropdown
+                                            isVisible={visibleDropdown}
+                                            items={[
+                                                <button
+                                                    onClick={deleteStory}
+                                                    className={
+                                                        classes.storyActionDelete
+                                                    }
+                                                >
+                                                    <AiOutlineDelete />
+                                                    {t("delete")}
+                                                </button>,
+                                            ]}
+                                        />
+                                    </div>
+                                )}
                                 {hasPreviousButton && (
                                     <button
                                         onClick={() => onArrowClick("LEFT")}

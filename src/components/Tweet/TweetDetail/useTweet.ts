@@ -111,7 +111,7 @@ export const useTweet = ({ tweet }: Props) => {
         reactTweetMutation.mutate(tweet._id);
         if (!liked) {
             const msg: iNotificationDTO = {
-                text: t("likedYourTweet"),
+                text: "likedYourTweet",
                 receivers: [tweet.author._id],
                 url: `/tweet/${tweet._id}`,
                 type: "like",
@@ -125,7 +125,7 @@ export const useTweet = ({ tweet }: Props) => {
         retweetMutation.mutate(tweet._id);
         if (!retweeted) {
             const msg: iNotificationDTO = {
-                text: `retweet your tweet`,
+                text: "retweetedYourTweet",
                 receivers: [tweet.author._id],
                 url: `/tweet/${tweet._id}`,
                 type: "retweet",
@@ -139,7 +139,7 @@ export const useTweet = ({ tweet }: Props) => {
         saveTweetMutation.mutate(tweet._id);
         if (!saved) {
             const msg: iNotificationDTO = {
-                text: t("savedYourTweet"),
+                text: "savedYourTweet",
                 receivers: [tweet.author._id],
                 url: `/tweet/${tweet._id}`,
                 type: "save",
