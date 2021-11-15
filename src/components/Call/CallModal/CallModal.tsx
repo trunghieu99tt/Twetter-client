@@ -3,6 +3,7 @@ import { toast } from "react-toastify";
 import { useRecoilState } from "recoil";
 import { MediaConnection } from "peerjs";
 import { FiPhoneCall } from "react-icons/fi";
+import Peer from "simple-peer";
 
 // talons
 import { useUser } from "@talons/useUser";

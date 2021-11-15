@@ -129,5 +129,10 @@
     "searchNoResult": "There is no result found",
     "chatPage": "Chat Page",
     "likedYourComment": "liked your comment",
-    "retweetedYourTweet": "retweeted your tweet"
+    "retweetedYourTweet": "retweeted your tweet",
+    "createNewGroupChat": "New group chat",
+    "groupChatName": "Group chat name",
+    "addUser": "Add user",
+    "roomImage": "Room image",
+    "groupChatDescription": "Group chat description"
 }

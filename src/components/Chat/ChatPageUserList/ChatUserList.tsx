@@ -5,7 +5,6 @@ import { useRecoilValue } from "recoil";
 import { useUser } from "@talons/useUser";
 
 // components
-import Logo from "@components/Logo";
 import UserAvatarSmall from "@components/UserAvatarSmall";
 
 // states
@@ -24,10 +23,6 @@ const ChatPageUserList = () => {
 
     return (
         <div className={classes.root}>
-            <div className={classes.logo}>
-                <Logo />
-            </div>
-
             {connectedRooms.map((room: iRoom) => {
                 // 1. if room is direct message room
                 if (room.isDm) {
@@ -58,7 +53,27 @@ const ChatPageUserList = () => {
 
                 // 2. if room is group room (might be update later)
                 else {
-                    return null;
+                    console.log("Go here");
+                    const { name, image } = room;
+
+                    console.log("name: ", name);
+                    console.log("image: ", image);
+
+                    return (
+                        <Link
+                            to={`/chat/${room._id}`}
+                            key={`chat-page-user-list-${room._id}`}
+                        >
+                            <article className={classes.item}>
+                                <figure>
+                                    <img src={image} alt={room.name} />
+                                </figure>
+                                <div>
+                                    <div className={classes.name}>{name}</div>
+                                </div>
+                            </article>
+                        </Link>
+                    );
                 }
             })}
         </div>

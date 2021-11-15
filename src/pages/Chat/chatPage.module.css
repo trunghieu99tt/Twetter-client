@@ -106,6 +106,16 @@
     margin: 1rem 0;
 }
 
+.newGroupChat {
+    padding: 1rem;
+    background: var(--blue-1);
+    color: #fff;
+    font-weight: 500;
+    border-radius: 0.5rem;
+    margin-left: auto;
+    display: inherit;
+}
+
 @media (max-width: 1024px) {
     .headerInner {
         justify-content: center;

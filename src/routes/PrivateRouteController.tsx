@@ -1,7 +1,7 @@
 import { Route, Switch } from "react-router-dom";
 
 // talons
-import { useRoom } from "@talons/useRoom";
+import { useRooms } from "@talons/useRoom";
 import { useStory } from "@talons/useStory";
 import { useNotify } from "@talons/useNotify";
 import { useHashtag } from "@talons/useHashtag";
@@ -33,7 +33,7 @@ const PrivateRouteController = () => {
     const storyTalons = useStory();
     const notificationTalons = useNotify();
     const hashtagTalons = useHashtag();
-    const { getAllUserRooms } = useRoom();
+    const { getAllUserRooms } = useRooms();
 
     useEffect(() => {
         getAllUserRooms();

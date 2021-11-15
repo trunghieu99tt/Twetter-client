@@ -129,5 +129,10 @@
     "searchNoResult": "Không tìm thấy kết quả",
     "chatPage": "Trang chat",
     "likedYourComment": "Đã thích bình luận của bạn",
-    "retweetedYourTweet": "đã retweet tweet của bạn"
+    "retweetedYourTweet": "đã retweet tweet của bạn",
+    "createNewGroupChat": "Tạo group chat mới",
+     "groupChatName": "Tên của nhóm chat",
+    "addUser": "Thêm người dùng",
+    "roomImage": "Ảnh nhóm chat",
+    "groupChatDescription": "Mô tả nhóm chat"
 }

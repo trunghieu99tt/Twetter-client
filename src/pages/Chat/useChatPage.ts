@@ -36,6 +36,9 @@ const useChatPage = () => {
     const [chatImages, setChatImages] = useState<string[]>([]);
     const [guestUser, setGuest] = useState<iUser | null>(null);
     const [totalMessage, setTotalMessage] = useState<number>(0);
+    const [visibleNewGroupChatModal, setVisibleNewGroupChatModal] =
+        useState<boolean>(false);
+
     const [messageImage, setMessageImage] = useState<{
         file: File | null;
         url: string;
@@ -203,6 +206,7 @@ const useChatPage = () => {
         chosenEmoji,
         messageImage,
         totalMessage,
+        visibleNewGroupChatModal,
 
         onChange,
         onSubmit,
@@ -211,6 +215,7 @@ const useChatPage = () => {
         fetchNextPage,
         setChosenEmoji,
         onCloseImageMessageForm,
+        setVisibleNewGroupChatModal,
     };
 };
 

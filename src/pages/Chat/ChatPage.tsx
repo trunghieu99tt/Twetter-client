@@ -28,6 +28,8 @@ import { iMessage } from "@type/message.types";
 // styles
 import classes from "./chatPage.module.css";
 import { Spinner1 } from "@components/Loaders";
+import Logo from "@components/Logo";
+import CreateNewGroupChat from "@components/Chat/CreateNewGroupChat";
 
 const ChatPage = () => {
     const { t } = useTranslation();
@@ -43,6 +45,7 @@ const ChatPage = () => {
         chosenEmoji,
         messageImage,
         totalMessage,
+        visibleNewGroupChatModal,
 
         onSubmit,
         onChange,
@@ -51,6 +54,7 @@ const ChatPage = () => {
         openVideoCall,
         setChosenEmoji,
         onCloseImageMessageForm,
+        setVisibleNewGroupChatModal,
     } = useChatPage();
 
     const messageDiv = useRef<HTMLElement | null>(null);
@@ -79,8 +83,19 @@ const ChatPage = () => {
             <PageMetadata title={t("chatPage")} />
             {loading && <Spinner1 />}
             {call && <CallModal />}
+            {visibleNewGroupChatModal && <CreateNewGroupChat />}
+
             <div className={classes.root}>
                 <aside className={classes.userList}>
+                    <div className={classes.logo}>
+                        <Logo />
+                    </div>
+                    <button
+                        className={classes.newGroupChat}
+                        onClick={() => setVisibleNewGroupChatModal(true)}
+                    >
+                        {t("createNewGroupChat")}
+                    </button>
                     <ChatPageUserList />
                 </aside>
                 <main className={classes.main}>
