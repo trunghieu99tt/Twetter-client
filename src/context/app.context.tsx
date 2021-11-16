@@ -12,6 +12,7 @@ const initialState: TAppState = {
     theme: "LIGHT",
     screenSize: "DESKTOP",
     visibleLeftSidebar: false,
+    visibleAddGroupChatModal: false,
 };
 
 const AppContext = React.createContext<{
@@ -45,6 +46,12 @@ const appReducer = (state: TAppState = initialState, action: TAppAction) => {
             return {
                 ...state,
                 socket: action.payload,
+            };
+        case "SET_VISIBLE_ADD_GROUP_CHAT_MODAL":
+            console.log("Go here");
+            return {
+                ...state,
+                visibleAddGroupChatModal: action.payload,
             };
         default:
             return state;

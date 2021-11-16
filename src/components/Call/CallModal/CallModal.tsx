@@ -3,7 +3,7 @@ import { toast } from "react-toastify";
 import { useRecoilState } from "recoil";
 import { MediaConnection } from "peerjs";
 import { FiPhoneCall } from "react-icons/fi";
-import Peer from "simple-peer";
+import Peer, { SignalData } from "simple-peer";
 
 // talons
 import { useUser } from "@talons/useUser";
@@ -22,10 +22,35 @@ import { HiOutlinePhoneMissedCall } from "react-icons/hi";
 
 // Styles
 import classes from "./callModal.module.css";
+import styled from "styled-components";
 
 interface Props {}
 
 let callTimeInterval: NodeJS.Timeout | null = null;
+
+const StyledVideo = styled.video`
+    height: 40%;
+    width: 50%;
+`;
+
+const videoConstraints = {
+    height: window.innerHeight / 2,
+    width: window.innerWidth / 2,
+};
+
+const Video = (props: any) => {
+    const ref = useRef() as MutableRefObject<HTMLVideoElement>;
+
+    useEffect(() => {
+        props.peer.on("stream", (stream: MediaStream) => {
+            if (ref?.current) {
+                ref.current.srcObject = stream;
+            }
+        });
+    }, [ref]);
+
+    return <StyledVideo playsInline autoPlay ref={ref} />;
+};
 
 const CallModal = (props: Props) => {
     const [call, setCall] = useRecoilState(callState);
@@ -37,10 +62,61 @@ const CallModal = (props: Props) => {
     const [answer, setAnswer] = useState<boolean>(false);
     const [callDuration, setCallDuration] = useState<number>(0);
     const [newCall, setNewCall] = useState<MediaConnection | null>(null);
+    const [peers, setPeers] = useState<any[]>([]);
 
     const tracks = useRef([]) as MutableRefObject<MediaStreamTrack[]>;
     const myVideoRef = useRef() as MutableRefObject<HTMLVideoElement>;
     const remoteVideoRef = useRef() as MutableRefObject<HTMLVideoElement>;
+    const peersRef = useRef<any[]>([]);
+
+    const createPeer = (
+        userToSignal: string,
+        callerId: string,
+        stream: MediaStream
+    ) => {
+        const peer = new Peer({
+            initiator: true,
+            trickle: false,
+            stream,
+        });
+
+        peer.on("signal", (signal: SignalData) => {
+            socket?.emit("sendingSignal", { signal, userToSignal, callerId });
+        });
+
+        return peer;
+    };
+
+    const addPeer = (
+        inComingSignal: SignalData,
+        callerId: string,
+        stream: MediaStream
+    ) => {
+        const peer = new Peer({
+            initiator: false,
+            trickle: false,
+            stream,
+        });
+
+        peer.on("signal", (signal: SignalData) => {
+            socket?.emit("returningSignal", {
+                signal,
+                userToSignal: callerId,
+                callerId,
+            });
+        });
+
+        peer.signal(inComingSignal);
+
+        return peer;
+    };
+
+    const handleAnswer = () => {
+        socket?.emit("joinRoom", {
+            userId: user._id,
+            roomId: call.room._id,
+        });
+    };
 
     // Open stream
     const openStream = async (video: boolean) => {
@@ -164,6 +240,56 @@ const CallModal = (props: Props) => {
         //     reset();
         // };
     }, [socket, call, newCall, tracks.current]);
+
+    useEffect(() => {
+        if (socket) {
+            navigator.mediaDevices
+                .getUserMedia({
+                    video: videoConstraints,
+                    audio: true,
+                })
+                .then((stream: MediaStream) => {
+                    myVideoRef.current.srcObject = stream;
+                    socket.on("allUsers", (userIds) => {
+                        const newPeers: any[] = [];
+                        userIds.forEach((userId: string) => {
+                            const peer = createPeer(userId, user._id, stream);
+                            newPeers.push(peer);
+                            peersRef.current.push({
+                                peerId: userId,
+                                peer,
+                            });
+                        });
+
+                        setPeers(newPeers);
+                    });
+
+                    socket.on("userJoined", (payload) => {
+                        const peer = addPeer(
+                            payload.signal,
+                            payload.callerId,
+                            stream
+                        );
+
+                        peersRef.current.push({
+                            peerId: payload.callerId,
+                            peer,
+                        });
+
+                        setPeers((prevPeers) => [...prevPeers, peer]);
+                    });
+
+                    socket.on("receivingReturnedSignal", (payload) => {
+                        const item = peersRef.current.find(
+                            (p: any) => p.peerId === payload.callerId
+                        );
+                        if (item) {
+                            item.peer.signal(payload.signal);
+                        }
+                    });
+                });
+        }
+    }, [socket]);
 
     const myCall = call?.senderId === user?._id;
 

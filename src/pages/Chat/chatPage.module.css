@@ -26,6 +26,10 @@
     padding: 0 2rem;
 }
 
+.logo {
+    margin: 1rem;
+}
+
 .left {
     display: flex;
     align-items: center;
@@ -114,6 +118,14 @@
     border-radius: 0.5rem;
     margin-left: auto;
     display: inherit;
+}
+
+.showRoomMemberListBtn {
+    font-size: 1.2rem;
+    text-align: center;
+    margin-bottom: 1rem;
+    font-weight: 500;
+    width: 100%;
 }
 
 @media (max-width: 1024px) {

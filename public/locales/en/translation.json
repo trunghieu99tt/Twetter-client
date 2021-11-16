@@ -134,5 +134,7 @@
     "groupChatName": "Group chat name",
     "addUser": "Add user",
     "roomImage": "Room image",
-    "groupChatDescription": "Group chat description"
+    "groupChatDescription": "Group chat description",
+    "groupChatSizeTooSmall": "Group chat must contain at least 2 people including yourself",
+    "roomMemberList": "Room member list"
 }

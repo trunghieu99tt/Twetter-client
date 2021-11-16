@@ -2,16 +2,18 @@
 import { useTranslation } from "react-i18next";
 
 // talons
-import { useCreateNewGroupChat } from "./useCreateNewGroupChat";
+import { useNewRoomModal } from "./useNewRoomModal";
 
 // components
 import Modal from "@components/Modal";
 
+// icons
+import { BsCardImage } from "react-icons/bs";
+
 // types
 import { iUser } from "@type/user.types";
 
-import classes from "./createNewGroupChat.module.css";
-import { BsCardImage } from "react-icons/bs";
+import classes from "./newRoomModal.module.css";
 
 const CreateNewGroupChat = () => {
     const { t } = useTranslation();
@@ -22,10 +24,11 @@ const CreateNewGroupChat = () => {
         newGroupChatUserList,
 
         onChange,
+        onCloseModal,
         onCreateNewChatGroup,
         onAddToNewGroupUserList,
         onRemoveUserFromNewGroupUserList,
-    } = useCreateNewGroupChat();
+    } = useNewRoomModal();
 
     const body = (
         <div className={classes.newGroupChat}>
@@ -131,13 +134,11 @@ const CreateNewGroupChat = () => {
 
     return (
         <Modal
-            isOpen={true}
             body={body}
-            header={<p>{t("createNewGroupChat")}</p>}
+            isOpen={true}
+            onCancel={onCloseModal}
             onOk={onCreateNewChatGroup}
-            onCancel={() => {
-                console.log("Cancel");
-            }}
+            header={<p>{t("createNewGroupChat")}</p>}
         />
     );
 };

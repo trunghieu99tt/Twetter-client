@@ -6,7 +6,7 @@ import { SRLWrapper } from "simple-react-lightbox";
 import { urlify } from "@utils/helper";
 
 // components
-import VoiceMessageContent from "../VoiceMessageContent";
+import VoiceMessageContent from "./VoiceMessageContent";
 
 // styles
 import classes from "./messageContent.module.css";

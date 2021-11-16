@@ -14,17 +14,15 @@ export const Wrapper = styled.div`
 export const ChatListWrapper = styled("div")<{
     isOpen: boolean;
 }>`
-    transform: translate(15%, -65%) scale(${(props) => (props.isOpen ? 1 : 0)});
+    transform: translate(-10%, -25%) scale(${(props) => (props.isOpen ? 1 : 0)});
     position: absolute;
     bottom: 0;
-    max-height: 20rem;
     background: #fff;
     padding: 2rem;
     border-radius: 1rem;
-    width: 25rem;
+    width: 30rem;
     transform-origin: bottom center;
     transition: all 0.1s ease-in-out;
-    overflow: auto;
 `;
 
 export const Heading = styled.div`
@@ -34,18 +32,9 @@ export const Heading = styled.div`
     border-bottom: var(--border-1);
 `;
 
-export const ChatUserListItem = styled.article`
-    display: flex;
-    gap: 1rem;
-    align-items: center;
-    padding: 1rem;
-    transition: all 0.2s;
-    cursor: pointer;
-    border-radius: 0.5rem;
-
-    &:hover {
-        background: var(--light-1);
-    }
+export const ChatList = styled.div`
+    max-height: 50rem;
+    overflow: auto;
 `;
 
 export const ToggleChatButton = styled.button`
@@ -65,17 +54,4 @@ export const ToggleChatButton = styled.button`
         width: var(--size);
         height: var(--size);
     }
-`;
-
-export const ChatUserListItemName = styled.p`
-    font-size: 1.2rem;
-    font-weight: 500;
-`;
-
-export const ChatBoxList = styled.div`
-    position: fixed;
-    bottom: 0.5rem;
-    right: 10rem;
-    display: flex;
-    gap: 1rem;
 `;

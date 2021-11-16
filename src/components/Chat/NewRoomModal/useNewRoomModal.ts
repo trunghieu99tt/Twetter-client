@@ -7,9 +7,15 @@ import { TMedia } from "@type/app.types";
 import { v4 } from "uuid";
 import { useRooms } from "@talons/useRoom";
 import { useUpload } from "@talons/useUpload";
+import { useUser } from "@talons/useUser";
+import { toast } from "react-toastify";
+import { useAppContext } from "@context/app.context";
 
-const useCreateNewGroupChat = () => {
+const useNewRoomModal = () => {
+    const { dispatch } = useAppContext();
+
     const { createNewRoom } = useRooms();
+    const { user: currentUser } = useUser();
     const { uploadSingleMedia } = useUpload();
 
     const [roomInfo, setRoomInfo] = useState<iRoomDTO>({
@@ -37,7 +43,13 @@ const useCreateNewGroupChat = () => {
             search: value,
             category: "people",
         });
-        setSuggestion(data);
+        const filteredUsers = data.filter((user: iUser) => {
+            return (
+                user._id !== currentUser._id &&
+                !newGroupChatUserList.some((u: iUser) => u._id === user._id)
+            );
+        });
+        setSuggestion(filteredUsers);
     };
 
     // create a debounce function to trigger the search
@@ -75,19 +87,39 @@ const useCreateNewGroupChat = () => {
     };
 
     const onCreateNewChatGroup = async () => {
-        let image: string = "";
-        if (media?.file) {
-            image = await uploadSingleMedia(media.file);
+        try {
+            newGroupChatUserList.push(currentUser);
+
+            if (newGroupChatUserList.length < 2) {
+                toast.error(
+                    "Please add at least 2 people to create a group chat"
+                );
+                return;
+            }
+
+            let image: string = "";
+            if (media?.file) {
+                image = await uploadSingleMedia(media.file);
+            }
+
+            const newRoom: iRoomDTO = {
+                ...roomInfo,
+                image,
+                members:
+                    newGroupChatUserList?.map((user: iUser) => user._id) || [],
+            };
+
+            createNewRoom(newRoom);
+        } catch (error) {
+            console.log("error: ", error);
         }
-
-        const newRoom: iRoomDTO = {
-            ...roomInfo,
-            image,
-            members: newGroupChatUserList?.map((user: iUser) => user._id) || [],
-        };
-
-        createNewRoom(newRoom);
     };
+
+    const onCloseModal = () =>
+        dispatch({
+            type: "SET_VISIBLE_ADD_GROUP_CHAT_MODAL",
+            payload: false,
+        });
 
     return {
         media,
@@ -95,10 +127,11 @@ const useCreateNewGroupChat = () => {
         newGroupChatUserList,
 
         onChange,
+        onCloseModal,
         onCreateNewChatGroup,
         onAddToNewGroupUserList,
         onRemoveUserFromNewGroupUserList,
     };
 };
 
-export { useCreateNewGroupChat };
+export { useNewRoomModal };
