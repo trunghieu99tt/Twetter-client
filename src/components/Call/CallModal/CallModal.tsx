@@ -1,7 +1,6 @@
 import React, { MutableRefObject, useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
 import { useRecoilState } from "recoil";
-import { MediaConnection } from "peerjs";
 import { FiPhoneCall } from "react-icons/fi";
 import Peer, { SignalData } from "simple-peer";
 
@@ -54,24 +53,21 @@ const Video = (props: any) => {
 
 const CallModal = (props: Props) => {
     const [call, setCall] = useRecoilState(callState);
+    const [answer, setAnswer] = useState(false);
     const { user } = useUser();
     const {
-        state: { peer, socket },
+        state: { socket },
     } = useAppContext();
 
-    const [answer, setAnswer] = useState<boolean>(false);
     const [callDuration, setCallDuration] = useState<number>(0);
-    const [newCall, setNewCall] = useState<MediaConnection | null>(null);
     const [peers, setPeers] = useState<any[]>([]);
 
-    const tracks = useRef([]) as MutableRefObject<MediaStreamTrack[]>;
     const myVideoRef = useRef() as MutableRefObject<HTMLVideoElement>;
-    const remoteVideoRef = useRef() as MutableRefObject<HTMLVideoElement>;
     const peersRef = useRef<any[]>([]);
 
     const createPeer = (
-        userToSignal: string,
-        callerId: string,
+        otherUserId: string,
+        currentUserId: string,
         stream: MediaStream
     ) => {
         const peer = new Peer({
@@ -81,7 +77,11 @@ const CallModal = (props: Props) => {
         });
 
         peer.on("signal", (signal: SignalData) => {
-            socket?.emit("sendingSignal", { signal, userToSignal, callerId });
+            socket?.emit("sendingSignal", {
+                signal,
+                otherUserId,
+                currentUserId,
+            });
         });
 
         return peer;
@@ -111,76 +111,31 @@ const CallModal = (props: Props) => {
         return peer;
     };
 
-    const handleAnswer = () => {
-        socket?.emit("joinRoom", {
-            userId: user._id,
-            roomId: call.room._id,
-        });
-    };
-
-    // Open stream
-    const openStream = async (video: boolean) => {
-        const stream = await navigator.mediaDevices.getUserMedia({
-            audio: true,
-            video: video,
-        });
-        tracks.current = stream.getTracks();
-        return stream;
-    };
-
-    // play stream
-    const playStream = (stream: MediaStream, video: HTMLVideoElement) => {
-        video.srcObject = stream;
-        video.addEventListener("loadedmetadata", () => {
-            video.play();
-        });
-    };
-
-    // Close stream
-    const closeStream = () => {
-        tracks?.current?.forEach((track) => track.stop());
-        if (newCall) newCall.close();
-    };
-
-    // reset states
-    const reset = () => {
-        closeStream();
-        setCall(null);
-        setAnswer(false);
-        setCallDuration(0);
-        setNewCall(null);
-    };
-
     // end call
     const endCall = () => {
-        reset();
-        socket?.emit("endCall", call);
-    };
-
-    // handle open peer connection
-    const onPeerConnection = async (newCall: MediaConnection | null) => {
-        const stream = await openStream(call.video);
-        if (myVideoRef?.current) {
-            playStream(stream, myVideoRef.current);
-        }
-        if (newCall) {
-            newCall.answer(stream);
-        } else {
-            newCall = peer?.call(call.peerId, stream) as MediaConnection;
-        }
-        newCall.on("stream", (stream) => {
-            console.log(`remoteVideoRef`, remoteVideoRef);
-            if (remoteVideoRef?.current) {
-                playStream(stream, remoteVideoRef.current);
+        setCall(null);
+        peersRef.current.forEach((peerItem) => {
+            const { peerId, peer } = peerItem;
+            if (peerId === user?._id && peer) {
+                peer.destroy();
             }
         });
-        setNewCall(newCall);
-        setAnswer(true);
+        peersRef.current.filter((peerItem) => peerItem.peerId !== user?._id);
+        socket?.emit("endCall", user._id);
     };
 
-    // answer call
-    const answerCall = async () => {
-        onPeerConnection(null);
+    const handleCloseCall = () => {
+        // set call to null
+        setCall(null);
+
+        // close all peers
+        peers?.forEach((peer) => peer?.destroy());
+        peersRef.current = [];
+    };
+
+    const handleRemovePeerOfUser = (userId: string) => {
+        const newPeers = peers.filter((peerItem) => peerItem.peerId !== userId);
+        setPeers(newPeers);
     };
 
     // convert call duration to seconds, minutes and hours
@@ -220,26 +175,13 @@ const CallModal = (props: Props) => {
         }
     }, [answer]);
 
-    useEffect(() => {
-        peer?.on("call", async (newCall: MediaConnection) => {
-            onPeerConnection(newCall);
+    const handleAnswer = () => {
+        setAnswer(true);
+        socket?.emit("requestJoinRoom", {
+            userId: user._id,
+            roomId: call.room._id,
         });
-
-        // return () => {
-        //     peer?.off("call", () => {});
-        //     reset();
-        // };
-    }, [peer, call]);
-
-    useEffect(() => {
-        socket?.on("callDisconnected", () => {
-            reset();
-        });
-
-        // return () => {
-        //     reset();
-        // };
-    }, [socket, call, newCall, tracks.current]);
+    };
 
     useEffect(() => {
         if (socket) {
@@ -250,17 +192,29 @@ const CallModal = (props: Props) => {
                 })
                 .then((stream: MediaStream) => {
                     myVideoRef.current.srcObject = stream;
-                    socket.on("allUsers", (userIds) => {
+                    console.log(`stream`, stream);
+                    socket.on("usersInRoomChanged", (userIds) => {
                         const newPeers: any[] = [];
-                        userIds.forEach((userId: string) => {
-                            const peer = createPeer(userId, user._id, stream);
+                        console.log(`userIds`, userIds);
+                        userIds.forEach((otherUserId: string) => {
+                            const peer = createPeer(
+                                otherUserId,
+                                user._id,
+                                stream
+                            );
                             newPeers.push(peer);
                             peersRef.current.push({
-                                peerId: userId,
+                                peerId: otherUserId,
                                 peer,
                             });
                         });
 
+                        console.log("newPeers: ", newPeers);
+
+                        if (newPeers.length > 1) {
+                            console.log("Go set answer true");
+                            setAnswer(true);
+                        }
                         setPeers(newPeers);
                     });
 
@@ -288,8 +242,15 @@ const CallModal = (props: Props) => {
                         }
                     });
                 });
+            socket.on("closeCall", () => {
+                handleCloseCall();
+            });
+
+            socket.on("userLeft", (userId) => {
+                handleRemovePeerOfUser(userId);
+            });
         }
-    }, [socket]);
+    }, []);
 
     const myCall = call?.senderId === user?._id;
 
@@ -315,10 +276,10 @@ const CallModal = (props: Props) => {
                             </div>
                         </div>
                         <div className={classes.callMenu}>
-                            {call && user._id === call.guestId && (
+                            {call && user._id !== call.senderId && (
                                 <button
                                     className={classes.answerCallBtn}
-                                    onClick={answerCall}
+                                    onClick={handleAnswer}
                                 >
                                     <FiPhoneCall />
                                 </button>
@@ -339,22 +300,15 @@ const CallModal = (props: Props) => {
                     }}
                 >
                     <div className={classes.videoList}>
-                        <video
-                            ref={(r: HTMLVideoElement) =>
-                                (myVideoRef.current = r)
-                            }
-                            className={classes.myVideo}
-                            playsInline
+                        <StyledVideo
                             muted
-                        />
-                        <video
-                            ref={(r: HTMLVideoElement) =>
-                                (remoteVideoRef.current = r)
-                            }
-                            className={classes.remoteVideo}
+                            ref={myVideoRef}
+                            autoPlay
                             playsInline
-                            muted
                         />
+                        {peers?.map((peer) => {
+                            return <Video key={peer.peerId} peer={peer} />;
+                        })}
                     </div>
                     <div className={classes.timeVideo}>{convertDuration()}</div>
                     <button className={classes.endCallBtn} onClick={endCall}>

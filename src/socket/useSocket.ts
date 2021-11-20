@@ -104,8 +104,8 @@ const useSocket = () => {
             ]);
         });
 
-        socket.on("callerConnected", (res: any) => {
-            console.log("caller connected!");
+        socket.on("hasCall", (res: any) => {
+            console.log("new call reached");
             setCall(res);
         });
 
