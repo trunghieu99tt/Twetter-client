@@ -12,6 +12,7 @@ import { iRoom } from "@type/room.types";
 import { iUser } from "@type/user.types";
 import { useAppContext } from "@context/app.context";
 import { callState } from "states/call.state";
+import { v4 as uuid, v4 } from "uuid";
 
 const useChatPage = () => {
     const {
@@ -123,7 +124,6 @@ const useChatPage = () => {
     };
 
     const openCreateNewGroupChatModal = () => {
-        console.log("on set visible new group chat modal");
         dispatch({
             type: "SET_VISIBLE_ADD_GROUP_CHAT_MODAL",
             payload: true,

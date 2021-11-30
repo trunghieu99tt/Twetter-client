@@ -10,6 +10,7 @@ import { useAppContext } from "@context/app.context";
 
 // pages
 import Chat from "@pages/Chat";
+import Call from "@pages/Call";
 import Search from "@pages/Search";
 import HashTag from "@pages/HashTag";
 import Explore from "@pages/Explore";
@@ -71,6 +72,7 @@ const PrivateRouteController = () => {
                     component={HashTag}
                 />
                 <PrivateRoute path="/chat/:roomId" exact component={Chat} />
+                <PrivateRoute path="/call/:roomId" exact component={Call} />
                 <PrivateRoute
                     path="/profile/media/:userId"
                     exact

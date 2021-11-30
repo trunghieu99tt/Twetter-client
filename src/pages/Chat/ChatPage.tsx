@@ -32,9 +32,11 @@ import Logo from "@components/Logo";
 import UserCard from "@components/UserCard";
 import { iUser } from "@type/user.types";
 import Modal from "@components/Modal";
+import { useHistory } from "react-router";
 
 const ChatPage = () => {
     const { t } = useTranslation();
+    const history = useHistory();
 
     const {
         room,
@@ -133,6 +135,13 @@ const ChatPage = () => {
                                 <h2 className={classes.roomName}>{roomName}</h2>
                             </div>
                             <div className={classes.right}>
+                                {/* <button
+                                    onClick={() => {
+                                        history.push(`/call/${room?._id}`);
+                                    }}
+                                >
+                                    Go to call
+                                </button> */}
                                 <button
                                     className={classes.callButton}
                                     onClick={() => triggerCall()}

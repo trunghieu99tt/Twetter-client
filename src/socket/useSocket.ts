@@ -33,7 +33,7 @@ const useSocket = () => {
     const queryClient = useQueryClient();
     const socketInstance = useRef(null);
     const previousUser = useRecoilValue(prevUserState);
-    const setCall = useSetRecoilState(callState);
+    const [call, setCall] = useRecoilState(callState);
     const [joinDMRoom, setJoinDMRoom] = useRecoilState(joinDMRoomState);
     const [newMessage, setNewMessage] = useRecoilState(newMessageState);
 
@@ -82,6 +82,17 @@ const useSocket = () => {
         }
     }, [newMessage]);
 
+    useEffect(() => {
+        const socket = socketInstance.current as any;
+        console.log(`socket.id`, socket.id);
+        socket.on("answerCall", (res: any) => {
+            console.log("res: ", res);
+            if (call) {
+                history.push(`/call/${res.roomId}`);
+            }
+        });
+    }, [call]);
+
     const init = () => {
         const socket = socketInstance.current as any;
 
@@ -105,7 +116,6 @@ const useSocket = () => {
         });
 
         socket.on("hasCall", (res: any) => {
-            console.log("new call reached");
             setCall(res);
         });
 
