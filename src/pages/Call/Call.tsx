@@ -270,24 +270,15 @@ const Call = () => {
                         });
 
                         socket.on("userJoined", (payload) => {
-                            const { newUserId } = payload;
-                            console.log("otherUserIds: ", otherIdsRef.current);
-                            console.log("currentUserId: ", user._id);
+                            console.log("userid: ", user._id);
+                            console.log(`payload userJoined`, payload);
+                            console.log("socketid: ", socket.id);
 
-                            if (
-                                !otherIdsRef?.current?.includes(newUserId) &&
-                                user._id !== payload.newUserId
-                            ) {
-                                console.log("userid: ", user._id);
-                                console.log(`payload userJoined`, payload);
-                                console.log("socketid: ", socket.id);
-
-                                createPeerForNewUser(
-                                    payload.signal,
-                                    payload.newUserId,
-                                    stream
-                                );
-                            }
+                            createPeerForNewUser(
+                                payload.signal,
+                                payload.newUserId,
+                                stream
+                            );
                         });
                         socket.on("receivingReturnedSignal", (payload) => {
                             replySignalOfNewMember(

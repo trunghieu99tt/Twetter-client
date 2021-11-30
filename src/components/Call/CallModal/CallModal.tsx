@@ -70,7 +70,7 @@ const CallModal = () => {
 
     const handleAnswer = () => {
         socket?.emit("answerCall", {
-            currentUserId: user._id,
+            userRepliedId: user._id,
             ownerCallId: call.senderId,
             roomId: call.room._id,
         });

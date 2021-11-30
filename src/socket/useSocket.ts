@@ -86,7 +86,6 @@ const useSocket = () => {
         const socket = socketInstance.current as any;
         console.log(`socket.id`, socket.id);
         socket.on("answerCall", (res: any) => {
-            console.log("res: ", res);
             if (call) {
                 history.push(`/call/${res.roomId}`);
             }

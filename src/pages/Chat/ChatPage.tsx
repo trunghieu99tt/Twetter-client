@@ -135,13 +135,13 @@ const ChatPage = () => {
                                 <h2 className={classes.roomName}>{roomName}</h2>
                             </div>
                             <div className={classes.right}>
-                                {/* <button
+                                <button
                                     onClick={() => {
                                         history.push(`/call/${room?._id}`);
                                     }}
                                 >
                                     Go to call
-                                </button> */}
+                                </button>
                                 <button
                                     className={classes.callButton}
                                     onClick={() => triggerCall()}
