@@ -31,12 +31,16 @@ import CreateNewGroupChat from "@components/Chat/NewRoomModal";
 
 // routes
 import { HASHTAG_ROUTES, STORY_ROUTES } from "./routes";
+import { useRecoilValue } from "recoil";
+import { callState } from "states/call.state";
+import CallModal from "@components/Call/CallModal";
 
 const PrivateRouteController = () => {
     const storyTalons = useStory();
     const notificationTalons = useNotify();
     const hashtagTalons = useHashtag();
     const { getUserRooms } = useRooms();
+    const call = useRecoilValue(callState);
     const {
         state: { visibleAddGroupChatModal },
     } = useAppContext();
@@ -48,6 +52,7 @@ const PrivateRouteController = () => {
     return (
         <React.Fragment>
             {visibleAddGroupChatModal && <CreateNewGroupChat />}
+            {call && <CallModal />}
             <Switch>
                 <PrivateRoute path="/" exact component={NewsFeed} />
                 <PrivateRoute

@@ -3119,7 +3119,13 @@ aggregate-error@^3.0.0:
     clean-stack "^2.0.0"
     indent-string "^4.0.0"
 
-agora-rtc-sdk-ng@^4.7.3:
+"agora-rtc-react@git://github.com/AgoraIO-Community/agora-rtc-react#v1.0.0":
+  version "1.0.0"
+  resolved "git://github.com/AgoraIO-Community/agora-rtc-react#89b689e77fa01cac7187e5d6106f4fc2e6e8f2e6"
+  dependencies:
+    agora-rtc-sdk-ng "^4.3.0"
+
+agora-rtc-sdk-ng@^4.3.0, agora-rtc-sdk-ng@^4.7.3:
   version "4.7.3"
   resolved "https://registry.yarnpkg.com/agora-rtc-sdk-ng/-/agora-rtc-sdk-ng-4.7.3.tgz#21108c51d1469b90804794c314275e73a3f52e06"
   integrity sha512-6SX3S4KJmiJVqITYAoicM2aBhthzvfrM+Fwccdd3vFsBeIetbI2Ajsz3Uhm6+7gotbcorHgm47eKNZWaqpUULg==

@@ -40,7 +40,6 @@ const ChatPage = () => {
 
     const {
         room,
-        call,
         loading,
         message,
         messages,
@@ -107,7 +106,6 @@ const ChatPage = () => {
                 onCancel={() => setShowMemberList(false)}
             />
             {loading && <Spinner1 />}
-            {call && <CallModal />}
 
             <div className={classes.root}>
                 <aside className={classes.userList}>
