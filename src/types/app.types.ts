@@ -4,23 +4,31 @@ import { Socket } from "socket.io-client";
 export type TTheme = "LIGHT" | "DARK";
 export type TScreenSize = "DESKTOP" | "TABLET" | "MOBILE";
 
-
-export type TAppAction = {
-    type: 'SET_THEME',
-    payload: TTheme;
-} | {
-    type: 'SET_VISIBLE_LEFT_SIDEBAR',
-    payload: boolean;
-} | {
-    type: 'SET_SCREEN_SIZE',
-    payload: TScreenSize;
-} | {
-    type: 'SET_PEER',
-    payload: Peer | null;
-} | {
-    type: 'SET_SOCKET',
-    payload: Socket | null;
-};
+export type TAppAction =
+    | {
+          type: "SET_THEME";
+          payload: TTheme;
+      }
+    | {
+          type: "SET_VISIBLE_LEFT_SIDEBAR";
+          payload: boolean;
+      }
+    | {
+          type: "SET_SCREEN_SIZE";
+          payload: TScreenSize;
+      }
+    | {
+          type: "SET_PEER";
+          payload: Peer | null;
+      }
+    | {
+          type: "SET_SOCKET";
+          payload: Socket | null;
+      }
+    | {
+          type: "SET_VISIBLE_ADD_GROUP_CHAT_MODAL";
+          payload: boolean;
+      };
 
 export type TAppState = {
     theme: TTheme;
@@ -28,6 +36,7 @@ export type TAppState = {
     socket: Socket | null;
     screenSize: TScreenSize;
     visibleLeftSidebar: boolean;
+    visibleAddGroupChatModal: boolean;
 };
 
 export type TAppDispatch = (action: TAppAction) => void;

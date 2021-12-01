@@ -11,9 +11,6 @@ import { AiOutlineClose } from "react-icons/ai";
 // styles
 import { Item, List, Container, CloseButton } from "./TopMenuStyle";
 
-// fixed data
-import { useMemo } from "react";
-
 const TopMenu = () => {
     const location = useLocation();
     const { t } = useTranslation();

@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from "react";
-import { useParams } from "react-router";
+import { useHistory, useParams } from "react-router";
 import { iMessage, iNewMessage } from "../../types/message.types";
 import { useUser } from "@talons/useUser";
 import { useUpload } from "@talons/useUpload";
@@ -12,11 +12,14 @@ import { iRoom } from "@type/room.types";
 import { iUser } from "@type/user.types";
 import { useAppContext } from "@context/app.context";
 import { callState } from "states/call.state";
+import { v4 as uuid, v4 } from "uuid";
 
 const useChatPage = () => {
     const {
         state: { peer, socket },
+        dispatch,
     } = useAppContext();
+    const history = useHistory();
     const [call, setCall] = useRecoilState(callState);
     const params: any = useParams();
     const { roomId } = params;
@@ -36,6 +39,8 @@ const useChatPage = () => {
     const [chatImages, setChatImages] = useState<string[]>([]);
     const [guestUser, setGuest] = useState<iUser | null>(null);
     const [totalMessage, setTotalMessage] = useState<number>(0);
+    const [showMemberList, setShowMemberList] = useState<boolean>(false);
+
     const [messageImage, setMessageImage] = useState<{
         file: File | null;
         url: string;
@@ -108,72 +113,50 @@ const useChatPage = () => {
         });
     };
 
-    // initialize call message
-    const initNewCall = (video: boolean = false) => {
-        const { _id, avatar, name } = currentUser;
-        const guestUser: iUser | undefined = room?.members.find(
-            (member: iUser) => member._id !== _id
+    const triggerCall = (isVideoCall: boolean = false) => {
+        const newCall = {
+            room,
+            isVideoCall,
+            senderId: currentUser._id,
+        };
+        setCall(newCall);
+        socket?.emit("startCall", newCall);
+    };
+
+    const openCreateNewGroupChatModal = () => {
+        dispatch({
+            type: "SET_VISIBLE_ADD_GROUP_CHAT_MODAL",
+            payload: true,
+        });
+    };
+
+    const checkUserIsMember = (room: iRoom) => {
+        return room.members.some(
+            (member: iUser) => member._id === currentUser._id
         );
-
-        if (guestUser) {
-            const newCall = {
-                senderId: _id,
-                guestId: guestUser?._id,
-                avatar,
-                name,
-                video,
-                peerId: "",
-            };
-            return newCall;
-        }
-
-        return null;
-    };
-
-    // update call context
-    const caller = (video: boolean = false) => {
-        const newCall = initNewCall(video);
-        if (newCall) {
-            setCall(newCall);
-        }
-    };
-
-    // fire call event to socket
-    const callUserSocket = (video: boolean = false) => {
-        const newCall = initNewCall(video);
-
-        if (newCall) {
-            if (peer) {
-                newCall.peerId = peer.id;
-            }
-            socket?.emit("startCall", newCall);
-        }
-    };
-
-    // open audio call
-    const openAudioCall = () => {
-        caller();
-        callUserSocket();
-    };
-
-    // open video call
-    const openVideoCall = () => {
-        caller(true);
-        callUserSocket(true);
     };
 
     useEffect(() => {
         const currentRoom =
             connectedRooms &&
             connectedRooms.find((room: iRoom) => room._id === roomId);
+
         if (currentRoom) {
-            const otherUser = currentRoom?.members?.find(
-                (member: iUser) => member._id !== currentUser?._id
-            );
-            if (otherUser) {
-                setGuest(otherUser);
+            const isUserMemberOfCurrentRoom = checkUserIsMember(currentRoom);
+
+            if (!isUserMemberOfCurrentRoom) {
+                history.push("/");
+            } else {
+                const otherUser = currentRoom?.members?.find(
+                    (member: iUser) => member._id !== currentUser?._id
+                );
+                if (otherUser) {
+                    setGuest(otherUser);
+                }
+                setRoom(currentRoom);
             }
-            setRoom(currentRoom);
+        } else if (connectedRooms) {
+            history.push("/");
         }
     }, [roomId, connectedRooms]);
 
@@ -184,8 +167,6 @@ const useChatPage = () => {
     useEffect(() => {
         if (chosenEmoji) {
             const newMessage = `${message} ${chosenEmoji!.emoji}`;
-            console.log("chosenEmoji: ", chosenEmoji);
-            console.log("chosenEmoji!.emoji:", chosenEmoji!.emoji);
             setMessage(newMessage);
             setChosenEmoji(null);
         }
@@ -203,14 +184,16 @@ const useChatPage = () => {
         chosenEmoji,
         messageImage,
         totalMessage,
+        showMemberList,
 
         onChange,
         onSubmit,
-        openAudioCall,
-        openVideoCall,
+        triggerCall,
         fetchNextPage,
         setChosenEmoji,
+        setShowMemberList,
         onCloseImageMessageForm,
+        openCreateNewGroupChatModal,
     };
 };
 

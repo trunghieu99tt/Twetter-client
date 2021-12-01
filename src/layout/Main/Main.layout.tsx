@@ -1,4 +1,4 @@
-import ChatUserList from "@components/Chat/ChatUserList";
+import ChatUserList from "@components/Chat/SmallRoomList";
 import React from "react";
 import Header from "./Header";
 

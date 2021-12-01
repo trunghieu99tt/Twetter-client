@@ -46,6 +46,10 @@ button {
     border: none;
 }
 
+input[type="file"] {
+    display: none;
+}
+
 :root {
     --gray-1: #828282;
     --gray-2: #4f4f4f;

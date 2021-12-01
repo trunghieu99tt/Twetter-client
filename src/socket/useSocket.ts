@@ -17,13 +17,14 @@ import { Socket } from "./socket";
 
 const spawnNotification = (body: any, icon: any, url: any, title: any) => {
     let options = {
-        body, icon
+        body,
+        icon,
     };
     let n = new Notification(title, options);
 
-    n.onclick = e => {
+    n.onclick = (e) => {
         e.preventDefault();
-        window.open(url, '_blank');
+        window.open(url, "_blank");
     };
 };
 
@@ -32,11 +33,12 @@ const useSocket = () => {
     const queryClient = useQueryClient();
     const socketInstance = useRef(null);
     const previousUser = useRecoilValue(prevUserState);
-    const setCall = useSetRecoilState(callState);
+    const [call, setCall] = useRecoilState(callState);
     const [joinDMRoom, setJoinDMRoom] = useRecoilState(joinDMRoomState);
     const [newMessage, setNewMessage] = useRecoilState(newMessageState);
 
-    const [connectedRooms, setConnectedRooms] = useRecoilState(connectedRoomsState);
+    const [connectedRooms, setConnectedRooms] =
+        useRecoilState(connectedRoomsState);
     const setConnectedUsers = useSetRecoilState(connectedUsersState);
     const { user } = useUser();
     const history = useHistory();
@@ -53,7 +55,11 @@ const useSocket = () => {
         if (user?._id !== previousUser?._id || !previousUser) {
             if (user?._id && socketInstance?.current) {
                 (socketInstance.current as any).emit("userOn", user);
-            } else if (!user?._id && previousUser?._id && socketInstance?.current) {
+            } else if (
+                !user?._id &&
+                previousUser?._id &&
+                socketInstance?.current
+            ) {
                 (socketInstance.current as any).emit("userOff", previousUser);
             }
         }
@@ -66,66 +72,66 @@ const useSocket = () => {
     }, [joinDMRoom]);
 
     useEffect(() => {
-        if ((newMessage && newMessage?.content?.length > 0 || newMessage && newMessage?.file) && socketInstance?.current) {
+        if (
+            ((newMessage && newMessage?.content?.length > 0) ||
+                (newMessage && newMessage?.file)) &&
+            socketInstance?.current
+        ) {
             console.log("newMessage", newMessage);
             (socketInstance.current as any).emit("newMessage", newMessage);
         }
     }, [newMessage]);
 
+    useEffect(() => {
+        const socket = socketInstance.current as any;
+        console.log(`socket.id`, socket.id);
+        socket.on("answerCall", (res: any) => {
+            if (call) {
+                history.push(`/call/${res.roomId}`);
+            }
+        });
+    }, [call]);
 
     const init = () => {
-        const socket = (socketInstance.current as any);
+        const socket = socketInstance.current as any;
 
-
-        socket.on('connect', () => {
-            console.log('Connected');
+        socket.on("connect", () => {
+            console.log("Connected");
             // setSocket(socket);
             dispatch({ type: "SET_SOCKET", payload: socket });
         });
 
-        socket.on('users', (res: any) => {
+        socket.on("users", (res: any) => {
             // console.log(`res users`, res)
             setConnectedUsers(res);
         });
 
-        socket.on('joinDmRoom', (res: any) => {
-            console.log('res joinDmRoom: ', res);
-            setJoinDMRoom(null);
-            // merge connectedRooms with res
-            if (!connectedRooms?.some((room: any) => room._id === res._id)) {
-                setConnectedRooms([...(connectedRooms || []), res]);
-            }
-            // Go to DM room
-            history.push(`/chat/${res._id}`);
-        });
-
-        socket.on('newMessage', (res: any) => {
+        socket.on("newMessage", (res: any) => {
             setNewMessage(null);
-            queryClient.invalidateQueries(
-                [MESSAGES_QUERIES.GET_MESSAGES, res.roomId],
-            );
+            queryClient.invalidateQueries([
+                MESSAGES_QUERIES.GET_MESSAGES,
+                res.roomId,
+            ]);
         });
 
-        socket.on('callerConnected', (res: any) => {
-            console.log('caller connected!');
+        socket.on("hasCall", (res: any) => {
             setCall(res);
         });
 
-        socket.on('newNotification', (res: any) => {
+        socket.on("newNotification", (res: any) => {
             showNotificationToast(res);
             spawnNotification(
                 res.text,
                 res.sender.avatar,
-                res?.url || '',
-                'Tweeter'
+                res?.url || "",
+                "Tweeter"
             );
-            queryClient.invalidateQueries(NOTIFICATION_QUERIES.GET_NOTIFICATIONS);
+            queryClient.invalidateQueries(
+                NOTIFICATION_QUERIES.GET_NOTIFICATIONS
+            );
         });
-
     };
-    return {
-    };
-
+    return {};
 };
 
 export { useSocket };

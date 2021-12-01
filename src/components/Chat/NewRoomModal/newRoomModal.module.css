@@ -1,0 +1,90 @@
+.addUserForm {
+    position: relative;
+}
+
+.input {
+    padding: 1rem;
+    border: 1px solid var(--gray-4);
+    border-radius: 0.5rem;
+    font-size: 1.3rem;
+    outline: none;
+}
+
+.addUserButton {
+    padding: 1rem 2rem;
+    background-color: var(--blue-1);
+    color: #fff;
+    font-weight: 500;
+    border-radius: 0.5rem;
+    margin-left: 1rem;
+}
+
+.groupChatUserList {
+    margin-top: 1rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.groupChatUserItem {
+    background: var(--blue-2);
+    display: inline-block;
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    color: #fff;
+    font-size: 1.2rem;
+    font-weight: 500;
+}
+
+.groupChatUserItem button {
+    color: #fff;
+}
+
+.userSuggestionList {
+    max-height: 20rem;
+    overflow: auto;
+    position: absolute;
+    z-index: 1;
+    background-color: #fff;
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid var(--light-1);
+    transform: translateY(1rem);
+}
+
+.userSuggestion {
+    width: 100%;
+}
+
+.fileBtn {
+    display: flex;
+    cursor: pointer;
+    margin: 2rem 0;
+    gap: 2rem;
+    font-size: 1.5rem;
+    align-items: center;
+}
+
+.fileBtn svg {
+    --size: 1.5rem;
+    width: var(--size);
+    height: var(--size);
+}
+
+.inputGroup {
+    position: relative;
+    margin-bottom: 1.5rem;
+}
+
+.inputLabel {
+    display: block;
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+}
+
+.roomImagePreview {
+    --size: 20rem;
+    width: var(--size);
+    height: var(--size);
+    object-fit: cover;
+}

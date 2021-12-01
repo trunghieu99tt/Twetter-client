@@ -7,7 +7,7 @@ type TSearch = {
     category: string;
 };
 
-const requestSearch = async (query: TSearch) => {
+export const requestSearch = async (query: TSearch) => {
     if (!query.search || !query.category) {
         return {
             data: [],

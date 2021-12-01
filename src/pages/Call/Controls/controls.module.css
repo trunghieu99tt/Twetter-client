@@ -1,0 +1,42 @@
+.root {
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1;
+    max-width: 60vw;
+    display: flex;
+    align-items: center;
+    grid-gap: 2rem;
+    gap: 2rem;
+    bottom: 5%;
+}
+
+.btn {
+    padding: 10px;
+    cursor: pointer;
+    background: #38373a;
+    color: #f7f7f7;
+    border-width: 1px;
+    border-color: #f7f7f7;
+    border-style: solid;
+    display: flex;
+    border-radius: 50%;
+    padding: 1rem;
+}
+
+.btn.on {
+    background: #f7f7f7;
+    color: #38373a;
+    border-width: 1px;
+    border-color: #38373a;
+    border-style: solid;
+}
+
+.leave {
+    background-color: var(--red);
+    padding: 0.5rem 2rem;
+    color: #fff;
+    font-weight: 500;
+    border-radius: 0.5rem;
+}

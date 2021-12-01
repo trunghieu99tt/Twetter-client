@@ -1,0 +1,32 @@
+.myVideo {
+    height: 50vh;
+    max-width: 50%;
+    margin: 0 auto;
+    padding: 2rem 0;
+    border-radius: 1rem;
+    overflow: hidden;
+}
+
+.video {
+    position: relative;
+    background-color: black;
+    height: 95%;
+    width: 95%;
+    border-width: 1px;
+    border-color: #38373a;
+    border-style: solid;
+    border-radius: 1rem;
+    overflow: hidden;
+}
+
+.otherVideos {
+    position: relative;
+    height: 20vh;
+    width: 100vw;
+    margin: auto;
+    align-self: flex-start;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    justify-items: center;
+    align-items: center;
+}

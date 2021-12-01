@@ -26,6 +26,10 @@
     padding: 0 2rem;
 }
 
+.logo {
+    margin: 1rem;
+}
+
 .left {
     display: flex;
     align-items: center;
@@ -104,6 +108,24 @@
     font-weight: 600;
     font-size: 1.5rem;
     margin: 1rem 0;
+}
+
+.newGroupChat {
+    padding: 1rem;
+    background: var(--blue-1);
+    color: #fff;
+    font-weight: 500;
+    border-radius: 0.5rem;
+    margin-left: auto;
+    display: inherit;
+}
+
+.showRoomMemberListBtn {
+    font-size: 1.2rem;
+    text-align: center;
+    margin-bottom: 1rem;
+    font-weight: 500;
+    width: 100%;
 }
 
 @media (max-width: 1024px) {

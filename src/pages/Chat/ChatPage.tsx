@@ -10,10 +10,10 @@ import { useIntersectionObserver } from "@hooks/useIntersectionObserver";
 import CallModal from "@components/Call/CallModal";
 import PageMetadata from "@components/PageMetadata";
 import MessageContent from "@components/Chat/MessageContent";
-import TextMessageForm from "@components/Chat/TextMessageForm";
+import TextMessageForm from "@components/Chat/MessageForms/TextMessageForm";
 import RoomImageGallery from "@components/Chat/RoomImageGallery";
-import ChatPageUserList from "@components/Chat/ChatPageUserList";
-import ImageMessageForm from "@components/Chat/ImageMessageForm";
+import RoomList from "@components/Chat/RoomList";
+import ImageMessageForm from "@components/Chat/MessageForms/ImageMessageForm";
 
 // icons
 import { IoCallSharp } from "react-icons/io5";
@@ -28,12 +28,18 @@ import { iMessage } from "@type/message.types";
 // styles
 import classes from "./chatPage.module.css";
 import { Spinner1 } from "@components/Loaders";
+import Logo from "@components/Logo";
+import UserCard from "@components/UserCard";
+import { iUser } from "@type/user.types";
+import Modal from "@components/Modal";
+import { useHistory } from "react-router";
 
 const ChatPage = () => {
     const { t } = useTranslation();
+    const history = useHistory();
 
     const {
-        call,
+        room,
         loading,
         message,
         messages,
@@ -43,14 +49,16 @@ const ChatPage = () => {
         chosenEmoji,
         messageImage,
         totalMessage,
+        showMemberList,
 
         onSubmit,
         onChange,
-        openAudioCall,
+        triggerCall,
         fetchNextPage,
-        openVideoCall,
         setChosenEmoji,
+        setShowMemberList,
         onCloseImageMessageForm,
+        openCreateNewGroupChatModal,
     } = useChatPage();
 
     const messageDiv = useRef<HTMLElement | null>(null);
@@ -74,14 +82,43 @@ const ChatPage = () => {
         }
     }, [messages]);
 
+    const { isDm, members, image, name } = room || {};
+
+    let roomImage = image || "";
+    let roomName = name || "";
+
+    if (isDm) {
+        roomImage = guestUser?.avatar || DefaultUnknownAvatar;
+        roomName = guestUser?.name || "";
+    }
+
+    const roomMemberList = members?.map((member: iUser) => (
+        <UserCard user={member} key={`room-member-card-${member._id}`} />
+    ));
+
     return (
         <React.Fragment>
             <PageMetadata title={t("chatPage")} />
+            <Modal
+                body={roomMemberList}
+                header={t("roomMemberList")}
+                isOpen={showMemberList}
+                onCancel={() => setShowMemberList(false)}
+            />
             {loading && <Spinner1 />}
-            {call && <CallModal />}
+
             <div className={classes.root}>
                 <aside className={classes.userList}>
-                    <ChatPageUserList />
+                    <div className={classes.logo}>
+                        <Logo />
+                    </div>
+                    <button
+                        className={classes.newGroupChat}
+                        onClick={openCreateNewGroupChatModal}
+                    >
+                        {t("createNewGroupChat")}
+                    </button>
+                    <RoomList />
                 </aside>
                 <main className={classes.main}>
                     <section className={classes.mainHeader}>
@@ -89,27 +126,29 @@ const ChatPage = () => {
                             <div className={classes.left}>
                                 <figure className={classes.roomImage}>
                                     <img
-                                        src={
-                                            guestUser?.avatar ||
-                                            DefaultUnknownAvatar
-                                        }
+                                        src={roomImage}
                                         alt={`${guestUser?.name}-wallpaper`}
                                     />
                                 </figure>
-                                <h2 className={classes.roomName}>
-                                    {guestUser?.name}
-                                </h2>
+                                <h2 className={classes.roomName}>{roomName}</h2>
                             </div>
                             <div className={classes.right}>
                                 <button
+                                    onClick={() => {
+                                        history.push(`/call/${room?._id}`);
+                                    }}
+                                >
+                                    Go to call
+                                </button>
+                                <button
                                     className={classes.callButton}
-                                    onClick={openAudioCall}
+                                    onClick={() => triggerCall()}
                                 >
                                     <IoCallSharp />
                                 </button>
                                 <button
                                     className={classes.callButton}
-                                    onClick={openVideoCall}
+                                    onClick={() => triggerCall(true)}
                                 >
                                     <BsFillCameraVideoFill />
                                 </button>
@@ -165,15 +204,25 @@ const ChatPage = () => {
                     <article className={classes.roomInfo}>
                         <figure className={classes.roomInfoImageWrapper}>
                             <img
-                                src={guestUser?.avatar || DefaultUnknownAvatar}
-                                alt={`${guestUser?.name} avatar`}
+                                src={roomImage}
+                                alt={`${roomName}-bg`}
                                 className={classes.roomInfoImage}
                             />
                             <figcaption className={classes.roomInfoName}>
-                                {guestUser?.name}
+                                {roomName}
                             </figcaption>
                         </figure>
                     </article>
+
+                    {!isDm && (
+                        <button
+                            className={classes.showRoomMemberListBtn}
+                            onClick={() => setShowMemberList(true)}
+                        >
+                            {t("roomMemberList")}
+                        </button>
+                    )}
+
                     <SimpleReactLightbox>
                         <RoomImageGallery images={chatImages} />
                     </SimpleReactLightbox>
