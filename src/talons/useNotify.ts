@@ -88,6 +88,7 @@ export const useNotify = () => {
 
         if (filteredReceivers.length > 0) {
             newNotification.receivers = filteredReceivers;
+            console.log("newNotification: ", newNotification);
             createNotificationMutation.mutate(newNotification, {
                 onSuccess: (response) => {
                     console.log(`response`, response);
