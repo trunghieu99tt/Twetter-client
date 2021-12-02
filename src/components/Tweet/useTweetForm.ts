@@ -22,6 +22,9 @@ export const useTweetForm = ({ tweet }: Props) => {
 
     const [body, setBody] = useState(tweet?.content || "");
     const [media, setMedia] = useState<TMedia[]>([]);
+    const [initialMedias, setInitialMedias] = useState<string[]>(
+        tweet?.media || []
+    );
     const [loading, setLoading] = useState<boolean>(false);
     const [audience, setAudience] = useState<number>(tweet?.audience || 0);
 
@@ -46,6 +49,7 @@ export const useTweetForm = ({ tweet }: Props) => {
 
     const onCancelMedia = () => {
         setMedia([]);
+        setInitialMedias([]);
     };
 
     const resetContent = () => {
@@ -76,10 +80,12 @@ export const useTweetForm = ({ tweet }: Props) => {
             );
             const { hashtags } = extractMetadata(body || "") || [];
 
+            const updatedMedias = [...mediaResponse, ...initialMedias];
+
             const newTweet: iCreateTweetDTO = {
                 content: body,
                 audience,
-                media: mediaResponse || tweet?.media,
+                media: updatedMedias,
                 tags: hashtags,
             };
 
@@ -113,6 +119,7 @@ export const useTweetForm = ({ tweet }: Props) => {
         loading,
         audience,
         media,
+        initialMedias,
 
         setBody,
         onSubmit,

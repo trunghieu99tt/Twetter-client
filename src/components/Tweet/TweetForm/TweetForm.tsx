@@ -36,6 +36,7 @@ import {
     TweetContentInputWrapper,
 } from "./TweetFormStyle";
 import { Flex } from "@shared/style/sharedStyle.style";
+import { v4 } from "uuid";
 
 type modeType = "block" | "flex" | "grid" | "none";
 
@@ -52,6 +53,7 @@ const TweetForm = ({ tweet, onCancel }: Props) => {
         media,
         loading,
         audience,
+        initialMedias,
 
         setBody,
         onSubmit,
@@ -65,7 +67,7 @@ const TweetForm = ({ tweet, onCancel }: Props) => {
     const { user } = useUser();
 
     let mediaViewMode: modeType = "none";
-    const mediaLen = media?.length;
+    const mediaLen = media?.length + initialMedias.length;
 
     if (mediaLen > 2) {
         mediaViewMode = "grid";
@@ -110,6 +112,24 @@ const TweetForm = ({ tweet, onCancel }: Props) => {
                                             <MediaViewer media={media} />
                                         </MediaItem>
                                     ))}
+                            {media?.length < 5 &&
+                                initialMedias?.length > 0 &&
+                                initialMedias.map((url: string, idx) => {
+                                    const media = {
+                                        id: v4(),
+                                        url,
+                                        type: url?.includes("video")
+                                            ? "video"
+                                            : "image",
+                                    };
+                                    return (
+                                        <MediaItem
+                                            key={`tweet-form-media-placeholder-${idx}`}
+                                        >
+                                            <MediaViewer media={media} />
+                                        </MediaItem>
+                                    );
+                                })}
                             {(remainingImageCount &&
                                 remainingImageCount > 0 && (
                                     <ImageLeftPlaceHolder>

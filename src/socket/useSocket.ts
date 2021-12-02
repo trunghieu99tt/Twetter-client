@@ -52,14 +52,11 @@ const useSocket = () => {
     }, []);
 
     useEffect(() => {
-        if (user?._id !== previousUser?._id || !previousUser) {
-            if (user?._id && socketInstance?.current) {
-                (socketInstance.current as any).emit("userOn", user);
-            } else if (
-                !user?._id &&
-                previousUser?._id &&
-                socketInstance?.current
-            ) {
+        if (user?._id && socketInstance.current) {
+            (socketInstance.current as any).emit("userOn", user);
+        }
+        if (!previousUser || user?._id !== previousUser?._id) {
+            if (!user?._id && previousUser?._id && socketInstance?.current) {
                 (socketInstance.current as any).emit("userOff", previousUser);
             }
         }
@@ -119,6 +116,7 @@ const useSocket = () => {
         });
 
         socket.on("newNotification", (res: any) => {
+            console.log(`res`, res);
             showNotificationToast(res);
             spawnNotification(
                 res.text,
