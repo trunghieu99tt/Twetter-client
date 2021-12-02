@@ -16,8 +16,10 @@ import "./index.css";
 import App from "./App";
 import { RecoilRoot } from "recoil";
 import { HelmetProvider } from "react-helmet-async";
+import { injectStyle } from "react-toastify/dist/inject-style";
 
 import "./i18.config";
+injectStyle();
 
 // Create a client
 const queryClient = new QueryClient();
