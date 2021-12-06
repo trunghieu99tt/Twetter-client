@@ -34,6 +34,7 @@ import { HASHTAG_ROUTES, STORY_ROUTES } from "./routes";
 import { useRecoilValue } from "recoil";
 import { callState } from "states/call.state";
 import CallModal from "@components/Call/CallModal";
+import AgoraRTC from "agora-rtc-sdk-ng";
 
 const PrivateRouteController = () => {
     const storyTalons = useStory();
@@ -47,6 +48,7 @@ const PrivateRouteController = () => {
 
     useEffect(() => {
         getUserRooms();
+        AgoraRTC.setLogLevel(4);
     }, []);
 
     return (

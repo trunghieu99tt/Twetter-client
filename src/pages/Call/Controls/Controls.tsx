@@ -2,14 +2,21 @@ import React, { useEffect, useState } from "react";
 import cn from "classnames";
 import { useHistory } from "react-router";
 
+// talons
+import { useUser } from "@talons/useUser";
+
+// icons
 import { FaVideoSlash, FaVideo } from "react-icons/fa";
 import { AiOutlineAudio, AiOutlineAudioMuted } from "react-icons/ai";
 
+// context
+import { useAppContext } from "@context/app.context";
+
+// config
 import { useAgoraClient } from "../agora.config";
 
+// styles
 import classes from "./controls.module.css";
-import { useAppContext } from "@context/app.context";
-import { useUser } from "@talons/useUser";
 
 type Props = {
     tracks: any;
@@ -53,6 +60,13 @@ const Controls = ({ setStart, tracks }: Props) => {
             leaveChannel();
         };
     }, []);
+
+    useEffect(() => {
+        socket?.on("closeCall", (res: { roomId: string }) => {
+            leaveChannel();
+            history.push("/");
+        });
+    }, [socket]);
 
     return (
         <div className={classes.root}>

@@ -1,38 +1,39 @@
 import React, { useEffect, useRef } from "react";
 import SimpleReactLightbox from "simple-react-lightbox";
 import { useTranslation } from "react-i18next";
+import { useHistory } from "react-router";
+import { useRecoilValue } from "recoil";
 
 // talons
 import { useChatPage } from "./useChatPage";
 import { useIntersectionObserver } from "@hooks/useIntersectionObserver";
 
 // components
-import CallModal from "@components/Call/CallModal";
+import Logo from "@components/Logo";
+import Modal from "@components/Modal";
+import UserCard from "@components/UserCard";
+import { Spinner1 } from "@components/Loaders";
+import RoomList from "@components/Chat/RoomList";
 import PageMetadata from "@components/PageMetadata";
 import MessageContent from "@components/Chat/MessageContent";
-import TextMessageForm from "@components/Chat/MessageForms/TextMessageForm";
 import RoomImageGallery from "@components/Chat/RoomImageGallery";
-import RoomList from "@components/Chat/RoomList";
+import TextMessageForm from "@components/Chat/MessageForms/TextMessageForm";
 import ImageMessageForm from "@components/Chat/MessageForms/ImageMessageForm";
 
 // icons
 import { IoCallSharp } from "react-icons/io5";
-import { BsFillCameraVideoFill } from "react-icons/bs";
 
 // images
 import DefaultUnknownAvatar from "@images/user.png";
 
 // types
 import { iMessage } from "@type/message.types";
+import { iUser } from "@type/user.types";
 
 // styles
 import classes from "./chatPage.module.css";
-import { Spinner1 } from "@components/Loaders";
-import Logo from "@components/Logo";
-import UserCard from "@components/UserCard";
-import { iUser } from "@type/user.types";
-import Modal from "@components/Modal";
-import { useHistory } from "react-router";
+
+import { roomsHaveCallState } from "states/call.state";
 
 const ChatPage = () => {
     const { t } = useTranslation();
@@ -60,6 +61,7 @@ const ChatPage = () => {
         onCloseImageMessageForm,
         openCreateNewGroupChatModal,
     } = useChatPage();
+    const roomsHaveCall = useRecoilValue(roomsHaveCallState);
 
     const messageDiv = useRef<HTMLElement | null>(null);
     const loadMoreRef = useRef() as React.RefObject<HTMLDivElement>;
@@ -82,6 +84,10 @@ const ChatPage = () => {
         }
     }, [messages]);
 
+    useEffect(() => {
+        console.log(`roomsHaveCall`, roomsHaveCall);
+    }, [roomsHaveCall]);
+
     const { isDm, members, image, name } = room || {};
 
     let roomImage = image || "";
@@ -95,6 +101,8 @@ const ChatPage = () => {
     const roomMemberList = members?.map((member: iUser) => (
         <UserCard user={member} key={`room-member-card-${member._id}`} />
     ));
+
+    const isRoomHavingCall = room && roomsHaveCall.includes(room._id);
 
     return (
         <React.Fragment>
@@ -133,24 +141,20 @@ const ChatPage = () => {
                                 <h2 className={classes.roomName}>{roomName}</h2>
                             </div>
                             <div className={classes.right}>
-                                <button
-                                    onClick={() => {
-                                        history.push(`/call/${room?._id}`);
-                                    }}
-                                >
-                                    Go to call
-                                </button>
+                                {isRoomHavingCall && (
+                                    <button
+                                        onClick={() => {
+                                            history.push(`/call/${room?._id}`);
+                                        }}
+                                    >
+                                        Go to call
+                                    </button>
+                                )}
                                 <button
                                     className={classes.callButton}
                                     onClick={() => triggerCall()}
                                 >
                                     <IoCallSharp />
-                                </button>
-                                <button
-                                    className={classes.callButton}
-                                    onClick={() => triggerCall(true)}
-                                >
-                                    <BsFillCameraVideoFill />
                                 </button>
                             </div>
                         </div>
