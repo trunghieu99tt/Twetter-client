@@ -9,9 +9,9 @@ import { useEffect, useRef } from "react";
 import { useQueryClient } from "react-query";
 import { useHistory } from "react-router";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
-import { callState } from "states/call.state";
+import { callState, roomsHaveCallState } from "states/call.state";
 import { newMessageState } from "states/message.state";
-import { connectedRoomsState, joinDMRoomState } from "states/room.state";
+import { joinDMRoomState } from "states/room.state";
 import { connectedUsersState, prevUserState } from "states/user.state";
 import { Socket } from "./socket";
 
@@ -36,10 +36,8 @@ const useSocket = () => {
     const [call, setCall] = useRecoilState(callState);
     const [joinDMRoom, setJoinDMRoom] = useRecoilState(joinDMRoomState);
     const [newMessage, setNewMessage] = useRecoilState(newMessageState);
-
-    const [connectedRooms, setConnectedRooms] =
-        useRecoilState(connectedRoomsState);
     const setConnectedUsers = useSetRecoilState(connectedUsersState);
+    const setRoomsHaveCall = useSetRecoilState(roomsHaveCallState);
     const { user } = useUser();
     const history = useHistory();
 
@@ -81,7 +79,6 @@ const useSocket = () => {
 
     useEffect(() => {
         const socket = socketInstance.current as any;
-        console.log(`socket.id`, socket.id);
         socket.on("answerCall", (res: any) => {
             if (call) {
                 history.push(`/call/${res.roomId}`);
@@ -113,6 +110,17 @@ const useSocket = () => {
 
         socket.on("hasCall", (res: any) => {
             setCall(res);
+        });
+
+        socket.on("roomCallStateChanged", (res: any) => {
+            const { roomId, hasCall } = res;
+            if (hasCall) {
+                setRoomsHaveCall((prev) =>
+                    Array.from(new Set([...prev, res.roomId]))
+                );
+            } else {
+                setRoomsHaveCall((prev) => prev.filter((r) => r !== roomId));
+            }
         });
 
         socket.on("newNotification", (res: any) => {

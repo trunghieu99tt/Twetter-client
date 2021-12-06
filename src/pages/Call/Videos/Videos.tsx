@@ -22,7 +22,6 @@ const Videos = ({ users, tracks }: Props) => {
             <div className={classes.otherVideos}>
                 {users.length > 0 &&
                     users.map((user) => {
-                        console.log(`user`, user);
                         if (user.videoTrack) {
                             return (
                                 <AgoraVideoPlayer

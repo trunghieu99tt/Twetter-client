@@ -74,6 +74,9 @@ const CallModal = () => {
             ownerCallId: call.senderId,
             roomId: call.room._id,
         });
+        socket?.emit("roomHasCall", {
+            roomId: call.room._id,
+        });
         history.push(`/call/${call.room._id}`);
     };
 
