@@ -48,7 +48,6 @@ const appReducer = (state: TAppState = initialState, action: TAppAction) => {
                 socket: action.payload,
             };
         case "SET_VISIBLE_ADD_GROUP_CHAT_MODAL":
-            console.log("Go here");
             return {
                 ...state,
                 visibleAddGroupChatModal: action.payload,

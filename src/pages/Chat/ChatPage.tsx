@@ -34,6 +34,7 @@ import { iUser } from "@type/user.types";
 import classes from "./chatPage.module.css";
 
 import { roomsHaveCallState } from "states/call.state";
+import { Link } from "react-router-dom";
 
 const ChatPage = () => {
     const { t } = useTranslation();
@@ -83,10 +84,6 @@ const ChatPage = () => {
             messageDiv.current.scrollTop = messageDiv.current.scrollHeight;
         }
     }, [messages]);
-
-    useEffect(() => {
-        console.log(`roomsHaveCall`, roomsHaveCall);
-    }, [roomsHaveCall]);
 
     const { isDm, members, image, name } = room || {};
 
@@ -138,7 +135,18 @@ const ChatPage = () => {
                                         alt={`${guestUser?.name}-wallpaper`}
                                     />
                                 </figure>
-                                <h2 className={classes.roomName}>{roomName}</h2>
+                                {(!isDm && (
+                                    <h2 className={classes.roomName}>
+                                        {roomName}
+                                    </h2>
+                                )) || (
+                                    <Link
+                                        to={`/profile/${guestUser?._id}`}
+                                        className={classes.roomName}
+                                    >
+                                        {roomName}
+                                    </Link>
+                                )}
                             </div>
                             <div className={classes.right}>
                                 {isRoomHavingCall && (
@@ -213,7 +221,11 @@ const ChatPage = () => {
                                 className={classes.roomInfoImage}
                             />
                             <figcaption className={classes.roomInfoName}>
-                                {roomName}
+                                {(!isDm && roomName) || (
+                                    <Link to={`/profile/${guestUser?._id}`}>
+                                        {roomName}
+                                    </Link>
+                                )}
                             </figcaption>
                         </figure>
                     </article>

@@ -32,6 +32,7 @@ import {
     Main,
     Info,
     Wrapper,
+    UserName,
     MainInfo,
     CoverPhoto,
     RightButton,
@@ -175,6 +176,7 @@ const MyProfileOverview = ({ user }: Props) => {
                             </FollowersCounter>
                         </MainInfo>
                         <SecondaryInfo>
+                            <UserName>@{user?.username}</UserName>
                             <Bio>{user?.bio}</Bio>
                         </SecondaryInfo>
                     </Info>

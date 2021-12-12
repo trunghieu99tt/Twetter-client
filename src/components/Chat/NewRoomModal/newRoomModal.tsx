@@ -1,4 +1,5 @@
 /* eslint-disable jsx-a11y/img-redundant-alt */
+import React from "react";
 import { useTranslation } from "react-i18next";
 
 // talons
@@ -14,12 +15,14 @@ import { BsCardImage } from "react-icons/bs";
 import { iUser } from "@type/user.types";
 
 import classes from "./newRoomModal.module.css";
+import { Spinner1 } from "@components/Loaders";
 
 const CreateNewGroupChat = () => {
     const { t } = useTranslation();
 
     const {
         media,
+        loading,
         suggestion,
         newGroupChatUserList,
 
@@ -133,13 +136,16 @@ const CreateNewGroupChat = () => {
     );
 
     return (
-        <Modal
-            body={body}
-            isOpen={true}
-            onCancel={onCloseModal}
-            onOk={onCreateNewChatGroup}
-            header={<p>{t("createNewGroupChat")}</p>}
-        />
+        <React.Fragment>
+            {loading && <Spinner1 />}
+            <Modal
+                body={body}
+                isOpen={true}
+                onCancel={onCloseModal}
+                onOk={onCreateNewChatGroup}
+                header={<p>{t("createNewGroupChat")}</p>}
+            />
+        </React.Fragment>
     );
 };
 

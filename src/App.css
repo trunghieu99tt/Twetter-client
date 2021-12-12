@@ -1,3 +1,7 @@
 .hidden {
     display: none;
 }
+
+.infinite-scroll-component {
+    overflow: initial !important;
+}

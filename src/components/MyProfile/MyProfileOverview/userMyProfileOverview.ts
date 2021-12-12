@@ -5,7 +5,7 @@ import { iUser } from "@type/user.types";
 import { ChangeEvent, useEffect, useState } from "react";
 import { useHistory } from "react-router";
 import { useRecoilValue, useSetRecoilState } from "recoil";
-import { connectedRoomsState, joinDMRoomState } from "states/room.state";
+import { connectedRoomsState, joinRoomState } from "states/room.state";
 
 type LIST_TYPE = "followers" | "following" | "";
 type MODAL_TYPE = "list_user" | "update_info" | "";
@@ -16,7 +16,7 @@ type Props = {
 
 export const useMyProfileOverview = ({ user }: Props) => {
     const connectedRooms = useRecoilValue(connectedRoomsState);
-    const setJoinRoomState = useSetRecoilState(joinDMRoomState);
+    const setJoinRoomState = useSetRecoilState(joinRoomState);
     const {
         user: currentUser,
         followUserMutation,
@@ -103,7 +103,10 @@ export const useMyProfileOverview = ({ user }: Props) => {
         if (room) {
             history.push(`/chat/${room._id}`);
         } else {
-            setJoinRoomState({ userIds });
+            setJoinRoomState({
+                owner: currentUser._id,
+                members: [currentUser._id, userId],
+            });
         }
     };
 

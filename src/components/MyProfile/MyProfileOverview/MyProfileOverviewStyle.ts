@@ -1,10 +1,9 @@
 import styled from "styled-components";
 
-export const Wrapper = styled.div`
-`;
+export const Wrapper = styled.div``;
 
-export const CoverPhoto = styled('div') <{ img: string }>`
-    background-image: url(${props => props.img});
+export const CoverPhoto = styled("div")<{ img: string }>`
+    background-image: url(${(props) => props.img});
     background-size: cover;
     background-position: center center;
     height: 35rem;
@@ -28,7 +27,6 @@ export const Info = styled.div`
 `;
 
 export const MainInfo = styled.div`
-    margin-bottom: 2rem;
     display: flex;
     gap: 2.5rem;
     align-items: center;
@@ -46,7 +44,7 @@ export const FollowersCounter = styled.button`
     font-size: 1.2rem;
     line-height: 1.8rem;
     color: var(--gray-3);
-    
+
     span {
         font-weight: 600;
         color: #000;
@@ -55,6 +53,13 @@ export const FollowersCounter = styled.button`
 `;
 
 export const SecondaryInfo = styled.div``;
+
+export const UserName = styled.p`
+    color: var(--blue-1);
+    font-size: 1.2rem;
+    font-weight: 500;
+    margin-bottom: 1rem;
+`;
 
 export const Bio = styled.p`
     color: var(--gray-1);
@@ -80,8 +85,7 @@ export const SendMessageBtn = styled.button`
     align-items: center;
     gap: 1rem;
     padding: 0.8rem 2.4rem;
-    border-radius: .5rem;
-`
-
-export const RightButton = styled(SendMessageBtn)`
+    border-radius: 0.5rem;
 `;
+
+export const RightButton = styled(SendMessageBtn)``;

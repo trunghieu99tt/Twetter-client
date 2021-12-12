@@ -32,8 +32,6 @@ const Search = () => {
 
     const { query, response, onChange, onSubmit } = useSearch();
 
-    console.log("response: ", response);
-
     let resultContent = null;
 
     if (response) {

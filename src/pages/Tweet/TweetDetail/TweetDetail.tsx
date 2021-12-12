@@ -52,7 +52,7 @@ const TweetDetail = () => {
     return (
         <React.Fragment>
             <PageMetadata
-                title={`${data?.content.slice(
+                title={`${data?.content?.slice(
                     0,
                     MAX_LENGTH_TWEET_META_HEADING
                 )}`}
