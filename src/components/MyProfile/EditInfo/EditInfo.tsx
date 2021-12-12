@@ -55,6 +55,7 @@ const EditInfo = ({ data, onCancel }: Props) => {
                 <EditItem>
                     <EditItemLabel>{t("coverPhoto")}</EditItemLabel>
                     <ImageWithUpdater
+                        shouldHaveUpdate={true}
                         data={newCover}
                         name="coverPhoto"
                         isDisabledUpdate={isDisabledUpdate}
@@ -67,6 +68,7 @@ const EditInfo = ({ data, onCancel }: Props) => {
                 <EditItem>
                     <EditItemLabel>{t("avatar")}</EditItemLabel>
                     <ImageWithUpdater
+                        shouldHaveUpdate={true}
                         data={newAvatar}
                         name="avatar"
                         isDisabledUpdate={isDisabledUpdate}

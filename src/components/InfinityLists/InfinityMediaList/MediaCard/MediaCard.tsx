@@ -8,7 +8,6 @@ interface Props {
 }
 
 const MediaCard = ({ data }: Props) => {
-    console.log(`data`, data);
     return (
         <Wrapper to={`/tweet/${data._id}`}>
             <MediaWrapper>

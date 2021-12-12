@@ -100,7 +100,6 @@ const ImageStory = ({ onCancel, onSubmit, setLoading }: Props) => {
                     o.setSrc(image, () => {
                         const objects = editor?.canvas.toJSON();
                         if (objects) {
-                            console.log("Go submit");
                             onSubmit(JSON.stringify(objects));
                         } else {
                             setLoading(false);

@@ -147,6 +147,7 @@ const MyProfileOverview = ({ user }: Props) => {
             <Container>
                 <Main>
                     <ImageWithUpdater
+                        shouldHaveUpdate={isMe}
                         data={newAvatar}
                         name="coverPhoto"
                         isDisabledUpdate={updating}

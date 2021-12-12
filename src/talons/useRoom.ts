@@ -11,7 +11,6 @@ const useRooms = () => {
     const getUserRooms = async () => {
         const response = await client.get("/rooms/myRoom");
         const rooms = response.data.data;
-        console.log(`rooms`, rooms);
         setConnectedRooms(rooms);
     };
 

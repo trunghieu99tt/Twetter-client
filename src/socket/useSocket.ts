@@ -73,7 +73,6 @@ const useSocket = () => {
                 (newMessage && newMessage?.file)) &&
             socketInstance?.current
         ) {
-            console.log("newMessage", newMessage);
             (socketInstance.current as any).emit("newMessage", newMessage);
         }
     }, [newMessage]);
@@ -125,7 +124,6 @@ const useSocket = () => {
         });
 
         socket.on("newNotification", (res: any) => {
-            console.log(`res`, res);
             showNotificationToast(res);
             spawnNotification(
                 res.text,

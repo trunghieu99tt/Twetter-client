@@ -158,8 +158,6 @@ const View = () => {
             });
         }
 
-        console.log(`userStories`, userStories);
-
         if (!userStories || userStories?.length === 0) {
             history.push("/");
         }
