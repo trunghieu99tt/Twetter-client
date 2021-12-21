@@ -136,5 +136,12 @@
     "roomImage": "Room image",
     "groupChatDescription": "Group chat description",
     "groupChatSizeTooSmall": "Group chat must contain at least 2 people including yourself",
-    "roomMemberList": "Room member list"
+    "roomMemberList": "Room member list",
+    "report": "report",
+    "reportRestriction": "You can report this tweet only once in 5 minutes",
+    "reportSuccess": "Reported successfully",
+    "deleteTweetConfirmation": "Are you sure you want to delete this tweet?",
+    "yes": "yes",
+    "no": "no",
+    "followedYou": "followed you"
 }

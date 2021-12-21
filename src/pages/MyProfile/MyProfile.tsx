@@ -1,6 +1,5 @@
 import React from "react";
 import { useParams } from "react-router";
-import { useTranslation } from "react-i18next";
 
 // talons
 import { useUser } from "@talons/useUser";
@@ -10,6 +9,7 @@ import { useTweets } from "@talons/useTweets";
 import MainLayout from "@layout/Main";
 
 // components
+import { Spinner1 } from "@components/Loaders";
 import AddTweet from "@components/Tweet/AddTweet";
 import PageMetadata from "@components/PageMetadata";
 import LeftSidebar from "@components/Sidebar/LeftSidebar";
@@ -29,6 +29,10 @@ const MyProfile = () => {
 
     const userData = userId === me?._id ? me : getUserQuery.data;
     const isMe = userId === me?._id;
+
+    if (getUserQuery?.isLoading) {
+        return <Spinner1 />;
+    }
 
     if (!userData) return null;
 

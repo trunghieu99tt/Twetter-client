@@ -44,17 +44,17 @@ const Search = () => {
                     />
                 ));
                 break;
-            case "comment":
-                resultContent = response.data
-                    .filter((comment: iComment) => comment.tweet)
-                    .map((comment: iComment) => (
-                        <CommentSearchResultCard
-                            data={comment}
-                            key={`CommentSearchResultCard-${comment._id}`}
-                        />
-                    ));
+            // case "comment":
+            //     resultContent = response.data
+            //         .filter((comment: iComment) => comment.tweet)
+            //         .map((comment: iComment) => (
+            //             <CommentSearchResultCard
+            //                 data={comment}
+            //                 key={`CommentSearchResultCard-${comment._id}`}
+            //             />
+            //         ));
 
-                break;
+            //     break;
             case "people":
                 resultContent = response.data.map((user: iUser) => (
                     <UserCard
@@ -103,9 +103,9 @@ const Search = () => {
                                     className={classes.CategorySelections}
                                 >
                                     <option value="tweet">{t("tweet")}</option>
-                                    <option value="comment">
+                                    {/* <option value="comment">
                                         {t("comment")}
-                                    </option>
+                                    </option> */}
                                     <option value="hashtag">
                                         {t("hashtag")}
                                     </option>

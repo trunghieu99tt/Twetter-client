@@ -147,6 +147,13 @@ const saveTweet = async (tweetId: string) => {
     return response?.data;
 };
 
+const reportTweet = async (tweetId: string) => {
+    const response = await client.patch(
+        `${TWEET_ENDPOINTS.REPORT_TWEET}/${tweetId}`
+    );
+    return response?.data;
+};
+
 export const useTweets = (userId = "", tag = "") => {
     const queryClient = useQueryClient();
 
@@ -248,6 +255,8 @@ export const useTweets = (userId = "", tag = "") => {
         },
     });
 
+    const reportTweetMutation = useMutation(reportTweet);
+
     return {
         getMediasQuery,
         getUserMediasQuery,
@@ -265,5 +274,6 @@ export const useTweets = (userId = "", tag = "") => {
         createTweetMutation,
         deleteTweetMutation,
         updateTweetMutation,
+        reportTweetMutation,
     };
 };
