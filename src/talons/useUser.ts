@@ -1,4 +1,10 @@
-import { QueryFunctionContext, useInfiniteQuery, useMutation, useQuery, useQueryClient } from "react-query";
+import {
+    QueryFunctionContext,
+    useInfiniteQuery,
+    useMutation,
+    useQuery,
+    useQueryClient,
+} from "react-query";
 import { useSetRecoilState } from "recoil";
 
 // utils
@@ -16,19 +22,26 @@ import { iUser } from "../types/user.types";
 // constants
 import { TWEET_QUERY } from "constants/tweet.constants";
 import { USER_ENDPOINTS, USER_QUERY } from "constants/user.constants";
-import { generateInfinityQueryListConfig, LONG_STATE_TIME } from "constants/config.constant";
+import {
+    generateInfinityQueryListConfig,
+    LONG_STATE_TIME,
+} from "constants/config.constant";
 
 // models
 import { UserModel } from "model/user.model";
+import { ONE_HOUR } from "constants/app.constants";
 
 export const parseUser = (user: iUser) => {
-    if (!user)
-        return undefined;
+    if (!user) return undefined;
     if (user?.followers?.length > 0) {
-        user.followers = user.followers.map(follower => new UserModel(follower));
+        user.followers = user.followers.map(
+            (follower) => new UserModel(follower)
+        );
     }
     if (user?.following?.length > 0) {
-        user.following = user.following.map(following => new UserModel(following));
+        user.following = user.following.map(
+            (following) => new UserModel(following)
+        );
     }
     return new UserModel(user).getData();
 };
@@ -40,14 +53,15 @@ const getMe = async () => {
 
 const getUser = async ({ queryKey }: QueryFunctionContext) => {
     const userId = queryKey[1];
-    if (!userId)
-        return;
+    if (!userId) return;
     const response = await client.get(`${USER_ENDPOINTS.BASE}/${userId}`);
     return parseUser(response?.data?.data);
 };
 
 const getPopularUsers = async ({ pageParam = 0 }: QueryFunctionContext) => {
-    return getInfinityList(USER_ENDPOINTS.POPULAR_USERS, pageParam);
+    return getInfinityList(USER_ENDPOINTS.POPULAR_USERS, pageParam, {
+        limit: 10,
+    });
 };
 
 // get 5 most popular users
@@ -55,30 +69,31 @@ const getLimitedPopularUsers = async () => {
     const response = await client.get(USER_ENDPOINTS.POPULAR_USERS, {
         params: {
             page: 1,
-            limit: 5
+            limit: 5,
         },
     });
     return response?.data?.data || [];
 };
 
-const updateUser = async ({ userId, updatedUser }: { updatedUser: Partial<iUser>, userId: string; }) => {
-    if (!userId)
-        return;
+const updateUser = async ({
+    userId,
+    updatedUser,
+}: {
+    updatedUser: Partial<iUser>;
+    userId: string;
+}) => {
+    if (!userId) return;
     const response = await client.patch(USER_ENDPOINTS.UPDATE_ME, updatedUser);
     return response?.data?.data;
 };
 
 const followUser = async (userId: string) => {
-    if (!userId)
-        return;
+    if (!userId) return;
     const response = await client.post(`${USER_ENDPOINTS.FOLLOW}/${userId}`);
     return response?.data;
 };
 
-export const useUser = (
-    userId = ""
-) => {
-
+export const useUser = (userId = "") => {
     const setPreviousUser = useSetRecoilState(prevUserState);
 
     const queryClient = useQueryClient();
@@ -95,33 +110,45 @@ export const useUser = (
         staleTime: LONG_STATE_TIME,
         retry: 1,
         onError: () => {
-            localStorage.removeItem('accessToken');
+            localStorage.removeItem("accessToken");
         },
         onSuccess: (data: iUser | undefined) => {
             if (data) {
                 setPreviousUser(data);
             }
+        },
+    });
+
+    const getUserQuery = useQuery<iUser | undefined>(
+        [USER_QUERY.GET_USER, userId],
+        getUser,
+        {
+            staleTime: LONG_STATE_TIME,
+            retry: 5,
         }
-    });
+    );
 
-    const getUserQuery = useQuery<iUser | undefined>([USER_QUERY.GET_USER, userId], getUser, {
-        staleTime: LONG_STATE_TIME,
-        retry: 5
-    });
+    const getPopularUsersQuery = useInfiniteQuery(
+        USER_QUERY.GET_POPULAR_USERS,
+        getPopularUsers,
+        generateInfinityQueryListConfig(ONE_HOUR, 10)
+    );
 
-    const getPopularUsersQuery = useInfiniteQuery(USER_QUERY.GET_POPULAR_USERS, getPopularUsers, generateInfinityQueryListConfig());
-
-    const getLimitedPopularUsersQuery = useQuery<iUser[] | undefined>(USER_QUERY.GET_LIMITED_POPULAR_USERS, getLimitedPopularUsers, {
-        staleTime: LONG_STATE_TIME,
-        retry: 5
-    });
+    const getLimitedPopularUsersQuery = useQuery<iUser[] | undefined>(
+        USER_QUERY.GET_LIMITED_POPULAR_USERS,
+        getLimitedPopularUsers,
+        {
+            staleTime: LONG_STATE_TIME,
+            retry: 5,
+        }
+    );
 
     const updateUserMutation = useMutation(updateUser, {
         onSuccess: () => {
             queryClient.invalidateQueries(USER_QUERY.GET_USER);
             queryClient.invalidateQueries(USER_QUERY.GET_ME);
             queryClient.invalidateQueries(TWEET_QUERY.GET_MY_TWEETS);
-        }
+        },
     });
 
     const followUserMutation = useMutation(followUser, {
@@ -129,7 +156,7 @@ export const useUser = (
             invalidateQueriesAfterSuccess();
             if (userId)
                 queryClient.invalidateQueries([USER_QUERY.GET_USER, userId]);
-        }
+        },
     });
 
     const user: iUser = new UserModel(getMeQuery.data).getData();
@@ -143,6 +170,6 @@ export const useUser = (
         getLimitedPopularUsersQuery,
 
         updateUserMutation,
-        followUserMutation
+        followUserMutation,
     };
 };

@@ -1,18 +1,20 @@
 import styled from "styled-components";
 
-export const Wrapper = styled('form') <{
+export const Wrapper = styled("form")<{
     shouldIndent?: boolean;
 }>`
-    ${props => !props.shouldIndent ? '' : 'transform: translateX(4rem); width: 94%;margin: 1rem 0;'}
+    ${(props) =>
+        !props.shouldIndent
+            ? ""
+            : "transform: translateX(4rem); width: 94%;margin: 1rem 0;"}
     display: flex;
     gap: 1.6rem;
 `;
 
-
 export const InputWrapper = styled.div`
     background: #fafafa;
     border: 1px solid #f2f2f2;
-    border-radius: .8rem;
+    border-radius: 0.8rem;
     flex: 1;
     position: relative;
     display: flex;
@@ -30,7 +32,7 @@ export const Input = styled.input`
     color: var(--gray-4);
     width: 95%;
     background: #fafafa;
-    padding: .75rem 0;
+    padding: 0.75rem 0;
 `;
 
 export const FileInput = styled.input`
@@ -39,8 +41,8 @@ export const FileInput = styled.input`
 
 export const FileInputLabel = styled.label`
     cursor: pointer;
-    
-    svg{
+
+    svg {
         --size: 1.5rem;
         width: var(--size);
         height: var(--size);
@@ -63,13 +65,14 @@ export const CommentImageCancelButton = styled.button`
     top: 1rem;
     right: 1rem;
     cursor: pointer;
-    
-    svg{
+
+    svg {
         --size: 1.5rem;
         width: var(--size);
         height: var(--size);
     }
 `;
 
-export const InputLoading = styled.div`
-`;
+export const InputLoading = styled.div``;
+
+export const EmojiDivStyled = styled.div``;

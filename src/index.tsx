@@ -12,6 +12,7 @@ import "draft-js/dist/Draft.css";
 import "react-datepicker/dist/react-datepicker.css";
 import "react-virtualized/styles.css";
 import "react-toastify/dist/ReactToastify.css";
+import "antd/dist/antd.css";
 import "./index.css";
 import App from "./App";
 import { RecoilRoot } from "recoil";
@@ -37,6 +38,7 @@ ReactDOM.render(
                             <ToastContainer
                                 position="bottom-left"
                                 hideProgressBar
+                                autoClose={5000}
                             />
                         </RecoilRoot>
                     </QueryClientProvider>

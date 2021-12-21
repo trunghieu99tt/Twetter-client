@@ -26,3 +26,8 @@ export interface iCreateTweetDTO {
     tags?: string[];
     media?: string[];
 }
+
+export interface iTweetReport {
+    userId: string;
+    reportTime: Date;
+}

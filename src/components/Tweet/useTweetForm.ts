@@ -65,9 +65,7 @@ export const useTweetForm = ({ tweet }: Props) => {
 
     const onSubmitSuccess = () => {
         const initialHashtags = tweet?.tags || [];
-
         const { hashtags: newHashtags } = extractMetadata(body || "") || [];
-
         updateHashTags(initialHashtags, newHashtags as string[]);
         resetAll();
     };

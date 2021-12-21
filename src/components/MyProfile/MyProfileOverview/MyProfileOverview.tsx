@@ -32,6 +32,7 @@ import {
     Main,
     Info,
     Wrapper,
+    UserName,
     MainInfo,
     CoverPhoto,
     RightButton,
@@ -146,6 +147,7 @@ const MyProfileOverview = ({ user }: Props) => {
             <Container>
                 <Main>
                     <ImageWithUpdater
+                        shouldHaveUpdate={isMe}
                         data={newAvatar}
                         name="coverPhoto"
                         isDisabledUpdate={updating}
@@ -175,6 +177,7 @@ const MyProfileOverview = ({ user }: Props) => {
                             </FollowersCounter>
                         </MainInfo>
                         <SecondaryInfo>
+                            <UserName>@{user?.username}</UserName>
                             <Bio>{user?.bio}</Bio>
                         </SecondaryInfo>
                     </Info>

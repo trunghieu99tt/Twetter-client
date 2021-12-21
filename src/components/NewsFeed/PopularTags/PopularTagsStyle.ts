@@ -1,12 +1,12 @@
 import styled from "styled-components";
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
 
 export const Wrapper = styled.div``;
 
 export const TagWrapper = styled(Link)`
     margin-bottom: 2.5rem;
     display: block;
-    color: var(--blue-1)
+    color: var(--blue-1);
 `;
 
 export const TagName = styled.p`

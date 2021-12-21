@@ -11,7 +11,7 @@ import { useHistory } from "react-router";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { callState, roomsHaveCallState } from "states/call.state";
 import { newMessageState } from "states/message.state";
-import { joinDMRoomState } from "states/room.state";
+import { connectedRoomsState, joinRoomState } from "states/room.state";
 import { connectedUsersState, prevUserState } from "states/user.state";
 import { Socket } from "./socket";
 
@@ -34,7 +34,8 @@ const useSocket = () => {
     const socketInstance = useRef(null);
     const previousUser = useRecoilValue(prevUserState);
     const [call, setCall] = useRecoilState(callState);
-    const [joinDMRoom, setJoinDMRoom] = useRecoilState(joinDMRoomState);
+    const joinRoom = useRecoilValue(joinRoomState);
+    const setConnectedRooms = useSetRecoilState(connectedRoomsState);
     const [newMessage, setNewMessage] = useRecoilState(newMessageState);
     const setConnectedUsers = useSetRecoilState(connectedUsersState);
     const setRoomsHaveCall = useSetRecoilState(roomsHaveCallState);
@@ -61,10 +62,10 @@ const useSocket = () => {
     }, [user]);
 
     useEffect(() => {
-        if (joinDMRoom && joinDMRoom?.userIds && socketInstance?.current) {
-            (socketInstance.current as any).emit("joinDmRoom", joinDMRoom);
+        if (joinRoom && joinRoom?.owner && socketInstance?.current) {
+            (socketInstance.current as any).emit("newDMRoom", joinRoom);
         }
-    }, [joinDMRoom]);
+    }, [joinRoom]);
 
     useEffect(() => {
         if (
@@ -72,7 +73,6 @@ const useSocket = () => {
                 (newMessage && newMessage?.file)) &&
             socketInstance?.current
         ) {
-            console.log("newMessage", newMessage);
             (socketInstance.current as any).emit("newMessage", newMessage);
         }
     }, [newMessage]);
@@ -124,7 +124,6 @@ const useSocket = () => {
         });
 
         socket.on("newNotification", (res: any) => {
-            console.log(`res`, res);
             showNotificationToast(res);
             spawnNotification(
                 res.text,
@@ -135,6 +134,12 @@ const useSocket = () => {
             queryClient.invalidateQueries(
                 NOTIFICATION_QUERIES.GET_NOTIFICATIONS
             );
+        });
+
+        socket.on("newDMRoom", (res: any) => {
+            const newRoomId = res._id;
+            setConnectedRooms((prev) => [...(prev || []), res]);
+            history.push(`/chat/${newRoomId}`);
         });
     };
     return {};

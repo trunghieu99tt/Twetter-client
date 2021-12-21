@@ -1,11 +1,13 @@
+import { useNotify } from "@talons/useNotify";
 import { useUpload } from "@talons/useUpload";
 import { useUser } from "@talons/useUser";
+import { iNotificationDTO } from "@type/notify.types";
 import { iRoom } from "@type/room.types";
 import { iUser } from "@type/user.types";
 import { ChangeEvent, useEffect, useState } from "react";
 import { useHistory } from "react-router";
 import { useRecoilValue, useSetRecoilState } from "recoil";
-import { connectedRoomsState, joinDMRoomState } from "states/room.state";
+import { connectedRoomsState, joinRoomState } from "states/room.state";
 
 type LIST_TYPE = "followers" | "following" | "";
 type MODAL_TYPE = "list_user" | "update_info" | "";
@@ -16,13 +18,14 @@ type Props = {
 
 export const useMyProfileOverview = ({ user }: Props) => {
     const connectedRooms = useRecoilValue(connectedRoomsState);
-    const setJoinRoomState = useSetRecoilState(joinDMRoomState);
+    const setJoinRoomState = useSetRecoilState(joinRoomState);
     const {
         user: currentUser,
         followUserMutation,
         updateUserMutation,
     } = useUser();
     const { uploadImage } = useUpload();
+    const { createNotificationAction } = useNotify();
     const history = useHistory();
 
     const [listType, setListType] = useState<LIST_TYPE>("");
@@ -103,7 +106,10 @@ export const useMyProfileOverview = ({ user }: Props) => {
         if (room) {
             history.push(`/chat/${room._id}`);
         } else {
-            setJoinRoomState({ userIds });
+            setJoinRoomState({
+                owner: currentUser._id,
+                members: [currentUser._id, userId],
+            });
         }
     };
 
@@ -112,8 +118,29 @@ export const useMyProfileOverview = ({ user }: Props) => {
         closeModal();
     }, [user]);
 
-    const updateFollowStatus = (userId: string) =>
-        followUserMutation.mutate(userId);
+    const updateFollowStatus = (userId: string) => {
+        followUserMutation.mutate(userId, {
+            onSuccess: (res) => {
+                if (res?.statusCode === 200) {
+                    const didCurrentUserFollowed = currentUser?.following?.some(
+                        (u) => u._id === userId
+                    );
+
+                    if (!didCurrentUserFollowed) {
+                        // create notification
+                        const msg: iNotificationDTO = {
+                            text: "followedYou",
+                            receivers: [userId],
+                            url: `/profile/${currentUser._id}`,
+                            type: "save",
+                        };
+
+                        createNotificationAction(msg);
+                    }
+                }
+            },
+        });
+    };
 
     const followed = currentUser?.following.some((u: iUser) => {
         return u._id === user._id;

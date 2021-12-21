@@ -23,6 +23,7 @@ interface Props {
     name: string;
     image: string;
     data: TImageInput;
+    shouldHaveUpdate: boolean;
     isDisabledUpdate: boolean;
     wrapperCustomStyles?: string;
 
@@ -37,6 +38,7 @@ const ImageWithUpdater = ({
     name,
     image,
     isDisabledUpdate,
+    shouldHaveUpdate,
     wrapperCustomStyles = "",
 
     onOk,
@@ -44,8 +46,6 @@ const ImageWithUpdater = ({
     onChange,
 }: Props) => {
     const { t } = useTranslation();
-    
-    
 
     return (
         <Wrapper customStyles={wrapperCustomStyles}>
@@ -55,40 +55,42 @@ const ImageWithUpdater = ({
                 </LoadingStyle>
             )}
             <MainImage src={image} alt={`${name}-${id}`} />
-            <UpdateWrapper>
-                {!data?.file ? (
-                    <React.Fragment>
-                        <label htmlFor={id}>
-                            <BiCamera />
-                            <span>{t("updateYourAvatar")}</span>
-                        </label>
-                        <input
-                            type="file"
-                            id={id}
-                            accept="image/*"
-                            onChange={onChange}
-                            name={name}
-                        />
-                    </React.Fragment>
-                ) : (
-                    <ActionButtons>
-                        {onOk && (
-                            <OkButton
-                                onClick={onOk}
+            {shouldHaveUpdate && (
+                <UpdateWrapper>
+                    {!data?.file ? (
+                        <React.Fragment>
+                            <label htmlFor={id}>
+                                <BiCamera />
+                                <span>{t("updateYourAvatar")}</span>
+                            </label>
+                            <input
+                                type="file"
+                                id={id}
+                                accept="image/*"
+                                onChange={onChange}
+                                name={name}
+                            />
+                        </React.Fragment>
+                    ) : (
+                        <ActionButtons>
+                            {onOk && (
+                                <OkButton
+                                    onClick={onOk}
+                                    disabled={isDisabledUpdate}
+                                >
+                                    {t("update")}
+                                </OkButton>
+                            )}
+                            <CancelButton
+                                onClick={onCancel}
                                 disabled={isDisabledUpdate}
                             >
-                                {t("update")}
-                            </OkButton>
-                        )}
-                        <CancelButton
-                            onClick={onCancel}
-                            disabled={isDisabledUpdate}
-                        >
-                            {t("cancel")}
-                        </CancelButton>
-                    </ActionButtons>
-                )}
-            </UpdateWrapper>
+                                {t("cancel")}
+                            </CancelButton>
+                        </ActionButtons>
+                    )}
+                </UpdateWrapper>
+            )}
         </Wrapper>
     );
 };

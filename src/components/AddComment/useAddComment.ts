@@ -7,7 +7,6 @@ import { iComment } from "@type/comments.types";
 import { iNotificationDTO } from "@type/notify.types";
 import { iTweet } from "@type/tweet.types";
 import { ChangeEvent, useState } from "react";
-import { useTranslation } from "react-i18next";
 import { v4 } from "uuid";
 
 type Props = {
@@ -16,9 +15,8 @@ type Props = {
 };
 
 export const useAddComment = ({ commentData, tweet }: Props) => {
-    const { t } = useTranslation();
-
     const [comment, setComment] = useState<string>("");
+    const [showEmoji, setShowEmoji] = useState<boolean>(false);
     const [media, setMedia] = useState<TMedia | null>(null);
 
     const { createNotificationAction } = useNotify();
@@ -97,16 +95,28 @@ export const useAddComment = ({ commentData, tweet }: Props) => {
         }
     };
 
+    const toggleShowEmoji = () => setShowEmoji(!showEmoji);
+
+    const hideEmoji = () => setShowEmoji(false);
+
+    const onEmojiClick = (event: any, emojiObject: any) => {
+        setComment(`${comment}${emojiObject.emoji}`);
+    };
+
     return {
         user,
         media,
         comment,
+        showEmoji,
         error: createCommentMutation.error,
         loading: createCommentMutation.isLoading,
 
+        hideEmoji,
         onSubmit,
+        onEmojiClick,
         onChangeFile,
         onCancelMedia,
         onChangeComment,
+        toggleShowEmoji,
     };
 };

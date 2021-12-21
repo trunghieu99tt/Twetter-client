@@ -70,7 +70,6 @@ const RoomList = () => {
                         const memberNames = members.map(
                             (member: iUser) => member.name
                         );
-                        console.log(`memberNames`, memberNames);
                         roomName =
                             memberNames.slice(0, 2).join(", ") +
                             (memberNames.length > 2 ? " and others" : "");

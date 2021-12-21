@@ -22,6 +22,7 @@ import AddComment from "@components/AddComment";
 import MediaViewer from "@components/MediaViewer";
 import { Carousel } from "react-responsive-carousel";
 import UserAvatarSmall from "@components/UserAvatarSmall";
+import CustomLinkPreview from "@components/CustomLinkPreview";
 
 // icons
 import { FiRefreshCw } from "react-icons/fi";
@@ -31,7 +32,7 @@ import {
     AiOutlineDelete,
     AiOutlineRetweet,
 } from "react-icons/ai";
-import CustomLinkPreview from "@components/CustomLinkPreview";
+import { MdReportProblem } from "react-icons/md";
 import { BiComment, BiBookmark, BiDotsVertical } from "react-icons/bi";
 
 // types
@@ -94,6 +95,7 @@ const Tweet = ({ tweet }: Props) => {
         onRetweet,
         onSaveTweet,
         onReactTweet,
+        onReportTweet,
         onDeleteTweet,
         toggleDropdown,
         setModalUserList,
@@ -191,19 +193,21 @@ const Tweet = ({ tweet }: Props) => {
                 )}
                 <Header>
                     <AuthorWrapper>
-                        <Link to={`/profile/${tweet.author._id}`}>
+                        <Link to={`/profile/${tweet?.author?._id}`}>
                             <UserAvatarSmall user={tweet?.author} />
                         </Link>
                         <div>
-                            <Link to={`/profile/${tweet.author._id}`}>
-                                <AuthorName>{tweet.author.name}</AuthorName>
+                            <Link to={`/profile/${tweet?.author?._id}`}>
+                                <AuthorName>
+                                    {tweet?.author?.name || ""}
+                                </AuthorName>
                             </Link>
                             <DateCreated>
                                 {calcDiffTimeString(tweet?.createdAt)}
                             </DateCreated>
                         </div>
                     </AuthorWrapper>
-                    {isAuthor && (
+                    {(isAuthor && (
                         <AuthorActions ref={dropdownRef}>
                             <DropdownButton onClick={toggleDropdown}>
                                 <BiDotsVertical />
@@ -220,6 +224,21 @@ const Tweet = ({ tweet }: Props) => {
                                     <AuthorAction onClick={onDeleteTweet}>
                                         <AiOutlineDelete />
                                         {t("delete")}
+                                    </AuthorAction>,
+                                ]}
+                            ></Dropdown>
+                        </AuthorActions>
+                    )) || (
+                        <AuthorActions ref={dropdownRef}>
+                            <DropdownButton onClick={toggleDropdown}>
+                                <BiDotsVertical />
+                            </DropdownButton>
+                            <Dropdown
+                                isVisible={visibleDropdown}
+                                items={[
+                                    <AuthorAction onClick={onReportTweet}>
+                                        <MdReportProblem />
+                                        {t("report")}
                                     </AuthorAction>,
                                 ]}
                             ></Dropdown>

@@ -44,7 +44,6 @@ const useSearch = () => {
 
     const onSubmit = async () => {
         const { data } = await requestSearch(query);
-        console.log(`data`, data);
         setResponse({
             type: query.category,
             data,

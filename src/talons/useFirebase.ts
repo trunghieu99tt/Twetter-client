@@ -23,7 +23,6 @@ const useFirebase = () => {
                 .put(blob)
                 .then(async (snapshot) => {
                     const url = await snapshot.ref.getDownloadURL();
-                    console.log(`url`, url);
                     setFileUrl(url);
                 })
                 .catch((error) => {

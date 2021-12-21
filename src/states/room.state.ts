@@ -19,7 +19,7 @@ export const connectedRoomSelector = selectorFamily({
         },
 });
 
-export const joinDMRoomState = atom<{ userIds: string[] } | null>({
-    key: "joinDMRoomState",
+export const joinRoomState = atom<{ owner: string; members: string[] } | null>({
+    key: "joinRoomState",
     default: null,
 });

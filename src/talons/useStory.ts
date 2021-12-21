@@ -96,7 +96,6 @@ export const useStory = () => {
             },
             {}
         );
-        console.log("groupStoryByUser: ", groupStoryByUser);
         setStories(groupStoryByUser);
     }, [storyList]);
 

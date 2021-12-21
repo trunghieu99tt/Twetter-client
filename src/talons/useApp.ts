@@ -17,6 +17,7 @@ export const useApp = () => {
         state: { screenSize },
         dispatch,
     } = useAppContext();
+
     const { width = 1920 } = useWindowSize();
 
     useEffect(() => {

@@ -42,7 +42,7 @@ const InfinityPeopleList = ({ query }: Props) => {
                 {users?.map((user: iUser) => (
                     <UserCard
                         user={user}
-                        key={`infinity-tweet-list-${user._id}`}
+                        key={`infinity-user-list-${user._id}`}
                     />
                 ))}
             </InfiniteScroll>

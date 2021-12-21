@@ -110,3 +110,7 @@ button:focus {
     font-size: 1.1rem;
     width: 2.7rem;
 }
+
+.infinite-scroll-component {
+    overflow: initial !important;
+}

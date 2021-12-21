@@ -1,24 +1,30 @@
-import { useEffect, useRef, useState } from "react";
+import { toast } from "react-toastify";
 import { useQueryClient } from "react-query";
 import { useTranslation } from "react-i18next";
+import { useEffect, useRef, useState } from "react";
+import { Modal } from "antd";
 
 // hooks
+import { useLocalStorage } from "@hooks/useLocalStorage";
 import { useOnClickOutside } from "@hooks/useOnClickOutside";
 
 // talons
 import { useNotify } from "@talons/useNotify";
 import { useTweets } from "@talons/useTweets";
 import { useComment } from "@talons/useComment";
+import { useHashtag } from "@talons/useHashtag";
+
+// utils
+import { extractMetadata } from "@utils/helper";
 
 // types
-import { iTweet } from "@type/tweet.types";
 import { iUser } from "@type/user.types";
+import { iTweet, iTweetReport } from "@type/tweet.types";
+import { iNotificationDTO } from "@type/notify.types";
 
 // constants
 import { USER_QUERY } from "constants/user.constants";
-import { iNotificationDTO } from "@type/notify.types";
-import { extractMetadata } from "@utils/helper";
-import { useHashtag } from "@talons/useHashtag";
+import { FIVE_MINUTES } from "constants/app.constants";
 
 type Props = {
     tweet: iTweet;
@@ -26,22 +32,26 @@ type Props = {
 
 type TUserList = "LIKED" | "SAVED" | "RETWEETED";
 
+const { confirm } = Modal;
+
 export const useTweet = ({ tweet }: Props) => {
     const { t } = useTranslation();
-
     const [urls, setUrls] = useState<string[]>([]);
     const [modalUserList, setModalUserList] = useState<TUserList | null>();
     const [visibleEditForm, setVisibleEditForm] = useState<boolean>(false);
     const [visibleDropdown, setVisibleDropdown] = useState<boolean>(false);
+
+    const [reports, setReports] = useLocalStorage("reports", {});
     const currentUser: iUser | undefined = useQueryClient().getQueryData(
         USER_QUERY.GET_ME
     );
 
     const {
+        retweetMutation,
         deleteTweetMutation,
         reactTweetMutation,
-        retweetMutation,
         saveTweetMutation,
+        reportTweetMutation,
     } = useTweets();
     const { createNotificationAction } = useNotify();
     const { tweetComments, totalTweetComments, fetchMoreTweetComment } =
@@ -99,10 +109,15 @@ export const useTweet = ({ tweet }: Props) => {
     const toggleDropdown = () => setVisibleDropdown((isVisible) => !isVisible);
 
     const onDeleteTweet = () => {
-        deleteTweetMutation.mutate(tweet._id, {
-            onSuccess: () => {
-                const initialTags = tweet?.tags || [];
-                updateHashTags(initialTags, []);
+        confirm({
+            title: t("deleteTweetConfirmation"),
+            onOk: () => {
+                deleteTweetMutation.mutate(tweet._id, {
+                    onSuccess: () => {
+                        const initialTags = tweet?.tags || [];
+                        updateHashTags(initialTags, []);
+                    },
+                });
             },
         });
     };
@@ -166,6 +181,63 @@ export const useTweet = ({ tweet }: Props) => {
 
     const onCloseModalUserList = () => setModalUserList(null);
 
+    const findReportRecord = (): iTweetReport | null => {
+        if (tweet?._id) {
+            const tweetReports = reports[tweet?._id] || [];
+            return tweetReports.find(
+                (report: iTweetReport) => report.userId === currentUser?._id
+            );
+        }
+
+        return null;
+    };
+
+    const updateUserLastTimeReportedCurrentTweet = () => {
+        const tweetReports = reports[tweet._id] || [];
+        let newTweetReports = [...tweetReports];
+        if (tweetReports?.length === 0) {
+            newTweetReports.push({
+                userId: currentUser?._id,
+                reportTime: new Date().toISOString(),
+            });
+        } else if (tweetReports?.length > 0) {
+            newTweetReports = tweetReports.map((report: iTweetReport) => {
+                if (report.userId === currentUser?._id) {
+                    return {
+                        ...report,
+                        reportTime: new Date().toISOString(),
+                    };
+                }
+                return report;
+            });
+        }
+        reports[tweet._id] = newTweetReports;
+        setReports(reports);
+    };
+
+    const onReportTweet = () => {
+        const userReportTweetRecord = findReportRecord();
+        if (userReportTweetRecord) {
+            const lastTimeReported = userReportTweetRecord.reportTime;
+            // if user reported this tweet in last 5 minutes, show error
+            if (
+                +Date.now() - new Date(lastTimeReported).getTime() <
+                FIVE_MINUTES
+            ) {
+                toast.error(t("reportRestriction"));
+                return;
+            }
+        } else {
+            reportTweetMutation.mutate(tweet._id, {
+                onSuccess: () => {
+                    toast.info(t("reportSuccess"));
+                    // update last time reported in local storage
+                    updateUserLastTimeReportedCurrentTweet();
+                },
+            });
+        }
+    };
+
     useEffect(() => {
         if (tweet?.content) {
             updateUrls(tweet.content);
@@ -196,6 +268,7 @@ export const useTweet = ({ tweet }: Props) => {
         onRetweet,
         onSaveTweet,
         onReactTweet,
+        onReportTweet,
         onDeleteTweet,
         toggleDropdown,
         setModalUserList,

@@ -23,6 +23,7 @@ const useNewRoomModal = () => {
         description: "",
         members: [],
     });
+    const [loading, setLoading] = useState<boolean>(false);
     const [media, setMedia] = useState<TMedia | null>(null);
     const [suggestion, setSuggestion] = useState<iUser[]>([]);
     const [newGroupChatUserList, setNewGroupUserList] = useState<iUser[]>([]);
@@ -97,6 +98,8 @@ const useNewRoomModal = () => {
                 return;
             }
 
+            setLoading(true);
+
             let image: string = "";
             if (media?.file) {
                 image = await uploadSingleMedia(media.file);
@@ -109,9 +112,12 @@ const useNewRoomModal = () => {
                     newGroupChatUserList?.map((user: iUser) => user._id) || [],
             };
 
-            createNewRoom(newRoom);
-        } catch (error) {
+            await createNewRoom(newRoom);
+            setLoading(false);
+        } catch (error: any) {
+            setLoading(false);
             console.log("error: ", error);
+            toast.error(error.message);
         }
     };
 
@@ -123,6 +129,7 @@ const useNewRoomModal = () => {
 
     return {
         media,
+        loading,
         suggestion,
         newGroupChatUserList,
 

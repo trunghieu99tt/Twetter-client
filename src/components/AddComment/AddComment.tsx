@@ -1,16 +1,26 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
+import EmojiPicker from "emoji-picker-react";
 
 // talons
 import { useAddComment } from "./useAddComment";
 
+// hooks
+import { useOnClickOutside } from "@hooks/useOnClickOutside";
+
 // components
 import { Spinner2 } from "@components/Loaders";
+import MediaViewer from "@components/MediaViewer";
 import UserAvatarSmall from "@components/UserAvatarSmall";
+
+// types
+import { iTweet } from "@type/tweet.types";
+import { iComment } from "@type/comments.types";
 
 // icons
 import { BsCardImage } from "react-icons/bs";
 import { ImCancelCircle } from "react-icons/im";
+import { HiOutlineEmojiHappy } from "react-icons/hi";
 
 // styles
 import {
@@ -21,12 +31,10 @@ import {
     InputLoading,
     InputWrapper,
     FileInputLabel,
+    EmojiDivStyled,
     CommentImageWrapper,
     CommentImageCancelButton,
 } from "./AddCommentStyle";
-import MediaViewer from "@components/MediaViewer";
-import { iTweet } from "@type/tweet.types";
-import { iComment } from "@type/comments.types";
 
 type Props = {
     tweet: iTweet;
@@ -40,15 +48,23 @@ const AddComment = ({ addCommentRef, tweet, commentData }: Props) => {
         media,
         comment,
         loading,
+        showEmoji,
 
         onSubmit,
+        hideEmoji,
         onChangeFile,
+        onEmojiClick,
         onCancelMedia,
         onChangeComment,
+        toggleShowEmoji,
     } = useAddComment({
         tweet,
         commentData,
     });
+
+    const emojiRef = React.useRef<HTMLDivElement>(null);
+
+    useOnClickOutside(emojiRef, hideEmoji);
 
     const { t } = useTranslation();
 
@@ -72,6 +88,22 @@ const AddComment = ({ addCommentRef, tweet, commentData }: Props) => {
                             <Spinner2 customStyles="--size: 20px" />
                         </InputLoading>
                     )}
+                    <EmojiDivStyled ref={emojiRef}>
+                        {showEmoji && (
+                            <EmojiPicker
+                                onEmojiClick={onEmojiClick}
+                                pickerStyle={{
+                                    position: "absolute",
+                                    bottom: "0",
+                                    transform: "translateY(-15%)",
+                                    boxShadow: "none    ",
+                                }}
+                            />
+                        )}
+                        <button type="button" onClick={toggleShowEmoji}>
+                            <HiOutlineEmojiHappy />
+                        </button>
+                    </EmojiDivStyled>
                     <FileInputLabel htmlFor={fileInputId}>
                         <BsCardImage />
                     </FileInputLabel>
