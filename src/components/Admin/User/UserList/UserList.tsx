@@ -153,7 +153,13 @@ const UserList = ({ classes: propsClasses }: Props) => {
             render: (text: any, record: any) => (
                 <Space size="middle">
                     <button className={cn(classes.btn, classes.view)}>
-                        <Link to={`/profile/${record.id}`}>View</Link>
+                        <a
+                            href={`/profile/${record.id}`}
+                            target={"_blank"}
+                            rel="noreferrer"
+                        >
+                            View
+                        </a>
                     </button>
                     <button
                         className={cn(classes.btn, classes.delete)}

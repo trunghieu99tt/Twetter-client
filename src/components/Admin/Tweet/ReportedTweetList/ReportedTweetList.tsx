@@ -111,7 +111,7 @@ const TweetList = ({ classes: propsClasses }: Props) => {
                 <Space size="middle">
                     <button className={cn(classes.btn, classes.view)}>
                         <a
-                            href={`${process.env.REACT_APP_MAIN_APP_URL}/tweet/${record.id}`}
+                            href={`/tweet/${record.id}`}
                             target="_blank"
                             rel="noopener noreferrer"
                         >
