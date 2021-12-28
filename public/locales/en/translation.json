@@ -145,5 +145,6 @@
     "no": "no",
     "followedYou": "followed you",
     "updateYourAvatar": "Update your avatar",
-    "updateCoverPhoto": "Update cover photo"
+    "updateCoverPhoto": "Update cover photo",
+    "adminAuthentication": "Login as admin"
 }

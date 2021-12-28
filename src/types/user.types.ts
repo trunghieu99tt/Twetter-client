@@ -2,6 +2,7 @@ export interface iUser {
     bio: string;
     _id: string;
     name: string;
+    role: string;
     email: string;
     gender: number;
     avatar: string;

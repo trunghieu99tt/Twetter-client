@@ -72,6 +72,10 @@ input[type="file"] {
     --box-shadow-1: 0 10px 25px 0 rgb(27 44 113 / 15%);
 
     --border-1: 1px solid var(--gray-5);
+
+    --blue: #287cf2;
+    --bg-1: #eff4ff;
+    --box-shadow-2: 0px 5px 25px 2px rgb(40 124 242 / 38%);
 }
 
 body {

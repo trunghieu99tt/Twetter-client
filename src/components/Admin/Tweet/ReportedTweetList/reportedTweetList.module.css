@@ -1,0 +1,20 @@
+.btn {
+    border: none;
+    outline: none;
+    border-radius: 10px;
+    height: 4rem;
+    color: #fff;
+    font-weight: 600;
+}
+
+.btn.delete {
+    background-color: red;
+}
+
+.btn.view {
+    background: var(--blue);
+}
+
+.btn.view a {
+    color: #fff;
+}

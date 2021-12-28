@@ -145,5 +145,6 @@
     "no": "Không",
     "followedYou": "Đã theo dõi bạn",
      "updateYourAvatar": "Cập nhật ảnh đại diện",
-    "updateCoverPhoto": "Cập nhật ảnh bìa"
+    "updateCoverPhoto": "Cập nhật ảnh bìa",
+    "adminAuthentication": "Đăng nhập dưới quyền admin"
 }

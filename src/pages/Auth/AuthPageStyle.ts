@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 
 export const Wrapper = styled.div`
@@ -11,11 +12,10 @@ export const Wrapper = styled.div`
 export const Main = styled.div`
     display: flex;
     max-width: 70%;
-    border-radius: .8rem;
+    border-radius: 0.8rem;
     overflow: hidden;
     box-shadow: 0px 0px 10px rgb(0 0 0 / 10%);
 `;
-
 
 export const AuthCoverPhoto = styled.img`
     width: 100%;
@@ -33,4 +33,10 @@ export const Heading = styled.h1`
     font-size: 2.5rem;
     font-weight: bold;
     text-align: center;
-`
+`;
+
+export const HeadToAdminAuth = styled(Link)`
+    position: absolute;
+    bottom: 2rem;
+    right: 2rem;
+`;

@@ -1,0 +1,10 @@
+.root {
+    display: flex;
+    justify-content: space-between;
+}
+
+.child {
+    width: 49%;
+    padding: 2rem;
+    border-right: 1px solid #e6e6e6;
+}
