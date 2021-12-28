@@ -1,0 +1,125 @@
+.root {
+    height: 100vh;
+    width: 350px;
+    max-width: 100vw;
+    padding: 20px;
+    background: #fff;
+    color: #fff;
+    position: sticky;
+    top: 0;
+    transition: all 0.2s;
+    overflow: auto;
+}
+
+.root.hide {
+    width: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+.mask {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.2);
+    z-index: 3;
+}
+
+.toggleBtn {
+    position: absolute;
+    padding: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    border: none;
+    top: 1rem;
+    left: 2rem;
+    width: 5rem;
+    height: 5rem;
+    z-index: 4;
+    font-size: 1.6rem;
+}
+
+.LogoRoot {
+    margin: 0;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.LogoImg {
+    filter: invert(1);
+    object-fit: contain;
+}
+
+.item {
+    display: flex;
+    min-height: 44px;
+    border-radius: 4px;
+    margin-bottom: 0.5rem;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 15px;
+    padding: 10px 16px;
+    overflow: hidden;
+    width: 100%;
+    color: #000;
+    transition: all 0.2s;
+    border-radius: 1rem;
+}
+
+.itemRoot,
+.item:hover {
+    background-color: var(--blue);
+    color: #fff;
+}
+
+.item:hover > img {
+    filter: invert(1);
+}
+
+.itemName {
+    font-size: 1.5rem;
+}
+
+.btn {
+    width: 100%;
+    border: none;
+    background-color: transparent;
+    margin-top: 1rem;
+}
+
+.itemActive {
+    color: #fff !important;
+    border-radius: 4px !important;
+    background-color: var(--blue);
+}
+
+.itemActive .item {
+    color: #fff;
+}
+
+.itemActive .item img {
+    filter: invert(1);
+}
+
+.icon svg {
+    width: 2rem;
+    height: 2rem;
+}
+
+.icon {
+    width: 25px;
+    height: 25px;
+}
+
+@media (max-width: 1025px) {
+    .root {
+        position: fixed;
+        left: 0;
+        height: 100%;
+        z-index: 3;
+    }
+}

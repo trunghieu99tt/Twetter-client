@@ -64,3 +64,5 @@ export type TMedia = {
 export type TMapExistence = {
     [key: string]: boolean;
 };
+
+export type FORM_TYPE = "ADD" | "EDIT" | "VIEW";

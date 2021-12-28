@@ -8,5 +8,10 @@ export const prevUserState = atom<iUser | null>({
 
 export const connectedUsersState = atom<iUser[] | null>({
     key: "connectedUsers",
-    default: null
-})
+    default: null,
+});
+
+export const adminState = atom<iUser | null>({
+    key: "admin",
+    default: null,
+});

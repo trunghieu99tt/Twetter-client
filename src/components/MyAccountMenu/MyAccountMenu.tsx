@@ -30,6 +30,9 @@ const MyAccountMenu = () => {
     const [visibleDropdown, setVisibleDropdown] = useState<boolean>(false);
 
     const { user } = useUser();
+
+    console.log(`user`, user);
+
     const { handleLogout } = useAuth({});
 
     const myAccountControllerRef =
@@ -46,6 +49,10 @@ const MyAccountMenu = () => {
                 <p>{t("profile")}</p>
             </Link>,
             <LanguageSelector />,
+            ...((user?.role === "admin" && [
+                <Link to="/users">Go to dashboard</Link>,
+            ]) ||
+                []),
             <LogoutButton onClick={handleLogout}>
                 <RiLogoutBoxRLine></RiLogoutBoxRLine>
                 <p>{t("logout")}</p>

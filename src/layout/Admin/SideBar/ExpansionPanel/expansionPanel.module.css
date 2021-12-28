@@ -1,0 +1,42 @@
+.root {
+    width: 100%;
+    margin-bottom: 1.5rem;
+}
+
+.panel {
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    padding: 0 20px;
+}
+
+.item {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 10px;
+}
+
+.icon {
+    transform: translateY(-5px);
+}
+
+.btn {
+    width: 100%;
+    border: none;
+    background-color: #287cf2;
+}
+
+.btn:hover {
+    /* background-color: rgba(255, 255, 255, 0.08); */
+    /* background-color: rgba(255, 255, 255, 0.08); */
+}
+
+.name {
+    font-size: 1.4rem;
+    font-weight: 500;
+}
+
+.iconArrow {
+    margin-left: auto;
+}

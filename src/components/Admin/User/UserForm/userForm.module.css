@@ -1,0 +1,44 @@
+.root {
+    padding: 5rem 2.5rem;
+    background: var(--bg-1);
+    border-radius: 10px;
+}
+
+.title {
+    text-align: center;
+    margin-bottom: 3rem;
+    padding: 2rem 0;
+    background: #284671;
+    color: #fff;
+    font-weight: 600;
+    border-radius: 10px;
+    box-shadow: 0px 10px 40px rgb(0 0 0 / 12%);
+}
+
+.form {
+    background-color: #fff;
+    padding: 3rem 2rem 2rem 3rem !important;
+    border-radius: 1rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(50rem, 1fr));
+}
+
+.btnGroup {
+    display: flex;
+    gap: 2rem;
+    justify-content: center;
+    grid-column: 1/-1;
+}
+
+.btn {
+    border: none;
+    padding: 1rem 3rem;
+    background: var(--blue);
+    color: #fff;
+    font-size: 1.4rem;
+    font-weight: 600;
+    border-radius: 5px;
+    box-shadow: var(--box-shadow-1);
+    transition: all 0.2s;
+    margin-top: 2rem;
+}

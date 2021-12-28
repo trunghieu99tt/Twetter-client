@@ -25,9 +25,6 @@ module.exports = {
         },
     },
     babel: {
-        plugins: [
-            ["babel-plugin-styled-components"],
-            ["transform-remove-console"],
-        ],
+        plugins: [["babel-plugin-styled-components"]],
     },
 };

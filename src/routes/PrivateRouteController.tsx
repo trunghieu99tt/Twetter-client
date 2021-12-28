@@ -35,6 +35,12 @@ import { useRecoilValue } from "recoil";
 import { callState } from "states/call.state";
 import CallModal from "@components/Call/CallModal";
 import AgoraRTC from "agora-rtc-sdk-ng";
+import UserList from "@components/Admin/User/UserList";
+import UserForm from "@components/Admin/User/UserForm";
+import ReportedTweetList from "@components/Admin/Tweet/ReportedTweetList";
+import UserStatistic from "@components/Admin/User/UserStatistic";
+import TweetStatistic from "@components/Admin/Tweet/TweetStatistic";
+import AdminPrivateRoute from "@components/routes/PrivateAdminRoute";
 
 const PrivateRouteController = () => {
     const storyTalons = useStory();
@@ -93,6 +99,35 @@ const PrivateRouteController = () => {
                 <PrivateRoute path="/profile/:userId" component={MyProfile} />
                 <PrivateRoute path="/explore/:page" component={Explore} />
                 <PrivateRoute path="/tweet/:tweetId" component={TweetDetail} />
+
+                {/* ----------------- USER ----------------------- */}
+                <AdminPrivateRoute exact path="/users" component={UserList} />
+                <AdminPrivateRoute
+                    exact
+                    path="/user/add"
+                    component={() => <UserForm view="ADD" />}
+                />
+
+                {/* ----------------- TWEET ----------------------- */}
+                <AdminPrivateRoute
+                    exact
+                    path="/reported-tweets"
+                    component={ReportedTweetList}
+                />
+
+                {/* ----------------- STATISTIC ----------------------- */}
+                <AdminPrivateRoute
+                    exact
+                    path="/statistic/users"
+                    component={UserStatistic}
+                />
+
+                <AdminPrivateRoute
+                    exact
+                    path="/statistic/tweet"
+                    component={TweetStatistic}
+                />
+
                 <Route component={NotFound} />
             </Switch>
         </React.Fragment>

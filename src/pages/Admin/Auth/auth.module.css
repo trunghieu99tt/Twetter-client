@@ -1,0 +1,23 @@
+.root {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: #232944;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.form {
+    background: #fff;
+    padding: 5rem !important;
+    padding-bottom: 2.5rem !important;
+    border-radius: 5px;
+}
+
+.title {
+    text-align: center;
+    margin-bottom: 2.5rem;
+}
