@@ -63,6 +63,7 @@ const MyProfileOverview = ({ user }: Props) => {
         followerOrFollowingList,
 
         onGoChat,
+        reportUser,
         closeModal,
         showFollowers,
         showFollowing,
@@ -197,10 +198,18 @@ const MyProfileOverview = ({ user }: Props) => {
                             {rightButtonContent}
                         </RightButton>
                         {!isMe && (
-                            <SendMessageBtn onClick={() => onGoChat(user._id)}>
-                                <AiOutlineMessage />
-                                {t("sendMessage")}
-                            </SendMessageBtn>
+                            <React.Fragment>
+                                <SendMessageBtn
+                                    onClick={() => onGoChat(user._id)}
+                                >
+                                    <AiOutlineMessage />
+                                    {t("sendMessage")}
+                                </SendMessageBtn>
+                                <SendMessageBtn onClick={reportUser}>
+                                    <AiOutlineMessage />
+                                    {t("reportUser")}
+                                </SendMessageBtn>
+                            </React.Fragment>
                         )}
                     </RightButtons>
                 </Main>

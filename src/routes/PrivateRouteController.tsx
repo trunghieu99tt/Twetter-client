@@ -41,6 +41,7 @@ import ReportedTweetList from "@components/Admin/Tweet/ReportedTweetList";
 import UserStatistic from "@components/Admin/User/UserStatistic";
 import TweetStatistic from "@components/Admin/Tweet/TweetStatistic";
 import AdminPrivateRoute from "@components/routes/PrivateAdminRoute";
+import UserView from "@components/Admin/User/UserView";
 
 const PrivateRouteController = () => {
     const storyTalons = useStory();
@@ -102,6 +103,11 @@ const PrivateRouteController = () => {
 
                 {/* ----------------- USER ----------------------- */}
                 <AdminPrivateRoute exact path="/users" component={UserList} />
+                <AdminPrivateRoute
+                    exact
+                    path="/user/view/:id"
+                    component={UserView}
+                />
                 <AdminPrivateRoute
                     exact
                     path="/user/add"

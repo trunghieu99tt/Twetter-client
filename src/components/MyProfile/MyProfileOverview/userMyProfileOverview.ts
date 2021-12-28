@@ -8,6 +8,8 @@ import { ChangeEvent, useEffect, useState } from "react";
 import { useHistory } from "react-router";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import { connectedRoomsState, joinRoomState } from "states/room.state";
+import { useLocalStorage } from "@hooks/useLocalStorage";
+import { useReport } from "@talons/useReport";
 
 type LIST_TYPE = "followers" | "following" | "";
 type MODAL_TYPE = "list_user" | "update_info" | "";
@@ -23,10 +25,12 @@ export const useMyProfileOverview = ({ user }: Props) => {
         user: currentUser,
         followUserMutation,
         updateUserMutation,
+        reportUserMutation,
     } = useUser();
-    const { uploadImage } = useUpload();
-    const { createNotificationAction } = useNotify();
     const history = useHistory();
+    const { uploadImage } = useUpload();
+    const { onReport } = useReport("user");
+    const { createNotificationAction } = useNotify();
 
     const [listType, setListType] = useState<LIST_TYPE>("");
     const [modalType, setModalType] = useState<MODAL_TYPE>("");
@@ -142,6 +146,11 @@ export const useMyProfileOverview = ({ user }: Props) => {
         });
     };
 
+    const reportUser = () => {
+        const callback = () => reportUserMutation.mutate(user._id);
+        onReport(user._id, currentUser._id, callback);
+    };
+
     const followed = currentUser?.following.some((u: iUser) => {
         return u._id === user._id;
     });
@@ -181,6 +190,7 @@ export const useMyProfileOverview = ({ user }: Props) => {
         updatingFollowStatus: followUserMutation.isLoading,
 
         onGoChat,
+        reportUser,
         closeModal,
         showFollowers,
         showFollowing,

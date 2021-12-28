@@ -33,7 +33,7 @@ export const Heading = styled.div`
 `;
 
 export const ChatList = styled.div`
-    max-height: 50rem;
+    max-height: 40rem;
     overflow: auto;
 `;
 

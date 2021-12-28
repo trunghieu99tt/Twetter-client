@@ -137,7 +137,7 @@ export const useTweetStatistics = () => {
         console.log(`tweet`, tweet);
         if (tweet?._id) {
             window.open(
-                `${process.env.REACT_APP_MAIN_APP_URL}/tweet/${tweet._id}`,
+                `/tweet/${tweet._id}`,
                 "_blank",
                 "noopener, noreferrer"
             );
@@ -148,7 +148,7 @@ export const useTweetStatistics = () => {
         const tag = findHashtag(param.name);
         if (tag?.name) {
             window.open(
-                `${process.env.REACT_APP_MAIN_APP_URL}/hashtags/${tag.name}`,
+                `/hashtags/${tag.name}`,
                 "_blank",
                 "noopener, noreferrer"
             );

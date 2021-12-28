@@ -1,6 +1,6 @@
 import client from "api/client";
 import { toast } from "react-toastify";
-import { useData } from "../useData";
+import { useData } from "../../useData";
 
 const useUser = () => {
     const { deleteOne, fetchList, fetchOne } = useData({
@@ -21,8 +21,8 @@ const useUser = () => {
     };
 
     const fetchUser = async (userID: string) => {
-        const response = await fetchOne(userID);
-        return response.data;
+        const response = await client.get(`/user/admin/${userID}`);
+        return response.data?.data;
     };
 
     const addUser = async (data: any) => {

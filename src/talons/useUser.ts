@@ -93,6 +93,13 @@ const followUser = async (userId: string) => {
     return response?.data;
 };
 
+const reportUser = async (userId: string) => {
+    const response = await client.patch(
+        `${USER_ENDPOINTS.REPORT_USER}/${userId}`
+    );
+    return response?.data;
+};
+
 export const useUser = (userId = "") => {
     const setPreviousUser = useSetRecoilState(prevUserState);
 
@@ -124,7 +131,7 @@ export const useUser = (userId = "") => {
         getUser,
         {
             staleTime: LONG_STATE_TIME,
-            retry: 5,
+            retry: 1,
         }
     );
 
@@ -159,6 +166,8 @@ export const useUser = (userId = "") => {
         },
     });
 
+    const reportUserMutation = useMutation(reportUser);
+
     const user: iUser = new UserModel(getMeQuery.data).getData();
 
     return {
@@ -171,5 +180,6 @@ export const useUser = (userId = "") => {
 
         updateUserMutation,
         followUserMutation,
+        reportUserMutation,
     };
 };

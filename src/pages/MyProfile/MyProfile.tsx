@@ -1,5 +1,5 @@
 import React from "react";
-import { useParams } from "react-router";
+import { useHistory, useParams } from "react-router";
 
 // talons
 import { useUser } from "@talons/useUser";
@@ -19,9 +19,11 @@ import MyProfileOverview from "@components/MyProfile/MyProfileOverview";
 // styles
 import { Sidebar, Wrapper, Main, Content } from "./MyProfileStyle";
 import { Container } from "@shared/style/sharedStyle.style";
+import { toast } from "react-toastify";
 
 const MyProfile = () => {
     const params: { userId: string } = useParams();
+    const history = useHistory();
     const { userId } = params;
 
     const { getProfileTweetsQuery } = useTweets(userId);
@@ -29,6 +31,13 @@ const MyProfile = () => {
 
     const userData = userId === me?._id ? me : getUserQuery.data;
     const isMe = userId === me?._id;
+
+    if (getUserQuery.error) {
+        const errorMessage = (getUserQuery as any)?.error?.response?.data
+            ?.error;
+        toast.error(errorMessage);
+        history.push("/");
+    }
 
     if (getUserQuery?.isLoading) {
         return <Spinner1 />;

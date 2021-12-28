@@ -115,14 +115,14 @@ const TweetList = ({ classes: propsClasses }: Props) => {
                             target="_blank"
                             rel="noopener noreferrer"
                         >
-                            View
+                            Xem tweet
                         </a>
                     </button>
                     <button
                         className={cn(classes.btn, classes.delete)}
                         onClick={() => onDelete(record.id)}
                     >
-                        Delete
+                        Xóa
                     </button>
                 </Space>
             ),

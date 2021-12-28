@@ -151,15 +151,9 @@ const UserList = ({ classes: propsClasses }: Props) => {
             title: "Thao tác",
             key: "action",
             render: (text: any, record: any) => (
-                <Space size="middle">
+                <Space size="small">
                     <button className={cn(classes.btn, classes.view)}>
-                        <a
-                            href={`/profile/${record.id}`}
-                            target={"_blank"}
-                            rel="noreferrer"
-                        >
-                            View
-                        </a>
+                        <Link to={`/user/view/${record.id}`}>Xem chi tiết</Link>
                     </button>
                     <button
                         className={cn(classes.btn, classes.delete)}
@@ -178,13 +172,13 @@ const UserList = ({ classes: propsClasses }: Props) => {
                         className={cn(classes.btn, classes.edit)}
                         onClick={() => resetPassword(record.email)}
                     >
-                        Reset password
+                        Reset mật khẩu
                     </button>
                     <button
                         className={cn(classes.btn, classes.delete)}
                         onClick={() => onDelete(record.id)}
                     >
-                        Delete
+                        Xóa<abbr title=""></abbr>
                     </button>
                 </Space>
             ),
