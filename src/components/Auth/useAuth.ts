@@ -59,7 +59,7 @@ const useAuth = ({ isRegister = false }: Props) => {
             if (accessToken) {
                 localStorage.setItem("accessToken", `"${accessToken}"`);
                 queryClient.invalidateQueries(USER_QUERY.GET_ME);
-                toast.success("Login successful");
+                toast.success("Login successfully");
                 history.push("/");
             } else {
                 toast.error("Login Failed");
@@ -96,6 +96,7 @@ const useAuth = ({ isRegister = false }: Props) => {
             if (accessToken) {
                 localStorage.setItem("accessToken", `"${accessToken}"`);
                 queryClient.invalidateQueries(USER_QUERY.GET_ME);
+                toast.success("Registered successfully");
                 history.push("/");
             }
         } catch (error: any) {

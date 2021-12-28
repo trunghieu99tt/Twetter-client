@@ -22,6 +22,7 @@ interface Props {
     id: string;
     name: string;
     image: string;
+    label: string;
     data: TImageInput;
     shouldHaveUpdate: boolean;
     isDisabledUpdate: boolean;
@@ -37,6 +38,7 @@ const ImageWithUpdater = ({
     data,
     name,
     image,
+    label,
     isDisabledUpdate,
     shouldHaveUpdate,
     wrapperCustomStyles = "",
@@ -61,7 +63,7 @@ const ImageWithUpdater = ({
                         <React.Fragment>
                             <label htmlFor={id}>
                                 <BiCamera />
-                                <span>{t("updateYourAvatar")}</span>
+                                <span>{label}</span>
                             </label>
                             <input
                                 type="file"

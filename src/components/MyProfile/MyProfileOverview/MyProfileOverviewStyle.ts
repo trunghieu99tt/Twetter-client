@@ -68,6 +68,11 @@ export const Bio = styled.p`
     line-height: 2.5rem;
 `;
 
+export const Birthday = styled.p`
+    font-size: 1.2rem;
+    color: var(--blue-1);
+`;
+
 export const RightButtons = styled.div`
     position: absolute;
     top: 2.5rem;

@@ -16,6 +16,7 @@ import ImageWithUpdater from "@components/ImageWithUpdater";
 // icons
 import { IoPersonAdd } from "react-icons/io5";
 import { AiOutlineMessage } from "react-icons/ai";
+import { FaBirthdayCake } from "react-icons/fa";
 
 // types
 import { iUser } from "@type/user.types";
@@ -40,6 +41,7 @@ import {
     FollowersCounter,
     RightButtons,
     SendMessageBtn,
+    Birthday,
 } from "./MyProfileOverviewStyle";
 import { Container } from "@shared/style/sharedStyle.style";
 
@@ -150,6 +152,7 @@ const MyProfileOverview = ({ user }: Props) => {
                         shouldHaveUpdate={isMe}
                         data={newAvatar}
                         name="coverPhoto"
+                        label={t("updateYourAvatar")}
                         isDisabledUpdate={updating}
                         id={`update-user-avatar-${user._id}`}
                         wrapperCustomStyles="margin-top: -7.5rem;"
@@ -179,6 +182,13 @@ const MyProfileOverview = ({ user }: Props) => {
                         <SecondaryInfo>
                             <UserName>@{user?.username}</UserName>
                             <Bio>{user?.bio}</Bio>
+                            <Birthday>
+                                <FaBirthdayCake />{" "}
+                                {user?.birthday &&
+                                    new Date(
+                                        user.birthday
+                                    ).toLocaleDateString()}
+                            </Birthday>
                         </SecondaryInfo>
                     </Info>
 

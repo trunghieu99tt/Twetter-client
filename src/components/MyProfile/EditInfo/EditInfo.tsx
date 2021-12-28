@@ -58,6 +58,7 @@ const EditInfo = ({ data, onCancel }: Props) => {
                         shouldHaveUpdate={true}
                         data={newCover}
                         name="coverPhoto"
+                        label={t("updateCoverPhoto")}
                         isDisabledUpdate={isDisabledUpdate}
                         image={newCover?.preview || data?.coverPhoto}
                         id={`update-cover-photo-${data._id}`}
@@ -71,6 +72,7 @@ const EditInfo = ({ data, onCancel }: Props) => {
                         shouldHaveUpdate={true}
                         data={newAvatar}
                         name="avatar"
+                        label={t("updateYourAvatar")}
                         isDisabledUpdate={isDisabledUpdate}
                         image={newAvatar?.preview || data?.avatar}
                         id={`update-avatar-photo-${data._id}`}

@@ -143,5 +143,7 @@
     "deleteTweetConfirmation": "Bạn có chắc muốn xóa tweet này không?",
     "yes": "Có",
     "no": "Không",
-    "followedYou": "Đã theo dõi bạn"
+    "followedYou": "Đã theo dõi bạn",
+     "updateYourAvatar": "Cập nhật ảnh đại diện",
+    "updateCoverPhoto": "Cập nhật ảnh bìa"
 }
