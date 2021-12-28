@@ -22,6 +22,8 @@ const useRooms = () => {
             if (room) {
                 const newConnectedRooms = [...(connectedRooms || []), room];
                 setConnectedRooms(newConnectedRooms);
+
+                return room;
             }
         } catch (error: any) {
             console.log("error create new room: ", error);

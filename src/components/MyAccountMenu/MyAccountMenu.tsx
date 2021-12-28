@@ -28,11 +28,7 @@ import LanguageSelector from "@components/LanguageSelector";
 const MyAccountMenu = () => {
     const { t } = useTranslation();
     const [visibleDropdown, setVisibleDropdown] = useState<boolean>(false);
-
     const { user } = useUser();
-
-    console.log(`user`, user);
-
     const { handleLogout } = useAuth({});
 
     const myAccountControllerRef =

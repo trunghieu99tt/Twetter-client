@@ -1,3 +1,4 @@
+import { useAppContext } from "@context/app.context";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
@@ -18,10 +19,18 @@ import {
 
 const SmallRoomList = () => {
     const { t } = useTranslation();
+    const { dispatch } = useAppContext();
 
     const [isChatOpen, setIsChatOpen] = useState(false);
 
     const toggleOpenChat = () => setIsChatOpen((value) => !value);
+
+    const openCreateNewGroupChatModal = () => {
+        dispatch({
+            type: "SET_VISIBLE_ADD_GROUP_CHAT_MODAL",
+            payload: true,
+        });
+    };
 
     return (
         <Wrapper>
@@ -30,6 +39,9 @@ const SmallRoomList = () => {
                 <ChatList>
                     <RoomList />
                 </ChatList>
+                <button onClick={openCreateNewGroupChatModal}>
+                    {t("createNewGroupChat")}
+                </button>
             </ChatListWrapper>
             <ToggleChatButton onClick={toggleOpenChat}>
                 <AiOutlineMessage />

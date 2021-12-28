@@ -73,11 +73,11 @@ const DataView = ({
                         })}
                 </ul>
                 <div className={classes.footer}>
-                    <button className={classes.btn} onClick={onGoToEdit}>
-                        Edit
-                    </button>
+                    {/* <button className={classes.btn} onClick={onGoToEdit}>
+                        
+                    </button> */}
                     <button className={classes.btn} onClick={onGoBack}>
-                        Back
+                        Quay lại
                     </button>
                 </div>
             </div>

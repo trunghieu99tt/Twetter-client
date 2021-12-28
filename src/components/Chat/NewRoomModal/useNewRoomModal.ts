@@ -10,9 +10,11 @@ import { useUpload } from "@talons/useUpload";
 import { useUser } from "@talons/useUser";
 import { toast } from "react-toastify";
 import { useAppContext } from "@context/app.context";
+import { useHistory } from "react-router";
 
 const useNewRoomModal = () => {
     const { dispatch } = useAppContext();
+    const history = useHistory();
 
     const { createNewRoom } = useRooms();
     const { user: currentUser } = useUser();
@@ -97,22 +99,38 @@ const useNewRoomModal = () => {
                 );
                 return;
             }
-
             setLoading(true);
-
             let image: string = "";
             if (media?.file) {
                 image = await uploadSingleMedia(media.file);
+            } else {
+                image =
+                    "https://res.cloudinary.com/dwefhvioc/image/upload/v1640711295/xi05jiws5gfl6grydmwi.jpg";
+            }
+            let membersIds =
+                newGroupChatUserList.map((u: iUser) => u._id) || [];
+            membersIds = Array.from(new Set(membersIds));
+
+            if (membersIds.length < 2) {
+                toast.error(
+                    "Please add at least 2 people to create a group chat"
+                );
+                return;
             }
 
             const newRoom: iRoomDTO = {
                 ...roomInfo,
                 image,
-                members:
-                    newGroupChatUserList?.map((user: iUser) => user._id) || [],
+                members: membersIds,
             };
-
-            await createNewRoom(newRoom);
+            const newRoomResponse = await createNewRoom(newRoom);
+            if (newRoomResponse?._id) {
+                history.push(`/chat/${newRoomResponse._id}`);
+            }
+            dispatch({
+                type: "SET_VISIBLE_ADD_GROUP_CHAT_MODAL",
+                payload: false,
+            });
             setLoading(false);
         } catch (error: any) {
             setLoading(false);

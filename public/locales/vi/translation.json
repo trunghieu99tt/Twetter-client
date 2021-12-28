@@ -138,7 +138,7 @@
     "groupChatSizeTooSmall": "Số lượng người trong nhóm chat phải lớn hơn 2",
     "roomMemberList": "Danh sách thành viên",
     "report": "Báo cáo",
-     "reportRestriction": "Bạn chỉ có thể báo cáo một tweet 5 phút một lần",
+     "reportRestriction": "Bạn chỉ có thể báo cáo một {{label}} 5 phút một lần",
     "reportSuccess": "Báo cáo thành công",
     "deleteTweetConfirmation": "Bạn có chắc muốn xóa tweet này không?",
     "yes": "Có",
@@ -146,5 +146,6 @@
     "followedYou": "Đã theo dõi bạn",
      "updateYourAvatar": "Cập nhật ảnh đại diện",
     "updateCoverPhoto": "Cập nhật ảnh bìa",
-    "adminAuthentication": "Đăng nhập dưới quyền admin"
+    "adminAuthentication": "Đăng nhập dưới quyền admin",
+    "reportUser": "Báo cáo người dùng"
 }

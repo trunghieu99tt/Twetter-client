@@ -21,9 +21,9 @@
     border: none;
     outline: none;
     border-radius: 10px;
-    height: 4rem;
     color: #fff;
     font-weight: 600;
+    padding: 0.5rem;
 }
 
 .btn.delete {

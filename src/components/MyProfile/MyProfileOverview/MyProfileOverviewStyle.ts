@@ -20,6 +20,7 @@ export const Main = styled.section`
     display: flex;
     gap: 2.5rem;
     position: relative;
+    min-height: 18rem;
 `;
 
 export const Info = styled.div`

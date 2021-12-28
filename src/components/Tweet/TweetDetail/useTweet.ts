@@ -1,4 +1,3 @@
-import { toast } from "react-toastify";
 import { useQueryClient } from "react-query";
 import { useTranslation } from "react-i18next";
 import { useEffect, useRef, useState } from "react";
@@ -19,12 +18,12 @@ import { extractMetadata } from "@utils/helper";
 
 // types
 import { iUser } from "@type/user.types";
-import { iTweet, iTweetReport } from "@type/tweet.types";
+import { iTweet } from "@type/tweet.types";
 import { iNotificationDTO } from "@type/notify.types";
 
 // constants
 import { USER_QUERY } from "constants/user.constants";
-import { FIVE_MINUTES } from "constants/app.constants";
+import { useReport } from "@talons/useReport";
 
 type Props = {
     tweet: iTweet;
@@ -40,8 +39,6 @@ export const useTweet = ({ tweet }: Props) => {
     const [modalUserList, setModalUserList] = useState<TUserList | null>();
     const [visibleEditForm, setVisibleEditForm] = useState<boolean>(false);
     const [visibleDropdown, setVisibleDropdown] = useState<boolean>(false);
-
-    const [reports, setReports] = useLocalStorage("reports", {});
     const currentUser: iUser | undefined = useQueryClient().getQueryData(
         USER_QUERY.GET_ME
     );
@@ -60,6 +57,7 @@ export const useTweet = ({ tweet }: Props) => {
             userId: currentUser?._id,
         });
     const { updateHashTags } = useHashtag();
+    const { onReport } = useReport("tweet");
 
     const dropdownRef = useRef() as React.RefObject<HTMLDivElement>;
     const addCommentRef = useRef(null) as React.RefObject<HTMLInputElement>;
@@ -181,60 +179,10 @@ export const useTweet = ({ tweet }: Props) => {
 
     const onCloseModalUserList = () => setModalUserList(null);
 
-    const findReportRecord = (): iTweetReport | null => {
-        if (tweet?._id) {
-            const tweetReports = reports[tweet?._id] || [];
-            return tweetReports.find(
-                (report: iTweetReport) => report.userId === currentUser?._id
-            );
-        }
-
-        return null;
-    };
-
-    const updateUserLastTimeReportedCurrentTweet = () => {
-        const tweetReports = reports[tweet._id] || [];
-        let newTweetReports = [...tweetReports];
-        if (tweetReports?.length === 0) {
-            newTweetReports.push({
-                userId: currentUser?._id,
-                reportTime: new Date().toISOString(),
-            });
-        } else if (tweetReports?.length > 0) {
-            newTweetReports = tweetReports.map((report: iTweetReport) => {
-                if (report.userId === currentUser?._id) {
-                    return {
-                        ...report,
-                        reportTime: new Date().toISOString(),
-                    };
-                }
-                return report;
-            });
-        }
-        reports[tweet._id] = newTweetReports;
-        setReports(reports);
-    };
-
     const onReportTweet = () => {
-        const userReportTweetRecord = findReportRecord();
-        if (userReportTweetRecord) {
-            const lastTimeReported = userReportTweetRecord.reportTime;
-            // if user reported this tweet in last 5 minutes, show error
-            if (
-                +Date.now() - new Date(lastTimeReported).getTime() <
-                FIVE_MINUTES
-            ) {
-                toast.error(t("reportRestriction"));
-                return;
-            }
-        } else {
-            reportTweetMutation.mutate(tweet._id, {
-                onSuccess: () => {
-                    toast.info(t("reportSuccess"));
-                    // update last time reported in local storage
-                    updateUserLastTimeReportedCurrentTweet();
-                },
-            });
+        const callback = () => reportTweetMutation.mutate(tweet._id);
+        if (currentUser?._id) {
+            onReport(tweet._id, currentUser?._id, callback);
         }
     };
 
