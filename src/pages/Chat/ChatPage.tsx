@@ -35,6 +35,7 @@ import classes from "./chatPage.module.css";
 
 import { roomsHaveCallState } from "states/call.state";
 import { Link } from "react-router-dom";
+import ImageWithPlaceholder from "@components/ImageWithPlaceholder";
 
 const ChatPage = () => {
     const { t } = useTranslation();
@@ -130,7 +131,7 @@ const ChatPage = () => {
                         <div className={classes.headerInner}>
                             <div className={classes.left}>
                                 <figure className={classes.roomImage}>
-                                    <img
+                                    <ImageWithPlaceholder
                                         src={roomImage}
                                         alt={`${guestUser?.name}-wallpaper`}
                                     />
@@ -215,10 +216,14 @@ const ChatPage = () => {
                 <aside>
                     <article className={classes.roomInfo}>
                         <figure className={classes.roomInfoImageWrapper}>
-                            <img
+                            <ImageWithPlaceholder
                                 src={roomImage}
                                 alt={`${roomName}-bg`}
-                                className={classes.roomInfoImage}
+                                customStyles="--size: 8rem;
+                                width: var(--size);
+                                height: var(--size);
+                                object-fit: cover;
+                                border-radius: 50%;"
                             />
                             <figcaption className={classes.roomInfoName}>
                                 {(!isDm && roomName) || (

@@ -13,6 +13,7 @@ import classes from "./messageContent.module.css";
 
 // types
 import { iMessage } from "@type/message.types";
+import ImageWithPlaceholder from "@components/ImageWithPlaceholder";
 
 interface Props {
     data: iMessage;
@@ -60,10 +61,15 @@ const MessageContent = ({ data, isMyMessage }: Props) => {
             })}
         >
             <figure>
-                <img
-                    className={classes.image}
-                    src={data?.author?.avatar}
+                <ImageWithPlaceholder
                     alt={`${fullName}-avatar`}
+                    src={data?.author?.avatar}
+                    customStyles="
+                    --size: 3rem;
+                        width: var(--size);
+                        height: var(--size);
+                        border-radius: 50%;
+                        object-fit: cover;"
                 />
             </figure>
             <div className={classes.messageWrapper}>

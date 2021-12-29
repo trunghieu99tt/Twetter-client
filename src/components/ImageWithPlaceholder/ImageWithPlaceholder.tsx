@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
+import DefaultUnknownAvatar from "@images/user.png";
 
 const Image = styled("img")<{
     customStyles?: string;
@@ -14,13 +15,13 @@ const Image = styled("img")<{
 interface Props {
     src: string;
     alt: string;
-    defaultSrc: any;
+    defaultSrc?: any;
     customStyles?: string;
 }
 
 const ImageWithPlaceholder = ({
     alt,
-    defaultSrc,
+    defaultSrc = DefaultUnknownAvatar,
     customStyles,
     src: propsSrc,
 }: Props) => {
