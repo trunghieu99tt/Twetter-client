@@ -13,6 +13,7 @@ import { iRoom } from "@type/room.types";
 
 // styles
 import classes from "./roomList.module.css";
+import ImageWithPlaceholder from "@components/ImageWithPlaceholder";
 
 const RoomItem = ({
     name,
@@ -27,7 +28,7 @@ const RoomItem = ({
         <Link to={`/chat/${id}`} key={`room-item-${id}`}>
             <article className={classes.item}>
                 <figure>
-                    <img src={image} alt={name} className={classes.img} />
+                    <ImageWithPlaceholder alt={name} src={image} />
                 </figure>
                 <div>
                     <div className={classes.name}>{name}</div>

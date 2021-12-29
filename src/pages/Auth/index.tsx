@@ -9,15 +9,8 @@ import { useUser } from "@talons/useUser";
 import Auth from "@components/Auth";
 
 // styles
-import {
-    Right,
-    Wrapper,
-    Main,
-    Heading,
-    HeadToAdminAuth,
-} from "./AuthPageStyle";
+import { Right, Wrapper, Main, Heading } from "./AuthPageStyle";
 import { Helmet } from "react-helmet-async";
-import { Link } from "react-router-dom";
 
 const AuthPage = () => {
     const { t } = useTranslation();
@@ -42,10 +35,6 @@ const AuthPage = () => {
                         <Auth />
                     </Right>
                 </Main>
-
-                <HeadToAdminAuth to="/admin/auth">
-                    {t("adminAuthentication")}
-                </HeadToAdminAuth>
             </Wrapper>
         </React.Fragment>
     );

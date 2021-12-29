@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Route, Switch } from "react-router-dom";
+import { Route, Switch, useLocation } from "react-router-dom";
 
 // talons
 import { useRooms } from "@talons/useRoom";
@@ -49,6 +49,7 @@ const PrivateRouteController = () => {
     const hashtagTalons = useHashtag();
     const { getUserRooms } = useRooms();
     const call = useRecoilValue(callState);
+    const location = useLocation();
     const {
         state: { visibleAddGroupChatModal },
     } = useAppContext();
@@ -57,6 +58,10 @@ const PrivateRouteController = () => {
         getUserRooms();
         AgoraRTC.setLogLevel(4);
     }, []);
+
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, [location.pathname]);
 
     return (
         <React.Fragment>
