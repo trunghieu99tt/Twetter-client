@@ -39,6 +39,7 @@ const MessageContent = ({ data, isMyMessage }: Props) => {
                         className="w-60 h-60 object-cover"
                         src={data?.file || ""}
                         alt={`${fullName}-message`}
+                        key={Math.random()}
                         onLoad={() => {
                             console.log("Loaded");
                         }}
