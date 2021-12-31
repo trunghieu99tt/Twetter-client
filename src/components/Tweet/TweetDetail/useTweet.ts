@@ -4,7 +4,6 @@ import { useEffect, useRef, useState } from "react";
 import { Modal } from "antd";
 
 // hooks
-import { useLocalStorage } from "@hooks/useLocalStorage";
 import { useOnClickOutside } from "@hooks/useOnClickOutside";
 
 // talons
@@ -24,6 +23,7 @@ import { iNotificationDTO } from "@type/notify.types";
 // constants
 import { USER_QUERY } from "constants/user.constants";
 import { useReport } from "@talons/useReport";
+import { useHistory, useParams } from "react-router";
 
 type Props = {
     tweet: iTweet;
@@ -35,6 +35,8 @@ const { confirm } = Modal;
 
 export const useTweet = ({ tweet }: Props) => {
     const { t } = useTranslation();
+    const params = useParams();
+    const history = useHistory();
     const [urls, setUrls] = useState<string[]>([]);
     const [modalUserList, setModalUserList] = useState<TUserList | null>();
     const [visibleEditForm, setVisibleEditForm] = useState<boolean>(false);
@@ -114,6 +116,9 @@ export const useTweet = ({ tweet }: Props) => {
                     onSuccess: () => {
                         const initialTags = tweet?.tags || [];
                         updateHashTags(initialTags, []);
+                        if ((params as any)?.tweetId) {
+                            history.push("/");
+                        }
                     },
                 });
             },

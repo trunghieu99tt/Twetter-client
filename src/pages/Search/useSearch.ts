@@ -25,6 +25,7 @@ export const requestSearch = async (query: TSearch) => {
 };
 
 const useSearch = () => {
+    const [loading, setLoading] = useState<boolean>(false);
     const [query, setQuery] = useState<TSearch>({
         search: "",
         category: "tweet",
@@ -43,7 +44,9 @@ const useSearch = () => {
     };
 
     const onSubmit = async () => {
+        setLoading(true);
         const { data } = await requestSearch(query);
+        setLoading(false);
         setResponse({
             type: query.category,
             data,
@@ -51,6 +54,7 @@ const useSearch = () => {
     };
     return {
         query,
+        loading,
         response,
 
         onSubmit,

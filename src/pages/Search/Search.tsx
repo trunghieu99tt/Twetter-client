@@ -18,7 +18,6 @@ import { AiOutlineFileSearch } from "react-icons/ai";
 
 // types
 import { iTweet } from "@type/tweet.types";
-import { iComment } from "@type/comments.types";
 
 // styles
 import classes from "./search.module.css";
@@ -26,11 +25,12 @@ import { Container } from "@shared/style/sharedStyle.style";
 import { iHashtag } from "@type/hashtag.types";
 import { iUser } from "@type/user.types";
 import UserCard from "@components/UserCard";
+import { Spinner1 } from "@components/Loaders";
 
 const Search = () => {
     const { t } = useTranslation();
 
-    const { query, response, onChange, onSubmit } = useSearch();
+    const { query, loading, response, onChange, onSubmit } = useSearch();
 
     let resultContent = null;
 
@@ -122,6 +122,8 @@ const Search = () => {
                                 {t("search")}
                             </button>
                         </section>
+
+                        {loading && <Spinner1 />}
 
                         {response && (
                             <section className={classes.searchResult}>
