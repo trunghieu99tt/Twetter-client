@@ -132,6 +132,7 @@ const ChatPage = () => {
                             <div className={classes.left}>
                                 <figure className={classes.roomImage}>
                                     <ImageWithPlaceholder
+                                        key={room?._id}
                                         src={roomImage}
                                         alt={`${guestUser?.name}-wallpaper`}
                                     />
@@ -190,16 +191,20 @@ const ChatPage = () => {
                                     <div ref={loadMoreRef}>Loading...</div>
                                 )}
                                 {messages?.map((message: iMessage) => {
-                                    return (
-                                        <MessageContent
-                                            key={`message-${message._id}`}
-                                            data={message}
-                                            isMyMessage={
-                                                message.author._id ===
-                                                currentUser._id
-                                            }
-                                        />
-                                    );
+                                    if (message?.author?._id) {
+                                        return (
+                                            <MessageContent
+                                                key={`message-${message._id}`}
+                                                data={message}
+                                                isMyMessage={
+                                                    message.author._id ===
+                                                    currentUser._id
+                                                }
+                                            />
+                                        );
+                                    }
+
+                                    return null;
                                 })}
                             </section>
 
@@ -218,6 +223,7 @@ const ChatPage = () => {
                         <figure className={classes.roomInfoImageWrapper}>
                             <ImageWithPlaceholder
                                 src={roomImage}
+                                key={room?._id}
                                 alt={`${roomName}-bg`}
                                 customStyles="--size: 8rem;
                                 width: var(--size);

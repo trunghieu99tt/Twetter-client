@@ -37,17 +37,26 @@ const useSocialLogin = () => {
     };
 
     const responseGoogle = async (data: any) => {
-        const response = await client.post("/auth/google", {
-            tokenId: data.tokenId,
-        });
-        handleAuth(response);
+        try {
+            const response = await client.post("/auth/google", {
+                tokenId: data.tokenId,
+            });
+
+            handleAuth(response);
+        } catch (error: any) {
+            toast.error(error.response.data.error);
+        }
     };
 
     const responseGithub = async (code: string) => {
-        const response = await client.post("/auth/github", {
-            code,
-        });
-        handleAuth(response);
+        try {
+            const response = await client.post("/auth/github", {
+                code,
+            });
+            handleAuth(response);
+        } catch (error: any) {
+            toast.error(error.response.data.error);
+        }
     };
 
     const handleAuth = (response: any) => {

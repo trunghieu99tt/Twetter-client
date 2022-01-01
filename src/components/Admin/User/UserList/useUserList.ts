@@ -57,8 +57,9 @@ const useUserList = () => {
             onOk: async () => {
                 const data = await deleteUser(userId);
                 setPageNumber(1);
+                console.log(data);
                 await handleFetchUsers();
-                if (data.status === 200) {
+                if (data.statusCode === 200) {
                     message.success("Xóa người dùng thành công");
                 } else {
                     message.error("Đã xảy ra lỗi. Xin thử lại sau");

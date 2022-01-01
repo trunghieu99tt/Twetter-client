@@ -46,7 +46,7 @@ const useUser = () => {
 
     const updateUser = async (userID: string, updatedData: any) => {
         const response = await client.patch(
-            `/user/update/${userID}`,
+            `/user/update/ban-status/${userID}`,
             updatedData
         );
         return response?.data;
