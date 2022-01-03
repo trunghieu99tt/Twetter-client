@@ -100,7 +100,7 @@ const Comment = ({ data, level = 0 }: Props) => {
                 <Main>
                     <MainInfo>
                         <div>
-                            <AuthorName to={`/profile/${data.author._id}`}>
+                            <AuthorName to={`/profile/${data?.author?._id}`}>
                                 {data?.author?.name}
                             </AuthorName>
                             <CreatedAt>

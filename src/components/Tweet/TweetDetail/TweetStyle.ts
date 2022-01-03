@@ -101,6 +101,7 @@ export const InteractionButtonGroup = styled.div`
     padding: 0.4rem 0;
     display: flex;
     justify-content: space-between;
+    flex-wrap: wrap;
 `;
 
 export const InteractionButton = styled("button")<{

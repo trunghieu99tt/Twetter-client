@@ -52,7 +52,7 @@ const useUserForm = ({ view }: { view: FORM_TYPE }) => {
             message.error("Mật khẩu không trùng khớp,  xin kiểm tra lại");
         } else {
             const response = await addUser(values);
-            if (response.status === 200) {
+            if (response.status === 201) {
                 message.success("Them moi thanh cong");
                 history.push("/users");
             } else {
