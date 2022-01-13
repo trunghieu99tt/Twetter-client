@@ -14,6 +14,8 @@ import { AGORA_APP_ID } from "@config/secret";
 import { useAgoraClient } from "../agora.config";
 
 import classes from "./videoCall.module.css";
+import { useRecoilValue } from "recoil";
+import { roomsHaveCallState } from "states/call.state";
 
 const useMicrophoneAndCameraTracks = createMicrophoneAndCameraTracks();
 
@@ -24,6 +26,7 @@ const VideoCall = (props: { channelName: string }) => {
     const [start, setStart] = useState<boolean>(false);
     const client = useAgoraClient();
     const { ready, tracks } = useMicrophoneAndCameraTracks();
+    const roomsHaveCall = useRecoilValue(roomsHaveCallState);
 
     useEffect(() => {
         const init = async (name: string) => {
@@ -59,10 +62,21 @@ const VideoCall = (props: { channelName: string }) => {
                 });
             });
 
-            const token = await getToken(name);
-            await client.join(AGORA_APP_ID, name, token, null);
-            if (tracks) await client.publish([tracks[0], tracks[1]]);
-            setStart(true);
+            const currentRoom = roomsHaveCall.find(
+                (r) => r.channelName === name
+            );
+
+            let token = currentRoom?.token;
+
+            if (!token) {
+                token = await getToken(name);
+            }
+
+            if (token) {
+                await client.join(AGORA_APP_ID, name, token, null);
+                if (tracks) await client.publish([tracks[0], tracks[1]]);
+                setStart(true);
+            }
         };
 
         if (ready && tracks) {

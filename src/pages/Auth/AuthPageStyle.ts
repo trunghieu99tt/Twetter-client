@@ -27,6 +27,8 @@ export const Right = styled.div`
     background: #fff;
     flex: 1;
     padding: 10rem;
+    max-height: 90vh;
+    overflow: auto;
 `;
 
 export const Heading = styled.h1`

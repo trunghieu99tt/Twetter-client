@@ -5,7 +5,13 @@ export const callState = atom<any>({
     default: null,
 });
 
-export const roomsHaveCallState = atom<string[]>({
+export const roomsHaveCallState = atom<
+    {
+        roomId: string;
+        channelName: string;
+        token: string;
+    }[]
+>({
     key: "roomHasCallState",
     default: [],
 });

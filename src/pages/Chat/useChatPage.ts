@@ -13,6 +13,7 @@ import { iUser } from "@type/user.types";
 import { useAppContext } from "@context/app.context";
 import { callState } from "states/call.state";
 import { v4 as uuid, v4 } from "uuid";
+import client from "api/client";
 
 const useChatPage = () => {
     const {
@@ -113,11 +114,16 @@ const useChatPage = () => {
         });
     };
 
-    const triggerCall = (isVideoCall: boolean = false) => {
+    const triggerCall = async (isVideoCall: boolean = false) => {
+        const response = await client.post("/rooms/create-video-call-room");
+        const data = response?.data?.data;
+        console.log(`newVideoCallRoom`, data);
         const newCall = {
             room,
             isVideoCall,
             senderId: currentUser._id,
+            channelName: data?.channelName,
+            token: data?.token,
         };
         setCall(newCall);
         socket?.emit("startCall", newCall);

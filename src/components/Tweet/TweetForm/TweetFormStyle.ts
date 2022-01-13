@@ -1,13 +1,16 @@
 import styled from "styled-components";
 
-export const Wrapper = styled.div`
+export const Wrapper = styled("div")<{
+    isEdit: boolean;
+}>`
     background: #ffffff;
     box-shadow: var(--box-shadow-1);
     border-radius: 1.2rem;
     padding: 1rem 2rem;
     margin-bottom: 2.5rem;
-    min-width: 70rem;
+    min-width: auto;
     max-width: 100%;
+    ${({ isEdit }) => isEdit && "max-width: 50rem"};
 `;
 
 export const HeadLine = styled.div`

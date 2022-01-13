@@ -87,10 +87,12 @@ export const useStory = () => {
                 curr: iStory
             ) => {
                 const { owner } = curr;
-                if (res.hasOwnProperty(owner._id)) {
-                    res[owner._id].push(curr);
-                } else {
-                    res[owner._id] = [curr];
+                if (owner?._id) {
+                    if (res.hasOwnProperty(owner._id)) {
+                        res[owner._id].push(curr);
+                    } else {
+                        res[owner._id] = [curr];
+                    }
                 }
                 return res;
             },

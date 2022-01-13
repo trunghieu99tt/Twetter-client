@@ -39,7 +39,7 @@ const useUserList = () => {
 
         const filteredUsers = initialData?.filter((user) => {
             return (
-                (user?.name?.includes(name.toLowerCase()) ||
+                (user?.name?.toLowerCase()?.includes(name.toLowerCase()) ||
                     user?.id === name) &&
                 user.status === status
             );

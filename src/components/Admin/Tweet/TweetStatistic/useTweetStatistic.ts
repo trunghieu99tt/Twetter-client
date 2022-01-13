@@ -49,7 +49,7 @@ export const useTweetStatistics = () => {
     };
 
     const generateMostSavedTweetChart = (data: any) => {
-        return generateTweetChart(data, "mostSavedTweets", "save_count");
+        return generateTweetChart(data, "mostSavedTweets", "saved_count");
     };
 
     const generateMostRetweetedChart = (data: any) => {

@@ -86,7 +86,7 @@ const TweetForm = ({ tweet, onCancel }: Props) => {
     return (
         <React.Fragment>
             {loading && <Spinner1 />}
-            <Wrapper>
+            <Wrapper isEdit={!!tweet}>
                 {!tweet && <HeadLine>{t("whatOnYourMind")}</HeadLine>}
                 <Main>
                     <UserAvatarSmall user={user} />

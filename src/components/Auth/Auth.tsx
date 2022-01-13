@@ -66,73 +66,87 @@ const Auth = () => {
         );
 
     return (
-        <Wrapper>
+        <React.Fragment>
             <AnimatePresence>
                 {visibleForgotPasswordForm && (
                     <ForgotPassword onClose={onCloseForgotPasswordForm} />
                 )}
             </AnimatePresence>
-            {subHeading}
-            <Form>
-                <InputGroup>
-                    <InputLabel>{t("username")}</InputLabel>
-                    <Input required {...register("username")} name="username" />
-                </InputGroup>
-                <InputGroup>
-                    <InputLabel>{t("password")}</InputLabel>
-                    <Input type="password" required {...register("password")} />
-                </InputGroup>
-                {screen === "REGISTER" && (
-                    <React.Fragment>
-                        <InputGroup>
-                            <InputLabel>{t("confirmPassword")}</InputLabel>
-                            <Input
-                                type="password"
-                                required
-                                {...register("passwordConfirm")}
-                            />
-                        </InputGroup>
-                        <InputGroup>
-                            <InputLabel>{t("name")}</InputLabel>
-                            <Input type="text" required {...register("name")} />
-                        </InputGroup>
-                        <InputGroup>
-                            <InputLabel>{t("email")}</InputLabel>
-                            <Input
-                                type="text"
-                                required
-                                {...register("email")}
-                            />
-                        </InputGroup>
-                        <InputGroup>
-                            <InputLabel>{t("birthday")}</InputLabel>
-                            <ReactDatePicker
-                                selected={birthday}
-                                onChange={(date: Date) => setBirthday(date)}
-                            />
-                        </InputGroup>
-                        <InputGroup>
-                            <InputLabel>{t("gender")}</InputLabel>
-                            <GenderSelector
-                                gender={gender}
-                                setGender={setGender}
-                            />
-                        </InputGroup>
-                    </React.Fragment>
-                )}
-                <SubmitButton onClick={handleSubmit}>
-                    {screen === "REGISTER" ? t("register") : t("login")}
-                </SubmitButton>
-            </Form>
-            <Hr>
-                <span>{t("or")}</span>
-            </Hr>
-            <SocialSuggest> {t("socialLoginHeading")}</SocialSuggest>
-            <SocialLoginIcons />
-            <ForgotPasswordStyled onClick={onOpenForgotPasswordForm}>
-                {t("forgotYourPassword")}
-            </ForgotPasswordStyled>
-        </Wrapper>
+            <Wrapper>
+                {subHeading}
+                <Form>
+                    <InputGroup>
+                        <InputLabel>{t("username")}</InputLabel>
+                        <Input
+                            required
+                            {...register("username")}
+                            name="username"
+                        />
+                    </InputGroup>
+                    <InputGroup>
+                        <InputLabel>{t("password")}</InputLabel>
+                        <Input
+                            type="password"
+                            required
+                            {...register("password")}
+                        />
+                    </InputGroup>
+                    {screen === "REGISTER" && (
+                        <React.Fragment>
+                            <InputGroup>
+                                <InputLabel>{t("confirmPassword")}</InputLabel>
+                                <Input
+                                    type="password"
+                                    required
+                                    {...register("passwordConfirm")}
+                                />
+                            </InputGroup>
+                            <InputGroup>
+                                <InputLabel>{t("name")}</InputLabel>
+                                <Input
+                                    type="text"
+                                    required
+                                    {...register("name")}
+                                />
+                            </InputGroup>
+                            <InputGroup>
+                                <InputLabel>{t("email")}</InputLabel>
+                                <Input
+                                    type="text"
+                                    required
+                                    {...register("email")}
+                                />
+                            </InputGroup>
+                            <InputGroup>
+                                <InputLabel>{t("birthday")}</InputLabel>
+                                <ReactDatePicker
+                                    selected={birthday}
+                                    onChange={(date: Date) => setBirthday(date)}
+                                />
+                            </InputGroup>
+                            <InputGroup>
+                                <InputLabel>{t("gender")}</InputLabel>
+                                <GenderSelector
+                                    gender={gender}
+                                    setGender={setGender}
+                                />
+                            </InputGroup>
+                        </React.Fragment>
+                    )}
+                    <SubmitButton onClick={handleSubmit}>
+                        {screen === "REGISTER" ? t("register") : t("login")}
+                    </SubmitButton>
+                </Form>
+                <Hr>
+                    <span>{t("or")}</span>
+                </Hr>
+                <SocialSuggest> {t("socialLoginHeading")}</SocialSuggest>
+                <SocialLoginIcons />
+                <ForgotPasswordStyled onClick={onOpenForgotPasswordForm}>
+                    {t("forgotYourPassword")}
+                </ForgotPasswordStyled>
+            </Wrapper>
+        </React.Fragment>
     );
 };
 

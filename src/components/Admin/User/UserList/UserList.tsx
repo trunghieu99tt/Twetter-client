@@ -174,15 +174,15 @@ const UserList = ({ classes: propsClasses }: Props) => {
                     >
                         Reset mật khẩu
                     </button>
-                    <button
+                    {/* <button
                         className={cn(classes.btn, classes.delete)}
                         onClick={() => onDelete(record.id)}
                     >
                         Xóa<abbr title=""></abbr>
-                    </button>
+                    </button> */}
                 </Space>
             ),
-            width: 400,
+            width: 300,
             fixed: "right" as "right",
         },
     ];

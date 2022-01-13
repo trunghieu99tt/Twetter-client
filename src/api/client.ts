@@ -29,4 +29,14 @@ client.interceptors.request.use(
     }
 );
 
+client.interceptors.response.use(
+    (response) => {
+        return response;
+    },
+    (error) => {
+        console.log(`error client`, error);
+        return Promise.reject(error);
+    }
+);
+
 export default client;

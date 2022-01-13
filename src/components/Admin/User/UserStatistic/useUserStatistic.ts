@@ -45,6 +45,7 @@ export const useUserStatistic = () => {
 
     const generateMostActiveUserDataForChart = (data: any) => {
         const yAxisData = data?.map((e: any) => e?.user?.name);
+
         const seriesData = [
             {
                 name: "Tweets",
@@ -56,7 +57,7 @@ export const useUserStatistic = () => {
         return {
             xAxis: {
                 type: "value",
-                boundaryGap: [0],
+                boundaryGap: [0, 0.01],
             },
             yAxis: {
                 type: "category",
@@ -99,7 +100,7 @@ export const useUserStatistic = () => {
         const user = findUser(params.value);
         if (user?._id) {
             window.open(
-                `${process.env.REACT_APP_MAIN_APP_URL}/profile/${user._id}`,
+                `/profile/${user._id}`,
                 "_blank",
                 "noopener,noreferrer"
             );

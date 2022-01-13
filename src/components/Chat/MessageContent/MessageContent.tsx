@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import cn from "classnames";
 import { SRLWrapper } from "simple-react-lightbox";
 
@@ -26,6 +26,7 @@ const MessageContent = ({ data, isMyMessage }: Props) => {
     let date = messageDate.toLocaleString().split(",")[0];
     const fullName = data?.author?.name;
     let fileContent = null;
+    const [reload, setReload] = useState<number>(0);
 
     if (data.file) {
         if (
@@ -47,6 +48,9 @@ const MessageContent = ({ data, isMyMessage }: Props) => {
                         onError={(error) => {
                             console.log("error: ", error);
                             console.log("Error");
+                            if (reload < 5) {
+                                setReload((r) => r + 1);
+                            }
                         }}
                     />
                 </figure>
