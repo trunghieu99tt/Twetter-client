@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import SimpleReactLightbox from "simple-react-lightbox";
 import { useTranslation } from "react-i18next";
 import { useHistory } from "react-router";
@@ -70,6 +70,7 @@ const ChatPage = () => {
 
     const hasMore = totalMessage > messages?.length;
     const [shouldJumpToEnd, setShouldJumpToEnd] = React.useState(true);
+    const [roomHasCall, setRoomHasCall] = useState<any>(null);
 
     useIntersectionObserver({
         target: loadMoreRef,
@@ -86,6 +87,17 @@ const ChatPage = () => {
         }
     }, [messages]);
 
+    useEffect(() => {
+        if (room?._id) {
+            const r = roomsHaveCall.find((r) => r.roomId === room._id);
+            if (r) {
+                setRoomHasCall(r);
+            } else {
+                setRoomHasCall(null);
+            }
+        }
+    }, [roomsHaveCall, room?._id]);
+
     const { isDm, members, image, name } = room || {};
 
     let roomImage = image || "";
@@ -99,8 +111,6 @@ const ChatPage = () => {
     const roomMemberList = members?.map((member: iUser) => (
         <UserCard user={member} key={`room-member-card-${member._id}`} />
     ));
-
-    const isRoomHavingCall = room && roomsHaveCall.includes(room._id);
 
     return (
         <React.Fragment>
@@ -151,21 +161,25 @@ const ChatPage = () => {
                                 )}
                             </div>
                             <div className={classes.right}>
-                                {isRoomHavingCall && (
+                                {roomHasCall && (
                                     <button
                                         onClick={() => {
-                                            history.push(`/call/${room?._id}`);
+                                            history.push(
+                                                `/call/${roomHasCall?.channelName}`
+                                            );
                                         }}
                                     >
                                         Go to call
                                     </button>
                                 )}
-                                <button
-                                    className={classes.callButton}
-                                    onClick={() => triggerCall()}
-                                >
-                                    <IoCallSharp />
-                                </button>
+                                {!roomHasCall && (
+                                    <button
+                                        className={classes.callButton}
+                                        onClick={() => triggerCall()}
+                                    >
+                                        <IoCallSharp />
+                                    </button>
+                                )}
                             </div>
                         </div>
                     </section>

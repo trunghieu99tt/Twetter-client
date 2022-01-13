@@ -11,6 +11,7 @@ export const Wrapper = styled(Link)`
 export const MediaWrapper = styled.div`
     width: 100%;
     overflow: hidden;
+    margin-bottom: 2rem;
 `;
 
 export const Image = styled.img`

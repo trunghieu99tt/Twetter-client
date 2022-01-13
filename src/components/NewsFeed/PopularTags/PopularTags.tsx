@@ -22,8 +22,6 @@ const PopularTags = () => {
     const mostPopularHashtags: iHashtag[] =
         getMostPopularHashtagQuery.data || [];
 
-    console.log("mostPopularHashtags:", mostPopularHashtags);
-
     if (!mostPopularHashtags?.length) return null;
 
     const title = t("popularTag");

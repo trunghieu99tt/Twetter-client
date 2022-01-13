@@ -35,8 +35,8 @@ const UserCard = ({ user }: Props) => {
 
     const followed =
         user.followers &&
-        user.followers.some((follower: iUser) => {
-            return follower?._id === currentUser?._id;
+        user.followers.some((user: any) => {
+            return (user as string).toString() === currentUser?._id.toString();
         });
 
     const onFollow = () => {
@@ -58,7 +58,7 @@ const UserCard = ({ user }: Props) => {
                         </UserFollowers>
                     </Link>
                 </Flex>
-                {user._id !== currentUser?._id && (
+                {/* {user._id !== currentUser?._id && (
                     <FollowButton
                         onClick={onFollow}
                         disabled={followUserMutation.isLoading}
@@ -66,7 +66,7 @@ const UserCard = ({ user }: Props) => {
                         <IoPersonAdd />
                         {followed ? t("followed") : t("follow")}
                     </FollowButton>
-                )}
+                )} */}
             </Flex>
             <UserBio>{user?.bio}</UserBio>
         </Wrapper>

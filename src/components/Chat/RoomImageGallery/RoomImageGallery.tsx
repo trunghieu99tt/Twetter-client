@@ -6,6 +6,7 @@ import mergeClasses from "@utils/mergeClasses";
 
 // styles
 import defaultClasses from "./roomimagegallery.module.css";
+import { useState } from "react";
 interface Props {
     classes?: object;
     images: string[];
@@ -13,6 +14,7 @@ interface Props {
 
 const RoomImageGallery = ({ classes: propsClasses, images }: Props) => {
     const { t } = useTranslation();
+    const [reload, setReload] = useState<number>(0);
 
     const classes = mergeClasses(defaultClasses, propsClasses);
 
@@ -25,9 +27,15 @@ const RoomImageGallery = ({ classes: propsClasses, images }: Props) => {
                         return (
                             <figure className={classes.itemWrapper} key={image}>
                                 <img
+                                    key={Math.random()}
                                     src={image}
                                     alt={image}
                                     className={classes.item}
+                                    onError={() => {
+                                        if (reload < 5) {
+                                            setReload((r) => r + 1);
+                                        }
+                                    }}
                                 />
                             </figure>
                         );

@@ -35,6 +35,12 @@ const CallModal = () => {
 
     // end call
     const endCall = () => {
+        if (call && user._id === call.senderId) {
+            console.log("end call");
+            socket?.emit("endCallRoom", {
+                roomId: call?.room?._id,
+            });
+        }
         setCall(null);
     };
 
@@ -73,11 +79,13 @@ const CallModal = () => {
             userRepliedId: user._id,
             ownerCallId: call.senderId,
             roomId: call.room._id,
+            channelName: call?.channelName,
+            token: call?.token,
         });
         socket?.emit("roomHasCall", {
             roomId: call.room._id,
         });
-        history.push(`/call/${call.room._id}`);
+        history.push(`/call/${call.channelName}`);
     };
 
     const myCall = call?.senderId === user?._id;

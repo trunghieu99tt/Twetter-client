@@ -38,7 +38,8 @@ const useSocket = () => {
     const setConnectedRooms = useSetRecoilState(connectedRoomsState);
     const [newMessage, setNewMessage] = useRecoilState(newMessageState);
     const setConnectedUsers = useSetRecoilState(connectedUsersState);
-    const setRoomsHaveCall = useSetRecoilState(roomsHaveCallState);
+    const [roomsHaveCall, setRoomsHaveCall] =
+        useRecoilState(roomsHaveCallState);
     const { user } = useUser();
     const history = useHistory();
 
@@ -80,8 +81,9 @@ const useSocket = () => {
     useEffect(() => {
         const socket = socketInstance.current as any;
         socket.on("answerCall", (res: any) => {
+            console.log("res:", res);
             if (call) {
-                history.push(`/call/${res.roomId}`);
+                history.push(`/call/${res.channelName}`);
             }
         });
     }, [call]);
@@ -113,13 +115,26 @@ const useSocket = () => {
         });
 
         socket.on("roomCallStateChanged", (res: any) => {
-            const { roomId, hasCall } = res;
+            const { roomId, hasCall, channelName, token } = res;
             if (hasCall) {
-                setRoomsHaveCall((prev) =>
-                    Array.from(new Set([...prev, res.roomId]))
+                const isRoomHavingCall = roomsHaveCall.find(
+                    (r) => r.roomId === roomId
                 );
+
+                if (!isRoomHavingCall) {
+                    setRoomsHaveCall([
+                        ...roomsHaveCall,
+                        {
+                            roomId,
+                            channelName,
+                            token,
+                        },
+                    ]);
+                }
             } else {
-                setRoomsHaveCall((prev) => prev.filter((r) => r !== roomId));
+                setRoomsHaveCall((prev) =>
+                    prev.filter((r) => r.roomId !== roomId)
+                );
             }
         });
 
@@ -140,6 +155,14 @@ const useSocket = () => {
             const newRoomId = res._id;
             setConnectedRooms((prev) => [...(prev || []), res]);
             history.push(`/chat/${newRoomId}`);
+        });
+
+        socket?.on("callStop", (res: any) => {
+            console.log("res", res);
+            console.log("call", call);
+            if (call && call.room._id === res.roomId) {
+                setCall(null);
+            }
         });
     };
     return {};

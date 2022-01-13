@@ -17,6 +17,8 @@ import { useAgoraClient } from "../agora.config";
 
 // styles
 import classes from "./controls.module.css";
+import { useRecoilState, useSetRecoilState } from "recoil";
+import { callState, roomsHaveCallState } from "states/call.state";
 
 type Props = {
     tracks: any;
@@ -26,11 +28,13 @@ type Props = {
 const Controls = ({ setStart, tracks }: Props) => {
     const history = useHistory();
     const client = useAgoraClient();
+    const [call, setCall] = useRecoilState(callState);
     const {
         state: { socket },
     } = useAppContext();
     const { user } = useUser();
     const [trackState, setTrackState] = useState({ video: true, audio: true });
+    const setRoomsHaveCall = useSetRecoilState(roomsHaveCallState);
 
     const mute = async (type: "audio" | "video") => {
         if (type === "audio") {
@@ -64,6 +68,10 @@ const Controls = ({ setStart, tracks }: Props) => {
     useEffect(() => {
         socket?.on("closeCall", (res: { roomId: string }) => {
             leaveChannel();
+            setCall(null);
+            setRoomsHaveCall((prev) =>
+                prev.filter((r) => r.roomId !== res.roomId)
+            );
             history.push("/");
         });
     }, [socket]);
