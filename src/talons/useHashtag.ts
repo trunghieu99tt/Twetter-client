@@ -23,6 +23,7 @@ export const useHashtag = () => {
         getMostPopularHashtag,
         {
             staleTime: ONE_HOUR,
+            enabled: false,
         }
     );
 

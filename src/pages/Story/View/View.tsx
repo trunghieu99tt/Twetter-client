@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import cn from "classnames";
 import { useHistory, useParams } from "react-router";
 import { useTranslation } from "react-i18next";
@@ -46,6 +46,7 @@ import classes from "./view.module.css";
 import { useOnClickOutside } from "@hooks/useOnClickOutside";
 import { BiDotsVertical } from "react-icons/bi";
 import Dropdown from "@components/Dropdown";
+import { isEqual } from "lodash";
 
 type TDirection = "LEFT" | "RIGHT";
 
@@ -58,12 +59,17 @@ const View = () => {
     const userId = params.userId;
 
     const { user: currentUser } = useUser();
-    const { updateStoryMutation, deleteStoryMutation } = useStory();
+    const {
+        updateStoryMutation,
+        deleteStoryMutation,
+        getStoriesFeedQuery,
+        groupStoryByUser,
+    } = useStory();
 
     const history = useHistory();
     const owners = useRecoilValue(ownersSelector);
-    const storyGroups = useRecoilValue(storiesState);
     const userStories = useRecoilValue(storySelector(userId));
+    const [storyGroups, setStoryGroups] = useRecoilState(storiesState);
     const userStoryMetadata = useRecoilValue(userStoryMetadataSelector(userId));
 
     const [activeStoryIdx, setActiveStoryIdx] = useState<number>(0);
@@ -75,6 +81,8 @@ const View = () => {
     useOnClickOutside(dropdownRef, () => setVisibleDropdown(false));
 
     const activeStory: iStory | null = userStories?.[activeStoryIdx] || null;
+
+    const storyList = getStoriesFeedQuery.data;
 
     const onViewUserStories = (userId: string) => {
         history.push(`${STORY_ROUTES.VIEW}/${userId}`);
@@ -184,6 +192,13 @@ const View = () => {
             }
         }
     }, [activeStory]);
+
+    useEffect(() => {
+        const newStoriesByUsers = groupStoryByUser(storyList);
+        if (!isEqual(storyGroups, newStoriesByUsers)) {
+            setStoryGroups(newStoriesByUsers);
+        }
+    }, [storyList]);
 
     /**
      * Has next button:

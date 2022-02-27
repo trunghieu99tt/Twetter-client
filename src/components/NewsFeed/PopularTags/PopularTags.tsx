@@ -13,6 +13,7 @@ import SidebarBlock from "@components/Sidebar/SidebarBlock";
 import { TagCounter, TagName, TagWrapper } from "./PopularTagsStyle";
 import { iHashtag } from "@type/hashtag.types";
 import { HASHTAG_ROUTES } from "routes/routes";
+import { memo, useEffect } from "react";
 
 const PopularTags = () => {
     const { t } = useTranslation();
@@ -22,9 +23,19 @@ const PopularTags = () => {
     const mostPopularHashtags: iHashtag[] =
         getMostPopularHashtagQuery.data || [];
 
+    useEffect(() => {
+        getMostPopularHashtagQuery.refetch();
+    }, []);
+
+    useEffect(() => {
+        console.log("popular tags re-rendered");
+    });
+
     if (!mostPopularHashtags?.length) return null;
 
     const title = t("popularTag");
+
+    console.log("mostPopularHashtags", mostPopularHashtags);
 
     const content = mostPopularHashtags
         .slice(0, Math.min(mostPopularHashtags.length, 5))
@@ -48,4 +59,4 @@ const PopularTags = () => {
     return <SidebarBlock title={title} content={content} />;
 };
 
-export default PopularTags;
+export default memo(PopularTags);

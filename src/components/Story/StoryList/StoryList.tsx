@@ -1,19 +1,41 @@
-import { useRecoilValue } from "recoil";
-import { storiesState } from "states/story.state";
+import { useEffect } from "react";
+import { useRecoilState } from "recoil";
+
+// talons
+import { useStory } from "@talons/useStory";
+
+// utils
+import { isEqual } from "lodash";
+
+// components
 import StoryItem from "../StoryItem";
 
+// states
+import { storiesState } from "states/story.state";
+
+// styles
 import classes from "./storyList.module.css";
 
 const MAX_SHOWN_STORY_COUNT = 5;
 
 const StoryList = () => {
-    const groupStoryByUser = useRecoilValue(storiesState);
+    const { getStoriesFeedQuery, groupStoryByUser } = useStory();
+    const [stories, setStories] = useRecoilState(storiesState);
+
+    const storyList = getStoriesFeedQuery.data;
+
+    useEffect(() => {
+        const newStoriesByUsers = groupStoryByUser(storyList);
+        if (!isEqual(stories, newStoriesByUsers)) {
+            setStories(newStoriesByUsers);
+        }
+    }, [storyList]);
 
     return (
         <section className={classes.root}>
             <StoryItem />
-            {groupStoryByUser &&
-                Object.entries(groupStoryByUser)
+            {stories &&
+                Object.entries(stories)
                     ?.slice(0, MAX_SHOWN_STORY_COUNT)
                     .map(([key, value]) => (
                         <StoryItem

@@ -1,11 +1,7 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import { iStory, iStoryCreate, iStoryGroup } from "@type/story.types";
 import client from "api/client";
 import { STORY_ENDPOINTS, STORY_QUERY } from "constants/story.constants";
-import { useEffect } from "react";
 import { useMutation, useQuery, useQueryClient } from "react-query";
-import { useSetRecoilState } from "recoil";
-import { storiesState } from "states/story.state";
 
 const getStoriesFeed = async () => {
     const response = await client.get(
@@ -30,7 +26,6 @@ const deleteStory = async ({ storyId }: { storyId: string }) => {
 };
 
 export const useStory = () => {
-    const setStories = useSetRecoilState(storiesState);
     const queryClient = useQueryClient();
 
     const invalidateStoryQuery = () => {
@@ -53,17 +48,6 @@ export const useStory = () => {
 
     const updateStoryMutation = useMutation(updateStory, {
         onSuccess: (response: any) => {
-            // const data = response?.data;
-            // // find and replace the story in react-query
-            // const stories = getStoriesFeedQuery.data;
-
-            // const updatedStory = stories.map((story: iStory) => {
-            //     if (story._id === data._id) {
-            //         return data;
-            //     }
-            //     return story;
-            // });
-            // queryClient.setQueryData(STORY_QUERY.GET_STORIES, updatedStory);
             invalidateStoryQuery();
         },
     });
@@ -74,12 +58,8 @@ export const useStory = () => {
         },
     });
 
-    const refetchAll = () => {};
-
-    const storyList = getStoriesFeedQuery.data;
-
-    useEffect(() => {
-        const groupStoryByUser: iStoryGroup = storyList?.reduce(
+    const groupStoryByUser = (stories: iStory[]): iStoryGroup => {
+        return stories?.reduce(
             (
                 res: {
                     [key: string]: iStory[];
@@ -98,11 +78,10 @@ export const useStory = () => {
             },
             {}
         );
-        setStories(groupStoryByUser);
-    }, [storyList]);
+    };
 
     return {
-        refetchAll,
+        groupStoryByUser,
         getStoriesFeedQuery,
         createStoryMutation,
         updateStoryMutation,

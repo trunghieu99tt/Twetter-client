@@ -1,4 +1,6 @@
 import React, { useEffect } from "react";
+import { useRecoilValue } from "recoil";
+import AgoraRTC from "agora-rtc-sdk-ng";
 import { Route, Switch, useLocation } from "react-router-dom";
 
 // talons
@@ -26,25 +28,24 @@ import Notification from "@pages/Notification";
 import TweetDetail from "@pages/Tweet/TweetDetail";
 
 // components
-import PrivateRoute from "@components/routes/PrivateRoute";
-import CreateNewGroupChat from "@components/Chat/NewRoomModal";
-
-// routes
-import { HASHTAG_ROUTES, STORY_ROUTES } from "./routes";
-import { useRecoilValue } from "recoil";
-import { callState } from "states/call.state";
 import CallModal from "@components/Call/CallModal";
-import AgoraRTC from "agora-rtc-sdk-ng";
 import UserList from "@components/Admin/User/UserList";
 import UserForm from "@components/Admin/User/UserForm";
-import ReportedTweetList from "@components/Admin/Tweet/ReportedTweetList";
+import UserView from "@components/Admin/User/UserView";
+import PrivateRoute from "@components/routes/PrivateRoute";
+import CreateNewGroupChat from "@components/Chat/NewRoomModal";
 import UserStatistic from "@components/Admin/User/UserStatistic";
 import TweetStatistic from "@components/Admin/Tweet/TweetStatistic";
 import AdminPrivateRoute from "@components/routes/PrivateAdminRoute";
-import UserView from "@components/Admin/User/UserView";
+import ReportedTweetList from "@components/Admin/Tweet/ReportedTweetList";
+
+// routes
+import { HASHTAG_ROUTES, STORY_ROUTES } from "./routes";
+
+// states
+import { callState } from "states/call.state";
 
 const PrivateRouteController = () => {
-    const storyTalons = useStory();
     const notificationTalons = useNotify();
     const hashtagTalons = useHashtag();
     const { getUserRooms } = useRooms();
@@ -62,6 +63,10 @@ const PrivateRouteController = () => {
     useEffect(() => {
         window.scrollTo(0, 0);
     }, [location.pathname]);
+
+    useEffect(() => {
+        console.log("re-rendered PrivateRouteController");
+    });
 
     return (
         <React.Fragment>
