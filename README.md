@@ -15,7 +15,6 @@
 - [Overview](#overview)
 - [Features](#features)
 - [How to use](#how-to-use)
-- [Acknowledgements](#acknowledgements)
 
 <!-- OVERVIEW -->
 
