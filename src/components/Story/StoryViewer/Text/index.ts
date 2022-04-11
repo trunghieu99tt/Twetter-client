@@ -1,1 +1,1 @@
-export { default } from './TextStoryViewer'
+export { default } from "./TextStoryViewer";

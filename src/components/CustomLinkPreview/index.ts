@@ -1,1 +1,1 @@
-export { default } from './CustomLinkPreview'
+export { default } from "./CustomLinkPreview";

@@ -1,1 +1,1 @@
-export { default } from './InfinityTweetList'
+export { default } from "./InfinityTweetList";

@@ -1,1 +1,1 @@
-export { default } from './MyProfileOverview'
+export { default } from "./MyProfileOverview";

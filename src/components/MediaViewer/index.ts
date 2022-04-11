@@ -1,1 +1,1 @@
-export { default } from './MediaViewer'
+export { default } from "./MediaViewer";

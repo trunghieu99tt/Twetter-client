@@ -1,1 +1,1 @@
-export { default } from './MediaCard'
+export { default } from "./MediaCard";

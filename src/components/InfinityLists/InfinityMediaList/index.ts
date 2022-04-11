@@ -1,1 +1,1 @@
-export { default } from './InfinityMediaList'
+export { default } from "./InfinityMediaList";

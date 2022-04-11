@@ -1,1 +1,1 @@
-export { default } from './ImageWithPlaceholder'
+export { default } from "./ImageWithPlaceholder";

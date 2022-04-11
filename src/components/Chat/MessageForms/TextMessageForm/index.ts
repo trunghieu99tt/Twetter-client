@@ -1,1 +1,1 @@
-export {default} from './TextMessageForm'
+export { default } from "./TextMessageForm";

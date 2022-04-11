@@ -1,1 +1,1 @@
-export {default} from './VoiceMessageContent'
+export { default } from "./VoiceMessageContent";

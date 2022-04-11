@@ -1,1 +1,1 @@
-export { default } from './RichTextInput'
+export { default } from "./RichTextInput";

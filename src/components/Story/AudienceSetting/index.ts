@@ -1,1 +1,1 @@
-export { default } from './AudienceSetting';
+export { default } from "./AudienceSetting";

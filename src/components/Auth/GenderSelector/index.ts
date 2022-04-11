@@ -1,1 +1,1 @@
-export { default } from './GenderSelector'
+export { default } from "./GenderSelector";

@@ -1,1 +1,1 @@
-export { default } from './ImageWithUpdater'
+export { default } from "./ImageWithUpdater";

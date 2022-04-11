@@ -1,1 +1,1 @@
-export {default} from './ImageMessageForm'
+export { default } from "./ImageMessageForm";

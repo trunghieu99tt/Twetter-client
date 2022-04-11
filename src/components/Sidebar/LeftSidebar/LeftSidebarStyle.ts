@@ -1,23 +1,24 @@
 import styled from "styled-components";
 
 export const Wrapper = styled.div`
-    background: #FFFFFF;
-    box-shadow: var(--box-shadow-1);
-    border-radius: 8px;
-    padding: 2rem;
-    padding-left: 0;
-    width: 30rem;
+  background: #ffffff;
+  box-shadow: var(--box-shadow-1);
+  border-radius: 8px;
+  padding: 2rem;
+  padding-left: 0;
+  width: 30rem;
 `;
 
 export const List = styled.ul``;
 
-export const ListItem = styled('li') <{ active: boolean }>`
+export const ListItem = styled("li")<{ active: boolean }>`
+  margin-bottom: 1.8rem;
+  padding: 0.5rem 2rem;
+  position: relative;
 
-    margin-bottom: 1.8rem;
-    padding: 0.5rem 2rem;
-    position: relative;
-    
-    ${props => props.active && `
+  ${(props) =>
+    props.active &&
+    `
         &::before{
             content: ' ';
             position: absolute;
@@ -30,11 +31,9 @@ export const ListItem = styled('li') <{ active: boolean }>`
         }
     `}
 
-    a {
-        font-weight: 600;
-        font-size: 1.4rem;
-        color: ${props => props.active ? 'var(--blue-1)' : 'var(--gray-1)'};
-        
-    }
-
+  a {
+    font-weight: 600;
+    font-size: 1.4rem;
+    color: ${(props) => (props.active ? "var(--blue-1)" : "var(--gray-1)")};
+  }
 `;

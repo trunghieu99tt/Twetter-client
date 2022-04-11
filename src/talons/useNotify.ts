@@ -1,8 +1,8 @@
 import {
-    QueryFunctionContext,
-    useInfiniteQuery,
-    useMutation,
-    useQueryClient,
+  QueryFunctionContext,
+  useInfiniteQuery,
+  useMutation,
+  useQueryClient,
 } from "react-query";
 
 // utils
@@ -14,8 +14,8 @@ import { useAppContext } from "@context/app.context";
 
 // constants
 import {
-    NOTIFICATION_ENDPOINT,
-    NOTIFICATION_QUERIES,
+  NOTIFICATION_ENDPOINT,
+  NOTIFICATION_QUERIES,
 } from "constants/notify.constants";
 import { generateInfinityQueryListConfig } from "constants/config.constant";
 
@@ -24,107 +24,105 @@ import { iNotificationDTO } from "@type/notify.types";
 import { useUser } from "./useUser";
 
 const getNotifications = async ({ pageParam = 0 }: QueryFunctionContext) => {
-    return getInfinityList(`${NOTIFICATION_ENDPOINT.BASE}`, pageParam, {
-        limit: 12,
-    });
+  return getInfinityList(`${NOTIFICATION_ENDPOINT.BASE}`, pageParam, {
+    limit: 12,
+  });
 };
 
 const createNotification = async (newNotification: iNotificationDTO) => {
-    try {
-        const response = await client.post(
-            NOTIFICATION_ENDPOINT.BASE,
-            newNotification
-        );
+  try {
+    const response = await client.post(
+      NOTIFICATION_ENDPOINT.BASE,
+      newNotification
+    );
 
-        return response.data;
-    } catch (error: any) {
-        console.log(new Date(), "error createNotification: ", error.message);
-    }
+    return response.data;
+  } catch (error: any) {
+    console.log(new Date(), "error createNotification: ", error.message);
+  }
 };
 
 const readNotification = async (notificationIds: string[]) => {
-    try {
-        const response = await Promise.all(
-            notificationIds.map(async (id) => {
-                const response = await client.patch(
-                    `${NOTIFICATION_ENDPOINT.READ_NOTIFICATION}/${id}`
-                );
-
-                return response?.data;
-            })
+  try {
+    const response = await Promise.all(
+      notificationIds.map(async (id) => {
+        const response = await client.patch(
+          `${NOTIFICATION_ENDPOINT.READ_NOTIFICATION}/${id}`
         );
 
-        return response;
-    } catch (error: any) {
-        console.log(new Date(), "error createNotification: ", error.message);
-    }
+        return response?.data;
+      })
+    );
+
+    return response;
+  } catch (error: any) {
+    console.log(new Date(), "error createNotification: ", error.message);
+  }
 };
 
 export const useNotify = () => {
-    const {
-        state: { socket },
-    } = useAppContext();
-    const { user: currentUser } = useUser();
-    const queryClient = useQueryClient();
+  const {
+    state: { socket },
+  } = useAppContext();
+  const { user: currentUser } = useUser();
+  const queryClient = useQueryClient();
 
-    // create notify
-    const createNotificationMutation = useMutation(createNotification);
+  // create notify
+  const createNotificationMutation = useMutation(createNotification);
 
-    // get notifies
-    const getNotificationsQuery = useInfiniteQuery(
-        NOTIFICATION_QUERIES.GET_NOTIFICATIONS,
-        getNotifications,
-        generateInfinityQueryListConfig()
+  // get notifies
+  const getNotificationsQuery = useInfiniteQuery(
+    NOTIFICATION_QUERIES.GET_NOTIFICATIONS,
+    getNotifications,
+    generateInfinityQueryListConfig()
+  );
+
+  // read notifies
+  const readNotificationMutation = useMutation(readNotification);
+
+  const createNotificationAction = (newNotification: iNotificationDTO) => {
+    const { receivers } = newNotification;
+    const filteredReceivers = receivers.filter(
+      (receiver) => receiver !== currentUser._id
     );
 
-    // read notifies
-    const readNotificationMutation = useMutation(readNotification);
+    if (filteredReceivers.length > 0) {
+      newNotification.receivers = filteredReceivers;
+      console.log("newNotification: ", newNotification);
+      createNotificationMutation.mutate(newNotification, {
+        onSuccess: (response) => {
+          console.log(`response`, response);
+          if (socket) {
+            if (response) {
+              socket.emit("createNotification", {
+                ...response,
+                sender: currentUser,
+              });
+            }
+          }
+        },
+      });
+    }
+  };
 
-    const createNotificationAction = (newNotification: iNotificationDTO) => {
-        const { receivers } = newNotification;
-        const filteredReceivers = receivers.filter(
-            (receiver) => receiver !== currentUser._id
-        );
+  const readNotificationAction = (notificationIds: string[]) => {
+    readNotificationMutation.mutate(notificationIds, {
+      onSuccess: () => {
+        queryClient.invalidateQueries(NOTIFICATION_QUERIES.GET_NOTIFICATIONS);
+      },
+    });
+  };
 
-        if (filteredReceivers.length > 0) {
-            newNotification.receivers = filteredReceivers;
-            console.log("newNotification: ", newNotification);
-            createNotificationMutation.mutate(newNotification, {
-                onSuccess: (response) => {
-                    console.log(`response`, response);
-                    if (socket) {
-                        if (response) {
-                            socket.emit("createNotification", {
-                                ...response,
-                                sender: currentUser,
-                            });
-                        }
-                    }
-                },
-            });
-        }
-    };
+  const refetchAll = () => {
+    // queryClient.invalidateQueries(
+    //     NOTIFICATION_QUERIES.GET_NOTIFICATIONS
+    // );
+  };
 
-    const readNotificationAction = (notificationIds: string[]) => {
-        readNotificationMutation.mutate(notificationIds, {
-            onSuccess: () => {
-                queryClient.invalidateQueries(
-                    NOTIFICATION_QUERIES.GET_NOTIFICATIONS
-                );
-            },
-        });
-    };
-
-    const refetchAll = () => {
-        // queryClient.invalidateQueries(
-        //     NOTIFICATION_QUERIES.GET_NOTIFICATIONS
-        // );
-    };
-
-    return {
-        refetchAll,
-        getNotificationsQuery,
-        readNotificationAction,
-        createNotificationAction,
-    };
+  return {
+    refetchAll,
+    getNotificationsQuery,
+    readNotificationAction,
+    createNotificationAction,
+  };
 };

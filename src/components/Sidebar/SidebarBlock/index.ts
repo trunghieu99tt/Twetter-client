@@ -1,1 +1,1 @@
-export { default } from './SidebarBlock'
+export { default } from "./SidebarBlock";

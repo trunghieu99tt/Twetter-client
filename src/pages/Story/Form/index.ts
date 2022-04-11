@@ -1,1 +1,1 @@
-export { default } from './StoryForm'
+export { default } from "./StoryForm";

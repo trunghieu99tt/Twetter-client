@@ -1,1 +1,1 @@
-export { default } from './TextStory';
+export { default } from "./TextStory";

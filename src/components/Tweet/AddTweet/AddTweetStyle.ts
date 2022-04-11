@@ -1,79 +1,84 @@
 import styled from "styled-components";
 
 export const Wrapper = styled.div`
-    background: #FFFFFF;
-    box-shadow: var(--box-shadow-1);
-    border-radius: 1.2rem;
-    padding: 1rem 2rem;
-    margin-bottom: 2.5rem;
+  background: #ffffff;
+  box-shadow: var(--box-shadow-1);
+  border-radius: 1.2rem;
+  padding: 1rem 2rem;
+  margin-bottom: 2.5rem;
 `;
 
 export const HeadLine = styled.div`
-    color: var(--gray-2);
-    padding-bottom: 0.8rem;
-    border-bottom: 1px solid var(--gray-5);
-    font-weight: 600;
-    margin-bottom: .8rem;
+  color: var(--gray-2);
+  padding-bottom: 0.8rem;
+  border-bottom: 1px solid var(--gray-5);
+  font-weight: 600;
+  margin-bottom: 0.8rem;
 `;
 
 export const Main = styled.div`
-    display: flex;
-    gap: 1.2rem;
-    
-    & > div{
-        flex: 1;
-    }
-    
+  display: flex;
+  gap: 1.2rem;
+
+  & > div {
+    flex: 1;
+  }
 `;
 
 export const TweetContentInputWrapper = styled.div`
-    min-height: 10rem;
-    margin-bottom: 2rem;
+  min-height: 10rem;
+  margin-bottom: 2rem;
 `;
 
 export const TweetContentInput = styled.input`
-    outline: none;
-    border: none;
-    width: 100%;
+  outline: none;
+  border: none;
+  width: 100%;
 `;
 
 export const TweetImage = styled.img`
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 `;
 
 export const ImageLeftPlaceHolder = styled.div`
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 3rem;
-    font-weight: 500;
-    background: rgba(0,0,0,.5);
-    color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 3rem;
+  font-weight: 500;
+  background: rgba(0, 0, 0, 0.5);
+  color: #fff;
 `;
 
-export const TweetImageWrapper = styled('div') <{
-    mode: 'block' | 'flex' | 'grid' | 'none';
+export const TweetImageWrapper = styled("div")<{
+  mode: "block" | "flex" | "grid" | "none";
 }>`
-    position: relative;
-    margin-top: 1rem;
-    margin-bottom: 2rem;
-    position: relative;
-    
-    display: ${props => props.mode};
-    
-    ${props => props.mode === 'block' && `
+  position: relative;
+  margin-top: 1rem;
+  margin-bottom: 2rem;
+  position: relative;
+
+  display: ${(props) => props.mode};
+
+  ${(props) =>
+    props.mode === "block" &&
+    `
         height: 30rem;
     `};
-    
-    ${props => props.mode === 'flex' && `
+
+  ${(props) =>
+    props.mode === "flex" &&
+    `
         & > img{
             width: 50%;
         }
     `};
-    
-    ${props => props.mode === 'grid' && `
+
+  ${(props) =>
+    props.mode === "grid" &&
+    `
         grid-template-rows: repeat(2, 20rem);
         grid-template-columns: repeat(6, 1fr);
         
@@ -107,47 +112,46 @@ export const TweetImageWrapper = styled('div') <{
 `;
 
 export const DeleteImagesButton = styled.button`
-    position: absolute;
-    top: 1rem;
-    right: 1rem;
-    cursor: pointer;
-    
-    svg{
-        --size: 1.5rem;
-        width: var(--size);
-        height: var(--size);
-    }
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  cursor: pointer;
+
+  svg {
+    --size: 1.5rem;
+    width: var(--size);
+    height: var(--size);
+  }
 `;
 
 export const Footer = styled.div`
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 `;
 
 export const FileLabel = styled.label`
-    svg{
-        --size: 1.5rem;
-        width: var(--size);
-        height: var(--size);
-        fill: var(--blue-1);
-        cursor: pointer;
-    }
+  svg {
+    --size: 1.5rem;
+    width: var(--size);
+    height: var(--size);
+    fill: var(--blue-1);
+    cursor: pointer;
+  }
 `;
 
 export const FileInput = styled.input`
-    display: none;
+  display: none;
 `;
 
 export const TweetSubmitButton = styled.button`
-    padding: .8rem 2.4rem;
-    background: var(--blue-1);
-    color: #fff;
-    border-radius: 4px;
-    cursor: pointer;
-    
-    &:disabled{
-        background: var(--gray-1);
-    }
-    
+  padding: 0.8rem 2.4rem;
+  background: var(--blue-1);
+  color: #fff;
+  border-radius: 4px;
+  cursor: pointer;
+
+  &:disabled {
+    background: var(--gray-1);
+  }
 `;

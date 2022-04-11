@@ -1,1 +1,1 @@
-export { default } from './InfinityPeopleList'
+export { default } from "./InfinityPeopleList";

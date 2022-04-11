@@ -12,117 +12,117 @@ import { useQueryClient } from "react-query";
 import { v4 as uuid } from "uuid";
 
 type Props = {
-    tweet?: iTweet;
+  tweet?: iTweet;
 };
 
 export const useTweetForm = ({ tweet }: Props) => {
-    const user: iUser = new UserModel(
-        useQueryClient().getQueryData(USER_QUERY.GET_ME)
-    ).getData();
+  const user: iUser = new UserModel(
+    useQueryClient().getQueryData(USER_QUERY.GET_ME)
+  ).getData();
 
-    const [body, setBody] = useState(tweet?.content || "");
-    const [media, setMedia] = useState<TMedia[]>([]);
-    const [initialMedias, setInitialMedias] = useState<string[]>(
-        tweet?.media || []
-    );
-    const [loading, setLoading] = useState<boolean>(false);
-    const [audience, setAudience] = useState<number>(tweet?.audience || 0);
+  const [body, setBody] = useState(tweet?.content || "");
+  const [media, setMedia] = useState<TMedia[]>([]);
+  const [initialMedias, setInitialMedias] = useState<string[]>(
+    tweet?.media || []
+  );
+  const [loading, setLoading] = useState<boolean>(false);
+  const [audience, setAudience] = useState<number>(tweet?.audience || 0);
 
-    const { createTweetMutation, updateTweetMutation } = useTweets(user?._id);
+  const { createTweetMutation, updateTweetMutation } = useTweets(user?._id);
 
-    const { uploadMultiMedia } = useUpload();
+  const { uploadMultiMedia } = useUpload();
 
-    const { updateHashTags } = useHashtag();
+  const { updateHashTags } = useHashtag();
 
-    const onChangeFile = (event: ChangeEvent<HTMLInputElement>) => {
-        const files = event.target.files || [];
-        if (files?.length > 0) {
-            const newMedia: TMedia[] = Array.from(files).map((file: File) => ({
-                id: uuid(),
-                file,
-                url: URL.createObjectURL(file),
-                type: file.type.split("/")[0],
-            }));
-            setMedia(newMedia);
-        }
-    };
+  const onChangeFile = (event: ChangeEvent<HTMLInputElement>) => {
+    const files = event.target.files || [];
+    if (files?.length > 0) {
+      const newMedia: TMedia[] = Array.from(files).map((file: File) => ({
+        id: uuid(),
+        file,
+        url: URL.createObjectURL(file),
+        type: file.type.split("/")[0],
+      }));
+      setMedia(newMedia);
+    }
+  };
 
-    const onCancelMedia = () => {
-        setMedia([]);
-        setInitialMedias([]);
-    };
+  const onCancelMedia = () => {
+    setMedia([]);
+    setInitialMedias([]);
+  };
 
-    const resetContent = () => {
-        setBody("");
-    };
+  const resetContent = () => {
+    setBody("");
+  };
 
-    const resetAll = () => {
-        onCancelMedia();
-        setAudience(0);
-        resetContent();
-        setLoading(false);
-    };
+  const resetAll = () => {
+    onCancelMedia();
+    setAudience(0);
+    resetContent();
+    setLoading(false);
+  };
 
-    const onSubmitSuccess = () => {
-        const initialHashtags = tweet?.tags || [];
-        const { hashtags: newHashtags } = extractMetadata(body || "") || [];
-        updateHashTags(initialHashtags, newHashtags as string[]);
-        resetAll();
-    };
+  const onSubmitSuccess = () => {
+    const initialHashtags = tweet?.tags || [];
+    const { hashtags: newHashtags } = extractMetadata(body || "") || [];
+    updateHashTags(initialHashtags, newHashtags as string[]);
+    resetAll();
+  };
 
-    const onSubmit = async () => {
-        if (body || media.length > 0) {
-            setLoading(true);
-            const mediaResponse = await uploadMultiMedia(
-                media?.map((media) => media.file as File) || []
-            );
-            const { hashtags } = extractMetadata(body || "") || [];
+  const onSubmit = async () => {
+    if (body || media.length > 0) {
+      setLoading(true);
+      const mediaResponse = await uploadMultiMedia(
+        media?.map((media) => media.file as File) || []
+      );
+      const { hashtags } = extractMetadata(body || "") || [];
 
-            const updatedMedias = [...mediaResponse, ...initialMedias];
+      const updatedMedias = [...mediaResponse, ...initialMedias];
 
-            const newTweet: iCreateTweetDTO = {
-                content: body,
-                audience,
-                media: updatedMedias,
-                tags: hashtags,
-            };
-
-            if (tweet) {
-                try {
-                    await updateTweetMutation.mutateAsync({
-                        tweetId: tweet._id,
-                        updatedTweet: newTweet,
-                    });
-                    onSubmitSuccess();
-                } catch (error) {
-                    resetAll();
-                    console.log("error: ", error);
-                }
-            } else {
-                try {
-                    await createTweetMutation.mutateAsync(newTweet);
-                    onSubmitSuccess();
-                } catch (error) {
-                    resetAll();
-                    console.log("error: ", error);
-                }
-            }
-
-            setLoading(false);
-        }
-    };
-
-    return {
-        body,
-        loading,
+      const newTweet: iCreateTweetDTO = {
+        content: body,
         audience,
-        media,
-        initialMedias,
+        media: updatedMedias,
+        tags: hashtags,
+      };
 
-        setBody,
-        onSubmit,
-        setAudience,
-        onChangeFile,
-        onCancelImage: onCancelMedia,
-    };
+      if (tweet) {
+        try {
+          await updateTweetMutation.mutateAsync({
+            tweetId: tweet._id,
+            updatedTweet: newTweet,
+          });
+          onSubmitSuccess();
+        } catch (error) {
+          resetAll();
+          console.log("error: ", error);
+        }
+      } else {
+        try {
+          await createTweetMutation.mutateAsync(newTweet);
+          onSubmitSuccess();
+        } catch (error) {
+          resetAll();
+          console.log("error: ", error);
+        }
+      }
+
+      setLoading(false);
+    }
+  };
+
+  return {
+    body,
+    loading,
+    audience,
+    media,
+    initialMedias,
+
+    setBody,
+    onSubmit,
+    setAudience,
+    onChangeFile,
+    onCancelImage: onCancelMedia,
+  };
 };

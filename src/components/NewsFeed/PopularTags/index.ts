@@ -1,1 +1,1 @@
-export { default } from './PopularTags'
+export { default } from "./PopularTags";

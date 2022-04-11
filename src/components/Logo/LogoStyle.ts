@@ -1,7 +1,5 @@
 import styled from "styled-components";
 
-export const LogoWrapper = styled.div`
-`;
+export const LogoWrapper = styled.div``;
 
-export const LogoImg = styled.img`
-`;
+export const LogoImg = styled.img``;

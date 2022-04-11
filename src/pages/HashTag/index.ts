@@ -1,1 +1,1 @@
-export { default } from './Hashtag'
+export { default } from "./Hashtag";

@@ -18,48 +18,48 @@ import { useUser } from "./useUser";
  *}}
  * */
 const useUserView = () => {
-    const history = useHistory();
-    const params: { id: string } = useParams();
+  const history = useHistory();
+  const params: { id: string } = useParams();
 
-    const { fetchUser } = useUser();
-    const [user, setUser] = useState<iUser | any>(null);
+  const { fetchUser } = useUser();
+  const [user, setUser] = useState<iUser | any>(null);
 
-    useEffect(() => {
-        if (params?.id) {
-            handleFetchUser();
+  useEffect(() => {
+    if (params?.id) {
+      handleFetchUser();
+    }
+  }, [params.id]);
+
+  const handleFetchUser = async () => {
+    if (params?.id) {
+      const id = params.id;
+      const data = await fetchUser(id);
+      if (!data) {
+        history.push("/users");
+        message.error("Không tồn tại phiếu thu với id này");
+      }
+      Object.entries(data).forEach(([key, value]) => {
+        // if value is array
+        if (Array.isArray(value)) {
+          data[key] = value.length;
         }
-    }, [params.id]);
+      });
 
-    const handleFetchUser = async () => {
-        if (params?.id) {
-            const id = params.id;
-            const data = await fetchUser(id);
-            if (!data) {
-                history.push("/users");
-                message.error("Không tồn tại phiếu thu với id này");
-            }
-            Object.entries(data).forEach(([key, value]) => {
-                // if value is array
-                if (Array.isArray(value)) {
-                    data[key] = value.length;
-                }
-            });
+      setUser(data);
+    }
+  };
 
-            setUser(data);
-        }
-    };
+  const onGoBack = () => history.push("/users");
 
-    const onGoBack = () => history.push("/users");
+  const onGoToEdit = () => history.push(`/user/edit/${params.id}`);
 
-    const onGoToEdit = () => history.push(`/user/edit/${params.id}`);
+  return {
+    params,
+    user,
 
-    return {
-        params,
-        user,
-
-        onGoBack,
-        onGoToEdit,
-    };
+    onGoBack,
+    onGoToEdit,
+  };
 };
 
 export { useUserView };

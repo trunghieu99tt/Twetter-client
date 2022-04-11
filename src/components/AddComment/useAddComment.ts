@@ -10,113 +10,109 @@ import { ChangeEvent, useState } from "react";
 import { v4 } from "uuid";
 
 type Props = {
-    tweet: iTweet;
-    commentData?: iComment;
+  tweet: iTweet;
+  commentData?: iComment;
 };
 
 export const useAddComment = ({ commentData, tweet }: Props) => {
-    const [comment, setComment] = useState<string>("");
-    const [showEmoji, setShowEmoji] = useState<boolean>(false);
-    const [media, setMedia] = useState<TMedia | null>(null);
+  const [comment, setComment] = useState<string>("");
+  const [showEmoji, setShowEmoji] = useState<boolean>(false);
+  const [media, setMedia] = useState<TMedia | null>(null);
 
-    const { createNotificationAction } = useNotify();
-    const { user } = useUser();
-    const { uploadSingleMedia } = useUpload();
+  const { createNotificationAction } = useNotify();
+  const { user } = useUser();
+  const { uploadSingleMedia } = useUpload();
 
-    const { createCommentMutation } = useComment({
-        userId: user?._id,
-        tweetId: tweet._id,
-    });
+  const { createCommentMutation } = useComment({
+    userId: user?._id,
+    tweetId: tweet._id,
+  });
 
-    const onChangeComment = (event: ChangeEvent<HTMLInputElement>) => {
-        setComment(event.target.value);
+  const onChangeComment = (event: ChangeEvent<HTMLInputElement>) => {
+    setComment(event.target.value);
+  };
+
+  const onChangeFile = (event: ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      const newMedia: TMedia = {
+        id: v4(),
+        file,
+        url: URL.createObjectURL(file),
+        type: file.type.split("/")[0],
+      };
+      setMedia(newMedia);
+    }
+  };
+
+  const onCancelMedia = () => setMedia(null);
+
+  const resetFields = () => {
+    onCancelMedia();
+    setComment("");
+  };
+
+  const onSubmit = async (event: any) => {
+    event.preventDefault();
+    let url = "";
+    if (media?.file) {
+      url = await uploadSingleMedia(media?.file);
+    }
+    const newComment = {
+      content: comment,
+      media: url,
     };
+    const response = await createCommentMutation.mutateAsync(
+      {
+        newComment,
+        parentId: commentData?._id || tweet?._id,
+      },
+      {
+        onSettled: () => {
+          resetFields();
+        },
+      }
+    );
 
-    const onChangeFile = (event: ChangeEvent<HTMLInputElement>) => {
-        const file = event.target.files?.[0];
-        if (file) {
-            const newMedia: TMedia = {
-                id: v4(),
-                file,
-                url: URL.createObjectURL(file),
-                type: file.type.split("/")[0],
-            };
-            setMedia(newMedia);
-        }
-    };
+    const commentResponse = response?.data;
 
-    const onCancelMedia = () => setMedia(null);
+    if (commentResponse) {
+      // push notification
+      const msg: iNotificationDTO = {
+        text: commentData?._id ? "repliedYourComment" : "commentedYourTweet",
+        receivers: [
+          commentData?._id ? commentData.author._id : tweet.author._id,
+        ],
+        url: `/tweet/${tweet._id}`,
+        type: "comment",
+      };
 
-    const resetFields = () => {
-        onCancelMedia();
-        setComment("");
-    };
+      createNotificationAction(msg);
+    }
+  };
 
-    const onSubmit = async (event: any) => {
-        event.preventDefault();
-        let url = "";
-        if (media?.file) {
-            url = await uploadSingleMedia(media?.file);
-        }
-        const newComment = {
-            content: comment,
-            media: url,
-        };
-        const response = await createCommentMutation.mutateAsync(
-            {
-                newComment,
-                parentId: commentData?._id || tweet?._id,
-            },
-            {
-                onSettled: () => {
-                    resetFields();
-                },
-            }
-        );
+  const toggleShowEmoji = () => setShowEmoji(!showEmoji);
 
-        const commentResponse = response?.data;
+  const hideEmoji = () => setShowEmoji(false);
 
-        if (commentResponse) {
-            // push notification
-            const msg: iNotificationDTO = {
-                text: commentData?._id
-                    ? "repliedYourComment"
-                    : "commentedYourTweet",
-                receivers: [
-                    commentData?._id
-                        ? commentData.author._id
-                        : tweet.author._id,
-                ],
-                url: `/tweet/${tweet._id}`,
-                type: "comment",
-            };
+  const onEmojiClick = (event: any, emojiObject: any) => {
+    setComment(`${comment}${emojiObject.emoji}`);
+  };
 
-            createNotificationAction(msg);
-        }
-    };
+  return {
+    user,
+    media,
+    comment,
+    showEmoji,
+    error: createCommentMutation.error,
+    loading: createCommentMutation.isLoading,
 
-    const toggleShowEmoji = () => setShowEmoji(!showEmoji);
-
-    const hideEmoji = () => setShowEmoji(false);
-
-    const onEmojiClick = (event: any, emojiObject: any) => {
-        setComment(`${comment}${emojiObject.emoji}`);
-    };
-
-    return {
-        user,
-        media,
-        comment,
-        showEmoji,
-        error: createCommentMutation.error,
-        loading: createCommentMutation.isLoading,
-
-        hideEmoji,
-        onSubmit,
-        onEmojiClick,
-        onChangeFile,
-        onCancelMedia,
-        onChangeComment,
-        toggleShowEmoji,
-    };
+    hideEmoji,
+    onSubmit,
+    onEmojiClick,
+    onChangeFile,
+    onCancelMedia,
+    onChangeComment,
+    toggleShowEmoji,
+  };
 };

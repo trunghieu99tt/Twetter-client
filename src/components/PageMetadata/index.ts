@@ -1,1 +1,1 @@
-export { default } from './PageMetadata';
+export { default } from "./PageMetadata";

@@ -2,147 +2,147 @@ import { Link } from "react-router-dom";
 import styled from "styled-components";
 
 export const RetweetedBy = styled(Link)`
-    margin-bottom: 1rem;
-    display: flex;
-    font-size: 14px;
-    color: var(--gray-1);
-    gap: 1rem;
-    align-items: center;
-    font-weight: 500;
-    color: var(--blue-2);
+  margin-bottom: 1rem;
+  display: flex;
+  font-size: 14px;
+  color: var(--gray-1);
+  gap: 1rem;
+  align-items: center;
+  font-weight: 500;
+  color: var(--blue-2);
 `;
 
 export const Wrapper = styled.div`
-    background: #fff;
-    box-shadow: var(--box-shadow-1);
-    border-radius: 0.5rem;
-    padding: 2rem;
-    margin: 0 auto;
-    margin-bottom: 3.5rem;
-    max-width: 100%;
+  background: #fff;
+  box-shadow: var(--box-shadow-1);
+  border-radius: 0.5rem;
+  padding: 2rem;
+  margin: 0 auto;
+  margin-bottom: 3.5rem;
+  max-width: 100%;
 `;
 
 export const Header = styled.header`
-    position: relative;
+  position: relative;
 `;
 
 export const AuthorWrapper = styled.div`
-    display: flex;
-    gap: 2rem;
-    margin-bottom: 2rem;
+  display: flex;
+  gap: 2rem;
+  margin-bottom: 2rem;
 `;
 
 export const AuthorName = styled.h4`
-    font-weight: 600;
-    font-size: 1.6rem;
+  font-weight: 600;
+  font-size: 1.6rem;
 `;
 
 export const DateCreated = styled.p`
-    color: var(--gray-4);
-    font-weight: 500;
+  color: var(--gray-4);
+  font-weight: 500;
 `;
 
 export const DropdownButton = styled.button`
-    cursor: pointer;
+  cursor: pointer;
 `;
 
 export const AuthorActions = styled.div`
-    position: absolute;
-    top: 1rem;
-    right: 1rem;
-    z-index: 2;
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  z-index: 2;
 `;
 
 export const AuthorAction = styled.button`
-    border: none;
-    display: flex;
-    gap: 1rem;
-    align-items: center;
+  border: none;
+  display: flex;
+  gap: 1rem;
+  align-items: center;
 `;
 
 export const Content = styled.div``;
 
 export const TweetDescription = styled.div`
-    font-size: 1.5rem;
-    color: var(--gray-2);
-    margin-bottom: 2rem;
+  font-size: 1.5rem;
+  color: var(--gray-2);
+  margin-bottom: 2rem;
 `;
 
 export const TweetMediaWrapper = styled.div``;
 
 export const TweetMedia = styled.div`
-    height: 40rem;
-    object-fit: contain;
-    border-radius: 0.8rem;
+  height: 40rem;
+  object-fit: contain;
+  border-radius: 0.8rem;
 `;
 
 export const Interaction = styled.div`
-    margin: 1rem 0;
+  margin: 1rem 0;
 `;
 
 export const InteractionSummary = styled.div`
-    display: flex;
-    gap: 1.6rem;
-    align-items: center;
-    justify-content: flex-end;
-    margin-bottom: 0.8rem;
+  display: flex;
+  gap: 1.6rem;
+  align-items: center;
+  justify-content: flex-end;
+  margin-bottom: 0.8rem;
 `;
 
 export const InteractionSummaryItem = styled.div`
-    color: var(--gray-4);
-    font-size: 1.2rem;
-    font-weight: 500;
-    cursor: pointer;
+  color: var(--gray-4);
+  font-size: 1.2rem;
+  font-weight: 500;
+  cursor: pointer;
 `;
 
 export const InteractionButtonGroup = styled.div`
-    border-top: 1px solid var(--light-1);
-    border-bottom: 1px solid var(--light-1);
-    padding: 0.4rem 0;
-    display: flex;
-    justify-content: space-between;
-    flex-wrap: wrap;
+  border-top: 1px solid var(--light-1);
+  border-bottom: 1px solid var(--light-1);
+  padding: 0.4rem 0;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
 `;
 
 export const InteractionButton = styled("button")<{
-    customStyle?: string;
-    liked?: boolean;
-    saved?: boolean;
-    retweeted?: boolean;
+  customStyle?: string;
+  liked?: boolean;
+  saved?: boolean;
+  retweeted?: boolean;
 }>`
-    cursor: pointer;
-    padding: 1.1rem 4rem;
-    border-radius: 0.8rem;
-    display: flex;
-    gap: 1.2rem;
-    align-items: center;
-    font-weight: 500;
+  cursor: pointer;
+  padding: 1.1rem 4rem;
+  border-radius: 0.8rem;
+  display: flex;
+  gap: 1.2rem;
+  align-items: center;
+  font-weight: 500;
 
-    ${(props) =>
-        props.liked &&
-        `
+  ${(props) =>
+    props.liked &&
+    `
         color: var(--red);
     `}
 
-    ${(props) =>
-        props.saved &&
-        `
+  ${(props) =>
+    props.saved &&
+    `
         color: var(--blue-2);
     `}
 
     ${(props) =>
-        props.retweeted &&
-        `
+    props.retweeted &&
+    `
         color: var(--green-2);
     `}
     
     &:hover {
-        background: var(--light-1);
-    }
+    background: var(--light-1);
+  }
 `;
 
 export const CommentsWrapper = styled.div`
-    margin-top: 1rem;
-    padding-top: 2rem;
-    border-top: 1px solid var(--light-1);
+  margin-top: 1rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--light-1);
 `;

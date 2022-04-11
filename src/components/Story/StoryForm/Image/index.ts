@@ -1,1 +1,1 @@
-export { default } from './ImageStory'
+export { default } from "./ImageStory";

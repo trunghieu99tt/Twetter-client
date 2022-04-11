@@ -1,1 +1,1 @@
-export { default } from './SocialAuthIcons'
+export { default } from "./SocialAuthIcons";

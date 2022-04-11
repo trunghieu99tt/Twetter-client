@@ -1,80 +1,80 @@
 import styled from "styled-components";
 
 export const Wrapper = styled.div`
-    position: relative;
+  position: relative;
 `;
 
 export const AvatarWrapper = styled.figure`
-    display: flex;
-    align-items: center;
-    gap: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
 `;
 
 export const AvatarCaption = styled.figcaption`
-    font-size: 1.2rem;
-    font-weight: 600;
+  font-size: 1.2rem;
+  font-weight: 600;
 `;
 
 export const DropdownButton = styled.button`
+  outline: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: flex;
+
+  &:focus {
     outline: none;
-    background: none;
-    border: none;
-    cursor: pointer;
-    display: flex;
-    
-    &:focus {
-        outline: none;
-    }
+  }
 `;
 
 export const Dropdown = styled.div`
-    position: absolute;
-    right: 0;
-    width: 100%;
-    border: 1px solid #E0E0E0;
-    box-sizing: border-box;
-    box-shadow: var(--box-shadow-1);
-    border-radius: 12px;
-    padding: 1.5rem;
-    transform: translateY(1rem);
-    background: #fff;
+  position: absolute;
+  right: 0;
+  width: 100%;
+  border: 1px solid #e0e0e0;
+  box-sizing: border-box;
+  box-shadow: var(--box-shadow-1);
+  border-radius: 12px;
+  padding: 1.5rem;
+  transform: translateY(1rem);
+  background: #fff;
 `;
 
 export const DropdownList = styled.ul``;
 
 export const DropdownListItem = styled.li`
-    padding: 1rem 1.5rem;
-    transition: all .5s;
-    border-radius: 5px;
-    
-    &:hover{
-        cursor: pointer;
-        background: var(--light-1);
-    }
+  padding: 1rem 1.5rem;
+  transition: all 0.5s;
+  border-radius: 5px;
 
-    a {
-        display: flex;
-        align-items: center;
-        gap: 1rem;
-        color: var(--gray-2);   
-        
-        svg{
-            --size: 1.6rem;
-            width: var(--size);
-            height: var(--size);
-        }
-        
-        p {
-            font-size: 1.2rem;
-            font-weight: 500;
-        }
-    }
-`;
+  &:hover {
+    cursor: pointer;
+    background: var(--light-1);
+  }
 
-export const LogoutButton = styled.button`
+  a {
     display: flex;
     align-items: center;
     gap: 1rem;
     color: var(--gray-2);
-    padding: 0;
+
+    svg {
+      --size: 1.6rem;
+      width: var(--size);
+      height: var(--size);
+    }
+
+    p {
+      font-size: 1.2rem;
+      font-weight: 500;
+    }
+  }
+`;
+
+export const LogoutButton = styled.button`
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  color: var(--gray-2);
+  padding: 0;
 `;

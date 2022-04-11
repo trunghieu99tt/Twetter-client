@@ -10,52 +10,47 @@ import { useHistory, useParams } from "react-router";
 import { toast } from "react-toastify";
 
 export const useTweetDetail = () => {
-    const history = useHistory();
-    const {
-        tweetId,
-    }: {
-        tweetId: string;
-    } = useParams();
+  const history = useHistory();
+  const {
+    tweetId,
+  }: {
+    tweetId: string;
+  } = useParams();
 
-    const queryClient = useQueryClient();
+  const queryClient = useQueryClient();
 
-    const { user } = useUser();
+  const { user } = useUser();
 
-    const { getTweetCommentsQuery } = useComment({
-        userId: user?._id,
-        tweetId,
-    });
+  const { getTweetCommentsQuery } = useComment({
+    userId: user?._id,
+    tweetId,
+  });
 
-    const [data, setData] = useState<iTweet | null>(null);
-    const [loading, setLoading] = useState<boolean>(true);
+  const [data, setData] = useState<iTweet | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
 
-    const getTweetData = async () => {
-        try {
-            setLoading(true);
-            const response = await client.get(
-                `${TWEET_ENDPOINTS.BASE}/${tweetId}`
-            );
-            queryClient.refetchQueries([
-                COMMENT_QUERY.GET_TWEET_COMMENTS,
-                tweetId,
-            ]);
-            if (response?.data?.data) {
-                setData(response.data.data);
-            }
-            setLoading(false);
-        } catch (error) {
-            console.log(`error`, error);
-            // toast.error((error as any).message);
-            history.push("/");
-        }
-    };
+  const getTweetData = async () => {
+    try {
+      setLoading(true);
+      const response = await client.get(`${TWEET_ENDPOINTS.BASE}/${tweetId}`);
+      queryClient.refetchQueries([COMMENT_QUERY.GET_TWEET_COMMENTS, tweetId]);
+      if (response?.data?.data) {
+        setData(response.data.data);
+      }
+      setLoading(false);
+    } catch (error) {
+      console.log(`error`, error);
+      // toast.error((error as any).message);
+      history.push("/");
+    }
+  };
 
-    useEffect(() => {
-        getTweetData();
-    }, [tweetId]);
+  useEffect(() => {
+    getTweetData();
+  }, [tweetId]);
 
-    return {
-        data,
-        loading,
-    };
+  return {
+    data,
+    loading,
+  };
 };

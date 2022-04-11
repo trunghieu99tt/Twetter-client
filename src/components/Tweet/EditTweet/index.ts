@@ -1,1 +1,1 @@
-export { default } from './EditTweet'
+export { default } from "./EditTweet";
