@@ -1,11 +1,10 @@
-import React, { useEffect } from "react";
+import React, { lazy, Suspense, useEffect } from "react";
 import { useRecoilValue } from "recoil";
 import AgoraRTC from "agora-rtc-sdk-ng";
 import { Route, Switch, useLocation } from "react-router-dom";
 
 // talons
 import { useRooms } from "@talons/useRoom";
-import { useStory } from "@talons/useStory";
 import { useNotify } from "@talons/useNotify";
 import { useHashtag } from "@talons/useHashtag";
 import { useAppContext } from "@context/app.context";
@@ -28,12 +27,12 @@ import Notification from "@pages/Notification";
 import TweetDetail from "@pages/Tweet/TweetDetail";
 
 // components
-import CallModal from "@components/Call/CallModal";
+const CallModal = lazy(() => import("@components/Call/CallModal"));
 import UserList from "@components/Admin/User/UserList";
 import UserForm from "@components/Admin/User/UserForm";
 import UserView from "@components/Admin/User/UserView";
 import PrivateRoute from "@components/routes/PrivateRoute";
-import CreateNewGroupChat from "@components/Chat/NewRoomModal";
+const CreateNewGroupChat = lazy(() => import("@components/Chat/NewRoomModal"));
 import UserStatistic from "@components/Admin/User/UserStatistic";
 import TweetStatistic from "@components/Admin/Tweet/TweetStatistic";
 import AdminPrivateRoute from "@components/routes/PrivateAdminRoute";
@@ -46,108 +45,104 @@ import { HASHTAG_ROUTES, STORY_ROUTES } from "./routes";
 import { callState } from "states/call.state";
 
 const PrivateRouteController = () => {
-    const notificationTalons = useNotify();
-    const hashtagTalons = useHashtag();
-    const { getUserRooms } = useRooms();
-    const call = useRecoilValue(callState);
-    const location = useLocation();
-    const {
-        state: { visibleAddGroupChatModal },
-    } = useAppContext();
+  const notificationTalons = useNotify();
+  const hashtagTalons = useHashtag();
+  const { getUserRooms } = useRooms();
+  const call = useRecoilValue(callState);
+  const location = useLocation();
+  const {
+    state: { visibleAddGroupChatModal },
+  } = useAppContext();
 
-    useEffect(() => {
-        getUserRooms();
-        AgoraRTC.setLogLevel(4);
-    }, []);
+  useEffect(() => {
+    getUserRooms();
+    AgoraRTC.setLogLevel(4);
+  }, []);
 
-    useEffect(() => {
-        window.scrollTo(0, 0);
-    }, [location.pathname]);
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location.pathname]);
 
-    useEffect(() => {
-        console.log("re-rendered PrivateRouteController");
-    });
+  useEffect(() => {
+    console.log("re-rendered PrivateRouteController");
+  });
 
-    return (
-        <React.Fragment>
-            {visibleAddGroupChatModal && <CreateNewGroupChat />}
-            {call && <CallModal />}
-            <Switch>
-                <PrivateRoute path="/" exact component={NewsFeed} />
-                <PrivateRoute
-                    path={STORY_ROUTES.CREATE}
-                    exact
-                    component={StoryForm}
-                />
-                <PrivateRoute
-                    path={`${STORY_ROUTES.VIEW}/:userId`}
-                    component={StoryView}
-                />
-                <PrivateRoute path="/bookmarks" exact component={BookMarks} />
-                <PrivateRoute path="/search" exact component={Search} />
-                <PrivateRoute
-                    path="/notifications"
-                    exact
-                    component={Notification}
-                />
-                <PrivateRoute
-                    path={`${HASHTAG_ROUTES.BASE}/:hashtag`}
-                    exact
-                    component={HashTag}
-                />
-                <PrivateRoute path="/chat/:roomId" exact component={Chat} />
-                <PrivateRoute path="/call/:roomId" exact component={Call} />
-                <PrivateRoute
-                    path="/profile/media/:userId"
-                    exact
-                    component={UserMedia}
-                />
-                <PrivateRoute
-                    path="/profile/likes/:userId"
-                    exact
-                    component={UserLikes}
-                />
-                <PrivateRoute path="/profile/:userId" component={MyProfile} />
-                <PrivateRoute path="/explore/:page" component={Explore} />
-                <PrivateRoute path="/tweet/:tweetId" component={TweetDetail} />
+  return (
+    <React.Fragment>
+      {visibleAddGroupChatModal && (
+        <Suspense fallback={<div>Loading...</div>}>
+          <CreateNewGroupChat />
+        </Suspense>
+      )}
+      {call && (
+        <Suspense fallback={<div>Loading...</div>}>
+          <CallModal />
+        </Suspense>
+      )}
+      <Switch>
+        <PrivateRoute path="/" exact component={NewsFeed} />
+        <PrivateRoute path={STORY_ROUTES.CREATE} exact component={StoryForm} />
+        <PrivateRoute
+          path={`${STORY_ROUTES.VIEW}/:userId`}
+          component={StoryView}
+        />
+        <PrivateRoute path="/bookmarks" exact component={BookMarks} />
+        <PrivateRoute path="/search" exact component={Search} />
+        <PrivateRoute path="/notifications" exact component={Notification} />
+        <PrivateRoute
+          path={`${HASHTAG_ROUTES.BASE}/:hashtag`}
+          exact
+          component={HashTag}
+        />
+        <PrivateRoute path="/chat/:roomId" exact component={Chat} />
+        <PrivateRoute path="/call/:roomId" exact component={Call} />
+        <PrivateRoute
+          path="/profile/media/:userId"
+          exact
+          component={UserMedia}
+        />
+        <PrivateRoute
+          path="/profile/likes/:userId"
+          exact
+          component={UserLikes}
+        />
+        <PrivateRoute path="/profile/:userId" component={MyProfile} />
+        <PrivateRoute path="/explore/:page" component={Explore} />
+        <PrivateRoute path="/tweet/:tweetId" component={TweetDetail} />
 
-                {/* ----------------- USER ----------------------- */}
-                <AdminPrivateRoute exact path="/users" component={UserList} />
-                <AdminPrivateRoute
-                    exact
-                    path="/user/view/:id"
-                    component={UserView}
-                />
-                <AdminPrivateRoute
-                    exact
-                    path="/user/add"
-                    component={() => <UserForm view="ADD" />}
-                />
+        {/* ----------------- USER ----------------------- */}
+        <AdminPrivateRoute exact path="/users" component={UserList} />
+        <AdminPrivateRoute exact path="/user/view/:id" component={UserView} />
+        <AdminPrivateRoute
+          exact
+          path="/user/add"
+          component={() => <UserForm view="ADD" />}
+        />
 
-                {/* ----------------- TWEET ----------------------- */}
-                <AdminPrivateRoute
-                    exact
-                    path="/reported-tweets"
-                    component={ReportedTweetList}
-                />
+        {/* ----------------- TWEET ----------------------- */}
+        <AdminPrivateRoute
+          exact
+          path="/reported-tweets"
+          component={ReportedTweetList}
+        />
 
-                {/* ----------------- STATISTIC ----------------------- */}
-                <AdminPrivateRoute
-                    exact
-                    path="/statistic/users"
-                    component={UserStatistic}
-                />
+        {/* ----------------- STATISTIC ----------------------- */}
+        <AdminPrivateRoute
+          exact
+          path="/statistic/users"
+          component={UserStatistic}
+        />
 
-                <AdminPrivateRoute
-                    exact
-                    path="/statistic/tweet"
-                    component={TweetStatistic}
-                />
+        <AdminPrivateRoute
+          exact
+          path="/statistic/tweet"
+          component={TweetStatistic}
+        />
 
-                <Route component={NotFound} />
-            </Switch>
-        </React.Fragment>
-    );
+        <Route component={NotFound} />
+      </Switch>
+    </React.Fragment>
+  );
 };
 
 export default PrivateRouteController;

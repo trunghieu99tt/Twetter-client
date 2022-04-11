@@ -9,22 +9,22 @@ import DataView from "../../DataView";
 import BaseView from "@layout/Admin/BaseView";
 
 interface Props {
-    classes?: object;
+  classes?: Record<string, any>;
 }
 
 const UserView = ({ classes: propsClasses }: Props) => {
-    const { user, params, onGoBack, onGoToEdit } = useUserView();
+  const { user, params, onGoBack, onGoToEdit } = useUserView();
 
-    return (
-        <DataView
-            data={user}
-            onGoBack={onGoBack}
-            onGoToEdit={onGoToEdit}
-            params={params}
-            title="Thông tin tài khoản"
-            exculedFields={["password", "__v", "_id", "avatar", "coverPhoto"]}
-        />
-    );
+  return (
+    <DataView
+      data={user}
+      onGoBack={onGoBack}
+      onGoToEdit={onGoToEdit}
+      params={params}
+      title="Thông tin tài khoản"
+      exculedFields={["password", "__v", "_id", "avatar", "coverPhoto"]}
+    />
+  );
 };
 
 export default BaseView(UserView);

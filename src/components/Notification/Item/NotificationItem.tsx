@@ -20,50 +20,50 @@ import DefaultUnknownAvatar from "@images/user.png";
 import classes from "./notificationItem.module.css";
 
 type Props = {
-    data: iNotification;
+  data: iNotification;
 };
 
 const NotificationItem = ({ data }: Props) => {
-    const { t } = useTranslation();
-    const { user } = useUser();
-    const history = useHistory();
-    const { readNotificationAction } = useNotify();
+  const { t } = useTranslation();
+  const { user } = useUser();
+  const history = useHistory();
+  const { readNotificationAction } = useNotify();
 
-    const onClick = () => {
-        if (data?._id) {
-            readNotificationAction([data._id]);
-        }
+  const onClick = () => {
+    if (data?._id) {
+      readNotificationAction([data._id]);
+    }
 
-        if (data?.url) {
-            history.push(data.url);
-        }
-    };
+    if (data?.url) {
+      history.push(data.url);
+    }
+  };
 
-    return (
-        <article
-            className={cn(classes.root, {
-                [classes.unread]: !data?.isRead?.includes(user?._id),
-            })}
-            onClick={onClick}
-        >
-            <figure className={classes.senderAvatarWrapper}>
-                <img
-                    src={data?.sender?.avatar || DefaultUnknownAvatar}
-                    alt="sender avatar"
-                    className={classes.senderAvatar}
-                />
-            </figure>
-            <div className={classes.main}>
-                <p className={classes.text}>
-                    <strong>{data?.sender?.name || ""}</strong>{" "}
-                    {t(data?.text || "")}
-                </p>
-                <p className={classes.time}>
-                    {calcDiffTimeString(data?.createdAt || new Date())}
-                </p>
-            </div>
-        </article>
-    );
+  return (
+    <article
+      className={cn(classes.root, {
+        [classes.unread]: !data?.isRead?.includes(user?._id),
+      })}
+      onClick={onClick}
+    >
+      <figure className={classes.senderAvatarWrapper}>
+        <img
+          src={data?.sender?.avatar || DefaultUnknownAvatar}
+          alt="sender avatar"
+          className={classes.senderAvatar}
+          loading="lazy"
+        />
+      </figure>
+      <div className={classes.main}>
+        <p className={classes.text}>
+          <strong>{data?.sender?.name || ""}</strong> {t(data?.text || "")}
+        </p>
+        <p className={classes.time}>
+          {calcDiffTimeString(data?.createdAt || new Date())}
+        </p>
+      </div>
+    </article>
+  );
 };
 
 export default NotificationItem;

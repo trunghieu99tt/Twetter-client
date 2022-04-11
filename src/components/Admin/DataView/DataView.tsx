@@ -9,80 +9,76 @@ import defaultClasses from "./dataView.module.css";
 // state
 
 interface Props {
-    classes?: object;
-    data: any;
-    params: any;
-    title: string;
-    exculedFields?: string[];
-    onGoBack: () => void;
-    onGoToEdit: () => void;
+  classes?: Record<string, any>;
+  data: any;
+  params: any;
+  title: string;
+  exculedFields?: string[];
+  onGoBack: () => void;
+  onGoToEdit: () => void;
 }
 
 const DataView = ({
-    classes: propsClasses,
-    data,
-    title,
-    params,
-    exculedFields: excludedFields,
-    onGoBack,
-    onGoToEdit,
+  classes: propsClasses,
+  data,
+  title,
+  params,
+  exculedFields: excludedFields,
+  onGoBack,
+  onGoToEdit,
 }: Props) => {
-    const classes = mergeClasses(defaultClasses, propsClasses);
+  const classes = mergeClasses(defaultClasses, propsClasses);
 
-    console.log(`data`, data);
+  console.log(`data`, data);
 
-    return (
-        <div className={classes.root}>
-            <h2 className={classes.heading}>{title}</h2>
-            <div className={classes.main}>
-                <ul className={classes.list}>
-                    {data &&
-                        Object.entries(data).map(([key, value], idx) => {
-                            let viewValue = value;
+  return (
+    <div className={classes.root}>
+      <h2 className={classes.heading}>{title}</h2>
+      <div className={classes.main}>
+        <ul className={classes.list}>
+          {data &&
+            Object.entries(data).map(([key, value], idx) => {
+              let viewValue = value;
 
-                            if (
-                                key === "password" ||
-                                value === null ||
-                                value === undefined ||
-                                excludedFields?.includes(key)
-                            ) {
-                                return null;
-                            }
+              if (
+                key === "password" ||
+                value === null ||
+                value === undefined ||
+                excludedFields?.includes(key)
+              ) {
+                return null;
+              }
 
-                            if (typeof value === "object") {
-                                viewValue = (value as { id: number }).id;
-                            }
+              if (typeof value === "object") {
+                viewValue = (value as { id: number }).id;
+              }
 
-                            if (typeof value === "number") {
-                                viewValue = formatNumber(viewValue);
-                            }
+              if (typeof value === "number") {
+                viewValue = formatNumber(viewValue);
+              }
 
-                            return (
-                                <li
-                                    className={classes.item}
-                                    key={`${title}-${params?.id || ""}-${idx}`}
-                                >
-                                    <span className={classes.itemTitle}>
-                                        {key}
-                                    </span>
-                                    <span
-                                        className={classes.itemValue}
-                                    >{`${viewValue}`}</span>
-                                </li>
-                            );
-                        })}
-                </ul>
-                <div className={classes.footer}>
-                    {/* <button className={classes.btn} onClick={onGoToEdit}>
+              return (
+                <li
+                  className={classes.item}
+                  key={`${title}-${params?.id || ""}-${idx}`}
+                >
+                  <span className={classes.itemTitle}>{key}</span>
+                  <span className={classes.itemValue}>{`${viewValue}`}</span>
+                </li>
+              );
+            })}
+        </ul>
+        <div className={classes.footer}>
+          {/* <button className={classes.btn} onClick={onGoToEdit}>
                         
                     </button> */}
-                    <button className={classes.btn} onClick={onGoBack}>
-                        Quay lại
-                    </button>
-                </div>
-            </div>
+          <button className={classes.btn} onClick={onGoBack}>
+            Quay lại
+          </button>
         </div>
-    );
+      </div>
+    </div>
+  );
 };
 
 export default DataView;

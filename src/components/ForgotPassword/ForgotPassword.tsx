@@ -12,62 +12,56 @@ import mergeClasses from "../../utils/mergeClasses";
 import defaultClasses from "./forgotPassword.module.css";
 
 interface Props {
-    classes?: object;
-    onClose: () => void;
+  classes?: Record<string, any>;
+  onClose: () => void;
 }
 
 const initState = {
-    opacity: 0,
-    y: "1rem",
+  opacity: 0,
+  y: "1rem",
 };
 
 const ForgotPassword = ({ classes: propsClasses, onClose }: Props) => {
-    const classes = mergeClasses(defaultClasses, propsClasses);
+  const classes = mergeClasses(defaultClasses, propsClasses);
 
-    const { t } = useTranslation();
+  const { t } = useTranslation();
 
-    const { email, onSubmit, onChange } = useForgotPassword({
-        onClose,
-    });
+  const { email, onSubmit, onChange } = useForgotPassword({
+    onClose,
+  });
 
-    return (
-        <motion.section
-            className={classes.root}
-            initial={initState}
-            animate={{
-                ...initState,
-                opacity: 1,
-                y: 0,
-            }}
-            exit={initState}
-        >
-            <div className={classes.mask} onClick={onClose}></div>
-            <div className={classes.form}>
-                <h4 className={classes.subHeading}>
-                    {t("forgotPasswordHeading")}
-                </h4>
-                <div>
-                    <input
-                        className={classes.input}
-                        type="email"
-                        name="email"
-                        value={email}
-                        onChange={onChange}
-                        id="forgotPasswordEmail"
-                        placeholder="Enter your email here..."
-                        required
-                    />
-                </div>
-                <button
-                    type="submit"
-                    className={classes.submitBtn}
-                    onClick={onSubmit}
-                >
-                    {t("send")}
-                </button>
-            </div>
-        </motion.section>
-    );
+  return (
+    <motion.section
+      className={classes.root}
+      initial={initState}
+      animate={{
+        ...initState,
+        opacity: 1,
+        y: 0,
+      }}
+      exit={initState}
+    >
+      <div className={classes.mask} onClick={onClose}></div>
+      <div className={classes.form}>
+        <h4 className={classes.subHeading}>{t("forgotPasswordHeading")}</h4>
+        <div>
+          <input
+            className={classes.input}
+            type="email"
+            name="email"
+            value={email}
+            onChange={onChange}
+            id="forgotPasswordEmail"
+            placeholder="Enter your email here..."
+            required
+          />
+        </div>
+        <button type="submit" className={classes.submitBtn} onClick={onSubmit}>
+          {t("send")}
+        </button>
+      </div>
+    </motion.section>
+  );
 };
 
 export default ForgotPassword;

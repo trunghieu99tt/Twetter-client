@@ -1,27 +1,25 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import { useLocalStorage } from "@hooks/useLocalStorage";
 import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 
 const useLanguage = () => {
-    const { i18n } = useTranslation();
-    const [lang, setLang] = useLocalStorage("lang", "en");
+  const { i18n } = useTranslation();
+  const [lang, setLang] = useLocalStorage("lang", "en");
 
-    useEffect(() => {
-        if (lang) {
-            i18n.changeLanguage(lang);
-        }
-    }, [lang]);
+  useEffect(() => {
+    if (lang) {
+      i18n.changeLanguage(lang);
+    }
+  }, [lang]);
 
-    const changeLang = (lang: string) => {
-        setLang(lang);
-    };
+  const changeLang = (lang: string) => {
+    setLang(lang);
+  };
 
-    return {
-        lang,
-        changeLang
-    };
-
+  return {
+    lang,
+    changeLang,
+  };
 };
 
 export { useLanguage };

@@ -19,72 +19,60 @@ import defaultClasses from "./voicemessageform.module.css";
 import { useParams } from "react-router";
 
 interface Props {
-    classes?: object;
-    closeRecord: (value: boolean) => void;
+  classes?: Record<string, any>;
+  closeRecord: (value: boolean) => void;
 }
 
 const VoiceMessageForm = ({ classes: propsClasses, closeRecord }: Props) => {
-    const classes = mergeClasses(defaultClasses, propsClasses);
+  const classes = mergeClasses(defaultClasses, propsClasses);
 
-    const {
-        recording,
-        recordData,
-        onRecordData,
-        onStopRecord,
-        sendAudio,
-        startRecording,
-        stopRecording,
-    } = useVoiceMessageForm();
+  const {
+    recording,
+    recordData,
+    onRecordData,
+    onStopRecord,
+    sendAudio,
+    startRecording,
+    stopRecording,
+  } = useVoiceMessageForm();
 
-    const voiceRecorderRef = useRef() as React.MutableRefObject<HTMLDivElement>;
+  const voiceRecorderRef = useRef() as React.MutableRefObject<HTMLDivElement>;
 
-    useOnClickOutside(voiceRecorderRef, () => closeRecord(false));
+  useOnClickOutside(voiceRecorderRef, () => closeRecord(false));
 
-    return (
-        <div className={classes.root} ref={voiceRecorderRef}>
-            {recordData && (
-                <ReactPlayer
-                    url={recordData.blobURL}
-                    height="2rem"
-                    width="100%"
-                    playing
-                />
-            )}
-            <ReactMic
-                record={recording}
-                className={classes.recordSoundwave}
-                onStop={onStopRecord}
-                onData={onRecordData}
-                strokeColor="#fff"
-                backgroundColor={"var(---mGray1)"}
-            />
-            <div className={classes.btnGroup}>
-                <button
-                    className={classes.btn}
-                    onClick={startRecording}
-                    type="button"
-                >
-                    <CgRecord />
-                </button>
-                <button
-                    className={classes.btn}
-                    onClick={stopRecording}
-                    type="button"
-                >
-                    <FaRegStopCircle />
-                </button>
-                {recordData && (
-                    <button
-                        className={classes.btn}
-                        onClick={sendAudio}
-                        type="button"
-                    >
-                        <FiSend />
-                    </button>
-                )}
-            </div>
-        </div>
-    );
+  return (
+    <div className={classes.root} ref={voiceRecorderRef}>
+      {recordData && (
+        <ReactPlayer
+          url={recordData.blobURL}
+          height="2rem"
+          width="100%"
+          playing
+        />
+      )}
+      <ReactMic
+        record={recording}
+        className={classes.recordSoundwave}
+        onStop={onStopRecord}
+        onData={onRecordData}
+        strokeColor="#fff"
+        backgroundColor={"var(---mGray1)"}
+      />
+      <div className={classes.btnGroup}>
+        <button className={classes.btn} onClick={startRecording} type="button">
+          <CgRecord />
+        </button>
+        <button className={classes.btn} onClick={stopRecording} type="button">
+          <FaRegStopCircle />
+        </button>
+        {recordData && (
+          <button className={classes.btn} onClick={sendAudio} type="button">
+            <FiSend />
+          </button>
+        )}
+      </div>
+    </div>
+  );
 };
 
 export default VoiceMessageForm;

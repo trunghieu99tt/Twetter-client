@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { lazy, Suspense, useEffect, useRef, useState } from "react";
 import SimpleReactLightbox from "simple-react-lightbox";
 import { useTranslation } from "react-i18next";
 import { useHistory } from "react-router";
@@ -10,7 +10,7 @@ import { useIntersectionObserver } from "@hooks/useIntersectionObserver";
 
 // components
 import Logo from "@components/Logo";
-import Modal from "@components/Modal";
+const Modal = lazy(() => import("@components/Modal"));
 import UserCard from "@components/UserCard";
 import { Spinner1 } from "@components/Loaders";
 import RoomList from "@components/Chat/RoomList";
@@ -38,239 +38,227 @@ import { Link } from "react-router-dom";
 import ImageWithPlaceholder from "@components/ImageWithPlaceholder";
 
 const ChatPage = () => {
-    const { t } = useTranslation();
-    const history = useHistory();
+  const { t } = useTranslation();
+  const history = useHistory();
 
-    const {
-        room,
-        loading,
-        message,
-        messages,
-        guestUser,
-        chatImages,
-        currentUser,
-        chosenEmoji,
-        messageImage,
-        totalMessage,
-        showMemberList,
+  const {
+    room,
+    loading,
+    message,
+    messages,
+    guestUser,
+    chatImages,
+    currentUser,
+    chosenEmoji,
+    messageImage,
+    totalMessage,
+    showMemberList,
 
-        onSubmit,
-        onChange,
-        triggerCall,
-        fetchNextPage,
-        setChosenEmoji,
-        setShowMemberList,
-        onCloseImageMessageForm,
-        openCreateNewGroupChatModal,
-    } = useChatPage();
-    const roomsHaveCall = useRecoilValue(roomsHaveCallState);
+    onSubmit,
+    onChange,
+    triggerCall,
+    fetchNextPage,
+    setChosenEmoji,
+    setShowMemberList,
+    onCloseImageMessageForm,
+    openCreateNewGroupChatModal,
+  } = useChatPage();
+  const roomsHaveCall = useRecoilValue(roomsHaveCallState);
 
-    const messageDiv = useRef<HTMLElement | null>(null);
-    const loadMoreRef = useRef() as React.RefObject<HTMLDivElement>;
+  const messageDiv = useRef<HTMLElement | null>(null);
+  const loadMoreRef = useRef() as React.RefObject<HTMLDivElement>;
 
-    const hasMore = totalMessage > messages?.length;
-    const [shouldJumpToEnd, setShouldJumpToEnd] = React.useState(true);
-    const [roomHasCall, setRoomHasCall] = useState<any>(null);
+  const hasMore = totalMessage > messages?.length;
+  const [shouldJumpToEnd, setShouldJumpToEnd] = React.useState(true);
+  const [roomHasCall, setRoomHasCall] = useState<any>(null);
 
-    useIntersectionObserver({
-        target: loadMoreRef,
-        enabled: hasMore,
-        onIntersect: () => {
-            setShouldJumpToEnd(false);
-            fetchNextPage();
-        },
-    });
+  useIntersectionObserver({
+    target: loadMoreRef,
+    enabled: hasMore,
+    onIntersect: () => {
+      setShouldJumpToEnd(false);
+      fetchNextPage();
+    },
+  });
 
-    useEffect(() => {
-        if (shouldJumpToEnd && messageDiv && messageDiv.current) {
-            messageDiv.current.scrollTop = messageDiv.current.scrollHeight;
-        }
-    }, [messages]);
-
-    useEffect(() => {
-        if (room?._id) {
-            const r = roomsHaveCall.find((r) => r.roomId === room._id);
-            if (r) {
-                setRoomHasCall(r);
-            } else {
-                setRoomHasCall(null);
-            }
-        }
-    }, [roomsHaveCall, room?._id]);
-
-    const { isDm, members, image, name } = room || {};
-
-    let roomImage = image || "";
-    let roomName = name || "";
-
-    if (isDm) {
-        roomImage = guestUser?.avatar || DefaultUnknownAvatar;
-        roomName = guestUser?.name || "";
+  useEffect(() => {
+    if (shouldJumpToEnd && messageDiv && messageDiv.current) {
+      messageDiv.current.scrollTop = messageDiv.current.scrollHeight;
     }
+  }, [messages]);
 
-    const roomMemberList = members?.map((member: iUser) => (
-        <UserCard user={member} key={`room-member-card-${member._id}`} />
-    ));
+  useEffect(() => {
+    if (room?._id) {
+      const r = roomsHaveCall.find((r) => r.roomId === room._id);
+      if (r) {
+        setRoomHasCall(r);
+      } else {
+        setRoomHasCall(null);
+      }
+    }
+  }, [roomsHaveCall, room?._id]);
 
-    return (
-        <React.Fragment>
-            <PageMetadata title={t("chatPage")} />
-            <Modal
-                body={roomMemberList}
-                header={t("roomMemberList")}
-                isOpen={showMemberList}
-                onCancel={() => setShowMemberList(false)}
-            />
-            {loading && <Spinner1 />}
+  const { isDm, members, image, name } = room || {};
 
-            <div className={classes.root}>
-                <aside className={classes.userList}>
-                    <div className={classes.logo}>
-                        <Logo />
-                    </div>
-                    <button
-                        className={classes.newGroupChat}
-                        onClick={openCreateNewGroupChatModal}
-                    >
-                        {t("createNewGroupChat")}
-                    </button>
-                    <RoomList />
-                </aside>
-                <main className={classes.main}>
-                    <section className={classes.mainHeader}>
-                        <div className={classes.headerInner}>
-                            <div className={classes.left}>
-                                <figure className={classes.roomImage}>
-                                    <ImageWithPlaceholder
-                                        key={room?._id}
-                                        src={roomImage}
-                                        alt={`${guestUser?.name}-wallpaper`}
-                                    />
-                                </figure>
-                                {(!isDm && (
-                                    <h2 className={classes.roomName}>
-                                        {roomName}
-                                    </h2>
-                                )) || (
-                                    <Link
-                                        to={`/profile/${guestUser?._id}`}
-                                        className={classes.roomName}
-                                    >
-                                        {roomName}
-                                    </Link>
-                                )}
-                            </div>
-                            <div className={classes.right}>
-                                {roomHasCall && (
-                                    <button
-                                        onClick={() => {
-                                            history.push(
-                                                `/call/${roomHasCall?.channelName}`
-                                            );
-                                        }}
-                                    >
-                                        Go to call
-                                    </button>
-                                )}
-                                {!roomHasCall && (
-                                    <button
-                                        className={classes.callButton}
-                                        onClick={() => triggerCall()}
-                                    >
-                                        <IoCallSharp />
-                                    </button>
-                                )}
-                            </div>
-                        </div>
-                    </section>
-                    <section className={classes.chatContent}>
-                        <div className={classes.content}>
-                            {messageImage.url && (
-                                <ImageMessageForm
-                                    data={messageImage}
-                                    onCancel={onCloseImageMessageForm}
-                                    onChange={onChange}
-                                    onSubmit={(e: any) => {
-                                        onSubmit(e);
-                                        setShouldJumpToEnd(true);
-                                    }}
-                                />
-                            )}
+  let roomImage = image || "";
+  let roomName = name || "";
 
-                            <section
-                                className={classes.messageContainer}
-                                ref={messageDiv}
-                            >
-                                {hasMore && (
-                                    <div ref={loadMoreRef}>Loading...</div>
-                                )}
-                                {messages?.map((message: iMessage) => {
-                                    if (message?.author?._id) {
-                                        return (
-                                            <MessageContent
-                                                key={`message-${message._id}`}
-                                                data={message}
-                                                isMyMessage={
-                                                    message.author._id ===
-                                                    currentUser._id
-                                                }
-                                            />
-                                        );
-                                    }
+  if (isDm) {
+    roomImage = guestUser?.avatar || DefaultUnknownAvatar;
+    roomName = guestUser?.name || "";
+  }
 
-                                    return null;
-                                })}
-                            </section>
+  const roomMemberList = members?.map((member: iUser) => (
+    <UserCard user={member} key={`room-member-card-${member._id}`} />
+  ));
 
-                            <TextMessageForm
-                                onChange={onChange}
-                                onSubmit={onSubmit}
-                                chosenEmoji={chosenEmoji}
-                                setChosenEmoji={setChosenEmoji}
-                                value={message}
-                            />
-                        </div>
-                    </section>
-                </main>
-                <aside>
-                    <article className={classes.roomInfo}>
-                        <figure className={classes.roomInfoImageWrapper}>
-                            <ImageWithPlaceholder
-                                src={roomImage}
-                                key={room?._id}
-                                alt={`${roomName}-bg`}
-                                customStyles="--size: 8rem;
+  return (
+    <React.Fragment>
+      <PageMetadata title={t("chatPage")} />
+      <Suspense fallback={<div>Loading...</div>}>
+        <Modal
+          body={roomMemberList}
+          header={t("roomMemberList")}
+          isOpen={showMemberList}
+          onCancel={() => setShowMemberList(false)}
+        />
+      </Suspense>
+      {loading && <Spinner1 />}
+
+      <div className={classes.root}>
+        <aside className={classes.userList}>
+          <div className={classes.logo}>
+            <Logo />
+          </div>
+          <button
+            className={classes.newGroupChat}
+            onClick={openCreateNewGroupChatModal}
+          >
+            {t("createNewGroupChat")}
+          </button>
+          <RoomList />
+        </aside>
+        <main className={classes.main}>
+          <section className={classes.mainHeader}>
+            <div className={classes.headerInner}>
+              <div className={classes.left}>
+                <figure className={classes.roomImage}>
+                  <ImageWithPlaceholder
+                    key={room?._id}
+                    src={roomImage}
+                    alt={`${guestUser?.name}-wallpaper`}
+                  />
+                </figure>
+                {(!isDm && (
+                  <h2 className={classes.roomName}>{roomName}</h2>
+                )) || (
+                  <Link
+                    to={`/profile/${guestUser?._id}`}
+                    className={classes.roomName}
+                  >
+                    {roomName}
+                  </Link>
+                )}
+              </div>
+              <div className={classes.right}>
+                {roomHasCall && (
+                  <button
+                    onClick={() => {
+                      history.push(`/call/${roomHasCall?.channelName}`);
+                    }}
+                  >
+                    Go to call
+                  </button>
+                )}
+                {!roomHasCall && (
+                  <button
+                    className={classes.callButton}
+                    onClick={() => triggerCall()}
+                  >
+                    <IoCallSharp />
+                  </button>
+                )}
+              </div>
+            </div>
+          </section>
+          <section className={classes.chatContent}>
+            <div className={classes.content}>
+              {messageImage.url && (
+                <ImageMessageForm
+                  data={messageImage}
+                  onCancel={onCloseImageMessageForm}
+                  onChange={onChange}
+                  onSubmit={(e: any) => {
+                    onSubmit(e);
+                    setShouldJumpToEnd(true);
+                  }}
+                />
+              )}
+
+              <section className={classes.messageContainer} ref={messageDiv}>
+                {hasMore && <div ref={loadMoreRef}>Loading...</div>}
+                {messages?.map((message: iMessage) => {
+                  if (message?.author?._id) {
+                    return (
+                      <MessageContent
+                        key={`message-${message._id}`}
+                        data={message}
+                        isMyMessage={message.author._id === currentUser._id}
+                      />
+                    );
+                  }
+
+                  return null;
+                })}
+              </section>
+
+              <TextMessageForm
+                onChange={onChange}
+                onSubmit={onSubmit}
+                chosenEmoji={chosenEmoji}
+                setChosenEmoji={setChosenEmoji}
+                value={message}
+              />
+            </div>
+          </section>
+        </main>
+        <aside>
+          <article className={classes.roomInfo}>
+            <figure className={classes.roomInfoImageWrapper}>
+              <ImageWithPlaceholder
+                src={roomImage}
+                key={room?._id}
+                alt={`${roomName}-bg`}
+                customStyles="--size: 8rem;
                                 width: var(--size);
                                 height: var(--size);
                                 object-fit: cover;
                                 border-radius: 50%;"
-                            />
-                            <figcaption className={classes.roomInfoName}>
-                                {(!isDm && roomName) || (
-                                    <Link to={`/profile/${guestUser?._id}`}>
-                                        {roomName}
-                                    </Link>
-                                )}
-                            </figcaption>
-                        </figure>
-                    </article>
+              />
+              <figcaption className={classes.roomInfoName}>
+                {(!isDm && roomName) || (
+                  <Link to={`/profile/${guestUser?._id}`}>{roomName}</Link>
+                )}
+              </figcaption>
+            </figure>
+          </article>
 
-                    {!isDm && (
-                        <button
-                            className={classes.showRoomMemberListBtn}
-                            onClick={() => setShowMemberList(true)}
-                        >
-                            {t("roomMemberList")}
-                        </button>
-                    )}
+          {!isDm && (
+            <button
+              className={classes.showRoomMemberListBtn}
+              onClick={() => setShowMemberList(true)}
+            >
+              {t("roomMemberList")}
+            </button>
+          )}
 
-                    <SimpleReactLightbox>
-                        <RoomImageGallery images={chatImages} />
-                    </SimpleReactLightbox>
-                </aside>
-            </div>
-        </React.Fragment>
-    );
+          <SimpleReactLightbox>
+            <RoomImageGallery images={chatImages} />
+          </SimpleReactLightbox>
+        </aside>
+      </div>
+    </React.Fragment>
+  );
 };
 
 export default ChatPage;
