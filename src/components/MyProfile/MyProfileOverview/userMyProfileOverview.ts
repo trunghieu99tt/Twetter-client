@@ -8,8 +8,8 @@ import { ChangeEvent, useEffect, useState } from "react";
 import { useHistory } from "react-router";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import { connectedRoomsState, joinRoomState } from "states/room.state";
-import { useLocalStorage } from "@hooks/useLocalStorage";
 import { useReport } from "@talons/useReport";
+import _ from "lodash";
 
 type LIST_TYPE = "followers" | "following" | "";
 type MODAL_TYPE = "list_user" | "update_info" | "";
@@ -120,14 +120,13 @@ export const useMyProfileOverview = ({ user }: Props) => {
     closeModal();
   }, [user]);
 
-  const updateFollowStatus = (userId: string) => {
+  const updateFollowStatus = _.debounce((userId: string) => {
     followUserMutation.mutate(userId, {
       onSuccess: (res) => {
         if (res?.statusCode === 200) {
           const didCurrentUserFollowed = currentUser?.following?.some(
             (u) => u._id === userId
           );
-
           if (!didCurrentUserFollowed) {
             // create notification
             const msg: iNotificationDTO = {
@@ -142,7 +141,7 @@ export const useMyProfileOverview = ({ user }: Props) => {
         }
       },
     });
-  };
+  }, 250);
 
   const reportUser = () => {
     const callback = () => reportUserMutation.mutate(user._id);
@@ -185,7 +184,7 @@ export const useMyProfileOverview = ({ user }: Props) => {
     newAvatar,
     isVisibleEditForm,
     followerOrFollowingList,
-    updatingFollowStatus: followUserMutation.isLoading,
+    updatingFollowStatus: false,
 
     onGoChat,
     reportUser,
