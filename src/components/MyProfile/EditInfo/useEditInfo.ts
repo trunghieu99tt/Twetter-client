@@ -41,7 +41,7 @@ export const useEditInfo = ({ data, onCancel }: Props) => {
   });
   const [updating, setUpdating] = useState<boolean>(false);
 
-  const { uploadImage } = useUpload();
+  const { uploadMedia } = useUpload();
   const { updateUserMutation } = useUser();
 
   const onChangePicture = (e: ChangeEvent<HTMLInputElement>) => {
@@ -113,11 +113,19 @@ export const useEditInfo = ({ data, onCancel }: Props) => {
       let coverPhoto = data.coverPhoto;
 
       if (newAvatar.file) {
-        avatar = await uploadImage(newAvatar.file);
+        avatar = await uploadMedia(newAvatar.file);
+        if (!avatar) {
+          setUpdating(false);
+          return;
+        }
       }
 
       if (newCover.file) {
-        coverPhoto = await uploadImage(newCover.file);
+        coverPhoto = await uploadMedia(newCover.file);
+        if (!coverPhoto) {
+          setUpdating(false);
+          return;
+        }
       }
 
       let newInfo: iUpdateUserDTO = {

@@ -7,6 +7,7 @@ import { iComment } from "@type/comments.types";
 import { iNotificationDTO } from "@type/notify.types";
 import { iTweet } from "@type/tweet.types";
 import { ChangeEvent, useState } from "react";
+import { toast } from "react-toastify";
 import { v4 } from "uuid";
 
 type Props = {
@@ -21,7 +22,7 @@ export const useAddComment = ({ commentData, tweet }: Props) => {
 
   const { createNotificationAction } = useNotify();
   const { user } = useUser();
-  const { uploadSingleMedia } = useUpload();
+  const { uploadMedia } = useUpload();
 
   const { createCommentMutation } = useComment({
     userId: user?._id,
@@ -56,7 +57,10 @@ export const useAddComment = ({ commentData, tweet }: Props) => {
     event.preventDefault();
     let url = "";
     if (media?.file) {
-      url = await uploadSingleMedia(media?.file);
+      url = await uploadMedia(media?.file);
+      if (!url) {
+        return;
+      }
     }
     const newComment = {
       content: comment,

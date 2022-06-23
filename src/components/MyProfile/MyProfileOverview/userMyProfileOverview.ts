@@ -28,7 +28,7 @@ export const useMyProfileOverview = ({ user }: Props) => {
     reportUserMutation,
   } = useUser();
   const history = useHistory();
-  const { uploadImage } = useUpload();
+  const { uploadMedia } = useUpload();
   const { onReport } = useReport("user");
   const { createNotificationAction } = useNotify();
 
@@ -77,7 +77,11 @@ export const useMyProfileOverview = ({ user }: Props) => {
     if (newAvatar.file) {
       setUpdating(true);
       try {
-        const newAvatarUrl = await uploadImage(newAvatar.file);
+        const newAvatarUrl = await uploadMedia(newAvatar.file);
+        if (!newAvatarUrl) {
+          setUpdating(false);
+          return;
+        }
         await updateUserMutation.mutateAsync({
           updatedUser: {
             avatar: newAvatarUrl,

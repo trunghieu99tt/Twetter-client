@@ -23,7 +23,7 @@ const useChatPage = () => {
   const [call, setCall] = useRecoilState(callState);
   const params: any = useParams();
   const { roomId } = params;
-  const { uploadImage } = useUpload();
+  const { uploadMedia } = useUpload();
   const { user: currentUser } = useUser();
   const { getMessagesQuery } = useMessage(roomId);
   const setNewMessage = useSetRecoilState(newMessageState);
@@ -58,7 +58,11 @@ const useChatPage = () => {
       roomId: roomId,
     };
     if (messageImage.file) {
-      const imageUrl = await uploadImage(messageImage.file);
+      const imageUrl = await uploadMedia(messageImage.file);
+      if (!imageUrl) {
+        setLoading(false);
+        return;
+      }
       newMessage.file = imageUrl;
       onCloseImageMessageForm();
     }

@@ -30,7 +30,7 @@ export const useTweetForm = ({ tweet }: Props) => {
 
   const { createTweetMutation, updateTweetMutation } = useTweets(user?._id);
 
-  const { uploadMultiMedia } = useUpload();
+  const { uploadMedias } = useUpload();
 
   const { updateHashTags } = useHashtag();
 
@@ -73,9 +73,13 @@ export const useTweetForm = ({ tweet }: Props) => {
   const onSubmit = async () => {
     if (body || media.length > 0) {
       setLoading(true);
-      const mediaResponse = await uploadMultiMedia(
+      const mediaResponse = await uploadMedias(
         media?.map((media) => media.file as File) || []
       );
+      if (mediaResponse?.filter(Boolean).length === 0) {
+        setLoading(false);
+        return;
+      }
       const { hashtags } = extractMetadata(body || "") || [];
 
       const updatedMedias = [...mediaResponse, ...initialMedias];

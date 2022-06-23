@@ -3,11 +3,16 @@ import {
   CLOUDINARY_UPLOAD_PRESET,
   CLOUDINARY_URL,
 } from "@config/secret";
+import { UPLOAD_FILE_TYPE } from "@type/app.types";
 import client from "api/client";
 import axios from "axios";
 import { UPLOAD_ENDPOINTS } from "constants/upload.constants";
+import { useTranslation } from "react-i18next";
+import { toast } from "react-toastify";
 
 export const useUpload = () => {
+  const { t } = useTranslation();
+
   const uploadImage = async (file: File) => {
     if (!file) return;
     try {
@@ -18,8 +23,8 @@ export const useUpload = () => {
         formData
       );
       return response?.data?.url || "";
-    } catch (error) {
-      console.log("upload image error: ", error);
+    } catch (error: any) {
+      console.log("upload image error: ", error, error.message);
     }
   };
 
@@ -50,10 +55,50 @@ export const useUpload = () => {
     return mediaUrls;
   };
 
+  const uploadMedia = async (
+    file: File,
+    type: UPLOAD_FILE_TYPE = "tweet"
+  ): Promise<string> => {
+    try {
+      const formData = new FormData();
+      formData.append("files", file);
+      formData.append("type", type);
+      const response = await client.post(UPLOAD_ENDPOINTS.BASE, formData);
+      return response?.data?.[0] || "";
+    } catch (error: any) {
+      toast.error(t(error?.response?.data?.message));
+      console.error(`[uploadMedia] error: `, error?.response);
+    }
+
+    return "";
+  };
+
+  const uploadMedias = async (
+    files: File[],
+    type: UPLOAD_FILE_TYPE = "tweet"
+  ): Promise<string[]> => {
+    try {
+      const formData = new FormData();
+      files.forEach((file) => {
+        formData.append("files", file);
+      });
+      formData.append("type", type);
+      const response = await client.post(UPLOAD_ENDPOINTS.BASE, formData);
+      return response?.data || [];
+    } catch (error: any) {
+      console.error(`[uploadMedias] error: `, error, error.message);
+      toast.error(t(error?.response?.data?.message));
+    }
+    return [];
+  };
+
   return {
     uploadSingleMedia,
     uploadMultiMedia,
     uploadImage,
     uploadImages,
+
+    uploadMedia,
+    uploadMedias,
   };
 };

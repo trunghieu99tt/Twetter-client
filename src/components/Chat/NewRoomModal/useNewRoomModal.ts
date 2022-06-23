@@ -18,7 +18,7 @@ const useNewRoomModal = () => {
 
   const { createNewRoom } = useRooms();
   const { user: currentUser } = useUser();
-  const { uploadSingleMedia } = useUpload();
+  const { uploadMedia } = useUpload();
 
   const [roomInfo, setRoomInfo] = useState<iRoomDTO>({
     name: "",
@@ -100,7 +100,11 @@ const useNewRoomModal = () => {
       setLoading(true);
       let image = "";
       if (media?.file) {
-        image = await uploadSingleMedia(media.file);
+        image = await uploadMedia(media.file);
+        if (!image) {
+          setLoading(false);
+          return;
+        }
       } else {
         image =
           "https://res.cloudinary.com/dwefhvioc/image/upload/v1640711295/xi05jiws5gfl6grydmwi.jpg";

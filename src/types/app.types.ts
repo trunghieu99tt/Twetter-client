@@ -66,3 +66,5 @@ export type TMapExistence = {
 };
 
 export type FORM_TYPE = "ADD" | "EDIT" | "VIEW";
+
+export type UPLOAD_FILE_TYPE = "tweet" | "background" | "avatar";
