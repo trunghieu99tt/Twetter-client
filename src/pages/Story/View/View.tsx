@@ -1,56 +1,38 @@
-import React, { useEffect, useRef, useState } from "react";
-import { useRecoilState, useRecoilValue } from "recoil";
-import cn from "classnames";
-import { useHistory, useParams } from "react-router";
-import { useTranslation } from "react-i18next";
-
-// talons
-import { useUser } from "@talons/useUser";
-import { useStory } from "@talons/useStory";
-
-// utils
-import { calcDiffTimeString } from "@utils/helper";
-
-// components
+import Dropdown from "@components/Dropdown";
 import Logo from "@components/Logo";
 import PageMetadata from "@components/PageMetadata";
 import StoryViewer from "@components/Story/StoryViewer";
-
-// icons
+import { useOnClickOutside } from "@hooks/useOnClickOutside";
+import DefaultUnknownAvatar from "@images/user.png";
+import { useStory } from "@talons/useStory";
+import { useUser } from "@talons/useUser";
+import { iStory } from "@type/story.types";
+import { iUser } from "@type/user.types";
+import { calcDiffTimeString } from "@utils/helper";
+import cn from "classnames";
+import { isEqual } from "lodash";
+import React, { useEffect, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   AiFillLeftCircle,
   AiFillRightCircle,
   AiOutlineDelete,
 } from "react-icons/ai";
-
-// constants
+import { BiDotsVertical } from "react-icons/bi";
+import { useHistory, useParams } from "react-router";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { STORY_ROUTES } from "routes/routes";
-
-// types
-import { iStory } from "@type/story.types";
-import { iUser } from "@type/user.types";
-
-// images
-import DefaultUnknownAvatar from "@images/user.png";
-
-// states
 import {
   ownersSelector,
   storiesState,
   storySelector,
   userStoryMetadataSelector,
 } from "states/story.state";
-
-// styles
 import classes from "./view.module.css";
-import { useOnClickOutside } from "@hooks/useOnClickOutside";
-import { BiDotsVertical } from "react-icons/bi";
-import Dropdown from "@components/Dropdown";
-import { isEqual } from "lodash";
 
 type TDirection = "LEFT" | "RIGHT";
 
-const View = () => {
+const View = (): JSX.Element => {
   const { t } = useTranslation();
 
   const params: {

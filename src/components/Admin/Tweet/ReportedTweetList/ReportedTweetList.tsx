@@ -1,18 +1,9 @@
-import React from "react";
-import cn from "classnames";
-
-// utils
-
-// talons
-import { useReportedTweetList } from "./useReportedTweetList";
-
-// components
-import { Button, Form, Input, Space, Table } from "antd";
-
-// styles
-import defaultClasses from "./reportedTweetList.module.css";
-import mergeClasses from "@utils/mergeClasses";
 import BaseView from "@layout/Admin/BaseView";
+import mergeClasses from "@utils/mergeClasses";
+import { Button, Form, Input, Space, Table } from "antd";
+import cn from "classnames";
+import defaultClasses from "./reportedTweetList.module.css";
+import { useReportedTweetList } from "./useReportedTweetList";
 
 interface Props {
   classes?: Record<string, any>;

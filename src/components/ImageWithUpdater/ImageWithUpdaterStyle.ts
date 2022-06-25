@@ -61,17 +61,11 @@ export const ActionButtons = styled.div`
   padding: 1rem 0;
   display: flex;
   justify-content: center;
+  flex-wrap: wrap;
 
   button:disabled {
     cursor: initial;
   }
-`;
-
-export const OkButton = styled.button`
-  background: var(--blue-2);
-  border-radius: 5px;
-  text-align: center;
-  color: #fff;
 `;
 
 export const CancelButton = styled.button`

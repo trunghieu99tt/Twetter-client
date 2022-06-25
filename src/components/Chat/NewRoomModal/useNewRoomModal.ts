@@ -1,16 +1,15 @@
-import { iUser } from "@type/user.types";
-import { useState } from "react";
-import debounce from "lodash.debounce";
-import { requestSearch } from "@pages/Search/useSearch";
-import { iRoomDTO } from "@type/room.types";
-import { TMedia } from "@type/app.types";
-import { v4 } from "uuid";
+import { useAppContext } from "@context/app.context";
 import { useRooms } from "@talons/useRoom";
 import { useUpload } from "@talons/useUpload";
 import { useUser } from "@talons/useUser";
-import { toast } from "react-toastify";
-import { useAppContext } from "@context/app.context";
+import { TMedia } from "@type/app.types";
+import { iRoomDTO } from "@type/room.types";
+import { iUser } from "@type/user.types";
+import _ from "lodash";
+import { useCallback, useState } from "react";
 import { useHistory } from "react-router";
+import { toast } from "react-toastify";
+import { v4 } from "uuid";
 
 const useNewRoomModal = () => {
   const { dispatch } = useAppContext();
@@ -27,53 +26,25 @@ const useNewRoomModal = () => {
   });
   const [loading, setLoading] = useState<boolean>(false);
   const [media, setMedia] = useState<TMedia | null>(null);
-  const [suggestion, setSuggestion] = useState<iUser[]>([]);
+  const [isAddMemberForOpened, setIsAddMemberForOpened] =
+    useState<boolean>(false);
   const [newGroupChatUserList, setNewGroupUserList] = useState<iUser[]>([]);
 
-  const onAddToNewGroupUserList = (user: iUser) => {
-    if (!newGroupChatUserList.some((u: iUser) => u._id === user._id)) {
-      setNewGroupUserList((v) => [...v, user]);
-    }
-    setSuggestion([]);
+  const onAddToNewGroupUserList = (users: iUser[]) => {
+    const newUserList = _.merge(newGroupChatUserList, users);
+    setNewGroupUserList(newUserList);
   };
 
   const onRemoveUserFromNewGroupUserList = (user: iUser) => {
     setNewGroupUserList((v) => v.filter((u: iUser) => u._id !== user._id));
   };
 
-  const searchUser = async (value: string) => {
-    const { data } = await requestSearch({
-      search: value,
-      category: "people",
-    });
-    const filteredUsers = data.filter((user: iUser) => {
-      return (
-        user._id !== currentUser._id &&
-        !newGroupChatUserList.some((u: iUser) => u._id === user._id)
-      );
-    });
-    setSuggestion(filteredUsers);
-  };
-
-  // create a debounce function to trigger the search
-  const debouncedSearch = debounce((value: string) => {
-    if (value.trim().length > 0) {
-      searchUser(value);
-    } else {
-      setSuggestion([]);
-    }
-  }, 500);
-
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, files } = e.target;
-    if (name === "user") {
-      debouncedSearch(value);
-    } else {
-      setRoomInfo((v) => ({
-        ...v,
-        [name]: value,
-      }));
-    }
+    setRoomInfo((v) => ({
+      ...v,
+      [name]: value,
+    }));
 
     if (files && files?.length > 0) {
       const file = files?.[0];
@@ -98,19 +69,18 @@ const useNewRoomModal = () => {
         return;
       }
       setLoading(true);
-      let image = "";
+      let image =
+        "https://res.cloudinary.com/dwefhvioc/image/upload/v1640711295/xi05jiws5gfl6grydmwi.jpg";
       if (media?.file) {
         image = await uploadMedia(media.file);
         if (!image) {
           setLoading(false);
           return;
         }
-      } else {
-        image =
-          "https://res.cloudinary.com/dwefhvioc/image/upload/v1640711295/xi05jiws5gfl6grydmwi.jpg";
       }
-      let membersIds = newGroupChatUserList.map((u: iUser) => u._id) || [];
-      membersIds = Array.from(new Set(membersIds));
+      const membersIds = Array.from(
+        new Set(newGroupChatUserList.map((u: iUser) => u._id) || [])
+      );
 
       if (membersIds.length < 2) {
         toast.error("Please add at least 2 people to create a group chat");
@@ -144,16 +114,26 @@ const useNewRoomModal = () => {
       payload: false,
     });
 
+  const onOpenAddMemberModal = useCallback(() => {
+    setIsAddMemberForOpened(true);
+  }, []);
+
+  const onCloseAddMemberModal = useCallback(() => {
+    setIsAddMemberForOpened(true);
+  }, []);
+
   return {
     media,
     loading,
-    suggestion,
+    isAddMemberForOpened,
     newGroupChatUserList,
 
     onChange,
     onCloseModal,
     onCreateNewChatGroup,
     onAddToNewGroupUserList,
+    onOpenAddMemberModal,
+    onCloseAddMemberModal,
     onRemoveUserFromNewGroupUserList,
   };
 };

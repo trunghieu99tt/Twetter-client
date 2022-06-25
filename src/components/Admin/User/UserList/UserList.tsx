@@ -1,18 +1,10 @@
+import BaseView from "@layout/Admin/BaseView";
+import mergeClasses from "@utils/mergeClasses";
+import { Button, Form, Input, Select, Space, Table, Tag } from "antd";
 import cn from "classnames";
 import { Link } from "react-router-dom";
-
-// utils
-
-// talons
-
-// components
-import { Button, Form, Input, Space, Table, Tag, Select } from "antd";
-
-// styles
 import defaultClasses from "./userList.module.css";
-import mergeClasses from "@utils/mergeClasses";
 import { useUserList } from "./useUserList";
-import BaseView from "@layout/Admin/BaseView";
 
 interface Props {
   classes?: Record<string, any>;

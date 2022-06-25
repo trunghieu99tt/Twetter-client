@@ -1,20 +1,10 @@
-import React, { useState } from "react";
-import cn from "classnames";
-
-// utils
-import { urlify } from "@utils/helper";
-
-// components
-import VoiceMessageContent from "./VoiceMessageContent";
-
-// styles
-import classes from "./messageContent.module.css";
-
-// types
-import { iMessage } from "@type/message.types";
-import ImageWithPlaceholder from "@components/ImageWithPlaceholder";
 import UserAvatarSmall from "@components/UserAvatarSmall";
-
+import { iMessage } from "@type/message.types";
+import { urlify } from "@utils/helper";
+import cn from "classnames";
+import { useState } from "react";
+import classes from "./messageContent.module.css";
+import VoiceMessageContent from "./VoiceMessageContent";
 interface Props {
   data: iMessage;
   isMyMessage: boolean;

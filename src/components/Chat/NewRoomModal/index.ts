@@ -1,1 +1,1 @@
-export { default } from "./newRoomModal";
+export { default } from "./NewRoomModal";

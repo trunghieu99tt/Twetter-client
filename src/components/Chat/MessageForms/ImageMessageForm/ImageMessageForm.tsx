@@ -1,5 +1,5 @@
-import { useTranslation } from "react-i18next";
 import { AnimatePresence, motion } from "framer-motion";
+import { useTranslation } from "react-i18next";
 
 // utils
 import mergeClasses from "@utils/mergeClasses";
@@ -33,7 +33,7 @@ const ImageMessageForm = ({
   onCancel,
   onChange,
   data,
-}: Props) => {
+}: Props): JSX.Element => {
   const { t } = useTranslation();
 
   const classes = mergeClasses(defaultClasses, propsClasses);

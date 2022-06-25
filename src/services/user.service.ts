@@ -1,3 +1,4 @@
+import { requestSearch } from "@pages/Search/useSearch";
 import { IApiResponse, IGetList } from "@type/api.type";
 import { iUser } from "@type/user.types";
 import { getInfinityList } from "@utils/query";
@@ -80,5 +81,14 @@ export class UserService {
       `${USER_ENDPOINTS.REPORT_USER}/${userId}`
     );
     return response?.data;
+  };
+
+  static searchUser = async (value: string): Promise<iUser[]> => {
+    const { data } = await requestSearch({
+      search: value,
+      category: "people",
+    });
+
+    return data;
   };
 }

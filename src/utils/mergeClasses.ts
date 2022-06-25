@@ -1,3 +1,7 @@
-const mergeClasses = (...args: any[]) => Object.assign({}, ...args);
+const mergeClasses = (...objects: any[]) => {
+  return objects.reduce((acc, obj) => {
+    return { ...acc, ...obj };
+  }, {});
+};
 
 export default mergeClasses;

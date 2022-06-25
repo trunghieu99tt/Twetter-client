@@ -23,22 +23,6 @@ export const UserFollowers = styled.p`
   color: var(--gray-1);
 `;
 
-export const FollowButton = styled.button`
-  background: var(--blue-1);
-  color: #fff;
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  padding: 0.8rem 2.4rem;
-  height: 3rem;
-  border-radius: 0.4rem;
-
-  &:disabled {
-    cursor: initial;
-    background: var(--gray-4);
-  }
-`;
-
 export const UserBio = styled.p`
   font-size: 14px;
   color: var(--gray-1);

@@ -2,6 +2,7 @@ import styled from "styled-components";
 
 export const Wrapper = styled("div")<{
   isOpen: boolean;
+  zIndex?: number;
 }>`
   display: ${(props) => (props.isOpen ? "flex" : "none")};
   position: fixed;
@@ -11,7 +12,7 @@ export const Wrapper = styled("div")<{
   height: 100vh;
   align-items: center;
   justify-content: center;
-  z-index: 999;
+  z-index: ${(props) => (props.zIndex ? props.zIndex : "100")};
 `;
 
 export const Mask = styled.div`
@@ -54,14 +55,6 @@ export const Footer = styled.div`
   border-top: 1px solid var(--gray-4);
   margin-top: 2rem;
   gap: 1rem;
-`;
-
-export const OkButton = styled.button`
-  background: var(--blue-2);
-  padding: 0.5rem 3rem;
-  border-radius: 5px;
-  color: #fff;
-  font-weight: 500;
 `;
 
 export const CancelButton = styled.button`

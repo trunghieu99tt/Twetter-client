@@ -143,15 +143,3 @@ export const FileLabel = styled.label`
 export const FileInput = styled.input`
   display: none;
 `;
-
-export const TweetSubmitButton = styled.button`
-  padding: 0.8rem 2.4rem;
-  background: var(--blue-1);
-  color: #fff;
-  border-radius: 4px;
-  cursor: pointer;
-
-  &:disabled {
-    background: var(--gray-1);
-  }
-`;

@@ -1,13 +1,16 @@
+import { IGetList } from "@type/api.type";
+import { iUser } from "@type/user.types";
 import { getInfinityList } from "@utils/query";
 import { useState } from "react";
-import { QueryFunctionContext } from "react-query";
 
 type TSearch = {
   search: string;
   category: string;
 };
 
-export const requestSearch = async (query: TSearch) => {
+export const requestSearch = async (
+  query: TSearch
+): Promise<IGetList<iUser>> => {
   if (!query.search || !query.category) {
     return {
       data: [],
