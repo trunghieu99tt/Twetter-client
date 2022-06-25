@@ -1,20 +1,22 @@
-import { useEffect, useState } from "react";
-import { useHistory, useParams } from "react-router";
-import { iMessage, iNewMessage } from "../../types/message.types";
-import { useUser } from "@talons/useUser";
-import { useUpload } from "@talons/useUpload";
-import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
-import { newMessageState } from "states/message.state";
+import { useAppContext } from "@context/app.context";
 import { useMessage } from "@talons/useMessage";
-import { connectedRoomsState } from "states/room.state";
+import { useUpload } from "@talons/useUpload";
+import { useUser } from "@talons/useUser";
 import { iRoom } from "@type/room.types";
 import { iUser } from "@type/user.types";
-import { useAppContext } from "@context/app.context";
-import { callState } from "states/call.state";
-import { v4 as uuid, v4 } from "uuid";
 import client from "api/client";
+import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
+import { useHistory, useParams } from "react-router";
+import { toast } from "react-toastify";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+import { callState } from "states/call.state";
+import { newMessageState } from "states/message.state";
+import { connectedRoomsState } from "states/room.state";
+import { iMessage, iNewMessage } from "../../types/message.types";
 
 const useChatPage = () => {
+  const { t } = useTranslation();
   const {
     state: { peer, socket },
     dispatch,
@@ -49,41 +51,63 @@ const useChatPage = () => {
     url: "",
   });
 
+  const optimisticAddNewMessage = () => {
+    const newMessage: iMessage = {
+      author: currentUser,
+      content: message,
+      roomId: roomId,
+      createdAt: new Date(),
+      _id: new Date().getTime().toString(),
+      file: messageImage.file ? messageImage.url : "",
+    };
+    setMessages([...messages, newMessage]);
+    setTotalMessage((prev) => prev + 1);
+    if (messageImage.file) {
+      setChatImages([messageImage.url, ...chatImages]);
+    }
+  };
+
   const onSubmit = async (event: any) => {
     event.preventDefault();
-    setLoading(true);
+    optimisticAddNewMessage();
     const newMessage: iNewMessage = {
       author: currentUser,
       content: message,
       roomId: roomId,
     };
+
     if (messageImage.file) {
-      const imageUrl = await uploadMedia(messageImage.file);
+      onCloseImageMessageForm();
+      const imageFile = messageImage.file;
+      const imageUrl = await uploadMedia(imageFile);
       if (!imageUrl) {
-        setLoading(false);
         return;
       }
       newMessage.file = imageUrl;
-      onCloseImageMessageForm();
     }
-    if (newMessage.content.length > 0 || newMessage.file) {
+
+    if (newMessage?.content.length > 0 || newMessage.file) {
       setNewMessage(newMessage);
       setMessage("");
     }
-    setLoading(false);
   };
 
-  const onChange = (event: any, file = false) => {
-    if (!file) {
+  const onChange = (event: any, isFileMessage = false) => {
+    if (!isFileMessage) {
       setMessage(event.target.value);
-    } else {
-      const file = event.target.files[0];
-      const newPhoto = {
-        file,
-        url: URL.createObjectURL(file),
-      };
-      setMessageImage(newPhoto);
+      return;
     }
+
+    const file = event.target.files[0];
+    if (!file) {
+      return;
+    }
+
+    const newPhoto = {
+      file,
+      url: URL.createObjectURL(file),
+    };
+    setMessageImage(newPhoto);
   };
 
   const getMessages = (data: any) => {

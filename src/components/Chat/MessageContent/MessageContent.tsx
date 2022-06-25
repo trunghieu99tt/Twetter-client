@@ -13,6 +13,7 @@ import classes from "./messageContent.module.css";
 // types
 import { iMessage } from "@type/message.types";
 import ImageWithPlaceholder from "@components/ImageWithPlaceholder";
+import UserAvatarSmall from "@components/UserAvatarSmall";
 
 interface Props {
   data: iMessage;
@@ -44,9 +45,7 @@ const MessageContent = ({ data, isMyMessage }: Props) => {
             onLoad={() => {
               console.log("Loaded");
             }}
-            onError={(error) => {
-              console.log("error: ", error);
-              console.log("Error");
+            onError={() => {
               if (reload < 5) {
                 setReload((r) => r + 1);
               }
@@ -65,16 +64,7 @@ const MessageContent = ({ data, isMyMessage }: Props) => {
       })}
     >
       <figure>
-        <ImageWithPlaceholder
-          alt={`${fullName}-avatar`}
-          src={data?.author?.avatar}
-          customStyles="
-                    --size: 3rem;
-                        width: var(--size);
-                        height: var(--size);
-                        border-radius: 50%;
-                        object-fit: cover;"
-        />
+        <UserAvatarSmall user={data?.author} />
       </figure>
       <div className={classes.messageWrapper}>
         <div className={classes.info}>

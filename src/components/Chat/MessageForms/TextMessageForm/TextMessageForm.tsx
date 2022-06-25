@@ -18,6 +18,8 @@ import { BsPlus, BsFillImageFill, BsMic } from "react-icons/bs";
 
 // styles
 import defaultClasses from "./textmessageform.module.css";
+import { toast } from "react-toastify";
+import { useTranslation } from "react-i18next";
 
 interface Props {
   classes?: Record<string, any>;
@@ -28,13 +30,15 @@ interface Props {
   setChosenEmoji: any;
 }
 
-const TextMessageForm = ({
+const MessageForm = ({
   classes: propsClasses,
   value,
   onSubmit,
   onChange,
   setChosenEmoji,
 }: Props) => {
+  const { t } = useTranslation();
+
   const [isVisibleMedia, setIsVisibleMedia] = useState<boolean>(true);
   const [showEmoji, setShowEmoji] = useState<boolean>(false);
   const [showRecord, setShowRecord] = useState<boolean>(false);
@@ -69,7 +73,17 @@ const TextMessageForm = ({
                 type="file"
                 style={{ display: "none" }}
                 name="image"
-                onChange={(event) => onChange(event, true)}
+                onChange={(event) => {
+                  console.log("file changed!", event.target.files);
+                  const file = event.target.files?.[0];
+                  // check if file is video
+                  if (!file?.type.includes("image")) {
+                    toast.error(t("unsupportedFileType"));
+                    return;
+                  }
+                  onChange(event, true);
+                  event.target.value = "";
+                }}
               />
               <label htmlFor="messageImage">
                 <BsFillImageFill />
@@ -127,4 +141,4 @@ const TextMessageForm = ({
   );
 };
 
-export default TextMessageForm;
+export default MessageForm;

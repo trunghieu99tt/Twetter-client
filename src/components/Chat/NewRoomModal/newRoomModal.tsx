@@ -70,6 +70,7 @@ const CreateNewGroupChat = () => {
           type="text"
           name="user"
           id="user"
+          onFocus={onChange}
           onChange={onChange}
           placeholder={t("addUser")}
         />

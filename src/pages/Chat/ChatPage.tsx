@@ -1,41 +1,28 @@
-import React, { lazy, Suspense, useEffect, useRef, useState } from "react";
-import SimpleReactLightbox from "simple-react-lightbox";
-import { useTranslation } from "react-i18next";
-import { useHistory } from "react-router";
-import { useRecoilValue } from "recoil";
-
-// talons
-import { useChatPage } from "./useChatPage";
-import { useIntersectionObserver } from "@hooks/useIntersectionObserver";
-
-// components
-import Logo from "@components/Logo";
-const Modal = lazy(() => import("@components/Modal"));
-import UserCard from "@components/UserCard";
-import { Spinner1 } from "@components/Loaders";
-import RoomList from "@components/Chat/RoomList";
-import PageMetadata from "@components/PageMetadata";
 import MessageContent from "@components/Chat/MessageContent";
-import RoomImageGallery from "@components/Chat/RoomImageGallery";
-import TextMessageForm from "@components/Chat/MessageForms/TextMessageForm";
 import ImageMessageForm from "@components/Chat/MessageForms/ImageMessageForm";
-
-// icons
-import { IoCallSharp } from "react-icons/io5";
-
-// images
+import TextMessageForm from "@components/Chat/MessageForms/TextMessageForm";
+import RoomImageGallery from "@components/Chat/RoomImageGallery";
+import RoomList from "@components/Chat/RoomList";
+import ImageWithPlaceholder from "@components/ImageWithPlaceholder";
+import { Spinner1 } from "@components/Loaders";
+import Logo from "@components/Logo";
+import PageMetadata from "@components/PageMetadata";
+import UserCard from "@components/UserCard";
+import { useIntersectionObserver } from "@hooks/useIntersectionObserver";
 import DefaultUnknownAvatar from "@images/user.png";
-
-// types
 import { iMessage } from "@type/message.types";
 import { iUser } from "@type/user.types";
-
-// styles
-import classes from "./chatPage.module.css";
-
-import { roomsHaveCallState } from "states/call.state";
+import React, { lazy, Suspense, useEffect, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
+import { IoCallSharp } from "react-icons/io5";
+import { useHistory } from "react-router";
 import { Link } from "react-router-dom";
-import ImageWithPlaceholder from "@components/ImageWithPlaceholder";
+import { useRecoilValue } from "recoil";
+import SimpleReactLightbox from "simple-react-lightbox";
+import { roomsHaveCallState } from "states/call.state";
+import classes from "./chatPage.module.css";
+import { useChatPage } from "./useChatPage";
+const Modal = lazy(() => import("@components/Modal"));
 
 const ChatPage = () => {
   const { t } = useTranslation();
@@ -108,9 +95,13 @@ const ChatPage = () => {
     roomName = guestUser?.name || "";
   }
 
+  console.log("messages", messages);
+
   const roomMemberList = members?.map((member: iUser) => (
     <UserCard user={member} key={`room-member-card-${member._id}`} />
   ));
+
+  console.log("messageImage", messageImage);
 
   return (
     <React.Fragment>

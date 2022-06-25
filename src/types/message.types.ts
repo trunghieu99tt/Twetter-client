@@ -14,6 +14,8 @@ export interface iNewMessage {
   file?: string;
   author: iUser;
   roomId: string;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
 export interface iFile {

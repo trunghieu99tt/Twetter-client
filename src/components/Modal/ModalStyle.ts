@@ -44,6 +44,7 @@ export const Header = styled("div")<{
 export const Body = styled.div`
   max-height: 50rem;
   overflow: auto;
+  overflow-x: hidden;
 `;
 
 export const Footer = styled.div`

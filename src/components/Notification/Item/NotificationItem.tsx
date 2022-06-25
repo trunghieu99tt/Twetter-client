@@ -18,6 +18,7 @@ import DefaultUnknownAvatar from "@images/user.png";
 
 // styles
 import classes from "./notificationItem.module.css";
+import UserAvatarSmall from "@components/UserAvatarSmall";
 
 type Props = {
   data: iNotification;
@@ -47,12 +48,13 @@ const NotificationItem = ({ data }: Props) => {
       onClick={onClick}
     >
       <figure className={classes.senderAvatarWrapper}>
-        <img
+        {/* <img
           src={data?.sender?.avatar || DefaultUnknownAvatar}
           alt="sender avatar"
           className={classes.senderAvatar}
           loading="lazy"
-        />
+        /> */}
+        <UserAvatarSmall user={data?.sender} />
       </figure>
       <div className={classes.main}>
         <p className={classes.text}>

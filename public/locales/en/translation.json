@@ -148,5 +148,6 @@
   "updateCoverPhoto": "Update cover photo",
   "adminAuthentication": "Login as admin",
   "reportUser": "Report user",
-  "nsfw": "Your uploaded picture may contain inappropriate content. Please check your picture and try again."
+  "nsfw": "Your uploaded picture may contain inappropriate content. Please check your picture and try again.",
+  "unsupportedFileType": "Unsupported file type"
 }
