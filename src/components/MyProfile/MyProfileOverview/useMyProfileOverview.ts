@@ -1,15 +1,15 @@
 import { useNotify } from "@talons/useNotify";
+import { useReport } from "@talons/useReport";
 import { useUpload } from "@talons/useUpload";
 import { useUser } from "@talons/useUser";
 import { iNotificationDTO } from "@type/notify.types";
 import { iRoom } from "@type/room.types";
 import { iUser } from "@type/user.types";
+import _ from "lodash";
 import { ChangeEvent, useEffect, useState } from "react";
 import { useHistory } from "react-router";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import { connectedRoomsState, joinRoomState } from "states/room.state";
-import { useReport } from "@talons/useReport";
-import _ from "lodash";
 
 type LIST_TYPE = "followers" | "following" | "";
 type MODAL_TYPE = "list_user" | "update_info" | "";

@@ -1,28 +1,18 @@
-import { useQueryClient } from "react-query";
-import { useTranslation } from "react-i18next";
-import { useEffect, useRef, useState } from "react";
 import { Modal } from "antd";
-
-// hooks
+import { useEffect, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
+import { useQueryClient } from "react-query";
 import { useOnClickOutside } from "@hooks/useOnClickOutside";
-
-// talons
-import { useNotify } from "@talons/useNotify";
-import { useTweets } from "@talons/useTweets";
 import { useComment } from "@talons/useComment";
 import { useHashtag } from "@talons/useHashtag";
-
-// utils
+import { useNotify } from "@talons/useNotify";
+import { useTweetQuery } from "@talons/useTweetQuery";
 import { extractMetadata } from "@utils/helper";
-
-// types
-import { iUser } from "@type/user.types";
-import { iTweet } from "@type/tweet.types";
 import { iNotificationDTO } from "@type/notify.types";
-
-// constants
-import { USER_QUERY } from "constants/user.constants";
+import { iTweet } from "@type/tweet.types";
+import { iUser } from "@type/user.types";
 import { useReport } from "@talons/useReport";
+import { USER_QUERY } from "constants/user.constants";
 import { useHistory, useParams } from "react-router";
 
 type Props = {
@@ -51,7 +41,7 @@ export const useTweet = ({ tweet }: Props) => {
     reactTweetMutation,
     saveTweetMutation,
     reportTweetMutation,
-  } = useTweets();
+  } = useTweetQuery();
   const { createNotificationAction } = useNotify();
   const { tweetComments, totalTweetComments, fetchMoreTweetComment } =
     useComment({
@@ -101,7 +91,7 @@ export const useTweet = ({ tweet }: Props) => {
   const tweetRetweetCount = tweet?.retweeted?.length || 0;
 
   // loading states
-  const deleteLoading = deleteTweetMutation.isLoading;
+  const deleteLoading = false;
 
   const toggleDropdown = () => setVisibleDropdown((isVisible) => !isVisible);
 
@@ -125,6 +115,13 @@ export const useTweet = ({ tweet }: Props) => {
   const onReactTweet = () => {
     reactTweetMutation.mutate(tweet._id);
     if (!liked) {
+      tweet.likes.push(currentUser as iUser);
+    } else {
+      tweet.likes = tweet.likes.filter(
+        (u: iUser) => u._id !== currentUser?._id
+      );
+    }
+    if (!liked && tweet?.author?._id) {
       if (currentUser) {
         tweet.likes.push(currentUser as iUser);
       }
@@ -142,6 +139,13 @@ export const useTweet = ({ tweet }: Props) => {
   const onRetweet = () => {
     retweetMutation.mutate(tweet._id);
     if (!retweeted) {
+      tweet.retweeted.push(currentUser as iUser);
+    } else {
+      tweet.retweeted = tweet.retweeted.filter(
+        (u: iUser) => u._id !== currentUser?._id
+      );
+    }
+    if (!retweeted && tweet?.author?._id) {
       if (currentUser) {
         tweet.retweeted.push(currentUser as iUser);
       }
@@ -159,9 +163,17 @@ export const useTweet = ({ tweet }: Props) => {
   const onSaveTweet = () => {
     saveTweetMutation.mutate(tweet._id);
     if (!saved) {
-      if (currentUser) {
-        tweet.saved.push(currentUser as iUser);
+      tweet.saved.push(currentUser as iUser);
+    } else {
+      // remove current user from saved list of tweet
+      const index = tweet.saved.findIndex(
+        (u: iUser) => u._id === (currentUser as unknown as iUser)?._id
+      );
+      if (index !== -1) {
+        tweet.saved.splice(index, 1);
       }
+    }
+    if (!saved && tweet?.author?._id) {
       const msg: iNotificationDTO = {
         text: "savedYourTweet",
         receivers: [tweet.author._id],

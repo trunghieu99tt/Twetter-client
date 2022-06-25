@@ -1,5 +1,5 @@
 import { useHashtag } from "@talons/useHashtag";
-import { useTweets } from "@talons/useTweets";
+import { useTweetQuery } from "@talons/useTweetQuery";
 import { useUpload } from "@talons/useUpload";
 import { TMedia } from "@type/app.types";
 import { iCreateTweetDTO, iTweet } from "@type/tweet.types";
@@ -28,7 +28,7 @@ export const useTweetForm = ({ tweet }: Props) => {
   const [loading, setLoading] = useState<boolean>(false);
   const [audience, setAudience] = useState<number>(tweet?.audience || 0);
 
-  const { createTweetMutation, updateTweetMutation } = useTweets(user?._id);
+  const { createTweetMutation, updateTweetMutation } = useTweetQuery(user?._id);
 
   const { uploadMedias } = useUpload();
 
@@ -73,27 +73,30 @@ export const useTweetForm = ({ tweet }: Props) => {
   const onSubmit = async () => {
     if (body || media.length > 0) {
       setLoading(true);
-      const mediaResponse = await uploadMedias(
-        media?.map((media) => media.file as File) || []
-      );
-      if (mediaResponse?.filter(Boolean).length === 0) {
-        setLoading(false);
-        return;
+      let newMedia = [...initialMedias];
+      if (media?.length > 0) {
+        const mediaResponse = await uploadMedias(
+          media?.map((media) => media.file as File) || []
+        );
+        if (mediaResponse?.filter(Boolean).length === 0) {
+          setLoading(false);
+          return;
+        }
+        newMedia = [...mediaResponse, ...initialMedias];
       }
-      const { hashtags } = extractMetadata(body || "") || [];
 
-      const updatedMedias = [...mediaResponse, ...initialMedias];
+      const { hashtags } = extractMetadata(body || "") || [];
 
       const newTweet: iCreateTweetDTO = {
         content: body,
         audience,
-        media: updatedMedias,
+        media: newMedia,
         tags: hashtags,
       };
 
       if (tweet) {
         try {
-          await updateTweetMutation.mutateAsync({
+          updateTweetMutation.mutate({
             tweetId: tweet._id,
             updatedTweet: newTweet,
           });
@@ -104,7 +107,7 @@ export const useTweetForm = ({ tweet }: Props) => {
         }
       } else {
         try {
-          await createTweetMutation.mutateAsync(newTweet);
+          createTweetMutation.mutate(newTweet);
           onSubmitSuccess();
         } catch (error) {
           resetAll();

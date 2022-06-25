@@ -1,53 +1,46 @@
 import React from "react";
-
-// components
+import TweetSkeleton from "@components/Tweet/TweetDetail/TweetSkeleton";
 import UserCard from "@components/UserCard";
 import InfiniteScroll from "react-infinite-scroll-component";
-import TweetSkeleton from "@components/Tweet/TweetDetail/TweetSkeleton";
-
-// types
 import { iUser } from "@type/user.types";
-import { parseUser } from "@talons/useUser";
+import { UserService } from "services/user.service";
 
 interface Props {
-    query: any;
+  query: any;
 }
 
 const InfinityPeopleList = ({ query }: Props) => {
-    const { data, isLoading, fetchNextPage } = query;
+  const { data, isLoading, fetchNextPage } = query;
 
-    const pages = data?.pages;
-    const totalRecords = pages?.[0].total || 0;
+  const pages = data?.pages;
+  const totalRecords = pages?.[0].total || 0;
 
-    const users: iUser[] =
-        pages?.reduce(
-            (res: iUser[], curr: { data: iUser[]; total: number }) => [
-                ...res,
-                ...curr.data.map((user: iUser) => parseUser(user)),
-            ],
-            []
-        ) || [];
+  const users: iUser[] =
+    pages?.reduce(
+      (res: iUser[], curr: { data: iUser[]; total: number }) => [
+        ...res,
+        ...curr.data.map(UserService.parseUser),
+      ],
+      []
+    ) || [];
 
-    const hasMore = users.length < totalRecords;
+  const hasMore = users.length < totalRecords;
 
-    return (
-        <React.Fragment>
-            {isLoading && users.length === 0 && <TweetSkeleton />}
-            <InfiniteScroll
-                dataLength={users.length}
-                next={fetchNextPage}
-                hasMore={hasMore}
-                loader={<TweetSkeleton />}
-            >
-                {users?.map((user: iUser) => (
-                    <UserCard
-                        user={user}
-                        key={`infinity-user-list-${user._id}`}
-                    />
-                ))}
-            </InfiniteScroll>
-        </React.Fragment>
-    );
+  return (
+    <React.Fragment>
+      {isLoading && users.length === 0 && <TweetSkeleton />}
+      <InfiniteScroll
+        dataLength={users.length}
+        next={fetchNextPage}
+        hasMore={hasMore}
+        loader={<TweetSkeleton />}
+      >
+        {users?.map((user: iUser) => (
+          <UserCard user={user} key={`infinity-user-list-${user._id}`} />
+        ))}
+      </InfiniteScroll>
+    </React.Fragment>
+  );
 };
 
 export default InfinityPeopleList;

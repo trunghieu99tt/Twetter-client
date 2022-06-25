@@ -1,57 +1,54 @@
-import { useState, useEffect } from "react";
-
-// components
+import React, { useState, useEffect } from "react";
 import ImageWithPlaceholder from "@components/ImageWithPlaceholder";
-
-// images
 import DefaultManAvatar from "@images/man.svg";
-import DefaultWomanAvatar from "../../assets/images/woman.svg";
+import DefaultWomanAvatar from "@images/woman.svg";
 import DefaultUnknownAvatar from "@images/user.png";
-
-// types and constants
 import { iUser } from "@type/user.types";
 import { GENDER } from "constants/user.constants";
 
 interface Props {
-    user: iUser;
-    customStyles?: string;
+  user: iUser;
+  customStyles?: string;
 }
 
-const UserAvatarSmall = ({ user, customStyles }: Props) => {
-    const [defaultSrc, setDefaultSrc] = useState<any>(user?.avatar || "");
+const UserAvatarSmall = ({ user, customStyles }: Props): JSX.Element => {
+  const [defaultSrc, setDefaultSrc] = useState<any>(
+    user?.avatar || DefaultUnknownAvatar
+  );
 
-    useEffect(() => {
-        if (user) {
-            let defaultSrc = DefaultUnknownAvatar;
-            if (user?.gender !== undefined) {
-                switch (user.gender) {
-                    case GENDER.MALE:
-                        defaultSrc = DefaultManAvatar;
-                        break;
-                    case GENDER.FEMALE:
-                        defaultSrc = DefaultWomanAvatar;
-                        break;
-                    default:
-                }
-            }
-            setDefaultSrc(defaultSrc);
+  useEffect(() => {
+    if (user) {
+      let defaultSrc = DefaultUnknownAvatar;
+      if (user?.gender !== undefined) {
+        switch (user.gender) {
+          case GENDER.MALE:
+            defaultSrc = DefaultManAvatar;
+            break;
+          case GENDER.FEMALE:
+            defaultSrc = DefaultWomanAvatar;
+            break;
+          default:
+            defaultSrc = DefaultUnknownAvatar;
         }
-    }, [user]);
+      }
+      setDefaultSrc(defaultSrc);
+    }
+  }, [user]);
 
-    return (
-        <ImageWithPlaceholder
-            src={user?.avatar || ""}
-            defaultSrc={defaultSrc}
-            alt={`${user?.name} avatar`}
-            key={user?.avatar}
-            customStyles={`--size: 3.5rem;
+  return (
+    <ImageWithPlaceholder
+      src={user?.avatar || ""}
+      defaultSrc={defaultSrc}
+      alt={`${user?.name} avatar`}
+      key={user?.avatar}
+      customStyles={`--size: 3.5rem;
                 width: var(--size);
                 height: var(--size);
                 border-radius: 0.5rem;
                 ${customStyles}
             `}
-        ></ImageWithPlaceholder>
-    );
+    ></ImageWithPlaceholder>
+  );
 };
 
 export default UserAvatarSmall;

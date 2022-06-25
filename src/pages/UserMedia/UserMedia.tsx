@@ -4,7 +4,7 @@ import { useParams } from "react-router";
 
 // talons
 import { useUser } from "@talons/useUser";
-import { useTweets } from "@talons/useTweets";
+import { useTweetQuery } from "@talons/useTweetQuery";
 
 // layout
 import MainLayout from "@layout/Main";
@@ -20,36 +20,36 @@ import { Container } from "@shared/style/sharedStyle.style";
 import { Wrapper, Content, Main, Sidebar } from "./userMediaStyle";
 
 const UserMedia = () => {
-    const { t } = useTranslation();
-    const params: { userId: string } = useParams();
-    const { userId } = params;
+  const { t } = useTranslation();
+  const params: { userId: string } = useParams();
+  const { userId } = params;
 
-    const { getUserMediasQuery } = useTweets(userId);
-    const { user: me, getUserQuery } = useUser(userId);
+  const { getUserMediasQuery } = useTweetQuery(userId);
+  const { user: me, getUserQuery } = useUser(userId);
 
-    const userData = userId === me?._id ? me : getUserQuery.data;
+  const userData = userId === me?._id ? me : getUserQuery.data;
 
-    if (!userData) return null;
+  if (!userData) return null;
 
-    return (
-        <React.Fragment>
-            <PageMetadata title={`${userData.name}'s ${t("media")}`} />
+  return (
+    <React.Fragment>
+      <PageMetadata title={`${userData.name}'s ${t("media")}`} />
 
-            <Wrapper>
-                <MyProfileOverview user={userData} />
-                <Container>
-                    <Content>
-                        <Sidebar>
-                            <LeftSidebar type="PROFILE" />
-                        </Sidebar>
-                        <Main>
-                            <InfinityMediaList query={getUserMediasQuery} />
-                        </Main>
-                    </Content>
-                </Container>
-            </Wrapper>
-        </React.Fragment>
-    );
+      <Wrapper>
+        <MyProfileOverview user={userData} />
+        <Container>
+          <Content>
+            <Sidebar>
+              <LeftSidebar type="PROFILE" />
+            </Sidebar>
+            <Main>
+              <InfinityMediaList query={getUserMediasQuery} />
+            </Main>
+          </Content>
+        </Container>
+      </Wrapper>
+    </React.Fragment>
+  );
 };
 
 export default MainLayout(UserMedia);

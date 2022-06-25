@@ -1,6 +1,6 @@
 import React from "react";
 import { useHistory, useParams } from "react-router";
-import { useTweets } from "@talons/useTweets";
+import { useTweetQuery } from "@talons/useTweetQuery";
 import { useUser } from "@talons/useUser";
 import MainLayout from "@layout/Main";
 import InfinityTweetList from "@components/InfinityLists/InfinityTweetsList";
@@ -18,7 +18,7 @@ const MyProfile = () => {
   const history = useHistory();
   const { userId } = params;
 
-  const { getProfileTweetsQuery } = useTweets(userId);
+  const { getProfileTweetsQuery } = useTweetQuery(userId);
   const { user: me, getUserQuery } = useUser(userId);
 
   const userData = userId === me?._id ? me : getUserQuery.data;

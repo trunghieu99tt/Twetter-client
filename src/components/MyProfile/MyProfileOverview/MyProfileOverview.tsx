@@ -2,7 +2,7 @@ import React, { Suspense } from "react";
 import { useTranslation } from "react-i18next";
 
 // talons
-import { useMyProfileOverview } from "./userMyProfileOverview";
+import { useMyProfileOverview } from "./useMyProfileOverview";
 
 // utils
 import { nFormatter } from "@utils/helper";

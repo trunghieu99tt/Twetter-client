@@ -1,42 +1,36 @@
-import React, { lazy, Suspense, useEffect } from "react";
-import { useRecoilValue } from "recoil";
 import AgoraRTC from "agora-rtc-sdk-ng";
+import React, { lazy, memo, Suspense, useEffect } from "react";
 import { Route, Switch, useLocation } from "react-router-dom";
-
-// talons
-import { useRooms } from "@talons/useRoom";
-import { useNotify } from "@talons/useNotify";
-import { useHashtag } from "@talons/useHashtag";
+import { useRecoilValue } from "recoil";
 import { useAppContext } from "@context/app.context";
-
-// pages
-import Chat from "@pages/Chat";
-import Call from "@pages/Call";
-import Search from "@pages/Search";
-import HashTag from "@pages/HashTag";
-import Explore from "@pages/Explore";
-import NotFound from "@pages/NotFound";
-import NewsFeed from "@pages/NewsFeed";
-import StoryForm from "@pages/Story/Form";
-import MyProfile from "@pages/MyProfile";
+import { useRooms } from "@talons/useRoom";
+import ReportedTweetList from "@components/Admin/Tweet/ReportedTweetList";
+import TweetStatistic from "@components/Admin/Tweet/TweetStatistic";
+import UserForm from "@components/Admin/User/UserForm";
+import UserList from "@components/Admin/User/UserList";
+import UserStatistic from "@components/Admin/User/UserStatistic";
+import UserView from "@components/Admin/User/UserView";
+import AdminPrivateRoute from "@components/routes/PrivateAdminRoute";
+import PrivateRoute from "@components/routes/PrivateRoute";
 import BookMarks from "@pages/BookMarks";
-import UserMedia from "@pages/UserMedia";
-import UserLikes from "@pages/UserLikes";
-import StoryView from "@pages/Story/View";
+import Call from "@pages/Call";
+import Chat from "@pages/Chat";
+import Explore from "@pages/Explore";
+import HashTag from "@pages/HashTag";
+import MyProfile from "@pages/MyProfile";
+import NewsFeed from "@pages/NewsFeed";
+import NotFound from "@pages/NotFound";
 import Notification from "@pages/Notification";
+import Search from "@pages/Search";
+import StoryForm from "@pages/Story/Form";
+import StoryView from "@pages/Story/View";
 import TweetDetail from "@pages/Tweet/TweetDetail";
+import UserLikes from "@pages/UserLikes";
+import UserMedia from "@pages/UserMedia";
 
 // components
 const CallModal = lazy(() => import("@components/Call/CallModal"));
-import UserList from "@components/Admin/User/UserList";
-import UserForm from "@components/Admin/User/UserForm";
-import UserView from "@components/Admin/User/UserView";
-import PrivateRoute from "@components/routes/PrivateRoute";
 const CreateNewGroupChat = lazy(() => import("@components/Chat/NewRoomModal"));
-import UserStatistic from "@components/Admin/User/UserStatistic";
-import TweetStatistic from "@components/Admin/Tweet/TweetStatistic";
-import AdminPrivateRoute from "@components/routes/PrivateAdminRoute";
-import ReportedTweetList from "@components/Admin/Tweet/ReportedTweetList";
 
 // routes
 import { HASHTAG_ROUTES, STORY_ROUTES } from "./routes";
@@ -45,8 +39,6 @@ import { HASHTAG_ROUTES, STORY_ROUTES } from "./routes";
 import { callState } from "states/call.state";
 
 const PrivateRouteController = () => {
-  const notificationTalons = useNotify();
-  const hashtagTalons = useHashtag();
   const { getUserRooms } = useRooms();
   const call = useRecoilValue(callState);
   const location = useLocation();
@@ -62,10 +54,6 @@ const PrivateRouteController = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [location.pathname]);
-
-  useEffect(() => {
-    console.log("re-rendered PrivateRouteController");
-  });
 
   return (
     <React.Fragment>
@@ -145,4 +133,4 @@ const PrivateRouteController = () => {
   );
 };
 
-export default PrivateRouteController;
+export default memo(PrivateRouteController);

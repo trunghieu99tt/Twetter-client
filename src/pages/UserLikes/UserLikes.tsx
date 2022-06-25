@@ -4,7 +4,7 @@ import { useParams } from "react-router";
 
 // talons
 import { useUser } from "@talons/useUser";
-import { useTweets } from "@talons/useTweets";
+import { useTweetQuery } from "@talons/useTweetQuery";
 
 // layout
 import MainLayout from "@layout/Main";
@@ -20,39 +20,35 @@ import { Container } from "@shared/style/sharedStyle.style";
 import PageMetadata from "@components/PageMetadata";
 
 const UserLikes = () => {
-    const { t } = useTranslation();
-    const params: { userId: string } = useParams();
-    const { userId } = params;
+  const { t } = useTranslation();
+  const params: { userId: string } = useParams();
+  const { userId } = params;
 
-    const { getProfileLikedTweetsQuery } = useTweets(userId);
-    const { user: me, getUserQuery } = useUser(userId);
+  const { getProfileLikedTweetsQuery } = useTweetQuery(userId);
+  const { user: me, getUserQuery } = useUser(userId);
 
-    const userData = userId === me?._id ? me : getUserQuery.data;
+  const userData = userId === me?._id ? me : getUserQuery.data;
 
-    if (!userData) return null;
+  if (!userData) return null;
 
-    return (
-        <React.Fragment>
-            <PageMetadata
-                title={`${userData.name}'s ${t("liked")} ${t("tweet")}`}
-            />
-            <Wrapper>
-                <MyProfileOverview user={userData} />
-                <Container>
-                    <Content>
-                        <Sidebar>
-                            <LeftSidebar type="PROFILE" />
-                        </Sidebar>
-                        <Main>
-                            <InfinityTweetsList
-                                query={getProfileLikedTweetsQuery}
-                            />
-                        </Main>
-                    </Content>
-                </Container>
-            </Wrapper>
-        </React.Fragment>
-    );
+  return (
+    <React.Fragment>
+      <PageMetadata title={`${userData.name}'s ${t("liked")} ${t("tweet")}`} />
+      <Wrapper>
+        <MyProfileOverview user={userData} />
+        <Container>
+          <Content>
+            <Sidebar>
+              <LeftSidebar type="PROFILE" />
+            </Sidebar>
+            <Main>
+              <InfinityTweetsList query={getProfileLikedTweetsQuery} />
+            </Main>
+          </Content>
+        </Container>
+      </Wrapper>
+    </React.Fragment>
+  );
 };
 
 export default MainLayout(UserLikes);

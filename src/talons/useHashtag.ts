@@ -31,6 +31,9 @@ export const useHashtag = () => {
     HASHTAG_QUERY.UPDATE_HASHTAG,
     updateHashtag,
     {
+      onMutate: (data) => {
+        console.log("data", data);
+      },
       onSuccess: () => {
         getMostPopularHashtagQuery.refetch();
       },
@@ -69,7 +72,7 @@ export const useHashtag = () => {
 
     const updateHashtagResponse = await Promise.all(
       updateHashtagObjects.map(async (updateObj: iUpdateHashtagDTO) => {
-        return await updateHashtagMutation.mutateAsync(updateObj);
+        return updateHashtagMutation.mutateAsync(updateObj);
       })
     );
 

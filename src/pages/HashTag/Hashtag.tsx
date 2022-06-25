@@ -3,7 +3,7 @@ import { useParams } from "react-router";
 import { useTranslation } from "react-i18next";
 
 // talons
-import { useTweets } from "@talons/useTweets";
+import { useTweetQuery } from "@talons/useTweetQuery";
 
 // layout
 import MainLayout from "@layout/Main";
@@ -17,25 +17,25 @@ import classes from "./hashtag.module.css";
 import { Container } from "@shared/style/sharedStyle.style";
 
 const Hashtag = () => {
-    const { t } = useTranslation();
-    const params: { hashtag: string } = useParams();
-    const { hashtag } = params;
+  const { t } = useTranslation();
+  const params: { hashtag: string } = useParams();
+  const { hashtag } = params;
 
-    const { getTweetsByTagQuery } = useTweets(undefined, hashtag);
+  const { getTweetsByTagQuery } = useTweetQuery(undefined, hashtag);
 
-    return (
-        <React.Fragment>
-            <PageMetadata title={`#${hashtag} ${t("tweet")}`} />
-            <div className={classes.root}>
-                <p className={classes.heading}>
-                    {t("allTweetByHashtag")} <span>#{hashtag}</span>
-                </p>
-                <Container>
-                    <InfinityTweetsList query={getTweetsByTagQuery} />
-                </Container>
-            </div>
-        </React.Fragment>
-    );
+  return (
+    <React.Fragment>
+      <PageMetadata title={`#${hashtag} ${t("tweet")}`} />
+      <div className={classes.root}>
+        <p className={classes.heading}>
+          {t("allTweetByHashtag")} <span>#{hashtag}</span>
+        </p>
+        <Container>
+          <InfinityTweetsList query={getTweetsByTagQuery} />
+        </Container>
+      </div>
+    </React.Fragment>
+  );
 };
 
 export default MainLayout(Hashtag);
