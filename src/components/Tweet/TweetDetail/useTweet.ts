@@ -122,9 +122,6 @@ export const useTweet = ({ tweet }: Props) => {
       );
     }
     if (!liked && tweet?.author?._id) {
-      if (currentUser) {
-        tweet.likes.push(currentUser as iUser);
-      }
       const msg: iNotificationDTO = {
         text: "likedYourTweet",
         receivers: [tweet.author._id],
@@ -146,9 +143,6 @@ export const useTweet = ({ tweet }: Props) => {
       );
     }
     if (!retweeted && tweet?.author?._id) {
-      if (currentUser) {
-        tweet.retweeted.push(currentUser as iUser);
-      }
       const msg: iNotificationDTO = {
         text: "retweetedYourTweet",
         receivers: [tweet.author._id],
