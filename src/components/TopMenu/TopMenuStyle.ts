@@ -1,10 +1,12 @@
 import styled from "styled-components";
 
-export const Container = styled.div`
+export const Container = styled("div")<{
+  isShown: boolean;
+}>`
   display: flex;
   gap: 6rem;
 
-  @media (max-width: 768px) {
+  @media (max-width: 769px) {
     position: fixed;
     top: 0;
     left: 0;
@@ -15,7 +17,10 @@ export const Container = styled.div`
     z-index: 1;
     display: block;
     padding-top: 3rem;
+    ${({ isShown }) => !isShown && `display: none`}
   }
+
+  ${({ isShown }) => !isShown && `display: none`}
 `;
 
 export const List = styled.div`

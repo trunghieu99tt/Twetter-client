@@ -6,9 +6,17 @@ export const Content = styled.div`
   display: flex;
   gap: 2.5rem;
   margin: 2.5rem auto;
+
+  @media (max-width: 1024px) {
+    flex-direction: column;
+  }
 `;
 
-export const Sidebar = styled.aside``;
+export const Sidebar = styled.aside`
+  position: sticky;
+  top: 7rem;
+  z-index: 3;
+`;
 
 export const Main = styled.div`
   flex: 1;

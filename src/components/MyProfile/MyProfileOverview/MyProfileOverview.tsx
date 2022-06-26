@@ -1,49 +1,34 @@
+import ImageWithUpdater from "@components/ImageWithUpdater";
+import Button from "@components/shared/Button";
+import UserCard from "@components/UserCard";
+import DefaultManAvatar from "@images/man.svg";
+import DefaultUnknownAvatar from "@images/user.png";
+import DefaultWomanAvatar from "@images/woman.svg";
+import { Container } from "@shared/style/sharedStyle.style";
+import { iUser } from "@type/user.types";
+import { nFormatter } from "@utils/helper";
 import React, { Suspense } from "react";
 import { useTranslation } from "react-i18next";
-
-// talons
-import { useMyProfileOverview } from "./useMyProfileOverview";
-
-// utils
-import { nFormatter } from "@utils/helper";
-
-// components
-import EditInfo from "../EditInfo";
-const Modal = React.lazy(() => import("@components/Modal"));
-import UserCard from "@components/UserCard";
-import ImageWithUpdater from "@components/ImageWithUpdater";
-
-// icons
-import { IoPersonAdd } from "react-icons/io5";
 import { AiOutlineMessage } from "react-icons/ai";
 import { FaBirthdayCake } from "react-icons/fa";
-
-// types
-import { iUser } from "@type/user.types";
-
-// image
-import DefaultManAvatar from "@images/man.svg";
-import DefaultWomanAvatar from "@images/woman.svg";
-import DefaultUnknownAvatar from "@images/user.png";
-
-// styles
+import { IoPersonAdd } from "react-icons/io5";
+import EditInfo from "../EditInfo";
 import {
   Bio,
-  Name,
-  Main,
-  Info,
-  Wrapper,
-  UserName,
-  MainInfo,
-  CoverPhoto,
-  RightButton,
-  SecondaryInfo,
-  FollowersCounter,
-  RightButtons,
-  SendMessageBtn,
   Birthday,
+  CoverPhoto,
+  FollowersCounter,
+  Info,
+  Main,
+  MainInfo,
+  Name,
+  RightButtons,
+  SecondaryInfo,
+  UserName,
+  Wrapper,
 } from "./MyProfileOverviewStyle";
-import { Container } from "@shared/style/sharedStyle.style";
+import { useMyProfileOverview } from "./useMyProfileOverview";
+const Modal = React.lazy(() => import("@components/Modal"));
 
 type Props = {
   user: iUser;
@@ -184,19 +169,17 @@ const MyProfileOverview = ({ user }: Props) => {
           </Info>
 
           <RightButtons>
-            <RightButton onClick={rightButtonAction}>
-              {rightButtonContent}
-            </RightButton>
+            <Button onClick={rightButtonAction}>{rightButtonContent}</Button>
             {!isMe && (
               <React.Fragment>
-                <SendMessageBtn onClick={() => onGoChat(user._id)}>
+                <Button onClick={() => onGoChat(user._id)}>
                   <AiOutlineMessage />
                   {t("sendMessage")}
-                </SendMessageBtn>
-                <SendMessageBtn onClick={reportUser}>
+                </Button>
+                <Button onClick={reportUser}>
                   <AiOutlineMessage />
                   {t("reportUser")}
-                </SendMessageBtn>
+                </Button>
               </React.Fragment>
             )}
           </RightButtons>

@@ -12,77 +12,79 @@ import { AiOutlineClose } from "react-icons/ai";
 import { Item, List, Container, CloseButton } from "./TopMenuStyle";
 
 const TopMenu = () => {
-    const location = useLocation();
-    const { t } = useTranslation();
-    const {
-        state: { visibleLeftSidebar, screenSize },
-        dispatch,
-    } = useAppContext();
+  const location = useLocation();
+  const { t } = useTranslation();
+  const {
+    state: { visibleLeftSidebar, screenSize },
+    dispatch,
+  } = useAppContext();
 
-    const menu = [
-        {
-            name: t("home"),
-            path: "/",
-            id: uuidv4(),
-        },
-        {
-            name: t("explore"),
-            path: "/explore/top",
-            submenus: [
-                "/explore/latest",
-                "/explore/top",
-                "/explore/people",
-                "/explore/media",
-            ],
-            id: uuidv4(),
-        },
-        {
-            name: t("bookmark"),
-            path: "/bookmarks",
-            id: uuidv4(),
-        },
-        {
-            name: t("search"),
-            path: "/search",
-            id: uuidv4(),
-        },
-    ];
+  const menu = [
+    {
+      name: t("home"),
+      path: "/",
+      id: uuidv4(),
+    },
+    {
+      name: t("explore"),
+      path: "/explore/top",
+      submenus: [
+        "/explore/latest",
+        "/explore/top",
+        "/explore/people",
+        "/explore/media",
+      ],
+      id: uuidv4(),
+    },
+    {
+      name: t("bookmark"),
+      path: "/bookmarks",
+      id: uuidv4(),
+    },
+    {
+      name: t("search"),
+      path: "/search",
+      id: uuidv4(),
+    },
+  ];
 
-    const closeMenu = () =>
-        dispatch({
-            type: "SET_VISIBLE_LEFT_SIDEBAR",
-            payload: false,
-        });
+  const closeMenu = () =>
+    dispatch({
+      type: "SET_VISIBLE_LEFT_SIDEBAR",
+      payload: false,
+    });
 
-    const shouldShowCloseButton =
-        screenSize !== "DESKTOP" && visibleLeftSidebar;
+  const shouldShowCloseButton = screenSize !== "DESKTOP" && visibleLeftSidebar;
+  const shouldShowTopBar = screenSize === "DESKTOP" || visibleLeftSidebar;
 
-    return (
-        <Container>
-            {shouldShowCloseButton && (
-                <CloseButton onClick={closeMenu}>
-                    <AiOutlineClose />
-                </CloseButton>
-            )}
+  console.log("shouldShowTopBar", shouldShowTopBar);
 
-            <List>
-                {menu?.map((item, idx) => {
-                    return (
-                        <Item
-                            key={item.id}
-                            active={
-                                location.pathname === item.path ||
-                                item?.submenus?.includes(location.pathname) ||
-                                false
-                            }
-                        >
-                            <Link to={item.path}>{item.name}</Link>
-                        </Item>
-                    );
-                })}
-            </List>
-        </Container>
-    );
+  return (
+    <Container isShown={shouldShowTopBar}>
+      {shouldShowCloseButton && (
+        <CloseButton onClick={closeMenu}>
+          <AiOutlineClose />
+        </CloseButton>
+      )}
+
+      <List>
+        {menu?.map((item, idx) => {
+          return (
+            <Item
+              key={item.id}
+              active={
+                location.pathname === item.path ||
+                item?.submenus?.includes(location.pathname) ||
+                false
+              }
+            >
+              <Link to={item.path}>{item.name}</Link>
+            </Item>
+          );
+        })}
+      </List>
+    </Container>
+  );
 };
 
 export default TopMenu;

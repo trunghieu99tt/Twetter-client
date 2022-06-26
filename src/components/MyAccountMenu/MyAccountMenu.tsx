@@ -3,6 +3,7 @@ import Dropdown from "@components/Dropdown";
 import LanguageSelector from "@components/LanguageSelector";
 import UserAvatarSmall from "@components/UserAvatarSmall";
 import { useOnClickOutside } from "@hooks/useOnClickOutside";
+import { useWindowSize } from "@hooks/useWindowSize";
 import { useUser } from "@talons/useUser";
 import React, { useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -22,6 +23,7 @@ const MyAccountMenu = (): JSX.Element => {
   const [visibleDropdown, setVisibleDropdown] = useState<boolean>(false);
   const { user } = useUser();
   const { handleLogout } = useAuth({});
+  const { width } = useWindowSize();
 
   const myAccountControllerRef =
     useRef() as React.MutableRefObject<HTMLDivElement>;
@@ -41,12 +43,15 @@ const MyAccountMenu = (): JSX.Element => {
         <Link to="/users">Go to dashboard</Link>,
       ]) ||
         []),
+      ...((width &&
+        width < 1024 && [<Link to={"/notifications"}>Notifications</Link>]) ||
+        []),
       <LogoutButton onClick={handleLogout}>
         <RiLogoutBoxRLine></RiLogoutBoxRLine>
         <p>{t("logout")}</p>
       </LogoutButton>,
     ],
-    [user]
+    [user, width]
   );
 
   return (

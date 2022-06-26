@@ -21,10 +21,23 @@ export const Main = styled.section`
   gap: 2.5rem;
   position: relative;
   min-height: 18rem;
+
+  @media (max-width: 1024px) {
+    transform: translateY(0);
+    flex-direction: column;
+  }
+
+  @media (max-width: 567px) {
+    margin: 0 1.5rem;
+    align-items: center;
+  }
 `;
 
 export const Info = styled.div`
   max-width: 50%;
+  @media (max-width: 1024px) {
+    max-width: 100%;
+  }
 `;
 
 export const MainInfo = styled.div`
@@ -81,17 +94,11 @@ export const RightButtons = styled.div`
   display: flex;
   flex-direction: column;
   gap: 1rem;
-`;
 
-export const SendMessageBtn = styled.button`
-  cursor: pointer;
-  background: var(--blue-1);
-  color: #fff;
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  padding: 0.8rem 2.4rem;
-  border-radius: 0.5rem;
+  @media (max-width: 576px) {
+    position: static;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+  }
 `;
-
-export const RightButton = styled(SendMessageBtn)``;

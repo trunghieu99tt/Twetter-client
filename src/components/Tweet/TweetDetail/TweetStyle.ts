@@ -86,6 +86,11 @@ export const InteractionSummary = styled.div`
   align-items: center;
   justify-content: flex-end;
   margin-bottom: 0.8rem;
+
+  @media (max-width: 576px) {
+    justify-content: space-between;
+    flex-wrap: wrap;
+  }
 `;
 
 export const InteractionSummaryItem = styled.div`
@@ -138,6 +143,13 @@ export const InteractionButton = styled("button")<{
     
     &:hover {
     background: var(--light-1);
+  }
+
+  @media (max-width: 576px) {
+    padding: 1rem;
+    span {
+      display: none;
+    }
   }
 `;
 

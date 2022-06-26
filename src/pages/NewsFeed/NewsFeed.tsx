@@ -30,6 +30,7 @@ import {
   Sidebar,
   Wrapper,
 } from "./newsFeed.style";
+import { useWindowSize } from "@hooks/useWindowSize";
 
 const NewsFeed = () => {
   const { t } = useTranslation();
@@ -39,6 +40,7 @@ const NewsFeed = () => {
   );
 
   const { getNewsFeedTweetsQuery } = useTweetQuery(user?._id || "");
+  const windowSize = useWindowSize();
 
   return (
     <React.Fragment>
@@ -46,9 +48,11 @@ const NewsFeed = () => {
       <Wrapper>
         <Container>
           <Inner>
-            <RightSidebar>
-              <NotificationList />
-            </RightSidebar>
+            {windowSize && windowSize.width && windowSize.width > 1024 && (
+              <RightSidebar>
+                <NotificationList />
+              </RightSidebar>
+            )}
             <Main>
               <StoryList />
               <AddTweet />

@@ -279,19 +279,19 @@ const Tweet = ({ tweet }: Props): JSX.Element => {
             <InteractionButtonGroup>
               <InteractionButton onClick={focusOnCommentForm}>
                 <BiComment />
-                {t("comment")}
+                <span>{t("comment")}</span>
               </InteractionButton>
               <InteractionButton onClick={onRetweet} retweeted={retweeted}>
                 <FiRefreshCw />
-                {t("retweet")}
+                <span>{t("retweet")}</span>
               </InteractionButton>
               <InteractionButton onClick={onReactTweet} liked={liked}>
                 <FaRegHeart />
-                {liked ? t("liked") : t("like")}
+                <span>{liked ? t("liked") : t("like")}</span>
               </InteractionButton>
               <InteractionButton onClick={onSaveTweet} saved={saved}>
                 <BiBookmark />
-                {saved ? t("saved") : t("save")}
+                <span>{saved ? t("saved") : t("save")}</span>
               </InteractionButton>
             </InteractionButtonGroup>
           </Interaction>

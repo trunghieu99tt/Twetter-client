@@ -7,9 +7,19 @@ export const Wrapper = styled.div`
   padding: 2rem;
   padding-left: 0;
   width: 30rem;
+
+  @media (max-width: 1024px) {
+    width: 100%;
+    padding: 0;
+  }
 `;
 
-export const List = styled.ul``;
+export const List = styled.ul`
+  @media (max-width: 1024px) {
+    display: flex;
+    justify-content: center;
+  }
+`;
 
 export const ListItem = styled("li")<{ active: boolean }>`
   margin-bottom: 1.8rem;
@@ -29,7 +39,23 @@ export const ListItem = styled("li")<{ active: boolean }>`
             height: 100%;
             border-radius: 0px 8px 8px 0px;
         }
+        
+        @media (max-width: 1024px) {
+          background: var(--blue-1);
+        }
+        
+        a {
+          @media (max-width: 1024px) {
+            color: #fff !important;
+          }
+        }
     `}
+
+  @media (max-width: 1024px) {
+    margin-bottom: 0;
+    display: flex;
+    align-items: center;
+  }
 
   a {
     font-weight: 600;

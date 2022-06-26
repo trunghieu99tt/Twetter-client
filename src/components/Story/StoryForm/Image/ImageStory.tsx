@@ -163,7 +163,7 @@ const ImageStory = ({ onCancel, onSubmit, setLoading }: Props) => {
                 className={classes.imageFormLabel}
               >
                 <BsCardImage />
-                <p>{t("updateImage")}</p>
+                <p>{t("uploadImage")}</p>
               </label>
             </div>
           )}
