@@ -28,8 +28,12 @@ export const useAddComment = ({ commentData, tweet }: Props) => {
     tweetId: tweet._id,
   });
 
-  const onChangeComment = (event: ChangeEvent<HTMLInputElement>) => {
-    setComment(event.target.value);
+  // const onChangeComment = (event: ChangeEvent<HTMLInputElement>) => {
+  //   setComment(event.target.value);
+  // };
+
+  const onChangeComment = (value: string) => {
+    setComment(value);
   };
 
   const onChangeFile = (event: ChangeEvent<HTMLInputElement>) => {

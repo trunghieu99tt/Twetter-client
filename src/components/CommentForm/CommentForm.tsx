@@ -5,7 +5,7 @@ import { useOnClickOutside } from "@hooks/useOnClickOutside";
 import { iComment } from "@type/comments.types";
 import { iTweet } from "@type/tweet.types";
 import EmojiPicker from "emoji-picker-react";
-import React from "react";
+import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { BsCardImage } from "react-icons/bs";
 import { HiOutlineEmojiHappy } from "react-icons/hi";
@@ -24,6 +24,7 @@ import {
   Wrapper,
 } from "./CommentFormStyle";
 import { useAddComment } from "./useCommentForm";
+import MentionInput from "@components/shared/Mention";
 
 type Props = {
   tweet: iTweet;
@@ -69,12 +70,16 @@ const CommentForm = ({
       <Wrapper onSubmit={onSubmit} shouldIndent={shouldIndent}>
         <UserAvatarSmall user={user} />
         <InputWrapper>
-          
-          <Input
+          {/* <Input
             value={comment}
             ref={addCommentRef}
             onChange={onChangeComment}
             placeholder={`${t("addAComment")} ...`}
+            disabled={loading}
+          /> */}
+          <MentionInput
+            onChange={onChangeComment}
+            value={comment}
             disabled={loading}
           />
           {loading && (
