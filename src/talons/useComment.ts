@@ -1,25 +1,17 @@
+import { iComment, iCreateCommentDTO } from "@type/comments.types";
+import { getInfinityList } from "@utils/query";
+import client from "api/client";
+import { COMMENT_ENDPOINTS, COMMENT_QUERY } from "constants/comment.constants";
+import {
+  DEFAULT_LIST_RESPONSE,
+  generateInfinityQueryListConfig,
+} from "constants/config.constant";
 import {
   QueryFunctionContext,
   useInfiniteQuery,
   useMutation,
   useQueryClient,
 } from "react-query";
-
-// utils
-import { getInfinityList } from "@utils/query";
-
-// api
-import client from "api/client";
-
-// types
-import { iComment, iCreateCommentDTO } from "@type/comments.types";
-
-// constants
-import {
-  DEFAULT_LIST_RESPONSE,
-  generateInfinityQueryListConfig,
-} from "constants/config.constant";
-import { COMMENT_ENDPOINTS, COMMENT_QUERY } from "constants/comment.constants";
 
 const getMyComments = async ({
   queryKey,

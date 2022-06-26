@@ -1,0 +1,18 @@
+.root {
+  min-width: 40rem;
+  min-height: 30rem;
+  position: relative;
+}
+
+.inputForm {
+  position: sticky;
+  top: 0;
+  background-color: #fff;
+}
+
+.userSuggestionList {
+  max-height: 30rem;
+  overflow: auto;
+  overflow-x: hidden;
+  padding-right: 3rem;
+}

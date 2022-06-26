@@ -1,36 +1,36 @@
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap");
 
 * {
-    font-family: "Poppins", sans-serif;
-    box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+  box-sizing: border-box;
 }
 
 html {
-    font-size: 62.5%;
-    scroll-behavior: smooth;
+  font-size: 62.5%;
+  scroll-behavior: smooth;
 }
 
 body {
-    margin: 0;
-    padding: 0;
+  margin: 0;
+  padding: 0;
 }
 
 figure {
-    margin: 0;
-    padding: 0;
+  margin: 0;
+  padding: 0;
 }
 
 ul {
-    margin: 0;
-    padding: 0;
+  margin: 0;
+  padding: 0;
 }
 
 li {
-    list-style: none;
+  list-style: none;
 }
 
 a {
-    text-decoration: none;
+  text-decoration: none;
 }
 
 h1,
@@ -39,83 +39,83 @@ h3,
 h4,
 h5,
 p {
-    margin: 0;
+  margin: 0;
 }
 
 button {
-    background: transparent;
-    border: none;
+  background: transparent;
+  border: none;
 }
 
 input[type="file"] {
-    display: none;
+  display: none;
 }
 
 :root {
-    --gray-1: #828282;
-    --gray-2: #4f4f4f;
-    --gray-3: #333333;
-    --gray-4: #bdbdbd;
-    --gray-5: #e0e0e0;
-    --gray-6: #1c1e21;
+  --gray-1: #828282;
+  --gray-2: #4f4f4f;
+  --gray-3: #333333;
+  --gray-4: #bdbdbd;
+  --gray-5: #e0e0e0;
+  --gray-6: #1c1e21;
 
-    --blue-1: #2f80ed;
-    --blue-2: #2d9cdb;
+  --blue-1: #2f80ed;
+  --blue-2: #2d9cdb;
 
-    --light-1: #f2f2f2;
-    --light-2: #fafafa;
+  --light-1: #f2f2f2;
+  --light-2: #fafafa;
 
-    --green-2: #27ae60;
+  --green-2: #27ae60;
 
-    --red: #eb5757;
+  --red: #eb5757;
 
-    /* --box-shadow-1: 0px 2px 4px rgba(0, 0, 0, 0.05); */
-    --box-shadow-1: 0 10px 25px 0 rgb(27 44 113 / 15%);
+  /* --box-shadow-1: 0px 2px 4px rgba(0, 0, 0, 0.05); */
+  --box-shadow-1: 0 10px 25px 0 rgb(27 44 113 / 15%);
 
-    --border-1: 1px solid var(--gray-5);
+  --border-1: 1px solid var(--gray-5);
 
-    --blue: #287cf2;
-    --bg-1: #eff4ff;
-    --box-shadow-2: 0px 5px 25px 2px rgb(40 124 242 / 38%);
+  --blue: #287cf2;
+  --bg-1: #eff4ff;
+  --box-shadow-2: 0px 5px 25px 2px rgb(40 124 242 / 38%);
 }
 
 body {
-    background-color: var(--light-1);
+  background-color: var(--light-1);
 }
 
 button {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 button:focus {
-    outline: none;
+  outline: none;
 }
 
 ::-webkit-scrollbar {
-    width: 1rem;
+  width: 1rem;
 }
 
 ::-webkit-scrollbar-thumb {
-    background: #333;
+  background: #333;
 }
 
 .react-datepicker-popper[data-placement^="bottom"] {
-    z-index: 5;
+  z-index: 5;
 }
 
 .react-datepicker__current-month,
 .react-datepicker-time__header,
 .react-datepicker-year-header {
-    font-size: 1rem;
+  font-size: 1rem;
 }
 
 .react-datepicker__day-name,
 .react-datepicker__day,
 .react-datepicker__time-name {
-    font-size: 1.1rem;
-    width: 2.7rem;
+  font-size: 1.1rem;
+  width: 2.7rem;
 }
 
 .infinite-scroll-component {
-    overflow: initial !important;
+  overflow: initial !important;
 }

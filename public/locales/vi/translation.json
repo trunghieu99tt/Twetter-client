@@ -149,5 +149,8 @@
   "adminAuthentication": "Đăng nhập dưới quyền admin",
   "reportUser": "Báo cáo người dùng",
   "nsfw": "Đăng ảnh segg cl thằng l này",
-  "unsupportedFileType": "Không hỗ trợ loại tệp này"
+  "unsupportedFileType": "Không hỗ trợ loại tệp này",
+  "formTitle": {
+    "addRoomMember": "Thêm thành viên vào nhóm chat"
+  }
 }

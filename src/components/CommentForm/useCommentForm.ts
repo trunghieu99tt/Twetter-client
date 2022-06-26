@@ -7,7 +7,6 @@ import { iComment } from "@type/comments.types";
 import { iNotificationDTO } from "@type/notify.types";
 import { iTweet } from "@type/tweet.types";
 import { ChangeEvent, useState } from "react";
-import { toast } from "react-toastify";
 import { v4 } from "uuid";
 
 type Props = {
@@ -66,7 +65,8 @@ export const useAddComment = ({ commentData, tweet }: Props) => {
       content: comment,
       media: url,
     };
-    const response = await createCommentMutation.mutateAsync(
+
+    createCommentMutation.mutate(
       {
         newComment,
         parentId: commentData?._id || tweet?._id,
@@ -75,24 +75,24 @@ export const useAddComment = ({ commentData, tweet }: Props) => {
         onSettled: () => {
           resetFields();
         },
+        onSuccess: (data) => {
+          if (data) {
+            const msg: iNotificationDTO = {
+              text: commentData?._id
+                ? "repliedYourComment"
+                : "commentedYourTweet",
+              receivers: [
+                commentData?._id ? commentData.author._id : tweet.author._id,
+              ],
+              url: `/tweet/${tweet._id}`,
+              type: "comment",
+            };
+
+            createNotificationAction(msg);
+          }
+        },
       }
     );
-
-    const commentResponse = response?.data;
-
-    if (commentResponse) {
-      // push notification
-      const msg: iNotificationDTO = {
-        text: commentData?._id ? "repliedYourComment" : "commentedYourTweet",
-        receivers: [
-          commentData?._id ? commentData.author._id : tweet.author._id,
-        ],
-        url: `/tweet/${tweet._id}`,
-        type: "comment",
-      };
-
-      createNotificationAction(msg);
-    }
   };
 
   const toggleShowEmoji = () => setShowEmoji(!showEmoji);

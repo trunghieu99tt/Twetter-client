@@ -1,9 +1,11 @@
 import { Spinner1 } from "@components/Loaders";
+import Button from "@components/shared/Button";
+import Input from "@components/shared/Input";
 import { iUser } from "@type/user.types";
 import React, { Suspense } from "react";
 import { useTranslation } from "react-i18next";
 import { BsCardImage } from "react-icons/bs";
-import AddUserToRoom from "./AddUserToRoomForm";
+import AddUserToRoom from "./AddRoomMemberForm";
 import classes from "./newRoomModal.module.css";
 import { useNewRoomModal } from "./useNewRoomModal";
 const Modal = React.lazy(() => import("@components/Modal"));
@@ -32,7 +34,7 @@ const NewRoomModal = () => {
         <label htmlFor="groupName" className={classes.inputLabel}>
           {t("groupChatName")}
         </label>
-        <input
+        <Input
           onChange={onChange}
           type="text"
           name="name"
@@ -46,7 +48,7 @@ const NewRoomModal = () => {
         <label htmlFor="groupChatDescription" className={classes.inputLabel}>
           {t("groupChatDescription")}
         </label>
-        <input
+        <Input
           onChange={onChange}
           type="text"
           name="description"
@@ -56,9 +58,7 @@ const NewRoomModal = () => {
         />
       </div>
       <div className={classes.inputGroup}>
-        <label htmlFor="groupChatDescription" className={classes.inputLabel}>
-          {t("addMember")}
-        </label>
+        <Button onClick={onOpenAddMemberModal}>{t("addMember")}</Button>
       </div>
       {isAddMemberForOpened && (
         <AddUserToRoom

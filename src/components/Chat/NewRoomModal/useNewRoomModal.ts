@@ -119,7 +119,7 @@ const useNewRoomModal = () => {
   }, []);
 
   const onCloseAddMemberModal = useCallback(() => {
-    setIsAddMemberForOpened(true);
+    setIsAddMemberForOpened(false);
   }, []);
 
   return {

@@ -6,19 +6,17 @@ import { iRoom } from "@type/room.types";
 import { iUser } from "@type/user.types";
 import client from "api/client";
 import { useEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
 import { useHistory, useParams } from "react-router";
-import { toast } from "react-toastify";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { callState } from "states/call.state";
 import { newMessageState } from "states/message.state";
 import { connectedRoomsState } from "states/room.state";
+
 import { iMessage, iNewMessage } from "../../types/message.types";
 
 const useChatPage = () => {
-  const { t } = useTranslation();
   const {
-    state: { peer, socket },
+    state: { socket },
     dispatch,
   } = useAppContext();
   const history = useHistory();

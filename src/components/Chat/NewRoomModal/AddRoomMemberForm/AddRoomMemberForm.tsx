@@ -1,14 +1,13 @@
-import UserAvatarSmall from "@components/UserAvatarSmall";
+import Modal from "@components/Modal";
+import Input from "@components/shared/Input";
 import { useUser } from "@talons/useUser";
 import { iUser } from "@type/user.types";
 import { debounce } from "lodash";
 import React, { Suspense, useCallback, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { UserService } from "services/user.service";
-import classes from "./addUserToRoom.module.css";
-import { TiTickOutline } from "react-icons/ti";
-import Button from "@components/shared/Button";
-import Modal from "@components/Modal";
+import SuggestedUser from "../SuggestedUser";
+import classes from "./addRoomMemberForm.module.css";
 
 type Props = {
   members: iUser[];
@@ -16,7 +15,7 @@ type Props = {
   onAddUser: (users: iUser[]) => void;
 };
 
-const AddUserToRoom = ({
+const AddRoomMemberForm = ({
   onAddUser,
   members,
   onCloseAddMember,
@@ -25,9 +24,11 @@ const AddUserToRoom = ({
   const { user: currentUser } = useUser();
   const [suggestions, setSuggestions] = useState<iUser[]>([]);
   const [selectedUsers, setSelectedUsers] = useState<iUser[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const debouncedSearch = useCallback(
     debounce(async (value: string) => {
+      setLoading(true);
       const data = await UserService.searchUser(value);
       const filteredUsers = data.filter(
         (user: iUser) =>
@@ -35,6 +36,7 @@ const AddUserToRoom = ({
           user._id !== currentUser._id
       );
       setSuggestions(filteredUsers);
+      setLoading(false);
     }, 500),
     []
   );
@@ -50,36 +52,37 @@ const AddUserToRoom = ({
           (selectedUser: iUser) => selectedUser._id === user._id
         )
       ) {
-        setSelectedUsers(
-          selectedUsers.filter(
-            (selectedUser: iUser) => selectedUser._id !== user._id
-          )
+        setSelectedUsers((prev) =>
+          prev.filter((selectedUser: iUser) => selectedUser._id !== user._id)
         );
       } else {
-        setSelectedUsers([...selectedUsers, user]);
+        setSelectedUsers((prev) => [...prev, user]);
       }
     },
-    []
+    [selectedUsers]
   );
 
   const addUsersToMemberList = () => {
     onAddUser(selectedUsers);
+    onCloseAddMember();
   };
 
   const body = (
-    <div className={classes.addUserForm}>
-      <label htmlFor="user" className={classes.inputLabel}>
-        {t("addUser")}
-      </label>
-      <input
-        className={classes.input}
-        type="text"
-        name="user"
-        id="user"
-        onFocus={search}
-        onChange={search}
-        placeholder={t("addUser")}
-      />
+    <div className={classes.root}>
+      <div className={classes.inputForm}>
+        <label htmlFor="user" className={classes.inputLabel}>
+          {t("search")}
+        </label>
+        <Input
+          type="text"
+          name="user"
+          id="user"
+          onFocus={search}
+          onChange={search}
+          placeholder={t("search")}
+        />
+      </div>
+      {loading && <div className={classes.loading}>{t("loading")}</div>}
       {suggestions?.length > 0 && (
         <div className={classes.userSuggestionList}>
           {suggestions?.map((user: iUser) => {
@@ -88,29 +91,15 @@ const AddUserToRoom = ({
             );
 
             return (
-              <article>
-                <UserAvatarSmall user={user} />
-                <div>
-                  <div>
-                    <span>{user.name}</span>
-                    <span>{user.email}</span>
-                    <span>@{user.username}</span>
-                  </div>
-                  <button
-                    className={classes.userSuggestion}
-                    onClick={toggleAddingToSelectedUsers(user)}
-                  >
-                    {isSelected && <TiTickOutline />}
-                  </button>
-                </div>
-              </article>
+              <SuggestedUser
+                user={user}
+                isSelected={isSelected}
+                onClick={toggleAddingToSelectedUsers}
+              />
             );
           })}
         </div>
       )}
-      <Button className={classes.addUserButton} onClick={addUsersToMemberList}>
-        {t("add")}
-      </Button>
     </div>
   );
 
@@ -119,7 +108,7 @@ const AddUserToRoom = ({
     isOpen: true,
     onCancel: onCloseAddMember,
     onOk: addUsersToMemberList,
-    header: <p>{t("addMember")}</p>,
+    header: <p>{t("formTitle.addRoomMember")}</p>,
   };
 
   return (
@@ -129,4 +118,4 @@ const AddUserToRoom = ({
   );
 };
 
-export default AddUserToRoom;
+export default AddRoomMemberForm;

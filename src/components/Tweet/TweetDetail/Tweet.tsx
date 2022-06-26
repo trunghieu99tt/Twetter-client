@@ -1,76 +1,64 @@
-import React, { lazy, Suspense } from "react";
-import { Link } from "react-router-dom";
-import { v4 } from "uuid";
-import nl2br from "react-nl2br";
-import reactStringReplace from "react-string-replace";
-import { useTranslation } from "react-i18next";
-
-// talons
-import { useTweet } from "./useTweet";
-
-// utils
-import { stopPropagation, calcDiffTimeString } from "@utils/helper";
-
-// components
-const EditTweet = lazy(() => import("../EditTweet"));
-const Modal = lazy(() => import("@components/Modal"));
+import AddCommentForm from "@components/CommentForm";
 import Comment from "@components/Comment";
-import UserCard from "@components/UserCard";
+import CustomLinkPreview from "@components/CustomLinkPreview";
 import Dropdown from "@components/Dropdown";
 import { Spinner1 } from "@components/Loaders";
-import AddComment from "@components/AddComment";
 import MediaViewer from "@components/MediaViewer";
-import { Carousel } from "react-responsive-carousel";
 import UserAvatarSmall from "@components/UserAvatarSmall";
-import CustomLinkPreview from "@components/CustomLinkPreview";
-
-// icons
-import { FiRefreshCw } from "react-icons/fi";
-import { FaRegHeart } from "react-icons/fa";
+import UserCard from "@components/UserCard";
+import { TMedia } from "@type/app.types";
+import { iComment } from "@type/comments.types";
+import { iTweet } from "@type/tweet.types";
+import { iUser } from "@type/user.types";
+import { calcDiffTimeString, stopPropagation } from "@utils/helper";
+import React, { lazy, Suspense } from "react";
+import { useTranslation } from "react-i18next";
 import {
-  AiOutlineEdit,
   AiOutlineDelete,
+  AiOutlineEdit,
   AiOutlineRetweet,
 } from "react-icons/ai";
+import { BiBookmark, BiComment, BiDotsVertical } from "react-icons/bi";
+import { FaRegHeart } from "react-icons/fa";
+import { FiRefreshCw } from "react-icons/fi";
 import { MdReportProblem } from "react-icons/md";
-import { BiComment, BiBookmark, BiDotsVertical } from "react-icons/bi";
-
-// types
-import { TMedia } from "@type/app.types";
-import { iTweet } from "@type/tweet.types";
-import { iComment } from "@type/comments.types";
-
+import nl2br from "react-nl2br";
+import { Carousel } from "react-responsive-carousel";
+import { Link } from "react-router-dom";
+import reactStringReplace from "react-string-replace";
 import { HASHTAG_ROUTES } from "routes/routes";
+import { v4 } from "uuid";
 
-// styles
 import {
-  Header,
-  Wrapper,
-  Content,
-  TweetMedia,
-  AuthorName,
-  DateCreated,
-  RetweetedBy,
-  Interaction,
   AuthorAction,
-  AuthorWrapper,
   AuthorActions,
-  DropdownButton,
+  AuthorName,
+  AuthorWrapper,
   CommentsWrapper,
-  TweetDescription,
-  TweetMediaWrapper,
+  Content,
+  DateCreated,
+  DropdownButton,
+  Header,
+  Interaction,
   InteractionButton,
+  InteractionButtonGroup,
   InteractionSummary,
   InteractionSummaryItem,
-  InteractionButtonGroup,
+  RetweetedBy,
+  TweetDescription,
+  TweetMedia,
+  TweetMediaWrapper,
+  Wrapper,
 } from "./TweetStyle";
-import { iUser } from "@type/user.types";
+import { useTweet } from "./useTweet";
+const EditTweet = lazy(() => import("../EditTweet"));
+const Modal = lazy(() => import("@components/Modal"));
 
 type Props = {
   tweet: iTweet;
 };
 
-const Tweet = ({ tweet }: Props) => {
+const Tweet = ({ tweet }: Props): JSX.Element => {
   const { t } = useTranslation();
   const {
     urls,
@@ -251,7 +239,7 @@ const Tweet = ({ tweet }: Props) => {
                 showStatus={tweet?.media?.length > 1}
                 showThumbs={false}
               >
-                {tweet.media.map((url: string, index: number) => {
+                {tweet.media.map((url: string) => {
                   const mediaData: TMedia = {
                     url: url,
                     type: url.includes("video") ? "video" : "image",
@@ -308,7 +296,7 @@ const Tweet = ({ tweet }: Props) => {
             </InteractionButtonGroup>
           </Interaction>
         </Content>
-        <AddComment addCommentRef={addCommentRef} tweet={tweet} />
+        <AddCommentForm addCommentRef={addCommentRef} tweet={tweet} />
         <CommentsWrapper>
           {tweetComments?.map((comment: iComment) => {
             return <Comment data={comment} key={comment._id} />;
