@@ -2,7 +2,7 @@
 
 <div align="center">
   <h3>
-    <a href="https://riki-twitter.netlify.app/">
+    <a href="https://twitter.rikikudo.live">
       Demo
     </a>
   </h3>
